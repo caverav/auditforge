@@ -3,7 +3,7 @@ import useAuth from "../hooks/useAuth";
 
 
 export const Login = () => {
-const { login } = useAuth();
+  const { login } = useAuth();
   const { t } = useTranslation();
   return (
     <section className="bg-gray-800 h-screen flex flex-col md:flex-row justify-center space-y-10 md:space-y-0 md:space-x-16 items-center my-2 mx-5 md:mx-0 md:my-0">

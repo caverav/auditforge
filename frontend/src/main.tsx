@@ -1,5 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
+import ProtectedRoute from './components/ProtectedRoute';
+import AuthProvider from './components/AuthProvider';
 
 
 import {
@@ -12,6 +14,11 @@ import { Root, Audits, Vulnerabilities, Data, Settings, Login } from './routes';
 import { ErrorPage } from './error-page.tsx';
 import './i18n';
 
+
+// get isSignedIn from localStorage (isAuthenticated)
+const isSignedIn = localStorage.getItem('isAuthenticated') === 'true';
+
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -20,19 +27,31 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/audits",
-        element: <Audits/>,
+        element: 
+        <ProtectedRoute>
+          <Audits/>
+        </ProtectedRoute>,
       },
       {
         path: "/vulnerabilities",
-        element: <Vulnerabilities/>,
+        element:
+        <ProtectedRoute>
+          <Vulnerabilities/>
+        </ProtectedRoute>,
       },
       {
         path: "/data",
-        element: <Data/>,
+        element:
+        <ProtectedRoute>
+          <Data/>
+        </ProtectedRoute>,
       },
       {
         path: "/settings",
-        element: <Settings/>,
+        element:
+        <ProtectedRoute>
+          <Settings/>
+        </ProtectedRoute>,
       },
     ],
 
@@ -45,6 +64,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-     <RouterProvider router={router} />
+      <AuthProvider isSignedIn={isSignedIn}>
+        <RouterProvider router={router} />
+      </AuthProvider>
   </React.StrictMode>,
 )
