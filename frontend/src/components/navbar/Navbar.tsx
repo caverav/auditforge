@@ -58,12 +58,12 @@ export default function Navbar() {
             <Link
               to='/settings'
               title='Settings'
-              className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+              className={classNames('/settings' === location.pathname ? 'bg-gray-900' : 'text-gray-400 hover:bg-gray-700', "relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white")}
             >
               <span className="absolute -inset-1.5" />
               <span className="sr-only">Settings</span>
-              <CogIcon aria-hidden="true" className="h-6 w-6" />
-            </Link>
+              <CogIcon aria-hidden="true" className="h-8 w-auto" />
+            </Link> 
 
             {/* Profile dropdown */}
             <Menu as="div" className="relative ml-3">
@@ -71,7 +71,7 @@ export default function Navbar() {
                 <MenuButton className="relative flex rounded-full bg-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800">
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">Open user menu</span>
-                  <UserCircleIcon className="text-gray-400 h-6 w-6" />
+                  <UserCircleIcon className="text-gray-400 h-8 w-auto" />
                 </MenuButton>
               </div>
               <MenuItems
