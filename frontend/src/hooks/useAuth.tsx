@@ -1,35 +1,53 @@
-import { createContext, ReactNode, useContext, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { useLocalStorage } from "./useLocalStorage";
-const AuthContext = createContext();
 
-export const AuthProvider = (children: ReactNode ) => {
-  const [user, setUser] = useLocalStorage("user", null);
+const userKey = "user";
+
+const apiUrl = "https://localhost:8443/api/users";
+
+const useAuth = () => {
+
   const navigate = useNavigate();
 
-  // call this function when you want to authenticate the user
-  const login = async (data: string | null) => {
-    setUser(data);
-    navigate("/");
-  };
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  // call this function to sign out logged in user
-  const logout = () => {
-    setUser(null);
-    navigate("/login", { replace: true });
-  };
+  useEffect(() => {
+    setIsAuthenticated(localStorage.getItem(userKey) ? true : false);
+  }, []);
 
-  const value = useMemo(
-    () => ({
-      user,
-      login,
-      logout,
-    }),
-    [user]
-  );
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  const login = (username: string, password: string, totp: string) => {
+    const data = JSON.stringify({ username, password, totp });
+
+    fetch(apiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: data,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.status === "success") {
+          localStorage.setItem(userKey, JSON.stringify(data));
+          setIsAuthenticated(true); 
+        }
+      })
+      .catch((error) => { 
+        console.log(error); 
+      });
+  }; 
+
+  const logout = () => { 
+    localStorage.removeItem(userKey); 
+    setIsAuthenticated(false); 
+    navigate("/login"); 
+  }; 
+
+  return { 
+    isAuthenticated, 
+    login, 
+    logout, 
+  }; 
 };
 
-export const useAuth = () => {
-  return useContext(AuthContext);
-};
+export default useAuth;

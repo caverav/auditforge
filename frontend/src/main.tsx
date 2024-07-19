@@ -1,6 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 
+
 import {
   createBrowserRouter,
   RouterProvider,
@@ -9,8 +10,7 @@ import {
 import './index.css'
 import { Root, Audits, Vulnerabilities, Data, Settings, Login } from './routes';
 import { ErrorPage } from './error-page.tsx';
-
-
+import './i18n';
 
 const router = createBrowserRouter([
   {
