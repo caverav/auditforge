@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 
 import './index.css'
-import { Root, Audits, Vulnerabilities, Data } from './routes';
+import { Root, Audits, Vulnerabilities, Data, Settings } from './routes';
 import { ErrorPage } from './error-page.tsx';
 
 
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/settings",
-        element: <Data/>,
+        element: <Settings/>,
       },
     ],
   },
