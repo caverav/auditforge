@@ -25,7 +25,7 @@ const useAuth = () => {
     })
       .then((response) => response.json())
       .then((data) => {
-        if (data.status !== "success") {
+        if (data.status === "success") {
           localStorage.setItem("isAuthenticated", "true");
           setIsAuthenticated(true); 
           navigate("/audits", { replace: true });
