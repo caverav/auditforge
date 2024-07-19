@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const apiUrl = "https://localhost:8443/api/users";
+const apiUrl = "https://localhost:8443/api/users/token";
 
 const useAuth = () => {
 
