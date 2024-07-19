@@ -30,6 +30,10 @@ const router = createBrowserRouter([
         path: "/data",
         element: <Data/>,
       },
+      {
+        path: "/settings",
+        element: <Data/>,
+      },
     ],
   },
 ]);
