@@ -1,9 +1,8 @@
 import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
 import { Bars3Icon, CogIcon, UserCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
-import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 
-const navigation = [
+const navigationOptions = [
   { name: 'Audits', href: '/audits', current: true },
   { name: 'Vulnerabilities', href: '/vulnerabilities', current: false },
   { name: 'Data', href: '/data', current: false },
@@ -15,7 +14,6 @@ function classNames(...classes: string[]) {
 
 export default function Navbar() {
   const location = useLocation();
-  const [navigationOptions, setNavigationOptions] = useState(navigation);
 
   return (
     <Disclosure as="nav" className="bg-gray-800">
@@ -103,7 +101,7 @@ export default function Navbar() {
 
       <DisclosurePanel className="sm:hidden">
         <div className="space-y-1 px-2 pb-3 pt-2">
-          {navigation.map((item) => (
+          {navigationOptions.map((item) => (
             <DisclosureButton
               key={item.name}
               as="a"
