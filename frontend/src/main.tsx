@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 
 import './index.css'
-import { Root, Audits, Vulnerabilities, Data, Settings } from './routes';
+import { Root, Audits, Vulnerabilities, Data, Settings, Login } from './routes';
 import { ErrorPage } from './error-page.tsx';
 
 
@@ -35,7 +35,12 @@ const router = createBrowserRouter([
         element: <Settings/>,
       },
     ],
+
   },
+  {
+    path:"/login",
+    element: <Login/>
+  }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
