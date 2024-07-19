@@ -21,6 +21,7 @@ const useAuth = () => {
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include",
       body: data,
     })
       .then((response) => response.json())
@@ -28,8 +29,8 @@ const useAuth = () => {
         if (data.status === "success") {
           localStorage.setItem("isAuthenticated", "true");
           setIsAuthenticated(true); 
-          navigate("/audits", { replace: true });
         }
+        navigate("/audits", { replace: true });
       })
       .catch((error) => { 
         console.log(error); 
