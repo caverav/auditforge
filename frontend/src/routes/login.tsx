@@ -21,7 +21,6 @@ export const Login = () => {
       (document.getElementById("password") as HTMLInputElement).value,
       ""
     );
-    navigate("/audits", { replace: true });
   };
 
   return (
