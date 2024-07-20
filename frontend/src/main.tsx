@@ -1,9 +1,7 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import ProtectedRoute from './components/ProtectedRoute';
 import AuthProvider from './components/AuthProvider';
 import { checktoken } from './hooks/useAuth';
-
 
 import {
   createBrowserRouter,
@@ -24,31 +22,23 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/audits",
-        element: 
-        <ProtectedRoute>
-          <Audits/>
-        </ProtectedRoute>,
+        element:
+          <Audits/>,
       },
       {
         path: "/vulnerabilities",
         element:
-        <ProtectedRoute>
-          <Vulnerabilities/>
-        </ProtectedRoute>,
+          <Vulnerabilities/>,
       },
       {
         path: "/data",
         element:
-        <ProtectedRoute>
-          <Data/>
-        </ProtectedRoute>,
+          <Data/>,
       },
       {
         path: "/settings",
         element:
-        <ProtectedRoute>
-          <Settings/>
-        </ProtectedRoute>,
+          <Settings/>,
       },
     ],
 

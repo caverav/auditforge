@@ -1,11 +1,14 @@
 import { Outlet } from "react-router-dom"
 import Navbar from "../components/navbar/Navbar"
+import ProtectedRoute from "../components/ProtectedRoute"
 
 export const Root = () => {
     return (
         <>
-            <Navbar/>
-            <Outlet/>
+            <ProtectedRoute>
+                <Navbar/>
+                <Outlet/>
+            </ProtectedRoute>
         </>
     )
 }
