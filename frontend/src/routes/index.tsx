@@ -1,7 +1,7 @@
-import { Audits } from "./audits"
-import { Vulnerabilities } from "./vulnerabilities"
-import { Data } from "./data"
-import { Settings } from "./settings"
+import { Audits } from "./audits/audits"
+import { Vulnerabilities } from "./vulnerabilities/vulnerabilities"
+import { Data } from "./data/data"
+import { Settings } from "./settings/settings"
 import { Root } from "./root"
 import { Login } from "./login"
 

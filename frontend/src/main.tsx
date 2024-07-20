@@ -2,6 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 import ProtectedRoute from './components/ProtectedRoute';
 import AuthProvider from './components/AuthProvider';
+import { checktoken } from './hooks/useAuth';
 
 
 import {
@@ -13,10 +14,6 @@ import './index.css'
 import { Root, Audits, Vulnerabilities, Data, Settings, Login } from './routes';
 import { ErrorPage } from './error-page.tsx';
 import './i18n';
-
-
-// get isSignedIn from localStorage (isAuthenticated)
-const isSignedIn = localStorage.getItem('isAuthenticated') === 'true';
 
 
 const router = createBrowserRouter([
@@ -62,10 +59,14 @@ const router = createBrowserRouter([
   }
 ]);
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-      <AuthProvider isSignedIn={isSignedIn}>
-        <RouterProvider router={router} />
-      </AuthProvider>
-  </React.StrictMode>,
-)
+checktoken().then((result) => {
+  console.log(result);
+  ReactDOM.createRoot(document.getElementById('root')!).render(
+    <React.StrictMode>
+        <AuthProvider isSignedIn={result}>
+          <RouterProvider router={router} />
+        </AuthProvider>
+    </React.StrictMode>,
+  )
+}
+);

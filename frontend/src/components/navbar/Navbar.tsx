@@ -2,18 +2,20 @@ import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuIt
 import { Bars3Icon, CogIcon, UserCircleIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Link, useLocation } from 'react-router-dom'
 import useAuth from '../../hooks/useAuth';
+import { useTranslation } from "react-i18next";
 
-const navigationOptions = [
-  { name: 'Audits', href: '/audits', current: true },
-  { name: 'Vulnerabilities', href: '/vulnerabilities', current: false },
-  { name: 'Data', href: '/data', current: false },
-]
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ')
 }
 
 export default function Navbar() {
+  const { t } = useTranslation();
+  const navigationOptions = [
+    { name: t('audits'), href: '/audits', current: true },
+    { name: t('vulnerabilities'), href: '/vulnerabilities', current: false },
+    { name: t('data'), href: '/data', current: false },
+  ]
   const { logout } = useAuth();
   const location = useLocation();
 
@@ -33,7 +35,7 @@ export default function Navbar() {
           <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
             <div className="flex flex-shrink-0 items-center">
               <img
-                alt="Your Company"
+                alt="Logo"
                 src="/auditforgelogo.png"
                 className="h-8 w-auto"
               />
@@ -59,11 +61,11 @@ export default function Navbar() {
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
             <Link
               to='/settings'
-              title='Settings'
+              title={t('settings')}
               className={classNames('/settings' === location.pathname ? 'bg-gray-900' : 'text-gray-400 hover:bg-gray-700', "relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white")}
             >
               <span className="absolute -inset-1.5" />
-              <span className="sr-only">Settings</span>
+              <span className="sr-only">{t('settings')}</span>
               <CogIcon aria-hidden="true" className="h-8 w-auto" />
             </Link> 
 
@@ -82,17 +84,17 @@ export default function Navbar() {
               >
                 <MenuItem>
                   <a href="" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                    Your Profile
+                    {t('profile')}
                   </a>
                 </MenuItem>
                 <MenuItem>
                   <a href="" className="block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100">
-                    Settings
+                    {t('settings')}
                   </a>
                 </MenuItem>
                 <MenuItem>
                   <button className="w-full text-left block px-4 py-2 text-sm text-gray-700 data-[focus]:bg-gray-100" onClick={() => logout()}>
-                    Sign out
+                    {t('logout')}
                   </button>
                 </MenuItem>
               </MenuItems>
