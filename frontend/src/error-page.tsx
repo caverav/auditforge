@@ -7,7 +7,6 @@ export function ErrorPage() {
   const { t } = useTranslation();
   return (
     <div className="bg-gray-900 h-full">
-      <Navbar />
       <section className="home grid h-max pt-32 pb-16">
         <div className="home__container container grid content-center gap-12 lg:max-w-5xl lg:grid-cols-2 lg:items-center m-auto">
           <div className="home__data justify-self-center text-center lg:text-left">

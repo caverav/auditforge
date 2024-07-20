@@ -21,6 +21,7 @@ export const Login = () => {
       (document.getElementById("password") as HTMLInputElement).value,
       ""
     );
+    navigate("/audits", { replace: true });
   };
 
   return (
@@ -28,7 +29,7 @@ export const Login = () => {
       <div className="md:w-1/3 max-w-sm">
         <img src="/auditforgelogo.png" alt="Logo" />
       </div>
-      <div className="md:w-1/3 max-w-sm">
+      <div className="md:w-1/3 max-w-sm text-black">
         <form onSubmit={handleSubmit}>
           <input
             id="email"
