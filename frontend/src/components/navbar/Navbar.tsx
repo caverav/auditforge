@@ -12,9 +12,9 @@ function classNames(...classes: string[]) {
 export default function Navbar() {
   const { t } = useTranslation();
   const navigationOptions = [
-    { name: t('audits'), href: '/audits', current: true },
-    { name: t('vulnerabilities'), href: '/vulnerabilities', current: false },
-    { name: t('data'), href: '/data', current: false },
+    { name: t('nav.audits'), href: '/audits', current: true },
+    { name: t('nav.vulnerabilities'), href: '/vulnerabilities', current: false },
+    { name: t('nav.data'), href: '/data', current: false },
   ]
   const { logout } = useAuth();
   const location = useLocation();
