@@ -3,8 +3,8 @@ import { t } from "i18next"
 import PrimarySwitch from "../../components/switch/PrimarySwitch"
 import { useEffect, useState } from "react"
 import SelectDropdown from "../../components/dropdown/SelectDropdown"
-import { getSettings } from "../../services/settings"
 import { useTranslation } from "react-i18next"
+import { CheckCircleIcon, NoSymbolIcon } from "@heroicons/react/24/outline"
 
 const languageOptions = [
     {
@@ -26,8 +26,6 @@ const languageOptions = [
 ]
 
 // QUITAR ESTO
-
-const data = await getSettings();
 
 
 export const Settings = () => {
@@ -80,13 +78,20 @@ export const Settings = () => {
                 title={t('generalSettings')}
             >
                 <div className="px-2">
-                    <h2>{t('changeDisplayLanguage')}</h2>
+                    <h2>Titulo de ejemplo</h2>
                     <div className="mt-2 mx-2">
-                        <p>{t('changeDisplayLanguageInfo')}</p>
+                        <p>Parrafo de ejemplo. Esta card contiene dos componentes: Primary Switch, que es un switch génerico, y un menú selector tipo dropdown. 
+                            Sirve de ejemplo sobre su funcionamiento.</p>
                     </div>
                     <div className="mt-2 mx-2">
                         <PrimarySwitch enabled={enabled} onChange={setEnabled}/>
-                        <SelectDropdown title="Título select" items={[
+                        {
+                            enabled ? 
+                                <CheckCircleIcon className="top-8 right-8 size-12"/>
+                                    :
+                                <NoSymbolIcon className="top-8 right-8 size-12"/>
+                        }
+                        <SelectDropdown title={"Título selector"} items={[
                             { id: 1, value: 'Tom Cook' },
                             { id: 2, value: 'Wade Cooper' },
                             { id: 3, value: 'Tanya Fox' },
@@ -100,9 +105,6 @@ export const Settings = () => {
                     <p>
                         Persona seleccionada: {selected.value}
                     </p>
-                    <div>
-                        data: {JSON.stringify(data.datas)}
-                    </div>
                 </div>
             </Card>
         </div>
