@@ -19,13 +19,6 @@ export const Settings = () => {
                         <p>{t('changeDisplayLanguageInfo')}</p>
                     </div>
                     <div className="mt-2 mx-2">
-                        <PrimaryDropdown 
-                            title="Menu"
-                            items={[
-                                    { href: '/settings', label: 'Settings' },
-                                    { href: '/support', label: 'Support' },
-                                    { href: '/license', label: 'License' },
-                                    ]}/>
                         <PrimarySwitch enabled={enabled} onChange={setEnabled}/>
                         <SelectDropdown title="Título select" items={[
                             { id: 1, value: 'Tom Cook' },
