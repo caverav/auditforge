@@ -5,6 +5,7 @@ import { checktoken } from './hooks/useAuth';
 
 import {
   createBrowserRouter,
+  Navigate,
   RouterProvider,
 } from "react-router-dom";
 
@@ -12,7 +13,6 @@ import './index.css'
 import { Root, Audits, Vulnerabilities, Data, Settings, Login } from './routes';
 import { ErrorPage } from './error-page.tsx';
 import './i18n';
-
 
 const router = createBrowserRouter([
   {
@@ -22,8 +22,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element:
-          <Audits/>,
+        element: <Navigate to="/audits"/>,
       },
       {
         path: "/audits",
