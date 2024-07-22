@@ -19,7 +19,7 @@ export const Login = () => {
     login(
       (document.getElementById("email") as HTMLInputElement).value,
       (document.getElementById("password") as HTMLInputElement).value,
-      ""
+      "",
     );
   };
 
