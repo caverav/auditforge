@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 const apiUrl = "https://localhost:8443/api/users/token";
 const checktokenUrl = "https://localhost:8443/api/users/checktoken";
 
-export const checktoken = async () : Promise<boolean> => {
+export const checktoken = async (): Promise<boolean> => {
   try {
     const response = await fetch(checktokenUrl, {
       method: "GET",
