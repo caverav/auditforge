@@ -1,14 +1,13 @@
 import { useState } from "react";
 import Card from "../../components/card/Card";
 import SimpleInput from "../../components/input/SimpleInput";
+import PrimaryButton from "../../components/button/PrimaryButton";
 
 export const Data = () => {
   const [valor, setValor] = useState("");
-
-  /* const onInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setValor(e.target.value);
-  }; */
-
+  const onClickButton = () => {
+    alert(valor);
+  };
   return (
     <div className="w-2/3 mt-8 mx-auto">
       <Card title="Test input simple">
@@ -23,8 +22,11 @@ export const Data = () => {
         />
       </Card>
       <Card title={valor}>
-        <div>aslkdjsajlkd</div>
+        <div>eseselvalorr</div>
       </Card>
+      <PrimaryButton onClick={onClickButton}>
+        asdlkaskjldjlkdsajlk
+      </PrimaryButton>
     </div>
   );
 };
