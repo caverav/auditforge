@@ -4,7 +4,7 @@ interface ModalProps {
   title: string;
   children: React.ReactNode;
   onCancel: () => void;
-  onConfirm: () => void;
+  onSubmit: () => void;
   cancelText: string;
   confirmText: string;
   isOpen: boolean;
@@ -14,7 +14,7 @@ const Modal: React.FC<ModalProps> = ({
   title,
   children,
   onCancel,
-  onConfirm,
+  onSubmit,
   cancelText,
   confirmText,
   isOpen,
@@ -37,7 +37,7 @@ const Modal: React.FC<ModalProps> = ({
               {cancelText}
             </button>
             <button
-              onClick={onConfirm}
+              onClick={onSubmit}
               className="bg-blue-500 text-white px-4 py-2 rounded"
             >
               {confirmText}
