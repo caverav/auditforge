@@ -5,8 +5,8 @@ import { useEffect, useState } from "react";
 import SelectDropdown from "../../components/dropdown/SelectDropdown";
 import { useTranslation } from "react-i18next";
 import { CheckCircleIcon, NoSymbolIcon } from "@heroicons/react/24/outline";
-import Radio from "../../components/radio/Radio";
-import CheckboxButton from "../../components/checkbox_button/CheckboxButton";
+import RadioGroup from "../../components/button/RadioGroup";
+import CheckboxButton from "../../components/button/CheckboxButton";
 
 const languageOptions = [
   {
@@ -25,6 +25,12 @@ const languageOptions = [
     id: 4,
     value: "zh-CN",
   },
+];
+
+const RadioOptions = [
+  { id: '1', label: 'Opcion 1', value: '1' },
+  { id: '2', label: 'Opcion 2', value: '2' },
+  { id: '3', label: 'Opcion 3', value: '3', disabled: true },
 ];
 
 // QUITAR ESTO
@@ -55,6 +61,10 @@ export const Settings = () => {
   }, [language]);
 
   // --------------------->
+
+  const handleRadioGroupChange = (value: string) => {
+    console.log('Selected value:', value);
+  };
 
   return (
     <div className="w-2/3 mt-8 mx-auto">
@@ -103,12 +113,11 @@ export const Settings = () => {
             />
           </div>
           <p>Persona seleccionada: {selected.value}</p>
-          <Radio
-            defaultChecked={true}
-            disabled={false}
-            id="radio-1"
-            label="Texto de radio"
-            name="radio-1"
+          <RadioGroup
+            name="example"
+            options={RadioOptions}
+            defaultValue="1"
+            onChange={handleRadioGroupChange}
           />
           <CheckboxButton text="Texto de checkbox" />
         </div>
