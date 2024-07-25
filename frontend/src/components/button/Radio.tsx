@@ -2,22 +2,22 @@ import cx from 'clsx';
 
 export interface RadioProps {
   disabled?: boolean;
-  defaultChecked?: boolean;
+  checked: boolean;
   id: string;
   label: string;
   name?: string;
-  onChange?: (event: React.FormEvent<HTMLInputElement>) => void;
-  value?: string;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  value: string;
 }
 
-const Radio = ({ defaultChecked, disabled, id, label, name, onChange, value }: RadioProps) => (
+const Radio = ({ disabled, checked, id, label, name, onChange, value }: RadioProps) => (
   <div className="flex gap-2 items-start">
     <div className="grid place-items-center mt-1">
       <input
         type="radio"
         id={id}
         name={name}
-        defaultChecked={defaultChecked}
+        checked={checked}
         disabled={disabled}
         className="
           peer
