@@ -6,7 +6,7 @@ interface ModalProps {
   onCancel: () => void;
   onSubmit: () => void;
   cancelText: string;
-  confirmText: string;
+  submitText: string;
   isOpen: boolean;
 }
 
@@ -16,7 +16,7 @@ const Modal: React.FC<ModalProps> = ({
   onCancel,
   onSubmit,
   cancelText,
-  confirmText,
+  submitText,
   isOpen,
 }) => {
   return (
@@ -40,7 +40,7 @@ const Modal: React.FC<ModalProps> = ({
               onClick={onSubmit}
               className="bg-blue-500 text-white px-4 py-2 rounded"
             >
-              {confirmText}
+              {submitText}
             </button>
           </div>
         </div>
