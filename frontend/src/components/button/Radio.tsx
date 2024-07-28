@@ -1,4 +1,4 @@
-import cx from 'clsx';
+import cx from "clsx";
 
 export interface RadioProps {
   disabled?: boolean;
@@ -10,7 +10,15 @@ export interface RadioProps {
   value: string;
 }
 
-const Radio = ({ disabled, checked, id, label, name, onChange, value }: RadioProps) => (
+const Radio = ({
+  disabled,
+  checked,
+  id,
+  label,
+  name,
+  onChange,
+  value,
+}: RadioProps) => (
   <div className="flex gap-2 items-start">
     <div className="grid place-items-center mt-1">
       <input
@@ -39,12 +47,11 @@ const Radio = ({ disabled, checked, id, label, name, onChange, value }: RadioPro
         )}
       />
     </div>
-    <label htmlFor={id}
-      className={cx(
-        "text-start hover:cursor-pointer",
-        {
-          "text-gray-400": disabled,
-        })}
+    <label
+      htmlFor={id}
+      className={cx("text-start hover:cursor-pointer", {
+        "text-gray-400": disabled,
+      })}
     >
       {label}
     </label>
