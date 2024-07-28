@@ -16,9 +16,10 @@ interface RadioGroupProps {
 }
 
 const RadioGroup = ({ name, options, value, onChange }: RadioGroupProps) => {
-  const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = event.target.value;
-    onChange(newValue);
+  const handleRadioGroupChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    onChange(event.target.value);
   };
 
   return (
@@ -32,7 +33,7 @@ const RadioGroup = ({ name, options, value, onChange }: RadioGroupProps) => {
           value={option.value}
           checked={value === option.value}
           disabled={option.disabled}
-          onChange={handleRadioChange}
+          onChange={handleRadioGroupChange}
         />
       ))}
     </div>
