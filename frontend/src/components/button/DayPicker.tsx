@@ -8,7 +8,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 interface DayPickerProps {
   label: string;
   selectedDay: Dayjs | null;
-  onChange: React.Dispatch<React.SetStateAction<Dayjs>>;
+  onChange: React.Dispatch<React.SetStateAction<Dayjs | null>>;
 }
 
 const DayPicker: React.FC<DayPickerProps> = ({

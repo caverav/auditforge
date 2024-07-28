@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Radio from "./Radio";
 
 export interface RadioOption {
@@ -11,24 +11,14 @@ export interface RadioOption {
 interface RadioGroupProps {
   name: string;
   options: RadioOption[];
-  defaultValue?: string;
-  onChange?: (value: string) => void;
+  value: string;
+  onChange: (value: string) => void;
 }
 
-const RadioGroup = ({
-  name,
-  options,
-  defaultValue,
-  onChange,
-}: RadioGroupProps) => {
-  const [selectedValue, setSelectedValue] = useState(defaultValue || "");
-
+const RadioGroup = ({ name, options, value, onChange }: RadioGroupProps) => {
   const handleRadioChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setSelectedValue(value);
-    if (onChange) {
-      onChange(value);
-    }
+    const newValue = event.target.value;
+    onChange(newValue);
   };
 
   return (
@@ -40,7 +30,7 @@ const RadioGroup = ({
           name={name}
           label={option.label}
           value={option.value}
-          checked={selectedValue === option.value}
+          checked={value === option.value}
           disabled={option.disabled}
           onChange={handleRadioChange}
         />
