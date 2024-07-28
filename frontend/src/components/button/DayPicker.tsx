@@ -8,7 +8,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 interface DayPickerProps {
   label: string;
   selectedDay: Dayjs | null;
-  onChange: (value: Dayjs | null) => void;
+  onChange: React.Dispatch<React.SetStateAction<Dayjs>>;
 }
 
 const DayPicker: React.FC<DayPickerProps> = ({
@@ -61,6 +61,10 @@ const DayPicker: React.FC<DayPickerProps> = ({
     },
   });
 
+  const handleDayChange = (value: Dayjs | null) => {
+    value && onChange(value);
+  };
+
   return (
     <ThemeProvider theme={customTheme}>
       <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -68,7 +72,7 @@ const DayPicker: React.FC<DayPickerProps> = ({
           <DatePicker
             label={label}
             value={selectedDay}
-            onChange={onChange}
+            onChange={handleDayChange}
             inputFormat="DD/MM/YYYY"
             renderInput={(params) => (
               <TextField {...params} size="small" sx={{ minWidth: 200 }} />
