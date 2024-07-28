@@ -1,11 +1,3 @@
 export const Vulnerabilities = () => {
-
-    return (
-        <>
-
-            Vulnerabilidade(s)
-        
-        </>
-    )
-
-}
+  return <div className="p-4">Vulnerabilities</div>;
+};
