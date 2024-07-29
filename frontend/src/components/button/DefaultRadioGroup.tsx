@@ -15,7 +15,12 @@ interface RadioGroupProps {
   onChange: (value: string) => void;
 }
 
-const RadioGroup = ({ name, options, value, onChange }: RadioGroupProps) => {
+const DefaultRadioGroup = ({
+  name,
+  options,
+  value,
+  onChange,
+}: RadioGroupProps) => {
   const handleRadioGroupChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -40,4 +45,4 @@ const RadioGroup = ({ name, options, value, onChange }: RadioGroupProps) => {
   );
 };
 
-export default RadioGroup;
+export default DefaultRadioGroup;
