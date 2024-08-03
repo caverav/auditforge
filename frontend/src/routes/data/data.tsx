@@ -5,22 +5,22 @@ import { Outlet } from "react-router-dom";
 export const Data = () => {
   const { t } = useTranslation();
   const sidebarList = [
-    { name: t("collaborators"), value: "collaborators" },
-    { name: t("companies"), value: "companies" },
-    { name: t("clients"), value: "clients" },
-    { name: t("templates"), value: "templates" },
-    { name: t("customData"), value: "customData" },
-    { name: `${t("import")} / ${t("export")}`, value: "importExport" },
+    { name: t("collaborators"), value: "collaborators", id: 1 },
+    { name: t("companies"), value: "companies", id: 2 },
+    { name: t("clients"), value: "clients", id: 3 },
+    { name: t("templates"), value: "templates", id: 4 },
+    { name: t("customData"), value: "customData", id: 5 },
+    { name: `${t("import")} / ${t("export")}`, value: "importExport", id: 6 },
   ];
   return (
     <>
-      <div className="flex">
+      <div className="flex overflow-hidden">
         <Sidebar
           title={t("handleCustomData")}
           items={sidebarList}
           defaultItem={sidebarList[0]}
         />
-        <div className="flex-1 p-8">
+        <div className="flex-1 overflow-auto p-8">
           <Outlet />
         </div>
       </div>

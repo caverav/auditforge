@@ -2,13 +2,16 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 /**
- * **name**: Traducción
+ * **name**: Traducción.
  *
- * **value**: Valor del item para hacer el `<Link/>`
+ * **value**: Valor del item para hacer el `<Link/>`.
+ *
+ * **id**: Valor entero único para identificar al item.
  */
 interface listItem {
   name: string;
   value: string;
+  id: number;
 }
 
 interface SidebarProps {
@@ -31,15 +34,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
       <nav>
         <ul>
           {items.map((item) => (
-            <Link to={item.value}>
-              <li
-                key={item.value}
-                onClick={() => setSelected(item.value)}
-                className={`p-4 hover:bg-gray-600 cursor-pointer ${item.value == selected ? "bg-gray-600" : ""}`}
-              >
-                {item.name}
-              </li>
-            </Link>
+            <div key={item.id}>
+              <Link to={item.value}>
+                <li
+                  onClick={() => setSelected(item.value)}
+                  className={`p-4 hover:bg-gray-600 cursor-pointer ${item.value == selected ? "bg-gray-600" : ""}`}
+                >
+                  <div>{item.name}</div>
+                </li>
+              </Link>
+            </div>
           ))}
         </ul>
       </nav>
