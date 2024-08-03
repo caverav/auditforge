@@ -20,7 +20,7 @@ export const Data = () => {
           items={sidebarList}
           defaultItem={sidebarList[0]}
         />
-        <div className="p-8">
+        <div className="flex-1 p-8">
           <Outlet />
         </div>
       </div>
