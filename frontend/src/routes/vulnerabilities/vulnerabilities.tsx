@@ -42,20 +42,13 @@ export const Vulnerabilities = () => {
   const [error, setError] = useState<string | null>(null);
 
   const [categories, setCategories] = useState<ListItem[]>([]);
-  const [currentCategory, setCurrentCategory] = useState<any>({id: 0, value: ''});
+  const [currentCategory, setCurrentCategory] = useState<any>({id: 0, value: t('noCategory')});
 
   const [types, setTypes] = useState<ListItem[]>([]);
-  const [currentType, setCurrentType] = useState<any>({id: 0, value: ''});
+  const [currentType, setCurrentType] = useState<any>({id: 0, value: t('undefined')});
 
-  /*
-  useEffect(() => {
-    if (currentLanguage.value !== '') {
-      console.log("ahora2");
-      console.log(languages[0]);
-      setCurrentLanguage(languages[0]);
-    }
-  }, [currentLanguage]);
-*/
+  const [textTitle, setTextTitle] = useState<string>('');
+
  
 
   useEffect(() => {
@@ -67,6 +60,7 @@ export const Vulnerabilities = () => {
           value: item.language,
         }));
         setLanguages(languageNames);
+        setCurrentLanguage(languageNames[0]);
         setLoading(false);
       } catch (err) {
         setError("Error fetching languages");
@@ -83,10 +77,17 @@ export const Vulnerabilities = () => {
       try {
         const data = await getCategories();
         const categoryNames = data.datas.map((item: CategoryData, index: number) => ({
-          id: index,
+          id: index + 1,
           value: item.name
         }));
-        setCategories(categoryNames);
+        if (categoryNames.length > 0){
+
+          setCategories([currentCategory, ...categoryNames]);
+        } else{
+          setCategories([currentCategory]);
+        }
+        console.log(categories)
+        
         setLoading(false);
       } catch (err) {
         setError("Error fetching languages");
@@ -102,10 +103,16 @@ export const Vulnerabilities = () => {
       try {
         const data = await getTypes();
         const typeNames = data.datas.map((item: TypeData, index: number) => ({
-          id: index,
+          id: index + 1,
           value: item.name
         }));
-        setTypes(typeNames);
+        if (typeNames.length > 0){
+
+          setTypes([currentType, ...typeNames]);
+        } else{
+          setTypes([currentType]);
+        }
+
         setLoading(false);
       } catch (err) {
         setError("Error fetching languages");
@@ -116,41 +123,10 @@ export const Vulnerabilities = () => {
     fetchType();
   }, []);
 
-
-  useEffect(() => {
-    if (languages.length > 0 && currentLanguage.value === '') {
-      console.log('Estableciendo currentLanguage: ', languages[0]);
-      setCurrentLanguage(languages[0]);
-    }
-  }, [languages, currentLanguage]);
   
-  useEffect(() => {
-    if (categories.length > 0 && currentCategory.value === '') {
-      console.log('Estableciendo currentLanguage: ', categories[0]);
-      setCurrentCategory(categories[0]);
-    }
-  }, [categories, currentCategory]);
 
-  useEffect(() => {
-    if (types.length > 0 && currentType.value === '') {
-      console.log('Estableciendo currentLanguage: ', types[0]);
-      setCurrentType(types[0]);
-    }
-  }, [types, currentType]);
- 
-  /* 
-         <SelectDropdown 
-              title={t('languages')} 
-              items={languages}
-              selected={currentLanguage}
-              onChange={setLanguage}
-            />
-
-
-        <div>{JSON.stringify(languages)}</div>
-        <div>{JSON.stringify(language)}</div>
-  */
-
+  
+        
   return (
     <div className="min-h-screen bg-gray-800 flex flex-col items-center">
       <div className="w-full max-w-7xl bg-gray-900 shadow-lg rounded-lg p-6 mt-6">
@@ -176,12 +152,16 @@ export const Vulnerabilities = () => {
             <PrimarySwitch enabled={enabledUpdate} onChange={setEnabledUpdate}/>
           </div>
           <div className="flex">
-            <button className="bg-teal-500 text-white rounded px-4 py-2 justify-self-end">{t('mergeVulnerabilities')}</button>
+            <div className="mt-2 mx-2">
+              <PrimaryButton>
+                <span className="mx-1">{t('mergeVulnerabilities')}</span>
+              </PrimaryButton>
+            </div>
             <div className="mt-2 mx-2">
               <PrimaryButton>
                 <span className="mx-1">{t('newVulnerability')}</span>
               </PrimaryButton>
-              </div>
+            </div>
           </div>
           
         </div>
@@ -189,7 +169,17 @@ export const Vulnerabilities = () => {
         </div>
         
         <div className="mb-4 flex space-x-4">
-          <input type="text" placeholder="Search" className="border border-gray-300 rounded p-2 w-1/2" />
+          <div className="w-1/2 top-2.5">
+            <SimpleInput
+              label={t('title')}
+              id="title"
+              name="title"
+              type="text"
+              placeholder="search"
+              value={textTitle}
+              onChange={setTextTitle}
+            />
+          </div>
           <div className="w-1/4">
             <SelectDropdown 
               title={t('category')} 
@@ -207,8 +197,9 @@ export const Vulnerabilities = () => {
             />
           </div>
         </div>
+        <hr className="h-1 my-3 bg-gray-600 border-0 rounded" />
         <div className="">
-          No matching records found
+          No matching records found {t('total')}
         </div>
       </div>
     </div>

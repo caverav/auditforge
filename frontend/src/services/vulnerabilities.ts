@@ -41,3 +41,17 @@ export const getTypes = async (): Promise<any> => {
     throw error;
   }
 };
+
+export const getVulnerabilities = async (): Promise<any> => {
+  try {
+    const response = await fetch(`${API_URL}vulnerabilities`, { credentials: "include" }); // Incluir token
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    throw error;
+  }
+};
