@@ -11,6 +11,12 @@ interface NewCollaborator {
   username: string;
 }
 
+interface NewCompany {
+  name: string;
+  shortname: string;
+  logo: string;
+}
+
 export const getCollaborators = async (): Promise<any> => {
   try {
     const response = await fetch(`${API_URL}users`, {
@@ -37,6 +43,44 @@ export const createCollaborator = async (
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(collab),
     }); // Incluir token
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+export const getCompanies = async (): Promise<any> => {
+  try {
+    const response = await fetch(`${API_URL}companies`, {
+      credentials: "include",
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+export const createCompany = async (
+  company: NewCompany
+): Promise<any> => {
+  try {
+    const response = await fetch(`${API_URL}companies`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(company),
+    });
+
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
