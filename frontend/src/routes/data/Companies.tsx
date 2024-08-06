@@ -30,18 +30,18 @@ export const Companies: React.FC = () => {
   const [isOpenAddCollabModal, setIsOpenAddCollabModal] = useState(false);
   
   useEffect(() => {
-    const fetchCollaborators = async () => {
+    const fetchCompanies = async () => {
       try {
         const data = await getCompanies();
         setCompanies(data);
         setLoading(false);
       } catch (err) {
-        setError("Error fetching collaborators");
+        setError("Error fetching company");
         setLoading(false);
       }
     };
 
-    fetchCollaborators();
+    fetchCompanies();
   }, []);
 
   const handleCancelAddCollab = () => {
@@ -53,7 +53,7 @@ export const Companies: React.FC = () => {
     try {
       await createCompany(newCompany!);
     } catch (error) {
-      setError("Error creating Company");
+      setError("Error creating company");
       console.error("Error:", error);
     }
     setNewCompany(null);
