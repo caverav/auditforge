@@ -2,9 +2,34 @@ import PrimarySwitch from "../../components/switch/PrimarySwitch"
 import PrimaryButton from "../../components/button/PrimaryButton"
 import { useState, useEffect } from "react";2
 import SimpleInput from "../../components/input/SimpleInput";
-import { getLanguages, getCategories, getTypes } from "../../services/vulnerabilities";
+import { getLanguages, getCategories, getTypes, getVulnerabilities } from "../../services/vulnerabilities";
 import SelectDropdown from "../../components/dropdown/SelectDropdown";
 import { t } from "i18next"
+
+type Details = {
+  locale: string;
+  title: string;
+  vulnType: string;
+  description: string;
+  observation: string;
+  remediation: string;
+  cwes: string[];
+  references: string[];
+  customFields: string[];
+} 
+
+type VulnerabilityData = {
+  _id: string;
+  cvssv3: string;
+  priority: number;
+  remediationComplexity: string;
+  details: Details[];
+  status: number;
+  category: string; 
+  __v: number;
+  createdAt: string;
+  updatedAt: string;
+};
 
 type LanguageData = {
   language: string;
@@ -34,110 +59,84 @@ export const Vulnerabilities = () => {
   const [enabledNew, setEnabledNew] = useState(false)
   const [enabledUpdate, setEnabledUpdate] = useState(false)
 
-  //const [languages, setLanguages] = useState<any[]>([]);
-  //const [currentLanguage, setCurrentLanguage] = useState<any>();
+  const [vulnerabilities, setVulnerabilities] = useState<VulnerabilityData[]>([]);
+  const [loadingVulnerability, setLoadingVulnerability] = useState<boolean>(true);
+
   const [languages, setLanguages] = useState<ListItem[]>([]);
   const [currentLanguage, setCurrentLanguage] = useState<any>({id: 0, value: ''});
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [loadingLanguage, setLoadingLanguage] = useState<boolean>(true);
 
   const [categories, setCategories] = useState<ListItem[]>([]);
   const [currentCategory, setCurrentCategory] = useState<any>({id: 0, value: t('noCategory')});
+  const [loadingCategory, setLoadingCategory] = useState<boolean>(true);
 
   const [types, setTypes] = useState<ListItem[]>([]);
   const [currentType, setCurrentType] = useState<any>({id: 0, value: t('undefined')});
+  const [loadingType, setLoadingType] = useState<boolean>(true);
 
   const [textTitle, setTextTitle] = useState<string>('');
 
- 
-
   useEffect(() => {
-    const fetchLanguages = async () => {
+    const fetchData = async () => {
       try {
-        const data = await getLanguages();
-        const languageNames = data.datas.map((item: LanguageData, index: number) => ({
+        const dataVulnerability = await getVulnerabilities();
+        setVulnerabilities(dataVulnerability.datas);
+        setLoadingVulnerability(false);
+   
+
+        const dataLanguage = await getLanguages();
+        const languageNames = dataLanguage.datas.map((item: LanguageData, index: number) => ({
           id: index,
           value: item.language,
         }));
         setLanguages(languageNames);
         setCurrentLanguage(languageNames[0]);
-        setLoading(false);
-      } catch (err) {
-        setError("Error fetching languages");
-        setLoading(false);
-      }
-    };
+        setLoadingLanguage(false);
 
-    fetchLanguages();
-  }, []);
-
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const data = await getCategories();
-        const categoryNames = data.datas.map((item: CategoryData, index: number) => ({
+        const dataCategory = await getCategories();
+        const categoryNames = dataCategory.datas.map((item: CategoryData, index: number) => ({
           id: index + 1,
           value: item.name
         }));
         if (categoryNames.length > 0){
-
           setCategories([currentCategory, ...categoryNames]);
         } else{
           setCategories([currentCategory]);
         }
-        console.log(categories)
-        
-        setLoading(false);
-      } catch (err) {
-        setError("Error fetching languages");
-        setLoading(false);
-      }
-    };
+        setLoadingCategory(false);
 
-    fetchCategories();
-  }, []);
-
-  useEffect(() => {
-    const fetchType = async () => {
-      try {
-        const data = await getTypes();
-        const typeNames = data.datas.map((item: TypeData, index: number) => ({
+        const dataType = await getTypes();
+        const typeNames = dataType.datas.map((item: TypeData, index: number) => ({
           id: index + 1,
           value: item.name
         }));
         if (typeNames.length > 0){
-
           setTypes([currentType, ...typeNames]);
         } else{
           setTypes([currentType]);
         }
+        setLoadingType(false);
 
-        setLoading(false);
+        
       } catch (err) {
-        setError("Error fetching languages");
-        setLoading(false);
+        setLoadingLanguage(false);
       }
     };
 
-    fetchType();
-  }, []);
-
-  
-
-  
+    fetchData();
+  }, []);  
         
   return (
     <div className="min-h-screen bg-gray-800 flex flex-col items-center">
       <div className="w-full max-w-7xl bg-gray-900 shadow-lg rounded-lg p-6 mt-6">
         <div className="flex items-center mb-4">
           <div>
-            <SelectDropdown 
+            {!loadingLanguage && <SelectDropdown 
               title={t('languages')} 
               items={languages}
               selected={currentLanguage}
               onChange={setCurrentLanguage}
-            />
+            />}
           </div>
           <div className="ml-1">
             <span className="mx-1">{t('btn.valid')}</span>
@@ -180,27 +179,36 @@ export const Vulnerabilities = () => {
               onChange={setTextTitle}
             />
           </div>
-          <div className="w-1/4">
-            <SelectDropdown 
+          <div className="w-1/6">
+            {!loadingCategory && <SelectDropdown 
               title={t('category')} 
               items={categories}
               selected={currentCategory}
               onChange={setCurrentCategory}
-            />
+            />}
           </div>
-          <div className="w-1/4">
-            <SelectDropdown 
-              title={t('search')} 
+          <div className="w-1/6">
+            {!loadingType && <SelectDropdown 
+              title={t('type')} 
               items={types}
               selected={currentType}
               onChange={setCurrentType}
-            />
+            />}
           </div>
         </div>
-        <hr className="h-1 my-3 bg-gray-600 border-0 rounded" />
+        
         <div className="">
-          No matching records found {t('total')}
+          <ul className="list-none p-0 m-0">
+            {!loadingVulnerability && vulnerabilities.map((item) => (
+              <li key={item._id} className="py-2 mb-4 flex space-x-4">
+                <span className="w-1/2">{item.details[0].title}</span>  
+                <span className="w-1/6">{item.category}</span>
+                <span className="w-1/6">{item.details[0].vulnType}</span>
+              </li>
+            ))}
+        </ul>
         </div>
+        <hr className="h-1 my-3 bg-gray-600 border-0 rounded" />
       </div>
     </div>
   );
