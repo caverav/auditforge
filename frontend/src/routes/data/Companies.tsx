@@ -16,19 +16,18 @@ interface NewCompany {
 export const Companies: React.FC = () => {
   const { t } = useTranslation();
 
-  const [newCompany, setNewCompany] =
-    useState<NewCompany | null>({
-      name: "",
-      shortname: "",
-      logo: "",
-    });
+  const [newCompany, setNewCompany] = useState<NewCompany | null>({
+    name: "",
+    shortname: "",
+    logo: "",
+  });
 
   const [companies, setCompanies] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
   const [isOpenAddCollabModal, setIsOpenAddCollabModal] = useState(false);
-  
+
   useEffect(() => {
     const fetchCompanies = async () => {
       try {
@@ -101,16 +100,16 @@ export const Companies: React.FC = () => {
             id={"name"}
             name={"name"}
             type={"text"}
-            placeholder={"name"}
+            placeholder={t("name")}
             value={newCompany?.name || ""}
             onChange={(value) => handleInputChange("name", value)}
           />
           <SimpleInput
-            label={t("shortname")}
+            label={t("shortName")}
             id={"shortname"}
             name={"shortname"}
             type={"text"}
-            placeholder={"shortname"}
+            placeholder={t("shortName")}
             value={newCompany?.shortname || ""}
             onChange={(value) => handleInputChange("shortname", value)}
           />

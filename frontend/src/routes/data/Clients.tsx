@@ -118,7 +118,7 @@ export const Clients: React.FC = () => {
             id={"firstname"}
             name={"firstname"}
             type={"text"}
-            placeholder={"firstname"}
+            placeholder={t("firstname")}
             value={newClient?.firstname || ""}
             onChange={(value) => handleInputChange("firstname", value)}
           />
@@ -127,7 +127,7 @@ export const Clients: React.FC = () => {
             id={"lastname"}
             name={"lastname"}
             type={"text"}
-            placeholder={"lastname"}
+            placeholder={t("lastname")}
             value={newClient?.lastname || ""}
             onChange={(value) => handleInputChange("lastname", value)}
           />
@@ -136,7 +136,7 @@ export const Clients: React.FC = () => {
             id={"email"}
             name={"email"}
             type={"text"}
-            placeholder={"email"}
+            placeholder={t("email")}
             value={newClient?.email || ""}
             onChange={(value) => handleInputChange("email", value)}
           />
@@ -145,7 +145,7 @@ export const Clients: React.FC = () => {
             id={"title"}
             name={"title"}
             type={"text"}
-            placeholder={"title"}
+            placeholder={t("title")}
             value={newClient?.title || ""}
             onChange={(value) => handleInputChange("title", value)}
           />
@@ -154,7 +154,7 @@ export const Clients: React.FC = () => {
             id={"phone"}
             name={"phone"}
             type={"text"}
-            placeholder={"phone"}
+            placeholder={t("phone")}
             value={newClient?.phone || ""}
             onChange={(value) => handleInputChange("phone", value)}
           />
@@ -163,7 +163,7 @@ export const Clients: React.FC = () => {
             id={"cell"}
             name={"cell"}
             type={"text"}
-            placeholder={"cell"}
+            placeholder={t("cell")}
             value={newClient?.cell || ""}
             onChange={(value) => handleInputChange("cell", value)}
           />

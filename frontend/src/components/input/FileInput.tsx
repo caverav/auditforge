@@ -1,14 +1,12 @@
 import React, { ChangeEvent, useState } from "react";
 
 interface FileInputProps {
-  label: string;
   id: string;
   name: string;
   onFileSelect: (file: { name: string; content: string }) => void;
 }
 
 const FileInput: React.FC<FileInputProps> = ({
-  label,
   id,
   name,
   onFileSelect,
@@ -42,12 +40,6 @@ const FileInput: React.FC<FileInputProps> = ({
 
   return (
     <div>
-      <label
-        htmlFor={id}
-        className="block text-sm font-medium leading-6 text-gray-300"
-      >
-        {label}
-      </label>
       <div className="relative mt-2 rounded-md shadow-sm">
         <input
           id={id}

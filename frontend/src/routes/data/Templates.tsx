@@ -82,14 +82,14 @@ export const Templates: React.FC = () => {
           <PrimaryButton
             onClick={() => setIsOpenAddCollabModal(!isOpenAddCollabModal)}
           >
-            {t("addTemplate")}
+            {t("createTemplate")}
           </PrimaryButton>
           <div>tarjetaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
           <div>{loading ? "cargandooo" : JSON.stringify(templates)}</div>
         </>
       </Card>
       <Modal
-        title={t("addTemplate")}
+        title={t("createTemplate")}
         onCancel={handleCancelAddCollab}
         onSubmit={handleSubmitAddCollab}
         cancelText={t("btn.cancel")}
@@ -107,7 +107,6 @@ export const Templates: React.FC = () => {
             onChange={(value) => handleInputChange("name", value)}
           />
           <FileInput
-            label={t("Upload Template")}
             id={"template"}
             name={"template"}
             onFileSelect={(file) => handleFileSelect(file.name.split('.').pop() || "", file.content)}
