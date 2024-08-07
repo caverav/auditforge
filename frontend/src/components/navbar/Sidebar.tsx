@@ -32,7 +32,6 @@ export const Sidebar: React.FC<SidebarProps> = ({
    * Al cambiar el valor de `location`,
    * actualiza el estado `selected`.
    */
-
   useEffect(() => {
     if(location) {
         let tmp = location.pathname.slice(location.pathname.lastIndexOf("/") +1, location.pathname.length);
