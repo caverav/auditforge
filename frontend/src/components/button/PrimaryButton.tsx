@@ -3,12 +3,25 @@ import React from "react";
 interface PrimaryButtonProps {
   children: React.ReactNode;
   onClick?: () => void;
+  color?: "blue" | "red" | "gray";
 }
 
-const PrimaryButton: React.FC<PrimaryButtonProps> = ({ children, onClick }) => {
+const colorToClassName = {
+  blue: "bg-blue-800 hover:bg-blue-700",
+  red: "bg-rose-800 hover:bg-rose-700",
+  gray: "bg-stone-400 hover:bg-stone-500",
+};
+
+const PrimaryButton: React.FC<PrimaryButtonProps> = ({
+  children,
+  onClick,
+  color = "blue",
+}) => {
+  const colorClassName = colorToClassName[color];
+
   return (
     <button
-      className="bg-blue-800 text-white font-bold py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline"
+      className={`${colorClassName} text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
       onClick={onClick}
     >
       {children}
