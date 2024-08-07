@@ -5,6 +5,7 @@ import SimpleInput from "../../components/input/SimpleInput";
 import { getLanguages, getCategories, getTypes, getVulnerabilities } from "../../services/vulnerabilities";
 import SelectDropdown from "../../components/dropdown/SelectDropdown";
 import { t } from "i18next"
+import AddVulnerability from "./addVulnerability";
 
 type Details = {
   locale: string;
@@ -75,6 +76,24 @@ export const Vulnerabilities = () => {
   const [loadingType, setLoadingType] = useState<boolean>(true);
 
   const [textTitle, setTextTitle] = useState<string>('');
+
+
+  //// Testing
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const closeModal = () => setIsModalOpen(false);
+  const openModal = () => setIsModalOpen(true);
+  const onSubmitModal = () => {
+    // Lógica de confirmación
+    setIsModalOpen(false);
+  };
+
+
+  const handleClick = () => {
+    // Lógica de confirmación
+    setIsModalOpen(true);
+  };
+  ////
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -157,9 +176,10 @@ export const Vulnerabilities = () => {
               </PrimaryButton>
             </div>
             <div className="mt-2 mx-2">
-              <PrimaryButton>
+              <PrimaryButton onClick={openModal}>
                 <span className="mx-1">{t('newVulnerability')}</span>
               </PrimaryButton>
+              <AddVulnerability category="test" onCancel={closeModal} onSubmit={onSubmitModal} isOpen={isModalOpen}/>
             </div>
           </div>
           
