@@ -28,10 +28,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
   const location = useLocation();
   const [selected, setSelected] = useState(defaultItem.value);
 
+  /**
+   * Al cambiar el valor de `location`,
+   * actualiza el estado `selected`.
+   */
+
   useEffect(() => {
     if(location) {
         let tmp = location.pathname.slice(location.pathname.lastIndexOf("/") +1, location.pathname.length);
-        console.log(tmp)
         setSelected(tmp);
     }
   }, [location])
