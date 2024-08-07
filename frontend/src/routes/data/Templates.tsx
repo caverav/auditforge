@@ -102,7 +102,7 @@ export const Templates: React.FC = () => {
             id={"name"}
             name={"name"}
             type={"text"}
-            placeholder={"name"}
+            placeholder={t("name")}
             value={newTemplate?.name || ""}
             onChange={(value) => handleInputChange("name", value)}
           />

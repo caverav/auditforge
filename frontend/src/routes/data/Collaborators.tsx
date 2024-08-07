@@ -114,7 +114,7 @@ export const Collaborators: React.FC = () => {
             id={"username"}
             name={"username"}
             type={"text"}
-            placeholder={"username"}
+            placeholder={t("username")}
             value={newCollaborator?.username || ""}
             onChange={(value) => handleInputChange("username", value)}
           />
@@ -123,7 +123,7 @@ export const Collaborators: React.FC = () => {
             id={"firstname"}
             name={"firstname"}
             type={"text"}
-            placeholder={"firstname"}
+            placeholder={t("firstname")}
             value={newCollaborator?.firstname || ""}
             onChange={(value) => handleInputChange("firstname", value)}
           />
@@ -132,7 +132,7 @@ export const Collaborators: React.FC = () => {
             id={"lastname"}
             name={"lastname"}
             type={"text"}
-            placeholder={"lastname"}
+            placeholder={t("lastname")}
             value={newCollaborator?.lastname || ""}
             onChange={(value) => handleInputChange("lastname", value)}
           />
@@ -141,7 +141,7 @@ export const Collaborators: React.FC = () => {
             id={"password"}
             name={"password"}
             type={"text"}
-            placeholder={"password"}
+            placeholder={t("password")}
             value={newCollaborator?.password || ""}
             onChange={(value) => handleInputChange("password", value)}
           />
@@ -150,7 +150,7 @@ export const Collaborators: React.FC = () => {
             id={"phone"}
             name={"phone"}
             type={"text"}
-            placeholder={"phone"}
+            placeholder={t("phone")}
             value={newCollaborator?.phone || ""}
             onChange={(value) => handleInputChange("phone", value)}
           />
@@ -165,7 +165,7 @@ export const Collaborators: React.FC = () => {
             id={"email"}
             name={"email"}
             type={"text"}
-            placeholder={"email"}
+            placeholder={t("email")}
             value={newCollaborator?.email || ""}
             onChange={(value) => handleInputChange("email", value)}
           />
