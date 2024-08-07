@@ -63,15 +63,15 @@ export const Vulnerabilities = () => {
   const [loadingVulnerability, setLoadingVulnerability] = useState<boolean>(true);
 
   const [languages, setLanguages] = useState<ListItem[]>([]);
-  const [currentLanguage, setCurrentLanguage] = useState<any>({id: 0, value: ''});
+  const [currentLanguage, setCurrentLanguage] = useState<ListItem>({id: 0, value: ''});
   const [loadingLanguage, setLoadingLanguage] = useState<boolean>(true);
 
   const [categories, setCategories] = useState<ListItem[]>([]);
-  const [currentCategory, setCurrentCategory] = useState<any>({id: 0, value: t('noCategory')});
+  const [currentCategory, setCurrentCategory] = useState<ListItem>({id: 0, value: t('noCategory')});
   const [loadingCategory, setLoadingCategory] = useState<boolean>(true);
 
   const [types, setTypes] = useState<ListItem[]>([]);
-  const [currentType, setCurrentType] = useState<any>({id: 0, value: t('undefined')});
+  const [currentType, setCurrentType] = useState<ListItem>({id: 0, value: t('undefined')});
   const [loadingType, setLoadingType] = useState<boolean>(true);
 
   const [textTitle, setTextTitle] = useState<string>('');
