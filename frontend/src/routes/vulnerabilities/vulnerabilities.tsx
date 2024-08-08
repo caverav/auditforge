@@ -1,6 +1,6 @@
 import PrimarySwitch from "../../components/switch/PrimarySwitch"
 import PrimaryButton from "../../components/button/PrimaryButton"
-import { useState, useEffect } from "react";2
+import { useState, useEffect, ChangeEvent } from "react";
 import SimpleInput from "../../components/input/SimpleInput";
 import { getLanguages, getCategories, getTypes, getVulnerabilities } from "../../services/vulnerabilities";
 import SelectDropdown from "../../components/dropdown/SelectDropdown";
@@ -55,6 +55,14 @@ interface ListItem {
   value: string;
 }
 
+type AddVulnerabilityData = {
+  cvssv3: string;
+  priority: number;
+  remediationComplexity: string;
+  details: Details[];
+  category: string; 
+};
+
 export const Vulnerabilities = () => {
   const [enabledValid, setEnabledValid] = useState(false)
   const [enabledNew, setEnabledNew] = useState(false)
@@ -80,18 +88,10 @@ export const Vulnerabilities = () => {
 
   //// Testing
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const closeModal = () => setIsModalOpen(false);
   const openModal = () => setIsModalOpen(true);
-  const onSubmitModal = () => {
-    // Lógica de confirmación
-    setIsModalOpen(false);
-  };
-
-
-  const handleClick = () => {
-    // Lógica de confirmación
-    setIsModalOpen(true);
-  };
+  
+  
+  
   ////
 
 
@@ -179,7 +179,10 @@ export const Vulnerabilities = () => {
               <PrimaryButton onClick={openModal}>
                 <span className="mx-1">{t('newVulnerability')}</span>
               </PrimaryButton>
-              <AddVulnerability category="test" onCancel={closeModal} onSubmit={onSubmitModal} isOpen={isModalOpen}/>
+              <div className="fixed z-50">
+              
+                {isModalOpen && <AddVulnerability isOpen={isModalOpen} handlerIsOpen={setIsModalOpen}/>}
+              </div>
             </div>
           </div>
           
