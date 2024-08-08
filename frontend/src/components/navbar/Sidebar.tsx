@@ -34,8 +34,8 @@ export const Sidebar: React.FC<SidebarProps> = ({
    */
   useEffect(() => {
     if(location) {
-        let tmp = location.pathname.slice(location.pathname.lastIndexOf("/") +1, location.pathname.length);
-        setSelected(tmp);
+        let tmp = location.pathname.split('/').filter(Boolean).pop();
+        setSelected(tmp ?? defaultItem.value);
     }
   }, [location])
 
