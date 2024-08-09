@@ -1,5 +1,12 @@
-import { ArrowDownTrayIcon, Bars3BottomRightIcon, ChevronLeftIcon, ChevronRightIcon, PencilSquareIcon, TrashIcon } from '@heroicons/react/24/outline';
-import React from 'react';
+import {
+  ArrowDownTrayIcon,
+  Bars3BottomRightIcon,
+  ChevronLeftIcon,
+  ChevronRightIcon,
+  PencilSquareIcon,
+  TrashIcon,
+} from "@heroicons/react/24/outline";
+import React from "react";
 
 type Column = {
   header: string;
@@ -17,7 +24,7 @@ interface TableProps {
   data: any[];
   keyExtractor: (item: any) => string | number;
   sortable?: boolean;
-  onSort?: (column: string, direction: 'asc' | 'desc') => void;
+  onSort?: (column: string, direction: "asc" | "desc") => void;
   pagination?: {
     currentPage: number;
     totalPages: number;
@@ -35,19 +42,17 @@ interface TableProps {
 }
 
 const mapActionLabelToIcon = (label: string) => {
-    switch (label){
-        case 'Edit':
-            return <PencilSquareIcon className='size-6'/>
-        case 'Delete':
-            return <TrashIcon className='size-6'/>
-        case 'Download':
-            return <ArrowDownTrayIcon className='size-6'/>
-        default:
-            return label;
-
-    }
-
-}
+  switch (label) {
+    case "Edit":
+      return <PencilSquareIcon className="size-6" />;
+    case "Delete":
+      return <TrashIcon className="size-6" />;
+    case "Download":
+      return <ArrowDownTrayIcon className="size-6" />;
+    default:
+      return label;
+  }
+};
 
 const UITable: React.FC<TableProps> = ({
   columns,
@@ -57,7 +62,7 @@ const UITable: React.FC<TableProps> = ({
   onSort,
   pagination,
   rowActions,
-  emptyState
+  emptyState,
 }) => {
   return (
     <div className="overflow-x-auto">
@@ -65,12 +70,18 @@ const UITable: React.FC<TableProps> = ({
         <thead className="bg-gray-700">
           <tr>
             {columns.map((column, index) => (
-              <th className="px-6 py-3 text-left tracking-wider">
-                {column.header}
-                {sortable && 
-                <button className='ml-2' onClick={() => onSort && onSort(column.accessor, 'asc')}>
-                    <Bars3BottomRightIcon className='size-4'/>
-                </button>}
+              <th className="px-6 py-3 text-left tracking-wider" key={index}>
+                <div className="flex justify-between">
+                  <span>{column.header}</span>
+                  {sortable && (
+                    <button
+                      className="ml-2"
+                      onClick={() => onSort && onSort(column.accessor, "asc")}
+                    >
+                      <Bars3BottomRightIcon className="size-4" />
+                    </button>
+                  )}
+                </div>
               </th>
             ))}
           </tr>
@@ -78,20 +89,28 @@ const UITable: React.FC<TableProps> = ({
         <tbody className="bg-gray-900 divide-y divide-gray-700">
           {data.length === 0 && emptyState ? (
             <tr>
-              <td className="px-6 py-4 text-center" colSpan={columns.length}>{emptyState}</td>
+              <td className="px-6 py-4 text-center" colSpan={columns.length}>
+                {emptyState}
+              </td>
             </tr>
           ) : (
             data.map((item) => (
-              <tr key={keyExtractor(item)}>
+              <tr key={keyExtractor(item)} className="hover:bg-gray-800">
                 {columns.map((column, index) => (
                   <td key={index} className="px-6 py-4 whitespace-nowrap">
-                    {column.render ? column.render(item[column.accessor]) : item[column.accessor]}
+                    {column.render
+                      ? column.render(item[column.accessor])
+                      : item[column.accessor]}
                   </td>
                 ))}
                 {rowActions && (
                   <td className="px-6 py-4 whitespace-nowrap">
                     {rowActions.map((action, index) => (
-                      <button key={index} onClick={() => action.onClick(item)} className="text-indigo-300 hover:text-indigo-600">
+                      <button
+                        key={index}
+                        onClick={() => action.onClick(item)}
+                        className="text-indigo-300 hover:text-indigo-600"
+                      >
                         {mapActionLabelToIcon(action.label)}
                       </button>
                     ))}
@@ -104,13 +123,18 @@ const UITable: React.FC<TableProps> = ({
       </table>
       {pagination && (
         <div className="mt-4 flex items-right ">
-          <button onClick={() => pagination.onPageChange(pagination.currentPage - 1)}>
-                <ChevronLeftIcon className='size-4'/>
-            </button>
+          <button
+            onClick={() => pagination.onPageChange(pagination.currentPage - 1)}
+          >
+            <ChevronLeftIcon className="size-4" />
+          </button>
           <span className="text-gray-100 bg-gray-900 px-2">
-            {pagination.currentPage} / {pagination.totalPages}</span>
-          <button onClick={() => pagination.onPageChange(pagination.currentPage + 1)}>
-            <ChevronRightIcon className='size-4'/>
+            {pagination.currentPage} / {pagination.totalPages}
+          </span>
+          <button
+            onClick={() => pagination.onPageChange(pagination.currentPage + 1)}
+          >
+            <ChevronRightIcon className="size-4" />
           </button>
         </div>
       )}
