@@ -1,6 +1,14 @@
 import { useState } from "react";
 import { Column } from "../components/table/UITable";
-
+/**
+ * Hook creado para manejar de manera simple el sorting de la tabla.
+ *
+ * Se deben ingresar los datos de la tabla y las columnas, definidas previamente.
+ *
+ * @param data Datos de la tabla.
+ * @param columns Columnas de la tabla. Utiliza el type `Column`.
+ * @returns Hook para mostrar los datos de la tabla y func. `setTableData` para UITable.
+ */
 export function useSortableTable<T>(data: T[], columns: Column[]) {
   const [tableData, setTableData] = useState(data);
 
