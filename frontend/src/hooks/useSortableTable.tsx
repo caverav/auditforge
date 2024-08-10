@@ -54,5 +54,5 @@ export function useSortableTable<T>(data: T[], columns: Column[]) {
     }
   };
 
-  return [tableData, handleSorting] as const;
+  return [tableData, handleSorting, setTableData] as const;
 }
