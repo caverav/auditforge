@@ -6,7 +6,8 @@ import {
   PencilSquareIcon,
   TrashIcon,
 } from "@heroicons/react/24/outline";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 export type Column = {
   header: string;
@@ -26,11 +27,6 @@ interface TableProps {
   keyExtractor: (item: any) => string | number;
   sortable?: boolean;
   onSort?: (column: string, direction: "asc" | "desc") => void;
-  pagination?: {
-    currentPage: number;
-    totalPages: number;
-    onPageChange: (page: number) => void;
-  };
   filterable?: boolean;
   onFilter?: (filters: { [key: string]: any }) => void;
   rowSelection?: {
@@ -61,11 +57,15 @@ const UITable: React.FC<TableProps> = ({
   data,
   keyExtractor,
   onSort,
-  pagination,
   rowActions,
   emptyState,
   children,
 }) => {
+  const { t } = useTranslation();
+
+  /**
+   * Sorting
+   */
   const [sortField, setSortField] = useState("");
   const [order, setOrder] = useState<"asc" | "desc">("asc");
   const handleSortingChange = (accessor: string) => {
@@ -77,10 +77,45 @@ const UITable: React.FC<TableProps> = ({
       onSort(accessor, sortOrder);
     }
   };
+
+  /**
+   * Pagination
+   */
+  const [currentPageNumber, setCurrentPageNumber] = useState(1);
+  const [dataToDisplay, setDataToDisplay] = useState(data);
+  const [totalValuesPerPage, setTotalValuesPerPage] = useState(25);
+
+  const goOnPrevPage = () => {
+    if (currentPageNumber === 1) return;
+    setCurrentPageNumber((prev) => prev - 1);
+  };
+  const goOnNextPage = () => {
+    if (currentPageNumber === Math.ceil(data.length / totalValuesPerPage))
+      return;
+    setCurrentPageNumber((prev) => prev + 1);
+  };
+
+  /**
+   * Update displayed data
+   */
+  useEffect(() => {
+    if (totalValuesPerPage == 0) {
+      setDataToDisplay(data);
+    } else {
+      const start = (currentPageNumber - 1) * totalValuesPerPage;
+      const end = currentPageNumber * totalValuesPerPage;
+      setDataToDisplay(data.slice(start, end));
+    }
+  }, [currentPageNumber, data, totalValuesPerPage]);
+
   return (
     <div className="overflow-x-auto bg-gray-700 p-2 shadow-2xl border rounded-lg">
-      <div className="py-3 mx-4">{children}</div>
-      <hr className="h-1 mx-2 bg-gray-600 border-0 rounded" />
+      {children && (
+        <>
+          <div className="py-3 mx-4">{children}</div>
+          <hr className="h-1 mx-2 bg-gray-600 border-0 rounded" />
+        </>
+      )}
       <div>
         <table className="min-w-full divide-y divide-gray-600">
           <thead className="bg-gray-700">
@@ -111,14 +146,14 @@ const UITable: React.FC<TableProps> = ({
             </tr>
           </thead>
           <tbody className="bg-gray-900 divide-y divide-gray-700">
-            {data.length === 0 && emptyState ? (
+            {dataToDisplay.length === 0 && emptyState ? (
               <tr>
                 <td className="px-6 py-4 text-center" colSpan={columns.length}>
                   {emptyState}
                 </td>
               </tr>
             ) : (
-              data.map((item) => (
+              dataToDisplay.map((item) => (
                 <tr key={keyExtractor(item)} className="hover:bg-gray-800">
                   {columns.map((column, index) => (
                     <td key={index} className="px-6 py-4 whitespace-nowrap">
@@ -148,26 +183,35 @@ const UITable: React.FC<TableProps> = ({
             )}
           </tbody>
         </table>
-        {pagination && (
-          <div className="flex flex-wrap">
-            <div className="mt-4 bg-gray-800 rounded-xl">
-              <button
-                onClick={() =>
-                  pagination.onPageChange(pagination.currentPage - 1)
-                }
+        {data.length > 0 && (
+          <div className="flex">
+            <div className="flex flex-wrap">
+              <div className="mt-4 bg-gray-800 rounded-xl">
+                <button onClick={goOnPrevPage}>
+                  <ChevronLeftIcon className="size-4" />
+                </button>
+                <span className="text-gray-100 bg-gray-900 px-2 select-none rounded-xl">
+                  {currentPageNumber} /{" "}
+                  {totalValuesPerPage !== 0
+                    ? Math.ceil(data.length / totalValuesPerPage)
+                    : 1}
+                </span>
+                <button onClick={goOnNextPage}>
+                  <ChevronRightIcon className="size-4" />
+                </button>
+              </div>
+            </div>
+            <div className="mt-4 bg-gray-800 rounded-xl px-1">
+              <select
+                className="bg-gray-900 rounded-xl px-2"
+                value={totalValuesPerPage}
+                onChange={(e) => setTotalValuesPerPage(Number(e.target.value))}
               >
-                <ChevronLeftIcon className="size-4" />
-              </button>
-              <span className="text-gray-100 bg-gray-900 px-2 select-none rounded-xl">
-                {pagination.currentPage} / {pagination.totalPages}
-              </span>
-              <button
-                onClick={() =>
-                  pagination.onPageChange(pagination.currentPage + 1)
-                }
-              >
-                <ChevronRightIcon className="size-4" />
-              </button>
+                <option value={25}>25</option>
+                <option value={50}>50</option>
+                <option value={100}>100</option>
+                <option value={0}>{t("btn.all")}</option>
+              </select>
             </div>
           </div>
         )}
