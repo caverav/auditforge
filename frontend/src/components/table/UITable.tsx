@@ -109,12 +109,12 @@ const UITable: React.FC<TableProps> = ({
   }, [currentPageNumber, data, totalValuesPerPage]);
 
   return (
-    <div className="overflow-x-auto bg-gray-700 p-2 shadow-2xl border rounded-lg">
+    <div className="overflow-x-auto bg-gray-900 p-2 shadow-2xl border rounded-lg">
       {children && (
-        <>
+        <div className="pb-4">
           <div className="py-3 mx-4">{children}</div>
           <hr className="h-1 mx-2 bg-gray-600 border-0 rounded" />
-        </>
+        </div>
       )}
       <div>
         <table className="min-w-full divide-y divide-gray-600">
@@ -186,7 +186,7 @@ const UITable: React.FC<TableProps> = ({
         {data.length > 0 && (
           <div className="flex">
             <div className="flex flex-wrap">
-              <div className="mt-4 bg-gray-800 rounded-xl">
+              <div className="mt-4 bg-gray-700 rounded-xl">
                 <button onClick={goOnPrevPage}>
                   <ChevronLeftIcon className="size-4" />
                 </button>
@@ -201,7 +201,7 @@ const UITable: React.FC<TableProps> = ({
                 </button>
               </div>
             </div>
-            <div className="mt-4 bg-gray-800 rounded-xl px-1">
+            <div className="mt-4 bg-gray-700 rounded-xl px-1">
               <select
                 className="bg-gray-900 rounded-xl px-2"
                 value={totalValuesPerPage}
