@@ -8,6 +8,7 @@ import {
 } from "@heroicons/react/24/outline";
 import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import SimpleInput from "../input/SimpleInput";
 
 export type Column = {
   header: string;
@@ -116,7 +117,7 @@ const UITable: React.FC<TableProps> = ({
 
   const [filters, setFilters] = useState<{ [key: string]: string }>({});
 
-  const handleFilterChange = (accessor: string, value: string) => {
+  const handleFilterChange = (value: string, accessor: string) => {
     const newFilters = { ...filters, [accessor]: value };
     setFilters(newFilters);
     if (onFilter) {
@@ -155,14 +156,13 @@ const UITable: React.FC<TableProps> = ({
                       )}
                     </div>
                     {column.filterable && (
-                      <input
+                      <SimpleInput
+                        id={column.header}
+                        name={column.header}
                         type="text"
                         placeholder={`Filter ${column.header}`}
-                        className="mt-2 p-1 border rounded w-full text-stone-900"
                         value={filters[column.accessor] || ""}
-                        onChange={(e) =>
-                          handleFilterChange(column.accessor, e.target.value)
-                        }
+                        onChange={(e) => handleFilterChange(e, column.accessor)}
                       />
                     )}
                   </div>
