@@ -102,7 +102,7 @@ const UITable: React.FC<TableProps> = ({
    * Update displayed data
    */
   useEffect(() => {
-    if (totalValuesPerPage == 0) {
+    if (totalValuesPerPage === 0) {
       setDataToDisplay(data);
     } else {
       const start = (currentPageNumber - 1) * totalValuesPerPage;
