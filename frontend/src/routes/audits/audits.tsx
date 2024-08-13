@@ -107,7 +107,7 @@ export const Audits = () => {
           (item: LanguageData, index: number) => ({
             id: index,
             value: item.language,
-          })
+          }),
         );
         setLanguages(languageNames);
         setCurrentLanguage(languageNames[0]);
@@ -118,7 +118,7 @@ export const Audits = () => {
           (item: TypeData, index: number) => ({
             id: index + 1,
             value: item.name,
-          })
+          }),
         );
         if (typeNames.length > 0) {
           setAuditType([currentAuditType, ...typeNames]);
@@ -132,7 +132,7 @@ export const Audits = () => {
           (item: CompanyData, index: number) => ({
             id: index + 1,
             value: item.name,
-          })
+          }),
         );
         setCompany(companyNames);
         setCurrentCompany(companyNames);
@@ -208,7 +208,7 @@ export const Audits = () => {
             options={RadioOptions}
             value={selectedValue}
             onChange={setSelectedValue}
-          ></DefaultRadioGroup>
+          />
           <SimpleInput
             label={t("name")}
             id="name"
@@ -236,7 +236,7 @@ export const Audits = () => {
           )}
         </Modal>
 
-        <div className="flex justify-between items-center mb-4"></div>
+        <div className="flex justify-between items-center mb-4" />
 
         <div className="mb-4 flex space-x-4">
           <div className="w-1/6 top-2.5">
