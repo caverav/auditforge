@@ -13,6 +13,7 @@ export type Column = {
   header: string;
   accessor: string;
   sortable?: boolean;
+  filterable?: boolean;
   render?: (data: any) => JSX.Element;
 };
 
@@ -57,6 +58,7 @@ const UITable: React.FC<TableProps> = ({
   data,
   keyExtractor,
   onSort,
+  onFilter,
   rowActions,
   emptyState,
   children,
@@ -108,6 +110,20 @@ const UITable: React.FC<TableProps> = ({
     }
   }, [currentPageNumber, data, totalValuesPerPage]);
 
+  /**
+   * Column filtering
+   */
+
+  const [filters, setFilters] = useState<{ [key: string]: string }>({});
+
+  const handleFilterChange = (accessor: string, value: string) => {
+    const newFilters = { ...filters, [accessor]: value };
+    setFilters(newFilters);
+    if (onFilter) {
+      onFilter(newFilters);
+    }
+  };
+
   return (
     <div className="overflow-x-auto bg-gray-900 p-2 shadow-2xl border rounded-lg">
       {children && (
@@ -122,17 +138,32 @@ const UITable: React.FC<TableProps> = ({
             <tr>
               {columns.map((column, index) => (
                 <th className="px-6 py-3 text-left tracking-wider" key={index}>
-                  <div className="flex justify-between">
-                    <span>{column.header}</span>
-                    {column.sortable && (
-                      <button
-                        className="ml-2"
-                        onClick={() =>
-                          onSort && handleSortingChange(column.accessor)
+                  <div className="flex flex-col space-y-2">
+                    <div className="flex justify-between items-center">
+                      {column.header}
+                      {column.sortable && (
+                        <div>
+                          <button
+                            className="ml-2 "
+                            onClick={() =>
+                              onSort && handleSortingChange(column.accessor)
+                            }
+                          >
+                            <Bars3BottomRightIcon className="size-4" />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                    {column.filterable && (
+                      <input
+                        type="text"
+                        placeholder={`Filter ${column.header}`}
+                        className="mt-2 p-1 border rounded w-full text-stone-900"
+                        value={filters[column.accessor] || ""}
+                        onChange={(e) =>
+                          handleFilterChange(column.accessor, e.target.value)
                         }
-                      >
-                        <Bars3BottomRightIcon className="size-4" />
-                      </button>
+                      />
                     )}
                   </div>
                 </th>
