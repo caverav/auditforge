@@ -5,12 +5,31 @@ import PrimarySwitch from "../../components/switch/PrimarySwitch";
 import PrimaryButton from "../../components/button/PrimaryButton";
 import SimpleInput from "../../components/input/SimpleInput";
 import SelectDropdown from "../../components/dropdown/SelectDropdown";
-import { getCompanies, getLanguages, getTypes } from "../../services/audits";
+import {
+  createAudit,
+  getCompanies,
+  getLanguages,
+  getTypes,
+} from "../../services/audits";
+import Modal from "../../components/modal/Modal";
+import DefaultRadioGroup from "../../components/button/DefaultRadioGroup";
 
 interface ListItem {
   id: number;
   value: string;
 }
+
+interface NewAudit {
+  type: string;
+  name: string;
+  assessment: string;
+  languaje: string;
+}
+
+const RadioOptions = [
+  { id: "1", label: t("default"), value: "1" },
+  { id: "2", label: t("multi"), value: "2" },
+];
 
 type TypeData = {
   name: string;
@@ -38,7 +57,22 @@ export const Audits = () => {
 
   const [usersConnected, setUsersConnected] = useState(false);
 
-  const [name, setName] = useState<string>("");
+  const [isOpenNewAuditModal, setIsOpenNewAuditModal] = useState(false);
+
+  const [newAudit, setNewAudit] = useState<NewAudit | null>({
+    type: "",
+    name: "",
+    assessment: "",
+    languaje: "",
+  });
+
+  const [selectedValue, setSelectedValue] = useState("");
+
+  const [error, setError] = useState<string | null>(null);
+
+  const [nameSearch, setNameSearch] = useState<string>("");
+
+  const [nameAudit, setNameAudit] = useState<string>("");
 
   const [auditType, setAuditType] = useState<ListItem[]>([]);
   const [currentAuditType, setCurrentAuditType] = useState<ListItem>({
@@ -110,6 +144,22 @@ export const Audits = () => {
     fetchData();
   }, []);
 
+  const handleCancelNewAudit = () => {
+    setNewAudit(null);
+    setIsOpenNewAuditModal(!isOpenNewAuditModal);
+  };
+
+  const handleSubmitNewAudit = async () => {
+    try {
+      await createAudit(newAudit!);
+    } catch (error) {
+      setError("Error creating audit");
+      console.error("Error:", error);
+    }
+    setNewAudit(null);
+    setIsOpenNewAuditModal(!isOpenNewAuditModal);
+  };
+
   return (
     <div className="min-h-screen bg-gray-800 flex flex-col items-center">
       <div className="w-full max-w-7xl bg-gray-900 shadow-lg rounded-lg p-6 mt-6">
@@ -137,11 +187,54 @@ export const Audits = () => {
             />
           </div>
           <div className="mt-2 mx-2">
-            <PrimaryButton>
-              <span className="mx-1">{t("newAudit")}</span>
+            <PrimaryButton
+              onClick={() => setIsOpenNewAuditModal(!isOpenNewAuditModal)}
+            >
+              {t("newAudit")}
             </PrimaryButton>
           </div>
         </div>
+
+        <Modal
+          title={t("createAudit")}
+          onCancel={handleCancelNewAudit}
+          onSubmit={handleSubmitNewAudit}
+          cancelText={t("btn.cancel")}
+          submitText={t("btn.create")}
+          isOpen={isOpenNewAuditModal}
+        >
+          <DefaultRadioGroup
+            name={"AuditType"}
+            options={RadioOptions}
+            value={selectedValue}
+            onChange={setSelectedValue}
+          ></DefaultRadioGroup>
+          <SimpleInput
+            label={t("name")}
+            id="name"
+            name="name"
+            type="text"
+            placeholder="Search"
+            value={nameAudit}
+            onChange={setNameAudit}
+          />
+          {!loadingAuditType && (
+            <SelectDropdown
+              title={t("auditType")}
+              items={auditType}
+              selected={currentAuditType}
+              onChange={setCurrentAuditType}
+            />
+          )}
+          {!loadingLanguage && (
+            <SelectDropdown
+              title={t("languages")}
+              items={languages}
+              selected={currentLanguage}
+              onChange={setCurrentLanguage}
+            />
+          )}
+        </Modal>
 
         <div className="flex justify-between items-center mb-4"></div>
 
@@ -153,8 +246,8 @@ export const Audits = () => {
               name="name"
               type="text"
               placeholder="Search"
-              value={name}
-              onChange={setName}
+              value={nameSearch}
+              onChange={setNameSearch}
             />
           </div>
           <div className="w-1/6">
