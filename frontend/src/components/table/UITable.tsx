@@ -160,7 +160,7 @@ const UITable: React.FC<TableProps> = ({
                         id={column.header}
                         name={column.header}
                         type="text"
-                        placeholder={`Filter ${column.header}`}
+                        placeholder={t("search")}
                         value={filters[column.accessor] || ""}
                         onChange={(e) => handleFilterChange(e, column.accessor)}
                       />
