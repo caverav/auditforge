@@ -195,7 +195,7 @@ const UITable: React.FC<TableProps> = ({
                     >
                       {column.render
                         ? column.render(item[column.accessor])
-                        : item[column.accessor]}
+                        : (item[column.accessor] ?? "-")}
                     </td>
                   ))}
                   {rowActions && (
