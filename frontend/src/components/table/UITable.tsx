@@ -137,8 +137,11 @@ const UITable: React.FC<TableProps> = ({
         <table className="min-w-full divide-y divide-gray-600">
           <thead className="bg-gray-700">
             <tr>
-              {columns.map((column, index) => (
-                <th className="px-6 py-3 text-left tracking-wider" key={index}>
+              {columns.map((column) => (
+                <th
+                  className="px-6 py-3 text-left tracking-wider"
+                  key={column.accessor}
+                >
                   <div className="flex flex-col space-y-2">
                     <div className="flex justify-between items-center">
                       {column.header}
@@ -186,8 +189,11 @@ const UITable: React.FC<TableProps> = ({
             ) : (
               dataToDisplay.map((item) => (
                 <tr key={keyExtractor(item)} className="hover:bg-gray-800">
-                  {columns.map((column, index) => (
-                    <td key={index} className="px-6 py-4 whitespace-nowrap">
+                  {columns.map((column) => (
+                    <td
+                      key={column.accessor}
+                      className="px-6 py-4 whitespace-nowrap"
+                    >
                       {column.render
                         ? column.render(item[column.accessor])
                         : item[column.accessor]}
@@ -198,9 +204,9 @@ const UITable: React.FC<TableProps> = ({
                       key={keyExtractor(item)}
                       className="px-6 py-4 whitespace-nowrap"
                     >
-                      {rowActions.map((action, index) => (
+                      {rowActions.map((action) => (
                         <button
-                          key={index}
+                          key={action.label}
                           onClick={() => action.onClick(item)}
                           className="text-indigo-300 hover:text-indigo-600"
                         >
