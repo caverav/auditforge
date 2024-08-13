@@ -35,7 +35,6 @@ interface TableProps {
     selectedRowKeys: (string | number)[];
     onSelectRow: (selectedRowKeys: (string | number)[]) => void;
   };
-  customStyles?: React.CSSProperties;
   rowActions?: RowAction[];
   emptyState?: React.ReactNode;
   children?: React.ReactNode;
