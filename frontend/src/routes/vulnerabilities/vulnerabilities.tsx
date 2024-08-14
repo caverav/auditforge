@@ -181,7 +181,7 @@ export const Vulnerabilities = () => {
               </PrimaryButton>
               <div className="fixed z-50">
               
-                {isModalOpen && <AddVulnerability isOpen={isModalOpen} handlerIsOpen={setIsModalOpen}/>}
+                {isModalOpen && <AddVulnerability isOpen={isModalOpen} handlerIsOpen={setIsModalOpen} categoryVuln={currentCategory.value}/>}
               </div>
             </div>
           </div>
