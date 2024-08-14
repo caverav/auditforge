@@ -18,14 +18,11 @@ const TextArea: React.FC<TextAreaEditor> = ({ label, rows, value, id, name, plac
 
     
     return (
-        <div className="w-full">
+        <div className="p-4 w-full rounded-md border-0 text-gray-900 ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
             <Field>
-                <Label className="block text-sm font-medium leading-6 text-gray-300">{label}</Label>
+                <Label className="block font-medium leading-6 text-gray-300">{label}</Label>
                 <Textarea
-                className={clsx(
-                    'w-full mt-2 p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500',
-                    'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25'
-                )}
+                className={"w-full mt-2 p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"}
                 rows={rows}
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
@@ -35,7 +32,7 @@ const TextArea: React.FC<TextAreaEditor> = ({ label, rows, value, id, name, plac
                 />
             </Field>
         </div>
-  )
+    )
 }
 
 export default TextArea;
