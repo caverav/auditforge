@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 /**
  * **name**: Traducción.
@@ -25,7 +25,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
   title,
   defaultItem,
 }) => {
+  const location = useLocation();
   const [selected, setSelected] = useState(defaultItem.value);
+
+  /**
+   * Al cambiar el valor de `location`,
+   * actualiza el estado `selected`.
+   */
+  useEffect(() => {
+    if(location) {
+        let tmp = location.pathname.split('/').filter(Boolean).pop();
+        setSelected(tmp ?? defaultItem.value);
+    }
+  }, [location])
+
   return (
     <div className="w-64 h-screen bg-gray-700 text-white">
       <div className="p-4">
