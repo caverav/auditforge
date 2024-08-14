@@ -13,6 +13,7 @@ import "./index.css";
 import { Root, Audits, Vulnerabilities, Data, Settings, Login } from "./routes";
 import { ErrorPage } from "./error-page.tsx";
 import "./i18n";
+import { General, Network, Add, Edit } from "./routes/audits";
 import {
   Collaborators,
   Companies,
@@ -35,6 +36,24 @@ const router = createBrowserRouter([
       {
         path: "/audits",
         element: <Audits />,
+        children: [
+          {
+            path: ":id/general",
+            element: <General />,
+          },
+          {
+            path: ":id/network",
+            element: <Network />,
+          },
+          {
+            path: ":id/findings/add",
+            element: <Add />,
+          },
+          {
+            path: ":auditId/findings/:findingId",
+            element: <Edit />,
+          },
+        ],
       },
       {
         path: "/vulnerabilities",
