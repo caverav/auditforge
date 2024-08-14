@@ -1,7 +1,4 @@
 import { Field, Label, Textarea } from '@headlessui/react'
-import clsx from 'clsx';
-
-
 
 interface TextAreaEditor {
     label: string;
@@ -10,7 +7,7 @@ interface TextAreaEditor {
     id: string;
     name: string;
     placeholder: string;
-    onChange: (content: string) => void;
+    onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
 }
 
 
@@ -22,13 +19,13 @@ const TextArea: React.FC<TextAreaEditor> = ({ label, rows, value, id, name, plac
             <Field>
                 <Label className="block font-medium leading-6 text-gray-300">{label}</Label>
                 <Textarea
-                className={"w-full mt-2 p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"}
-                rows={rows}
-                value={value}
-                onChange={(e) => onChange(e.target.value)}
-                placeholder={placeholder}
-                id={id}
-                name={name}
+                    className={"w-full mt-2 p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"}
+                    rows={rows}
+                    value={value}
+                    onChange={onChange}
+                    placeholder={placeholder}
+                    id={id}
+                    name={name}
                 />
             </Field>
         </div>
