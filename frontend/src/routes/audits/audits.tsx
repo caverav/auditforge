@@ -10,13 +10,32 @@ import {
   getCompanies,
   getLanguages,
   getTypes,
+  getAudits,
+  getAuditColumns,
 } from "../../services/audits";
 import Modal from "../../components/modal/Modal";
 import DefaultRadioGroup from "../../components/button/DefaultRadioGroup";
+import UITable from "../../components/table/UITable";
+import type { Column } from "../../components/table/UITable";
+import type { Audit } from "../../services/audits";
 
 interface ListItem {
   id: number;
   value: string;
+}
+
+interface TmpAudit {
+  _id: string;
+  name: string;
+  type: string;
+  language: string;
+  company: string;
+  participants: string;
+  date: string;
+  creator: {
+    username: string;
+    _id: string;
+  };
 }
 
 interface NewAudit {
@@ -99,6 +118,26 @@ export const Audits = () => {
 
   const [date, setDate] = useState<string>("");
 
+  const [columns, setColumns] = useState<Column[]>([]);
+
+  const [data, setData] = useState<Object[]>([]);
+
+  const onFilter = (filters: { [key: string]: any }) => {
+    if (filters.length === 0) return;
+    const newData = data.filter((item) => {
+      return Object.keys(filters).every((key) => {
+        if (filters[key] === "") {
+          return true;
+        }
+        if (item[key].includes(filters[key])) {
+          return true;
+        }
+        return false;
+      });
+    });
+    setData(newData);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -127,6 +166,8 @@ export const Audits = () => {
         }
         setLoadingAuditType(false);
 
+        const dataColumns = await getAuditColumns();
+        setColumns(dataColumns);
         const dataCompany = await getCompanies();
         const companyNames = dataCompany.datas.map(
           (item: CompanyData, index: number) => ({
@@ -137,6 +178,26 @@ export const Audits = () => {
         setCompany(companyNames);
         setCurrentCompany(companyNames);
         setLoadingCompany(false);
+
+        const dataAudits = await getAudits().then((res) => {
+          const data = res.datas.map((audit: TmpAudit) => {
+            const auditData: Audit = {
+              _id: audit._id,
+              name: t(audit.name),
+              type: audit.type,
+              language: audit.language,
+              company: audit.company,
+              participants: audit.participants,
+              date: audit.date,
+              creator: audit.creator.username,
+            };
+
+            return auditData;
+          });
+          return data;
+        });
+
+        setData(dataAudits);
       } catch (err) {
         setLoadingLanguage(false);
       }
@@ -303,6 +364,16 @@ export const Audits = () => {
             />
           </div>
         </div>
+        <UITable
+          columns={columns}
+          data={data}
+          keyExtractor={(item) => item._id}
+          sortable={true}
+          filterable={true}
+          customStyles={"bg-gray-800 p-2 shadow-2xl border rounded-lg"}
+          emptyState={t("noAudits")}
+          onFilter={onFilter}
+        />
       </div>
     </div>
   );
