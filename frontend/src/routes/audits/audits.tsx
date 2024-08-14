@@ -27,15 +27,25 @@ interface ListItem {
 interface TmpAudit {
   _id: string;
   name: string;
-  type: string;
+  auditType: string;
   language: string;
-  company: string;
-  participants: string;
+  company: {
+    _id: string;
+    name: string;
+  };
+  collaborators: {
+    _id: string;
+    username: string;
+  }[];
   date: string;
   creator: {
     username: string;
     _id: string;
   };
+  state: string;
+  type: string;
+  connected: string[];
+  createdAt: string;
 }
 
 interface NewAudit {
@@ -177,17 +187,22 @@ export const Audits = () => {
 
         const dataAudits = await getAudits().then((res) => {
           const data = res.datas.map((audit: TmpAudit) => {
+            console.log(audit);
             const auditData: Audit = {
               _id: audit._id,
               name: t(audit.name),
-              type: audit.type,
+              auditType: audit.auditType,
               language: audit.language,
-              company: audit.company,
-              participants: audit.participants,
-              date: audit.date,
+              company: audit.company?.name,
+              collaborators: audit.collaborators.map((c) => c.username),
+              createdAt: audit.createdAt,
               creator: audit.creator.username,
+              state: audit.state,
+              type: audit.type,
+              connected: audit.connected,
             };
 
+            console.log(auditData);
             return auditData;
           });
           return data;

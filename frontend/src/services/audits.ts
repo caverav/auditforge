@@ -3,12 +3,15 @@ const API_URL = "https://localhost:8443/api/";
 export interface Audit {
   _id: string;
   name: string;
-  type: string;
+  auditType: string;
   language: string;
   company: string;
-  participants: string;
-  date: string;
+  collaborators: string[];
+  createdAt: string;
   creator: string;
+  state: string;
+  type: string;
+  connected: string[];
 }
 
 interface NewAudit {
@@ -101,31 +104,6 @@ export const getAudits = async (): Promise<any> => {
     throw error;
   }
 };
-
-// example columns
-// const columns = [
-//   { header: t("name"), accessor: "name", sortable: true, filterable: true },
-//   { header: t("type"), accessor: "type", sortable: true, filterable: true },
-//   {
-//     header: t("language"),
-//     accessor: "language",
-//     sortable: true,
-//     filterable: true,
-//   },
-//   {
-//     header: t("company"),
-//     accessor: "company",
-//     sortable: true,
-//     filterable: true,
-//   },
-//   {
-//     header: t("participants"),
-//     accessor: "participants",
-//     sortable: true,
-//     filterable: true,
-//   },
-//   { header: t("date"), accessor: "date", sortable: true, filterable: true },
-// ];
 
 export const getAuditColumns = async (): Promise<any> => {
   console.log("Loading audit columns");
