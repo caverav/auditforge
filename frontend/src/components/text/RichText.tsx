@@ -1,5 +1,5 @@
 import 'react-quill/dist/quill.snow.css';
-import ReactQuill, {Quill} from 'react-quill-new';
+import ReactQuill from 'react-quill';
 import { Field, Label } from '@headlessui/react'
 
 
