@@ -122,20 +122,16 @@ export const Audits = () => {
 
   const [data, setData] = useState<Object[]>([]);
 
+  const [filteredData, setFilteredData] = useState<Object[]>([]);
+
   const onFilter = (filters: { [key: string]: any }) => {
     if (filters.length === 0) return;
     const newData = data.filter((item) => {
-      return Object.keys(filters).every((key) => {
-        if (filters[key] === "") {
-          return true;
-        }
-        if (item[key].includes(filters[key])) {
-          return true;
-        }
-        return false;
-      });
+      return Object.keys(filters).every(
+        (key) => filters[key] === "" || item[key].includes(filters[key]),
+      );
     });
-    setData(newData);
+    setFilteredData(newData);
   };
 
   useEffect(() => {
@@ -197,6 +193,7 @@ export const Audits = () => {
           return data;
         });
 
+        setFilteredData(dataAudits);
         setData(dataAudits);
       } catch (err) {
         setLoadingLanguage(false);
@@ -366,11 +363,10 @@ export const Audits = () => {
         </div>
         <UITable
           columns={columns}
-          data={data}
+          data={filteredData}
           keyExtractor={(item) => item._id}
           sortable={true}
           filterable={true}
-          customStyles={"bg-gray-800 p-2 shadow-2xl border rounded-lg"}
           emptyState={t("noAudits")}
           onFilter={onFilter}
         />
