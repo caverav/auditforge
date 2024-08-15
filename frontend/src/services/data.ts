@@ -133,6 +133,27 @@ export const updateCompany = async (
   }
 };
 
+export const deleteCompany = async (
+  companyId: string
+): Promise<any> => {
+  try {
+    const response = await fetch(`${API_URL}companies/${companyId}`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" }
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
 export const getClients = async (): Promise<any> => {
   try {
     const response = await fetch(`${API_URL}clients`, {

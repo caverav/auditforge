@@ -1,7 +1,12 @@
 import { useTranslation } from "react-i18next";
 import Card from "../../components/card/Card";
 import { useEffect, useState } from "react";
-import { getCompanies, createCompany, updateCompany } from "../../services/data";
+import {
+  getCompanies,
+  createCompany,
+  updateCompany,
+  deleteCompany,
+} from "../../services/data";
 import PrimaryButton from "../../components/button/PrimaryButton";
 import Modal from "../../components/modal/Modal";
 import SimpleInput from "../../components/input/SimpleInput";
@@ -29,24 +34,24 @@ export const Companies: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchCompanies = async () => {
-      try {
-        const data = await getCompanies();
-        setCompanies(data.datas);
-        setLoading(false);
-      } catch (err) {
-        setError("Error fetching company");
-        setLoading(false);
-      }
-    };
+  const fetchCompanies = async () => {
+    try {
+      const data = await getCompanies();
+      setCompanies(data.datas);
+      setLoading(false);
+    } catch (err) {
+      setError("Error fetching company");
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchCompanies();
   }, []);
 
   // table
   const columns = [
-    { header: "Name", accessor: "name", sortable: true , filterable: true},
+    { header: "Name", accessor: "name", sortable: true, filterable: true },
     { header: "Shortname", accessor: "shortName", sortable: true },
     {
       header: "Logo",
@@ -71,8 +76,7 @@ export const Companies: React.FC = () => {
 
   const keyExtractor = (item: any) => item.id;
 
-  const handleEditCompany = (company: TableData) => {
-    console.log("open ", company);
+  const handleEditCompanyButton = (company: TableData) => {
     setNewCompany({
       _id: company._id,
       name: company.name,
@@ -82,14 +86,19 @@ export const Companies: React.FC = () => {
     setIsOpenEditCollabModal(!isOpenEditCollabModal);
   };
 
+  const handleDeleteCompanyButton = (company: TableData) => {
+    deleteCompany(company._id);
+    fetchCompanies();
+  };
+
   const rowActions = [
     {
       label: "Edit",
-      onClick: (item: TableData) => handleEditCompany(item),
+      onClick: (item: TableData) => handleEditCompanyButton(item),
     },
     {
       label: "Delete",
-      onClick: (item: any) => alert(`Delete ${item.name}`),
+      onClick: (item: TableData) => handleDeleteCompanyButton(item),
     },
   ];
 
@@ -138,6 +147,7 @@ export const Companies: React.FC = () => {
     }
     setNewCompany(null);
     setIsOpenAddCollabModal(!isOpenAddCollabModal);
+    fetchCompanies();
   };
 
   const handleCancelEditCollab = () => {
@@ -147,7 +157,6 @@ export const Companies: React.FC = () => {
 
   const handleSubmitEditCollab = async () => {
     try {
-      console.log("button ", newCompany);
       await updateCompany(newCompany!);
     } catch (error) {
       setError("Error updating company");
@@ -155,6 +164,7 @@ export const Companies: React.FC = () => {
     }
     setNewCompany(null);
     setIsOpenEditCollabModal(!isOpenEditCollabModal);
+    fetchCompanies();
   };
 
   const handleInputChange = (name: string, value: string) => {
@@ -217,7 +227,7 @@ export const Companies: React.FC = () => {
             type={"text"}
             placeholder={t("shortName")}
             value={newCompany?.shortName || ""}
-            onChange={(value) => handleInputChange("shortname", value)}
+            onChange={(value) => handleInputChange("shortName", value)}
           />
           <ImageInput
             label={t("logo")}
