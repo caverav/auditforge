@@ -1,5 +1,26 @@
 const API_URL = 'https://localhost:4242/api/';
 
+type Details = {
+  locale: string;
+  title: string;
+  vulnType: string;
+  description: string;
+  observation: string;
+  remediation: string;
+  cwes: string[];
+  references: string[];
+  customFields: string[];
+} 
+
+type NewVulnerability = {
+  cvssv3: string;
+  priority: number;
+  remediationComplexity: number;
+  details: Details[];
+  category: string; 
+};
+
+
 export const getLanguages = async (): Promise<any> => {
   try {
     const response = await fetch(`${API_URL}data/languages`, { credentials: "include" }); // Incluir token
@@ -52,6 +73,25 @@ export const getVulnerabilities = async (): Promise<any> => {
     return data;
   } catch (error) {
     console.error('Error fetching data:', error);
+    throw error;
+  }
+};
+
+export const postVulnerability = async (vulnerability: NewVulnerability[]): Promise<any> => {
+  try {
+    const response = await fetch(`${API_URL}vulnerabilities`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(vulnerability),
+    });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
     throw error;
   }
 };
