@@ -42,7 +42,7 @@ const router = createBrowserRouter([
         element: <General />,
       },
       {
-        path: "/audits/:AuditId/network",
+        path: "/audits/:auditId/network",
         element: <Network />,
       },
       {
