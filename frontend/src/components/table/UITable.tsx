@@ -89,11 +89,14 @@ const UITable: React.FC<TableProps> = ({
   const [totalValuesPerPage, setTotalValuesPerPage] = useState(25);
 
   const goOnPrevPage = () => {
-    if (currentPageNumber === 1) return;
+    if (currentPageNumber === 1 || totalValuesPerPage === 0) return;
     setCurrentPageNumber((prev) => prev - 1);
   };
   const goOnNextPage = () => {
-    if (currentPageNumber === Math.ceil(data.length / totalValuesPerPage))
+    if (
+      currentPageNumber === Math.ceil(data.length / totalValuesPerPage) ||
+      totalValuesPerPage === 0
+    )
       return;
     setCurrentPageNumber((prev) => prev + 1);
   };
@@ -104,6 +107,7 @@ const UITable: React.FC<TableProps> = ({
   useEffect(() => {
     if (totalValuesPerPage === 0) {
       setDataToDisplay(data);
+      setCurrentPageNumber(1);
     } else {
       const start = (currentPageNumber - 1) * totalValuesPerPage;
       const end = currentPageNumber * totalValuesPerPage;
