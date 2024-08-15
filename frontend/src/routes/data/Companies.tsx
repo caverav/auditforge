@@ -38,6 +38,7 @@ export const Companies: React.FC = () => {
     try {
       const data = await getCompanies();
       setCompanies(data.datas);
+      setTableData(data.datas);
       setLoading(false);
     } catch (err) {
       setError("Error fetching company");
