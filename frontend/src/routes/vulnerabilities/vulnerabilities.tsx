@@ -179,7 +179,7 @@ export const Vulnerabilities = () => {
               <PrimaryButton onClick={openModal}>
                 <span className="mx-1">{t('newVulnerability')}</span>
               </PrimaryButton>
-              <div className="fixed z-50">
+              <div className="fixed">
               
                 {isModalOpen && <AddVulnerability isOpen={isModalOpen} handlerIsOpen={setIsModalOpen} categoryVuln={currentCategory.value} languages={languages} types={types}/>}
               </div>
