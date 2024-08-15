@@ -1,10 +1,11 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState, useEffect } from "react";
 
 interface ImageInputProps {
   label: string;
   id: string;
   name: string;
   onImageSelect: (image: string) => void;
+  initialImage?: string;  // Optional prop to set the initial image
 }
 
 const ImageInput: React.FC<ImageInputProps> = ({
@@ -12,8 +13,15 @@ const ImageInput: React.FC<ImageInputProps> = ({
   id,
   name,
   onImageSelect,
+  initialImage,
 }) => {
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(initialImage || null);
+
+  useEffect(() => {
+    if (initialImage) {
+      setImagePreview(initialImage);
+    }
+  }, [initialImage]);
 
   const handleImageChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

@@ -12,8 +12,9 @@ interface NewCollaborator {
 }
 
 interface NewCompany {
+  _id?: string;
   name: string;
-  shortname: string;
+  shortName: string;
   logo: string;
 }
 
@@ -95,6 +96,30 @@ export const createCompany = async (
       credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(company),
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+export const updateCompany = async (
+  company: NewCompany
+): Promise<any> => {
+  try {
+    const { _id, ...companyWithoutId } = company;
+
+    const response = await fetch(`${API_URL}companies/${_id}`, {
+      method: "PUT",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(companyWithoutId),
     });
 
     if (!response.ok) {
