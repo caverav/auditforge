@@ -12,6 +12,7 @@ import {
   getTypes,
   getAudits,
   getAuditColumns,
+  fetchUsername,
 } from "../../services/audits";
 import Modal from "../../components/modal/Modal";
 import DefaultRadioGroup from "../../components/button/DefaultRadioGroup";
@@ -134,15 +135,22 @@ export const Audits = () => {
 
   const [filteredData, setFilteredData] = useState<Object[]>([]);
 
+  const [username, setUsername] = useState<string>("");
+
   const onFilter = (filters: { [key: string]: any }) => {
     if (filters.length === 0) return;
     const newData = data.filter((item) => {
       return Object.keys(filters).every(
-        (key) => filters[key] === "" || item[key].includes(filters[key]),
+        (key) =>
+          filters[key] === "" ||
+          (item[key].includes(filters[key]) &&
+            (myAudits ? username === item.creator.username : true)),
       );
     });
     setFilteredData(newData);
   };
+
+  fetchUsername().then((username) => setUsername(username));
 
   useEffect(() => {
     const fetchData = async () => {

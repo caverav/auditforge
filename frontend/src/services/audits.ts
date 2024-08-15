@@ -129,3 +129,11 @@ export const getAuditColumns = async (): Promise<any> => {
     throw error;
   }
 };
+
+export const fetchUsername = () => {
+  // /api/users/me
+  const user = fetch(`${API_URL}users/me`, {
+    credentials: "include",
+  }).then((res) => res.json());
+  return user;
+};

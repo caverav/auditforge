@@ -36,24 +36,22 @@ const router = createBrowserRouter([
       {
         path: "/audits",
         element: <Audits />,
-        children: [
-          {
-            path: ":id/general",
-            element: <General />,
-          },
-          {
-            path: ":id/network",
-            element: <Network />,
-          },
-          {
-            path: ":id/findings/add",
-            element: <Add />,
-          },
-          {
-            path: ":auditId/findings/:findingId",
-            element: <Edit />,
-          },
-        ],
+      },
+      {
+        path: "/audits/:auditId/general",
+        element: <General />,
+      },
+      {
+        path: "/audits/:AuditId/network",
+        element: <Network />,
+      },
+      {
+        path: "/audits/:auditId/findings/add",
+        element: <Add />,
+      },
+      {
+        path: "/audits/:auditId/findings/:findingId",
+        element: <Edit />,
       },
       {
         path: "/vulnerabilities",
@@ -111,6 +109,6 @@ checktoken().then((result) => {
       <AuthProvider isSignedIn={result}>
         <RouterProvider router={router} />
       </AuthProvider>
-    </React.StrictMode>
+    </React.StrictMode>,
   );
 });
