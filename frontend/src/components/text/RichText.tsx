@@ -1,5 +1,5 @@
 import 'react-quill/dist/quill.snow.css';
-import ReactQuill from 'react-quill-new';
+import ReactQuill from 'react-quill';
 import { Field, Label } from '@headlessui/react'
 import './quill-styles.css';
 
@@ -36,7 +36,7 @@ const RichText: React.FC<RichTextEditor> = ({ label, value, placeholder, onChang
               theme="snow" 
               value={value} 
               onChange={(value: string) =>  onChange(value)}
-              formats={['header', 'font', 'size', 'bold', 'italic', 'underline', 'strike', 'blockquote', 'list', 'indent', 'link', 'image', 'code-block']}
+              formats={['header', 'font', 'size', 'bold', 'italic', 'underline', 'strike', 'blockquote', 'list', 'bullet', 'indent', 'link', 'image', 'code-block']}
               placeholder={placeholder}
               className='w-full overflow-auto bg-white mt-2 p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500'
               modules={modules} 
