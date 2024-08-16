@@ -13,6 +13,7 @@ import SimpleInput from "../../components/input/SimpleInput";
 import ImageInput from "../../components/input/ImageInput";
 import UITable from "../../components/table/UITable";
 import { useSortableTable } from "../../hooks/useSortableTable";
+import { useTableFiltering } from "../../hooks/useTableFiltering";
 
 interface NewCompany {
   _id?: string;
@@ -108,12 +109,11 @@ export const Companies: React.FC = () => {
     columns
   );
 
-  const [filters, setFilters] = useState<{ [key: string]: string }>({});
-
-  const handleFilterChange = (accessor: string, value: string) => {
-    const newFilters = { ...filters, [accessor]: value };
-    setFilters(newFilters);
-  };
+  const [filters, handleFilterChange] = useTableFiltering<TableData>(
+    companies,
+    columns,
+    setTableData
+  );
 
   useEffect(() => {
     const newFilteredData = companies?.filter((item) =>
@@ -186,11 +186,20 @@ export const Companies: React.FC = () => {
     <>
       <Card title={t("companies")}>
         <>
-          <PrimaryButton
-            onClick={() => setIsOpenAddCollabModal(!isOpenAddCollabModal)}
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+              marginBottom: "10px",
+              marginRight: "10px",
+            }}
           >
-            {t("addCompany")}
-          </PrimaryButton>
+            <PrimaryButton
+              onClick={() => setIsOpenAddCollabModal(!isOpenAddCollabModal)}
+            >
+              {t("addCompany")}
+            </PrimaryButton>
+          </div>
           <UITable
             columns={columns}
             data={tableData}
