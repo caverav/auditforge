@@ -23,6 +23,12 @@ const SearchInput: React.FC<SearchInputProps> = ({
   onChange,
   onClick,
 }) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      onClick();
+    }
+  };
+
   return (
     <div>
       <label
@@ -41,6 +47,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             onChange(e.target.value)
           }
+          onKeyDown={handleKeyDown}
           className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
         />
         <button

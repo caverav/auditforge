@@ -29,8 +29,8 @@ interface TableProps {
   keyExtractor: (item: any) => string | number;
   sortable?: boolean;
   onSort?: (column: string, direction: "asc" | "desc") => void;
-  filterable?: boolean;
-  onFilter?: (filters: { [key: string]: any }) => void;
+  onFilter?: (value: string, accessor: string) => void;
+  filters?: { [key: string]: string };
   rowSelection?: {
     selectedRowKeys: (string | number)[];
     onSelectRow: (selectedRowKeys: (string | number)[]) => void;
@@ -59,6 +59,7 @@ const UITable: React.FC<TableProps> = ({
   keyExtractor,
   onSort,
   onFilter,
+  filters,
   rowActions,
   emptyState,
   children,
@@ -88,11 +89,14 @@ const UITable: React.FC<TableProps> = ({
   const [totalValuesPerPage, setTotalValuesPerPage] = useState(25);
 
   const goOnPrevPage = () => {
-    if (currentPageNumber === 1) return;
+    if (currentPageNumber === 1 || totalValuesPerPage === 0) return;
     setCurrentPageNumber((prev) => prev - 1);
   };
   const goOnNextPage = () => {
-    if (currentPageNumber === Math.ceil(data.length / totalValuesPerPage))
+    if (
+      currentPageNumber === Math.ceil(data.length / totalValuesPerPage) ||
+      totalValuesPerPage === 0
+    )
       return;
     setCurrentPageNumber((prev) => prev + 1);
   };
@@ -103,26 +107,13 @@ const UITable: React.FC<TableProps> = ({
   useEffect(() => {
     if (totalValuesPerPage === 0) {
       setDataToDisplay(data);
+      setCurrentPageNumber(1);
     } else {
       const start = (currentPageNumber - 1) * totalValuesPerPage;
       const end = currentPageNumber * totalValuesPerPage;
       setDataToDisplay(data.slice(start, end));
     }
   }, [currentPageNumber, data, totalValuesPerPage]);
-
-  /**
-   * Column filtering
-   */
-
-  const [filters, setFilters] = useState<{ [key: string]: string }>({});
-
-  const handleFilterChange = (value: string, accessor: string) => {
-    const newFilters = { ...filters, [accessor]: value };
-    setFilters(newFilters);
-    if (onFilter) {
-      onFilter(newFilters);
-    }
-  };
 
   return (
     <div className="overflow-x-auto bg-gray-900 p-2 shadow-2xl border rounded-lg">
@@ -157,14 +148,16 @@ const UITable: React.FC<TableProps> = ({
                         </div>
                       )}
                     </div>
-                    {column.filterable && (
+                    {column.filterable && onFilter && (
                       <SimpleInput
                         id={column.header}
                         name={column.header}
                         type="text"
                         placeholder={t("search")}
-                        value={filters[column.accessor] || ""}
-                        onChange={(e) => handleFilterChange(e, column.accessor)}
+                        value={(filters && filters[column.accessor]) || ""}
+                        onChange={(value) => {
+                          onFilter(column.accessor, value);
+                        }}
                       />
                     )}
                   </div>
@@ -195,7 +188,7 @@ const UITable: React.FC<TableProps> = ({
                     >
                       {column.render
                         ? column.render(item[column.accessor])
-                        : item[column.accessor]}
+                        : (item[column.accessor] ?? "-")}
                     </td>
                   ))}
                   {rowActions && (
