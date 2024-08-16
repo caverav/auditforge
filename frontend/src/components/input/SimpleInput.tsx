@@ -1,7 +1,7 @@
 import { ChangeEvent } from "react";
 
 interface SimpleInputProps {
-  label: string;
+  label?: string;
   id: string;
   name: string;
   type: "text" | "number";
@@ -21,12 +21,14 @@ const SimpleInput: React.FC<SimpleInputProps> = ({
 }) => {
   return (
     <div>
-      <label
-        htmlFor={id}
-        className="block text-sm font-medium leading-6 text-gray-300"
-      >
-        {label}
-      </label>
+      {label && (
+        <label
+          htmlFor={id}
+          className="block text-sm font-medium leading-6 text-gray-300"
+        >
+          {label}
+        </label>
+      )}
       <div className="relative mt-2 rounded-md shadow-sm">
         <input
           id={id}

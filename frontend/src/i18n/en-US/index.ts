@@ -34,7 +34,8 @@ export default {
         accountsEnabled: 'Enabled accounts',
         accountsDisabled: 'Disabled accounts',
         accountEnabled: 'Account enabled',
-        accountDisabled: 'Account disabled'
+        accountDisabled: 'Account disabled',
+        all: 'All'
     },
     tooltip: {
         usersConnected: 'Users on the Audit:',
@@ -135,6 +136,7 @@ export default {
         expiredToken: 'Expired token',
         invalidToken: 'Invalid token',
         invalidCredentials: 'Invalid credentials',
+        noMatchingRecords: 'No matching records found',
     },
     cvss: {
         title: 'CVSS v3.1 Base Score',
