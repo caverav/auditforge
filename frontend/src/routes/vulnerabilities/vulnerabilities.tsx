@@ -5,6 +5,7 @@ import { getLanguages, getCategories, getTypes, getVulnerabilities, deleteVulner
 import SelectDropdown from "../../components/dropdown/SelectDropdown";
 import { t } from "i18next"
 import AddVulnerability from "./addVulnerability";
+import EditVulnerability from "./editVulnerability";
 
 //// Testing Table
 import UITable from "../../components/table/UITable";
@@ -29,11 +30,11 @@ type Details = {
 type VulnerabilityData = {
   _id: string;
   cvssv3?: string;
-  priority?: number;
-  remediationComplexity?: string;
+  priority?: number | "";
+  remediationComplexity?: number | "";
   details: Details[];
   status?: number;
-  category?: string; 
+  category: string | null; 
   __v: number;
   createdAt?: string;
   updatedAt?: string;
@@ -240,10 +241,10 @@ export const Vulnerabilities = () => {
       <Card title={t("nav.vulnerabilities")}>
         <>
           <div className="fixed">
-            {openAddVuln && <AddVulnerability isOpen={openAddVuln} handlerIsOpen={setOpenAddVuln} categoryVuln={currentCategory.value} languages={languages} types={types}/>}
+            {openAddVuln && <AddVulnerability isOpen={openAddVuln} handlerIsOpen={setOpenAddVuln} categoryVuln={currentCategory.value} languages={languages} types={types} refreshVulns={fetchVulnerabilities}/>}
           </div>
           <div className="fixed">
-            {openEditVuln && <AddVulnerability isOpen={openEditVuln} handlerIsOpen={setOpenEditVuln} categoryVuln={currentCategory.value} languages={languages} types={types}/>}
+          {openAddVuln && <AddVulnerability isOpen={openAddVuln} handlerIsOpen={setOpenAddVuln} categoryVuln={currentCategory.value} languages={languages} types={types} refreshVulns={fetchVulnerabilities}/>}          
           </div>
           <UITable
             columns={columns}
