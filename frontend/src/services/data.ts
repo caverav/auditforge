@@ -33,6 +33,11 @@ interface NewTemplate {
   file: string;
 }
 
+interface NewLanguage {
+  language: string;
+  locale: string;
+}
+
 export const getCollaborators = async (): Promise<any> => {
   try {
     const response = await fetch(`${API_URL}users`, {
@@ -86,9 +91,7 @@ export const getCompanies = async (): Promise<any> => {
   }
 };
 
-export const createCompany = async (
-  company: NewCompany
-): Promise<any> => {
+export const createCompany = async (company: NewCompany): Promise<any> => {
   try {
     const response = await fetch(`${API_URL}companies`, {
       method: "POST",
@@ -124,9 +127,7 @@ export const getClients = async (): Promise<any> => {
   }
 };
 
-export const createClient = async (
-  client: NewClient
-): Promise<any> => {
+export const createClient = async (client: NewClient): Promise<any> => {
   try {
     const response = await fetch(`${API_URL}clients`, {
       method: "POST",
@@ -162,9 +163,7 @@ export const getTemplates = async (): Promise<any> => {
   }
 };
 
-export const createTemplates = async (
-  template: NewTemplate
-): Promise<any> => {
+export const createTemplates = async (template: NewTemplate): Promise<any> => {
   try {
     const response = await fetch(`${API_URL}templates`, {
       method: "POST",
@@ -173,6 +172,45 @@ export const createTemplates = async (
       body: JSON.stringify(template),
     });
 
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+/**
+ * Custom data: Languages
+ */
+
+export const getLanguages = async (): Promise<any> => {
+  try {
+    const response = await fetch(`${API_URL}data/languages`, {
+      credentials: "include",
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+export const createLanguage = async (language: NewLanguage): Promise<any> => {
+  try {
+    const response = await fetch(`${API_URL}data/languages`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(language),
+    }); // Incluir token
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
