@@ -125,6 +125,7 @@ export const Vulnerabilities = () => {
         type: item2.details[0].vulnType ? item2.details[0].vulnType : t('undefined'),
       }))
       setTableData(vulnDataTable)
+      setTableInfo(vulnDataTable)
       //setLoadingVulnerability(false);
     } catch (err) {
       setError(true);
@@ -154,6 +155,11 @@ export const Vulnerabilities = () => {
         value: item.name
       }));
       setTypes([typeNames])
+      if (typeNames.length > 0){
+        setTypes([currentType, ...typeNames]);
+      } else{
+        setTypes([currentType]);
+      }
       //setLoadingType(false);
     } catch (err) {
       setError(true);
@@ -167,7 +173,11 @@ export const Vulnerabilities = () => {
         id: index + 1,
         value: item.name
       }));
-      setCategories([categoryNames])
+      if (categoryNames.length > 0){
+        setCategories([currentCategory, ...categoryNames]);
+      } else{
+        setCategories([currentCategory]);
+      }
       //setLoadingCategory(false);
     } catch (err) {
       setError(true);
@@ -230,7 +240,7 @@ export const Vulnerabilities = () => {
     columns
   );
 
-  const [nameFilter, setNameFilter] = useState("");
+ 
   const [filters, handleFilterChange] = useTableFiltering<TableData>(
     tableInfo,
     columns,
