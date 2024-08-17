@@ -17,6 +17,7 @@ export const Languages: React.FC = () => {
 
   const [loading, setLoading] = useState<boolean>(true);
   const [isOpenToast, setIsOpenToast] = useState<boolean>(false);
+  const [isEditing, setIsEditing] = useState<boolean>(false);
   const [toastMsg, setToastMsg] = useState("");
   const [error, setError] = useState<string | null>(null);
 
@@ -84,13 +85,22 @@ export const Languages: React.FC = () => {
       </div>
       <EditCard
         title={t("listOfLanguages")}
-        isEditing={false}
+        isEditing={isEditing}
         editTitle="edit"
-        onClickEdit={() => console.log("edit")}
+        onClickEdit={() => setIsEditing(true)}
         onClickSave={() => console.log("save")}
-        onClickCancel={() => console.log("cancel")}
+        onClickCancel={() => setIsEditing(false)}
       >
-        <>{loading ? t("loading") : <>{JSON.stringify(languages)}</>}</>
+        <>
+          {loading ? (
+            t("loading")
+          ) : (
+            <>
+              {JSON.stringify(languages)}
+              {isEditing && "editing"}
+            </>
+          )}
+        </>
       </EditCard>
       {isOpenToast && (
         <Toast
