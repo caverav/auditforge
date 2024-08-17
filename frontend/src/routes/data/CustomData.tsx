@@ -66,6 +66,7 @@ export const CustomData: React.FC = () => {
         <div className="flex justify-left overflow-x-auto py-3 mx-4">
           {cardOptions.map((option) => (
             <button
+              key={option.id}
               className={`${selected === option.id ? "bg-gray-700" : "bg-gray-800"} p-2 ml-4 rounded-lg hover:bg-gray-700`}
               onClick={() => handleOptionClick(option)}
             >
