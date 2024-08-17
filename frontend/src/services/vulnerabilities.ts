@@ -95,3 +95,20 @@ export const postVulnerability = async (vulnerability: NewVulnerability[]): Prom
     throw error;
   }
 };
+
+export const deleteVulnerability = async (id: string): Promise<any> => {
+  try {
+    const response = await fetch(`${API_URL}vulnerabilities/${id}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
