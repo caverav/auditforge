@@ -121,7 +121,8 @@ export default {
         tryingToContactBackend: '<p>Trying to contact backend</p>',
         wrongContactingBackend: 'Something went wrong contacting backend',
         highlightWarningTitle: 'Highlighted Text still present !',
-        noAuditTypeForThisStage: 'No Assessments. Create an Audit Type first'
+        noAuditTypeForThisStage: 'No Assessments. Create an Audit Type first',
+        languageCreatedOk: "Language Created Successfully!",
     },
     err: {
         notDefinedLanguage: 'Not defined for this language',
@@ -137,6 +138,7 @@ export default {
         invalidToken: 'Invalid token',
         invalidCredentials: 'Invalid credentials',
         noMatchingRecords: 'No matching records found',
+        errorCreatingLang: "Error creating language!",
     },
     cvss: {
         title: 'CVSS v3.1 Base Score',
