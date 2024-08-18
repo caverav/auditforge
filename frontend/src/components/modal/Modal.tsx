@@ -10,7 +10,7 @@ interface ModalProps {
   cancelText: string;
   submitText: string;
   isOpen: boolean;
-  hr?: boolean;
+  disablehr?: boolean;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -21,7 +21,7 @@ const Modal: React.FC<ModalProps> = ({
   cancelText,
   submitText,
   isOpen,
-  hr
+  disablehr
 }) => {
   return (
     isOpen && (
@@ -38,9 +38,9 @@ const Modal: React.FC<ModalProps> = ({
           </button>
           </div>
           
-          {hr && <hr className="h-1 mb-3 bg-gray-600 border-0 rounded" />}
+          {!disablehr && <hr className="h-1 mb-3 bg-gray-600 border-0 rounded" />}
           <div className="mb-4 text-gray-200 py-4">{children}</div>
-          {hr && <hr className="h-1 mb-3 bg-gray-600 border-0 rounded" />}
+          {!disablehr && <hr className="h-1 mb-3 bg-gray-600 border-0 rounded" />}
           <div className="flex justify-end">
             <button
               onClick={onCancel}
