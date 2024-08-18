@@ -13,6 +13,7 @@
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@headlessui/react": "^2.1.2",
+    "@hello-pangea/dnd": "^16.6.0",
     "@heroicons/react": "^2.1.5",
     "@mui/material": "^5.12.2",
     "@mui/x-date-pickers": "^5.0.20",
@@ -27,6 +28,7 @@
   },
   "devDependencies": {
     "@types/react": "^18.3.3",
+    "@types/react-beautiful-dnd": "^13.1.8",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.15.0",
     "@typescript-eslint/parser": "^7.15.0",
