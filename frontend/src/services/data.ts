@@ -221,3 +221,24 @@ export const createLanguage = async (language: NewLanguage): Promise<any> => {
     throw error;
   }
 };
+
+export const updateLanguages = async (
+  language: NewLanguage[]
+): Promise<any> => {
+  try {
+    const response = await fetch(`${API_URL}data/languages`, {
+      method: "PUT",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(language),
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
