@@ -3,8 +3,13 @@ import PrimaryButton from "../../../components/button/PrimaryButton";
 import EditCard from "../../../components/card/EditCard";
 import SimpleInput from "../../../components/input/SimpleInput";
 import { useEffect, useState } from "react";
-import { createLanguage, getLanguages } from "../../../services/data";
+import {
+  createLanguage,
+  getLanguages,
+  updateLanguages,
+} from "../../../services/data";
 import Toast from "../../../components/modal/Toast";
+import LanguageList from "./LanguageList";
 
 export const Languages: React.FC = () => {
   const { t } = useTranslation();
@@ -58,6 +63,33 @@ export const Languages: React.FC = () => {
     setTimeout(() => setIsOpenToast(false), 3000); // Ocultar el toast después de 3 segundos
   };
 
+  /**
+   * Lógica para hacer uptdate (PUT)
+   * de los lenguajes.
+   */
+  const [newLanguageList, setNewLanguageList] = useState<
+    { language: string; locale: string }[]
+  >([]);
+
+  const handleUpdateLanguageList = (
+    data: { language: string; locale: string }[]
+  ) => {
+    setNewLanguageList(data);
+  };
+
+  const onClickSave = async () => {
+    try {
+      await updateLanguages(newLanguageList);
+    } catch (error) {
+      setError("Error updating languages");
+      console.error("Error:", error);
+      handleShowToast(t("err.errorUpdatingLangs"));
+      return;
+    }
+    setIsEditing(false);
+    handleShowToast(t("msg.languageUpdatedOk"));
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -88,7 +120,7 @@ export const Languages: React.FC = () => {
         isEditing={isEditing}
         editTitle="edit"
         onClickEdit={() => setIsEditing(true)}
-        onClickSave={() => console.log("save")}
+        onClickSave={onClickSave}
         onClickCancel={() => setIsEditing(false)}
       >
         <>
@@ -96,8 +128,11 @@ export const Languages: React.FC = () => {
             t("loading")
           ) : (
             <>
-              {JSON.stringify(languages)}
-              {isEditing && "editing"}
+              <LanguageList
+                data={languages}
+                isDisabled={!isEditing}
+                onUpdateList={handleUpdateLanguageList}
+              />
             </>
           )}
         </>
