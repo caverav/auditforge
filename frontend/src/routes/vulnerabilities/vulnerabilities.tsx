@@ -61,6 +61,7 @@ type TypeData = {
 interface ListItem {
   id: number;
   value: string;
+  label?: string;
 }
 
 type AddVulnerabilityData = {
@@ -79,31 +80,35 @@ type TableData = {
 };
 
 export const Vulnerabilities = () => {
+  // Switches
   const [enabledValid, setEnabledValid] = useState(false)
   const [enabledNew, setEnabledNew] = useState(false)
   const [enabledUpdate, setEnabledUpdate] = useState(false)
 
+  // Core
   const [vulnerabilities, setVulnerabilities] = useState<any[]>([]);
+  const [tableInfo, setTableInfo] = useState<any[]>([]);
+  const [error, setError] = useState<boolean>(false);
 
+  // Lang
   const [languages, setLanguages] = useState<ListItem[]>([]);
   const [currentLanguage, setCurrentLanguage] = useState<ListItem>({id: 0, value: ''});
   const [loadingLanguage, setLoadingLanguage] = useState<boolean>(true);
 
+  // Category
   const [categories, setCategories] = useState<ListItem[]>([]);
-  const [currentCategory, setCurrentCategory] = useState<ListItem>({id: 0, value: t('noCategory')});
 
+  // Types
   const [types, setTypes] = useState<ListItem[]>([]);
-  const [currentType, setCurrentType] = useState<ListItem>({id: 0, value: t('undefined')});
   
-  const [error, setError] = useState<boolean>(false);
-
+  // Sliding Pages
   const [openAddVuln, setOpenAddVuln] = useState(false);
   const openAddVulnSlidingPage = () => setOpenAddVuln(true);
 
   const [openEditVuln, setOpenEditVuln] = useState<boolean>(false)
   const [editVuln, setEditVuln] = useState<VulnerabilityData>()
+  const [selectedCategory, setSelectedCategory] = useState<ListItem|null>(null);
 
-  const [tableInfo, setTableInfo] = useState<any[]>([])
 
 
   const fetchVulnerabilities = async () => {
@@ -128,7 +133,8 @@ export const Vulnerabilities = () => {
       const dataLanguage = await getLanguages();
       const languageNames = dataLanguage.datas.map((item: LanguageData, index: number) => ({
         id: index,
-        value: item.language,
+        value: item.locale,
+        label: item.language
       }));
       setLanguages(languageNames);
       setCurrentLanguage(languageNames[0]);
@@ -143,14 +149,10 @@ export const Vulnerabilities = () => {
       const dataType = await getTypes();
       const typeNames = dataType.datas.map((item: TypeData, index: number) => ({
         id: index + 1,
-        value: item.name
+        value: item.name,
+        label: item.name
       }));
-      setTypes([typeNames])
-      if (typeNames.length > 0){
-        setTypes([currentType, ...typeNames]);
-      } else{
-        setTypes([currentType]);
-      }
+      setTypes([...typeNames])
     } catch (err) {
       setError(true);
     }
@@ -161,13 +163,10 @@ export const Vulnerabilities = () => {
       const dataCategory = await getCategories();
       const categoryNames = dataCategory.datas.map((item: CategoryData, index: number) => ({
         id: index + 1,
-        value: item.name
+        value: item.name,
+        label: item.name
       }));
-      if (categoryNames.length > 0){
-        setCategories([currentCategory, ...categoryNames]);
-      } else{
-        setCategories([currentCategory]);
-      }
+      setCategories([...categoryNames]);
     } catch (err) {
       setError(true);
     }
@@ -241,10 +240,10 @@ export const Vulnerabilities = () => {
       <Card title={t("nav.vulnerabilities")}>
         <>
           <div className="fixed">
-            {openAddVuln && <AddVulnerability isOpen={openAddVuln} handlerIsOpen={setOpenAddVuln} categoryVuln={currentCategory.value} languages={languages} types={types} refreshVulns={fetchVulnerabilities}/>}
+            {openAddVuln && <AddVulnerability isOpen={openAddVuln} handlerIsOpen={setOpenAddVuln} categoryVuln={selectedCategory} languages={languages} types={types} refreshVulns={fetchVulnerabilities}/>}
           </div>
           <div className="fixed">
-          {openAddVuln && <AddVulnerability isOpen={openAddVuln} handlerIsOpen={setOpenAddVuln} categoryVuln={currentCategory.value} languages={languages} types={types} refreshVulns={fetchVulnerabilities}/>}          
+            {openEditVuln && <AddVulnerability isOpen={openAddVuln} handlerIsOpen={setOpenAddVuln} categoryVuln={selectedCategory} languages={languages} types={types} refreshVulns={fetchVulnerabilities}/>}          
           </div>
           <UITable
             columns={columns}
