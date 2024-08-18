@@ -123,6 +123,7 @@ export default {
         highlightWarningTitle: 'Highlighted Text still present !',
         noAuditTypeForThisStage: 'No Assessments. Create an Audit Type first',
         languageCreatedOk: "Language Created Successfully!",
+        languagesUpdatedOk: "Languages Updated Successfully!",
     },
     err: {
         notDefinedLanguage: 'Not defined for this language',
@@ -139,6 +140,7 @@ export default {
         invalidCredentials: 'Invalid credentials',
         noMatchingRecords: 'No matching records found',
         errorCreatingLang: "Error creating language!",
+        errorUpdatingLangs: "Error updating languages!",
     },
     cvss: {
         title: 'CVSS v3.1 Base Score',
