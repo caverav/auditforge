@@ -29,7 +29,7 @@ const SimpleInput: React.FC<SimpleInputProps> = ({
           {label}
         </label>
       )}
-      <div className="relative mt-2 rounded-md shadow-sm">
+      <div className="mt-2 rounded-md shadow-sm">
         <input
           id={id}
           name={name}
