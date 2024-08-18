@@ -3,14 +3,14 @@ import ReactQuill from 'react-quill-new';
 import { Field, Label } from '@headlessui/react'
 import './quill-styles.css';
 
-interface RichTextEditor {
+interface RichTextEditorProps {
   label: string;
   value: string;
   placeholder: string;
   onChange: (content: string) => void;
 }
 
-const RichText: React.FC<RichTextEditor> = ({ label, value, placeholder, onChange}) => {
+const RichText: React.FC<RichTextEditorProps> = ({ label, value, placeholder, onChange}) => {
     
   const modules = {
     toolbar: [

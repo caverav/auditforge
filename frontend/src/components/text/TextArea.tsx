@@ -1,7 +1,7 @@
 import { Field, Label, Textarea } from '@headlessui/react'
 import { ChangeEvent } from "react";
 
-interface TextAreaEditor {
+interface TextAreaEditorProps {
     label: string;
     rows: number;
     value: string | string[];
@@ -11,7 +11,7 @@ interface TextAreaEditor {
     onChange: (content: string) => void;
 }
 
-const TextArea: React.FC<TextAreaEditor> = ({ label, rows, value, id, name, placeholder, onChange}) => {
+const TextArea: React.FC<TextAreaEditorProps> = ({ label, rows, value, id, name, placeholder, onChange}) => {
 
     
     return (
