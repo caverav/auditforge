@@ -1,4 +1,6 @@
 import React from "react";
+import { XMarkIcon } from '@heroicons/react/24/outline';
+
 
 interface ModalProps {
   title: string;
@@ -8,6 +10,7 @@ interface ModalProps {
   cancelText: string;
   submitText: string;
   isOpen: boolean;
+  disablehr?: boolean;
 }
 
 const Modal: React.FC<ModalProps> = ({
@@ -18,17 +21,26 @@ const Modal: React.FC<ModalProps> = ({
   cancelText,
   submitText,
   isOpen,
+  disablehr
 }) => {
   return (
     isOpen && (
       <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
         <div className="bg-gray-800 rounded-lg shadow-lg p-6 w-full max-w-lg">
-          <h2 className="text-xl font-bold mb-4 text-center text-gray-200">
-            {title}
-          </h2>
-          <hr className="h-1 mb-3 bg-gray-600 border-0 rounded" />
-          <div className="mb-4 text-gray-200">{children}</div>
-          <hr className="h-1 my-3 bg-gray-600 border-0 rounded" />
+          <div className="ml-3 mt-3 flex justify-between items-center mb-2">
+            <h2 className="text-xl font-bold text-center text-gray-200">
+              {title}
+            </h2>
+            <button
+              onClick={onCancel}
+              className="bg-transparent text-white p-2 rounded mx-3"
+            ><XMarkIcon className="h-6 w-6" />
+          </button>
+          </div>
+          
+          {!disablehr && <hr className="h-1 mb-3 bg-gray-600 border-0 rounded" />}
+          <div className="mb-4 text-gray-200 py-4">{children}</div>
+          {!disablehr && <hr className="h-1 mb-3 bg-gray-600 border-0 rounded" />}
           <div className="flex justify-end">
             <button
               onClick={onCancel}
