@@ -239,10 +239,10 @@ export const Vulnerabilities = () => {
     <div className="p-4">
       <Card title={t("nav.vulnerabilities")}>
         <>
-          <div className="fixed">
+          <div className="fixed z-10">
             {openAddVuln && <AddVulnerability isOpen={openAddVuln} handlerIsOpen={setOpenAddVuln} categoryVuln={selectedCategory} languages={languages} types={types} refreshVulns={fetchVulnerabilities}/>}
           </div>
-          <div className="fixed">
+          <div className="fixed z-10">
             {openEditVuln && <AddVulnerability isOpen={openAddVuln} handlerIsOpen={setOpenAddVuln} categoryVuln={selectedCategory} languages={languages} types={types} refreshVulns={fetchVulnerabilities}/>}          
           </div>
           <UITable
