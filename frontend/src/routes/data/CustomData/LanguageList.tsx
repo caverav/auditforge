@@ -40,33 +40,45 @@ const LanguageList: React.FC<LanguageListProps> = ({
    * Se debe manejar el disable de los Input en esta función.
    */
   const renderRow = (row: LanguageItem) => (
-    <div className="grid grid-cols-1 md:grid-cols-4 border rounded-lg p-2   ">
-      {!isDisabled && <Bars2Icon className="size-4" />}
-      <SimpleInput
-        type="text"
-        value={row.language}
-        name="language"
-        placeholder="language"
-        id="language"
-        onChange={(e) => handleInputChange(row.language, "language", e)}
-        disabled={isDisabled}
-      />
-      <SimpleInput
-        type="text"
-        value={row.locale}
-        name="locale"
-        placeholder="locale"
-        id="locale"
-        onChange={(e) => handleInputChange(row.locale, "locale", e)}
-        disabled={isDisabled}
-      />
+    <div
+      className={`grid grid-cols-1 md:grid-cols-${isDisabled ? "2" : "4"} place-items-center`}
+    >
       {!isDisabled && (
-        <PrimaryButton
-          color="red"
-          onClick={() => handleRemoveRow(row.language)}
-        >
-          X
-        </PrimaryButton>
+        <div>
+          <Bars2Icon className="size-4" />
+        </div>
+      )}
+      <div className="pr-2">
+        <SimpleInput
+          type="text"
+          value={row.language}
+          name="language"
+          placeholder="language"
+          id="language"
+          onChange={(e) => handleInputChange(row.language, "language", e)}
+          disabled={isDisabled}
+        />
+      </div>
+      <div className="pr-2">
+        <SimpleInput
+          type="text"
+          value={row.locale}
+          name="locale"
+          placeholder="locale"
+          id="locale"
+          onChange={(e) => handleInputChange(row.locale, "locale", e)}
+          disabled={isDisabled}
+        />
+      </div>
+      {!isDisabled && (
+        <div>
+          <PrimaryButton
+            color="red"
+            onClick={() => handleRemoveRow(row.language)}
+          >
+            X
+          </PrimaryButton>
+        </div>
       )}
     </div>
   );
