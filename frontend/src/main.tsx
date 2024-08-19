@@ -13,7 +13,7 @@ import "./index.css";
 import { Root, Audits, Vulnerabilities, Data, Settings, Login } from "./routes";
 import { ErrorPage } from "./error-page.tsx";
 import "./i18n";
-import { General, Network, Add, Edit } from "./routes/audits";
+import { AuditRoot, General, Network, Add, Edit } from "./routes/audits";
 import {
   Collaborators,
   Companies,
@@ -38,20 +38,26 @@ const router = createBrowserRouter([
         element: <Audits />,
       },
       {
-        path: "/audits/:auditId/general",
-        element: <General />,
-      },
-      {
-        path: "/audits/:auditId/network",
-        element: <Network />,
-      },
-      {
-        path: "/audits/:auditId/findings/add",
-        element: <Add />,
-      },
-      {
-        path: "/audits/:auditId/findings/:findingId",
-        element: <Edit />,
+        path: "/audits/:auditId",
+        element: <AuditRoot />,
+        children: [
+          {
+            path: "general",
+            element: <General />,
+          },
+          {
+            path: "network",
+            element: <Network />,
+          },
+          {
+            path: "findings/add",
+            element: <Add />,
+          },
+          {
+            path: "findings/:findingId",
+            element: <Edit />,
+          },
+        ],
       },
       {
         path: "/vulnerabilities",
@@ -109,6 +115,6 @@ checktoken().then((result) => {
       <AuthProvider isSignedIn={result}>
         <RouterProvider router={router} />
       </AuthProvider>
-    </React.StrictMode>,
+    </React.StrictMode>
   );
 });

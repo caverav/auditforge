@@ -105,6 +105,25 @@ export const getAudits = async (): Promise<any> => {
   }
 };
 
+export const getAuditById = async (
+  auditId: string | undefined
+): Promise<any> => {
+  try {
+    const response = await fetch(`${API_URL}audits/${auditId}`, {
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+    });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
 export const getAuditColumns = async (): Promise<any> => {
   console.log("Loading audit columns");
   try {
@@ -136,4 +155,52 @@ export const fetchUsername = () => {
     credentials: "include",
   }).then((res) => res.json());
   return user;
+};
+
+export const getCollaborators = async (): Promise<any> => {
+  try {
+    const response = await fetch(`${API_URL}users`, {
+      credentials: "include",
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+export const getClients = async (): Promise<any> => {
+  try {
+    const response = await fetch(`${API_URL}clients`, {
+      credentials: "include",
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+export const getTemplates = async (): Promise<any> => {
+  try {
+    const response = await fetch(`${API_URL}templates`, {
+      credentials: "include",
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
 };
