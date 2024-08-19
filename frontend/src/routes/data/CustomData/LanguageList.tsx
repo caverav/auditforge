@@ -16,7 +16,7 @@ interface LanguageListProps {
 }
 
 /**
- * Este componente renderea el contenido de
+ * Este componente renderea el contenido de EditCard
  */
 const LanguageList: React.FC<LanguageListProps> = ({
   data,
