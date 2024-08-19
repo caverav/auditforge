@@ -49,6 +49,7 @@ const LanguageList: React.FC<LanguageListProps> = ({
         placeholder="language"
         id="language"
         onChange={(e) => handleInputChange(row.language, "language", e)}
+        disabled={isDisabled}
       />
       <SimpleInput
         type="text"
@@ -57,6 +58,7 @@ const LanguageList: React.FC<LanguageListProps> = ({
         placeholder="locale"
         id="locale"
         onChange={(e) => handleInputChange(row.locale, "locale", e)}
+        disabled={isDisabled}
       />
       {!isDisabled && (
         <PrimaryButton
