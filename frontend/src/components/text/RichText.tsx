@@ -1,7 +1,7 @@
-import 'react-quill/dist/quill.snow.css';
+import './css/quill.snow.css';
 import ReactQuill from 'react-quill-new';
 import { Field, Label } from '@headlessui/react'
-import './quill-styles.css';
+import './css/quill-styles.css';
 
 interface RichTextEditorProps {
   label: string;
