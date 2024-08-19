@@ -87,7 +87,7 @@ export const Languages: React.FC = () => {
       return;
     }
     setIsEditing(false);
-    handleShowToast(t("msg.languageUpdatedOk"));
+    handleShowToast(t("msg.languagesUpdatedOk"));
   };
 
   return (
