@@ -8,6 +8,7 @@ interface SimpleInputProps {
   placeholder: string;
   value: string;
   onChange: (value: string) => void;
+  disabled?: boolean;
 }
 
 const SimpleInput: React.FC<SimpleInputProps> = ({
@@ -18,6 +19,7 @@ const SimpleInput: React.FC<SimpleInputProps> = ({
   placeholder,
   value,
   onChange,
+  disabled = false,
 }) => {
   return (
     <div>
@@ -29,7 +31,7 @@ const SimpleInput: React.FC<SimpleInputProps> = ({
           {label}
         </label>
       )}
-      <div className="relative mt-2 rounded-md shadow-sm">
+      <div className="mt-2 rounded-md shadow-sm">
         <input
           id={id}
           name={name}
@@ -39,6 +41,7 @@ const SimpleInput: React.FC<SimpleInputProps> = ({
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             onChange(e.target.value)
           }
+          disabled={disabled}
           className="block w-full rounded-md border-0 py-1.5 pl-7 pr-7 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
         />
       </div>
