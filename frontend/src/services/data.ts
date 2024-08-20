@@ -19,13 +19,14 @@ interface NewCompany {
 }
 
 interface NewClient {
-  company: string;
+  _id?: string;
   firstname: string;
   lastname: string;
   email: string;
   title: string;
   phone: string;
   cell: string;
+  company: NewCompany | null;
 }
 
 interface NewTemplate {
@@ -179,6 +180,51 @@ export const createClient = async (
       credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(client),
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+export const updateClient = async (
+  company: NewClient
+): Promise<any> => {
+  try {
+    const { _id, ...clientWithoutId } = company;
+
+    const response = await fetch(`${API_URL}clients/${_id}`, {
+      method: "PUT",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(clientWithoutId),
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+export const deleteClient = async (
+  clientId: string
+): Promise<any> => {
+  try {
+    const response = await fetch(`${API_URL}clients/${clientId}`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" }
     });
 
     if (!response.ok) {

@@ -15,6 +15,7 @@ import UITable from "../../components/table/UITable";
 import { useSortableTable } from "../../hooks/useSortableTable";
 import { useTableFiltering } from "../../hooks/useTableFiltering";
 
+
 interface NewCompany {
   _id?: string;
   name: string;
@@ -51,12 +52,11 @@ export const Companies: React.FC = () => {
     fetchCompanies();
   }, []);
 
-  // table
   const columns = [
-    { header: "Name", accessor: "name", sortable: true, filterable: true },
-    { header: "Shortname", accessor: "shortName", sortable: true },
+    { header: t("name"), accessor: "name", sortable: true, filterable: true },
+    { header: t("shortName"), accessor: "shortName", sortable: true },
     {
-      header: "Logo",
+      header: t("logo"),
       accessor: "logo",
       sortable: false,
       render: (logo: string) => (
@@ -129,7 +129,6 @@ export const Companies: React.FC = () => {
     );
     setTableData(newFilteredData ?? []);
   }, [filters]);
-  // end table
 
   const [isOpenAddCollabModal, setIsOpenAddCollabModal] = useState(false);
   const [isOpenEditCollabModal, setIsOpenEditCollabModal] = useState(false);
