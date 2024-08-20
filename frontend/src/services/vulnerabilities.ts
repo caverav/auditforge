@@ -14,10 +14,10 @@ type Details = {
 
 type NewVulnerability = {
   cvssv3: string;
-  priority: number;
-  remediationComplexity: number;
+  priority: number | "";
+  remediationComplexity: number | "";
   details: Details[];
-  category: string; 
+  category: string |null; 
 };
 
 

@@ -62,6 +62,7 @@ interface ListItem {
   id: number;
   value: string;
   label?: string;
+  locale?: string;
 }
 
 type AddVulnerabilityData = {
@@ -150,7 +151,8 @@ export const Vulnerabilities = () => {
       const typeNames = dataType.datas.map((item: TypeData, index: number) => ({
         id: index + 1,
         value: item.name,
-        label: item.name
+        label: item.name,
+        locale: item.locale
       }));
       setTypes([...typeNames])
     } catch (err) {
