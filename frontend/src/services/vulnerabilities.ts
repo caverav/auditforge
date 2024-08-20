@@ -86,7 +86,13 @@ export const postVulnerability = async (vulnerability: NewVulnerability[]): Prom
       body: JSON.stringify(vulnerability),
     });
     if (!response.ok) {
-      throw new Error("Network response was not ok");
+      const errorText = await response.text()
+      const errorData = JSON.parse(errorText).datas
+      if (errorData === "Vulnerability title already exists"){
+        throw new Error(errorData);
+      } else {
+        throw new Error("Network response was not ok");
+      }
     }
     const data = await response.json();
     return data;
