@@ -15,10 +15,10 @@ export interface Audit {
 }
 
 interface NewAudit {
-  type: string;
+  auditType: string;
   name: string;
-  assessment: string;
-  languaje: string;
+  language: string;
+  type: string;
 }
 
 export const createAudit = async (audit: NewAudit): Promise<any> => {
@@ -106,7 +106,7 @@ export const getAudits = async (): Promise<any> => {
 };
 
 export const getAuditById = async (
-  auditId: string | undefined
+  auditId: string | undefined,
 ): Promise<any> => {
   try {
     const response = await fetch(`${API_URL}audits/${auditId}`, {

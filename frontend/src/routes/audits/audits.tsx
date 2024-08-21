@@ -82,7 +82,6 @@ type CompanyData = {
 
 export const Audits = () => {
   const [finding, setFinding] = useState<string>("");
-
   const [myAudits, setMyAudits] = useState(false);
 
   const [usersConnected, setUsersConnected] = useState(false);
@@ -137,20 +136,12 @@ export const Audits = () => {
 
   const [username, setUsername] = useState<string>("");
 
-  const onFilter = (filters: { [key: string]: any }) => {
-    if (filters.length === 0) return;
-    const newData = data.filter((item) => {
-      return Object.keys(filters).every(
-        (key) =>
-          filters[key] === "" ||
-          (item[key].includes(filters[key]) &&
-            (myAudits ? username === item.creator.username : true)),
-      );
-    });
+  const onFilter = (accessor: string, value: string) => {
+    const newData = data.filter((item) => item[accessor].includes(value));
     setFilteredData(newData);
   };
 
-  fetchUsername().then((username) => setUsername(username));
+  fetchUsername().then((username) => setUsername(username.username));
 
   useEffect(() => {
     const fetchData = async () => {
@@ -232,7 +223,13 @@ export const Audits = () => {
 
   const handleSubmitNewAudit = async () => {
     try {
-      await createAudit(newAudit!);
+      await createAudit({
+        name: nameAudit,
+        auditType: currentAuditType.value,
+        language: currentLanguage.value,
+        type: selectedValue,
+      });
+      setNewAudit(null);
     } catch (error) {
       setError("Error creating audit");
       console.error("Error:", error);
