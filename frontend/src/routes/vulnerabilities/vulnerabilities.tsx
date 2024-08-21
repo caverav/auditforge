@@ -16,7 +16,7 @@ import Card from "../../components/card/Card";
 
 
 type Details = {
-  locale?: string;
+  locale: string;
   title?: string;
   vulnType?: string;
   description?: string;
@@ -29,12 +29,12 @@ type Details = {
 
 type VulnerabilityData = {
   _id: string;
-  cvssv3?: string;
+  cvssv3: string | null;
   priority?: number | "";
   remediationComplexity?: number | "";
   details: Details[];
   status?: number;
-  category: string | null; 
+  category?: string | null; 
   __v: number;
   createdAt?: string;
   updatedAt?: string;
@@ -245,7 +245,7 @@ export const Vulnerabilities = () => {
             {openAddVuln && <AddVulnerability isOpen={openAddVuln} handlerIsOpen={setOpenAddVuln} categoryVuln={selectedCategory} languages={languages} types={types} refreshVulns={fetchVulnerabilities}/>}
           </div>
           <div className="fixed z-10">
-            {openEditVuln && <AddVulnerability isOpen={openAddVuln} handlerIsOpen={setOpenAddVuln} categoryVuln={selectedCategory} languages={languages} types={types} refreshVulns={fetchVulnerabilities}/>}          
+          {openEditVuln && <EditVulnerability isOpen={openEditVuln} handlerIsOpen={setOpenEditVuln} categoryVuln={selectedCategory} languages={languages} types={types} refreshVulns={fetchVulnerabilities} currentVuln={editVuln!}/>}          
           </div>
           <UITable
             columns={columns}
