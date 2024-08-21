@@ -245,7 +245,7 @@ export const Vulnerabilities = () => {
             {openAddVuln && <AddVulnerability isOpen={openAddVuln} handlerIsOpen={setOpenAddVuln} categoryVuln={selectedCategory} languages={languages} types={types} refreshVulns={fetchVulnerabilities}/>}
           </div>
           <div className="fixed z-10">
-          {openEditVuln && <EditVulnerability isOpen={openEditVuln} handlerIsOpen={setOpenEditVuln} categoryVuln={selectedCategory} languages={languages} types={types} refreshVulns={fetchVulnerabilities} currentVuln={editVuln!}/>}          
+          {openEditVuln && <EditVulnerability isOpen={openEditVuln} handlerIsOpen={setOpenEditVuln} categories={categories} languages={languages} types={types} refreshVulns={fetchVulnerabilities} currentVuln={editVuln!}/>}          
           </div>
           <UITable
             columns={columns}
