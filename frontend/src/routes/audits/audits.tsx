@@ -1,24 +1,26 @@
-import { t } from "i18next";
-import SearchInput from "../../components/input/SearchInput";
-import { useEffect, useState } from "react";
-import PrimarySwitch from "../../components/switch/PrimarySwitch";
+import DefaultRadioGroup from "../../components/button/DefaultRadioGroup";
 import PrimaryButton from "../../components/button/PrimaryButton";
-import SimpleInput from "../../components/input/SimpleInput";
 import SelectDropdown from "../../components/dropdown/SelectDropdown";
+import SearchInput from "../../components/input/SearchInput";
+import SimpleInput from "../../components/input/SimpleInput";
+import Modal from "../../components/modal/Modal";
+import PrimarySwitch from "../../components/switch/PrimarySwitch";
+import UITable from "../../components/table/UITable";
+import type { Column } from "../../components/table/UITable";
+import { useSortableTable } from "../../hooks/useSortableTable";
+import { useTableFiltering } from "../../hooks/useTableFiltering";
 import {
   createAudit,
+  fetchUsername,
+  getAuditColumns,
+  getAudits,
   getCompanies,
   getLanguages,
   getTypes,
-  getAudits,
-  getAuditColumns,
-  fetchUsername,
 } from "../../services/audits";
-import Modal from "../../components/modal/Modal";
-import DefaultRadioGroup from "../../components/button/DefaultRadioGroup";
-import UITable from "../../components/table/UITable";
-import type { Column } from "../../components/table/UITable";
 import type { Audit } from "../../services/audits";
+import { t } from "i18next";
+import { useEffect, useState } from "react";
 
 interface ListItem {
   id: number;
@@ -47,13 +49,6 @@ interface TmpAudit {
   type: string;
   connected: string[];
   createdAt: string;
-}
-
-interface NewAudit {
-  type: string;
-  name: string;
-  assessment: string;
-  languaje: string;
 }
 
 const RadioOptions = [
@@ -88,16 +83,9 @@ export const Audits = () => {
 
   const [isOpenNewAuditModal, setIsOpenNewAuditModal] = useState(false);
 
-  const [newAudit, setNewAudit] = useState<NewAudit | null>({
-    type: "",
-    name: "",
-    assessment: "",
-    languaje: "",
-  });
-
   const [selectedValue, setSelectedValue] = useState("");
 
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
 
   const [nameSearch, setNameSearch] = useState<string>("");
 
@@ -130,18 +118,24 @@ export const Audits = () => {
 
   const [columns, setColumns] = useState<Column[]>([]);
 
-  const [data, setData] = useState<Object[]>([]);
+  const [filteredData, setFilteredData] = useState<Audit[]>([]);
 
-  const [filteredData, setFilteredData] = useState<Object[]>([]);
+  const [tableData, handleSorting, setTableData] = useSortableTable<Audit>(
+    filteredData,
+    columns,
+  );
 
-  const [username, setUsername] = useState<string>("");
+  const [filters, handleFilterChange] = useTableFiltering<Audit>(
+    filteredData,
+    columns,
+    setTableData,
+  );
 
-  const onFilter = (accessor: string, value: string) => {
-    const newData = data.filter((item) => item[accessor].includes(value));
-    setFilteredData(newData);
-  };
-
-  fetchUsername().then((username) => setUsername(username.username));
+  useEffect(() => {
+    fetchUsername().then((username) => {
+      handleFilterChange("creator", myAudits ? username.datas.username : "");
+    });
+  }, [myAudits]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -207,8 +201,8 @@ export const Audits = () => {
           return data;
         });
 
+        setTableData(dataAudits);
         setFilteredData(dataAudits);
-        setData(dataAudits);
       } catch (err) {
         setLoadingLanguage(false);
       }
@@ -217,7 +211,6 @@ export const Audits = () => {
   }, []);
 
   const handleCancelNewAudit = () => {
-    setNewAudit(null);
     setIsOpenNewAuditModal(!isOpenNewAuditModal);
   };
 
@@ -229,12 +222,10 @@ export const Audits = () => {
         language: currentLanguage.value,
         type: selectedValue,
       });
-      setNewAudit(null);
     } catch (error) {
       setError("Error creating audit");
       console.error("Error:", error);
     }
-    setNewAudit(null);
     setIsOpenNewAuditModal(!isOpenNewAuditModal);
   };
 
@@ -325,7 +316,10 @@ export const Audits = () => {
               type="text"
               placeholder="Search"
               value={nameSearch}
-              onChange={setNameSearch}
+              onChange={(value) => {
+                setNameSearch(value);
+                handleFilterChange("name", value);
+              }}
             />
           </div>
           <div className="w-1/6">
@@ -334,7 +328,10 @@ export const Audits = () => {
                 title={t("auditType")}
                 items={auditType}
                 selected={currentAuditType}
-                onChange={setCurrentAuditType}
+                onChange={(value) => {
+                  setCurrentAuditType(value);
+                  handleFilterChange("auditType", value.value);
+                }}
               />
             )}
           </div>
@@ -344,7 +341,10 @@ export const Audits = () => {
                 title={t("languages")}
                 items={languages}
                 selected={currentLanguage}
-                onChange={setCurrentLanguage}
+                onChange={(value) => {
+                  setCurrentLanguage(value);
+                  handleFilterChange("language", value.value);
+                }}
               />
             )}
           </div>
@@ -354,7 +354,10 @@ export const Audits = () => {
                 title={t("company")}
                 items={company}
                 selected={currentCompany}
-                onChange={setCurrentCompany}
+                onChange={(value) => {
+                  setCurrentCompany(value);
+                  handleFilterChange("company", value.value);
+                }}
               />
             )}
           </div>
@@ -366,7 +369,10 @@ export const Audits = () => {
               type="text"
               placeholder="Search"
               value={participants}
-              onChange={setParticipants}
+              onChange={(value) => {
+                setParticipants(value);
+                handleFilterChange("participants", value);
+              }}
             />
           </div>
           <div className="w-1/6 top-2.5">
@@ -377,18 +383,22 @@ export const Audits = () => {
               type="text"
               placeholder="Search"
               value={date}
-              onChange={setDate}
+              onChange={(value) => {
+                setDate(value);
+                handleFilterChange("date", value);
+              }}
             />
           </div>
         </div>
         <UITable
           columns={columns}
-          data={filteredData}
+          data={tableData}
           keyExtractor={(item) => item._id}
           sortable={true}
-          filterable={true}
+          onSort={handleSorting}
           emptyState={t("noAudits")}
-          onFilter={onFilter}
+          filters={filters}
+          onFilter={handleFilterChange}
         />
       </div>
     </div>
