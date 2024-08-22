@@ -131,9 +131,7 @@ export const getCompanies = async (): Promise<any> => {
   }
 };
 
-export const createCompany = async (
-  company: NewCompany
-): Promise<any> => {
+export const createCompany = async (company: NewCompany): Promise<any> => {
   try {
     const response = await fetch(`${API_URL}companies`, {
       method: "POST",
@@ -153,9 +151,7 @@ export const createCompany = async (
   }
 };
 
-export const updateCompany = async (
-  company: NewCompany
-): Promise<any> => {
+export const updateCompany = async (company: NewCompany): Promise<any> => {
   try {
     const { _id, ...companyWithoutId } = company;
 
@@ -177,14 +173,12 @@ export const updateCompany = async (
   }
 };
 
-export const deleteCompany = async (
-  companyId: string
-): Promise<any> => {
+export const deleteCompany = async (companyId: string): Promise<any> => {
   try {
     const response = await fetch(`${API_URL}companies/${companyId}`, {
       method: "DELETE",
       credentials: "include",
-      headers: { "Content-Type": "application/json" }
+      headers: { "Content-Type": "application/json" },
     });
 
     if (!response.ok) {
@@ -214,9 +208,7 @@ export const getClients = async (): Promise<any> => {
   }
 };
 
-export const createClient = async (
-  client: NewClient
-): Promise<any> => {
+export const createClient = async (client: NewClient): Promise<any> => {
   try {
     const response = await fetch(`${API_URL}clients`, {
       method: "POST",
@@ -236,9 +228,7 @@ export const createClient = async (
   }
 };
 
-export const updateClient = async (
-  company: NewClient
-): Promise<any> => {
+export const updateClient = async (company: NewClient): Promise<any> => {
   try {
     const { _id, ...clientWithoutId } = company;
 
@@ -260,14 +250,12 @@ export const updateClient = async (
   }
 };
 
-export const deleteClient = async (
-  clientId: string
-): Promise<any> => {
+export const deleteClient = async (clientId: string): Promise<any> => {
   try {
     const response = await fetch(`${API_URL}clients/${clientId}`, {
       method: "DELETE",
       credentials: "include",
-      headers: { "Content-Type": "application/json" }
+      headers: { "Content-Type": "application/json" },
     });
 
     if (!response.ok) {
@@ -297,9 +285,7 @@ export const getTemplates = async (): Promise<any> => {
   }
 };
 
-export const createTemplate = async (
-  template: NewTemplate
-): Promise<any> => {
+export const createTemplate = async (template: NewTemplate): Promise<any> => {
   try {
     const response = await fetch(`${API_URL}templates`, {
       method: "POST",
@@ -319,9 +305,7 @@ export const createTemplate = async (
   }
 };
 
-export const updateTemplate = async (
-  template: NewTemplate
-): Promise<any> => {
+export const updateTemplate = async (template: NewTemplate): Promise<any> => {
   try {
     const { _id, ...TemplateWithoutId } = template;
 
@@ -343,14 +327,12 @@ export const updateTemplate = async (
   }
 };
 
-export const deleteTemplate = async (
-  templateId: string
-): Promise<any> => {
+export const deleteTemplate = async (templateId: string): Promise<any> => {
   try {
     const response = await fetch(`${API_URL}templates/${templateId}`, {
       method: "DELETE",
       credentials: "include",
-      headers: { "Content-Type": "application/json" }
+      headers: { "Content-Type": "application/json" },
     });
 
     if (!response.ok) {
@@ -364,9 +346,7 @@ export const deleteTemplate = async (
   }
 };
 
-export const downloadTemplate = async (
-  templateId: string
-): Promise<any> => {
+export const downloadTemplate = async (templateId: string): Promise<any> => {
   try {
     const response = await fetch(`${API_URL}templates/download/${templateId}`, {
       credentials: "include",

@@ -5,7 +5,7 @@ interface ImageInputProps {
   id: string;
   name: string;
   onImageSelect: (image: string) => void;
-  initialImage?: string;  // Optional prop to set the initial image
+  initialImage?: string; // Optional prop to set the initial image
 }
 
 const ImageInput: React.FC<ImageInputProps> = ({
@@ -15,7 +15,9 @@ const ImageInput: React.FC<ImageInputProps> = ({
   onImageSelect,
   initialImage,
 }) => {
-  const [imagePreview, setImagePreview] = useState<string | null>(initialImage || null);
+  const [imagePreview, setImagePreview] = useState<string | null>(
+    initialImage || null
+  );
 
   useEffect(() => {
     if (initialImage) {

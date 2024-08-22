@@ -1,7 +1,13 @@
 import { useTranslation } from "react-i18next";
 import Card from "../../components/card/Card";
 import { useEffect, useState } from "react";
-import { createTemplate, deleteTemplate, downloadTemplate, getTemplates, updateTemplate } from "../../services/data";
+import {
+  createTemplate,
+  deleteTemplate,
+  downloadTemplate,
+  getTemplates,
+  updateTemplate,
+} from "../../services/data";
 import PrimaryButton from "../../components/button/PrimaryButton";
 import Modal from "../../components/modal/Modal";
 import SimpleInput from "../../components/input/SimpleInput";
@@ -20,8 +26,7 @@ interface NewTemplate {
 export const Templates: React.FC = () => {
   const { t } = useTranslation();
 
-  const [newTemplate, setNewTemplate] =
-  useState<NewTemplate | null>({
+  const [newTemplate, setNewTemplate] = useState<NewTemplate | null>({
     name: "",
     ext: "",
     file: "",
@@ -49,7 +54,12 @@ export const Templates: React.FC = () => {
 
   const columns = [
     { header: t("name"), accessor: "name", sortable: true, filterable: true },
-    { header: t("extension"), accessor: "ext", sortable: true, filterable: true },
+    {
+      header: t("extension"),
+      accessor: "ext",
+      sortable: true,
+      filterable: true,
+    },
   ];
 
   type TableData = {
@@ -66,28 +76,27 @@ export const Templates: React.FC = () => {
       _id: template._id,
     }));
     setIsOpenEditTemplateModal(true);
-  }
+  };
 
   const handleDeleteTemplateButton = async (templateId: string) => {
     await deleteTemplate(templateId);
     fetchTemplates();
-  }
+  };
 
   const handleDownloadTemplateButton = async (template: TableData) => {
     try {
       const blob = await downloadTemplate(template._id);
-  
+
       const url = window.URL.createObjectURL(blob);
-  
+
       const link = document.createElement("a");
       link.href = url;
-  
+
       link.download = `${template.name}.${template.ext}`;
       document.body.appendChild(link);
       link.click();
-        window.URL.revokeObjectURL(url);
+      window.URL.revokeObjectURL(url);
       link.remove();
-
     } catch (error) {
       setError("Error downloading template");
     }
@@ -137,7 +146,6 @@ export const Templates: React.FC = () => {
   const [isOpenAddTemplateModal, setIsOpenAddTemplateModal] = useState(false);
   const [isOpenEditTemplateModal, setIsOpenEditTemplateModal] = useState(false);
 
-
   const handleCancelAddTemplate = () => {
     setNewTemplate(null);
     setIsOpenAddTemplateModal(!isOpenAddTemplateModal);
@@ -183,7 +191,7 @@ export const Templates: React.FC = () => {
     setNewTemplate((prevState) => ({
       ...prevState!,
       ext: ext,
-      file: content, 
+      file: content,
     }));
   };
 
@@ -191,7 +199,7 @@ export const Templates: React.FC = () => {
     <>
       <Card title={t("templates")}>
         <>
-        <div
+          <div
             style={{
               display: "flex",
               justifyContent: "flex-end",
@@ -238,7 +246,9 @@ export const Templates: React.FC = () => {
           <FileInput
             id={"template"}
             name={"template"}
-            onFileSelect={(file) => handleFileSelect(file.name.split('.').pop() || "", file.content)}
+            onFileSelect={(file) =>
+              handleFileSelect(file.name.split(".").pop() || "", file.content)
+            }
           />
         </>
       </Modal>
@@ -263,7 +273,9 @@ export const Templates: React.FC = () => {
           <FileInput
             id={"template"}
             name={"template"}
-            onFileSelect={(file) => handleFileSelect(file.name.split('.').pop() || "", file.content)}
+            onFileSelect={(file) =>
+              handleFileSelect(file.name.split(".").pop() || "", file.content)
+            }
           />
         </>
       </Modal>

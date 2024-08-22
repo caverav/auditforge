@@ -1,7 +1,13 @@
 import { useTranslation } from "react-i18next";
 import Card from "../../components/card/Card";
 import { useEffect, useState } from "react";
-import { createClient, getClients, getCompanies, updateClient, deleteClient } from "../../services/data";
+import {
+  createClient,
+  getClients,
+  getCompanies,
+  updateClient,
+  deleteClient,
+} from "../../services/data";
 import PrimaryButton from "../../components/button/PrimaryButton";
 import Modal from "../../components/modal/Modal";
 import SimpleInput from "../../components/input/SimpleInput";
@@ -100,14 +106,24 @@ export const Clients: React.FC = () => {
 
   // table
   const columns = [
-    { header: t("firstname"), accessor: "firstname", sortable: true, filterable: true },
-    { header: t("lastname"), accessor: "lastname", sortable: true, filterable: true },
-    { header: t("email"), accessor: "email", sortable: true, filterable: true },
-    { 
-      header: t("company"), 
-      accessor: "company", 
+    {
+      header: t("firstname"),
+      accessor: "firstname",
       sortable: true,
-      render: (data: any) => data?.name ?? "-"
+      filterable: true,
+    },
+    {
+      header: t("lastname"),
+      accessor: "lastname",
+      sortable: true,
+      filterable: true,
+    },
+    { header: t("email"), accessor: "email", sortable: true, filterable: true },
+    {
+      header: t("company"),
+      accessor: "company",
+      sortable: true,
+      render: (data: any) => data?.name ?? "-",
     },
   ];
 
@@ -128,7 +144,7 @@ export const Clients: React.FC = () => {
     const matchingCompany = apiCompanies.find(
       (company) => company.name === client.company
     );
-  
+
     setNewClient({
       _id: client._id,
       email: client.email,
@@ -137,12 +153,14 @@ export const Clients: React.FC = () => {
       phone: client.phone,
       cell: client.cell,
       title: client.title,
-      company: matchingCompany ? {
-        _id: matchingCompany._id,
-        name: matchingCompany.name,
-        shortName: matchingCompany.shortName,
-        logo: matchingCompany.logo
-      } : null
+      company: matchingCompany
+        ? {
+            _id: matchingCompany._id,
+            name: matchingCompany.name,
+            shortName: matchingCompany.shortName,
+            logo: matchingCompany.logo,
+          }
+        : null,
     });
     setIsOpenEditClientModal(!isOpenEditClientModal);
   };
@@ -236,17 +254,17 @@ export const Clients: React.FC = () => {
 
   const handleSubmitEditClient = async () => {
     if (!newClient || !selectedCompany) return;
-  
+
     try {
       const matchingCompany = apiCompanies.find(
         (company) => company._id === selectedCompany._id
       );
-  
+
       if (!matchingCompany) {
         setError("Selected company not found");
         return;
       }
-  
+
       const clientToUpdate = {
         ...newClient,
         company: {
@@ -256,7 +274,7 @@ export const Clients: React.FC = () => {
           logo: matchingCompany.logo,
         },
       };
-  
+
       await updateClient(clientToUpdate);
       setNewClient(null);
       setIsOpenEditClientModal(!isOpenEditClientModal);
@@ -281,9 +299,9 @@ export const Clients: React.FC = () => {
       company: {
         id: company.id,
         _id: company._id,
-        name: company.name || '',
-        shortName: company.shortName || '',
-        logo: company.logo || ''
+        name: company.name || "",
+        shortName: company.shortName || "",
+        logo: company.logo || "",
       } as Company,
     }));
   };
@@ -292,7 +310,7 @@ export const Clients: React.FC = () => {
     <>
       <Card title={t("clients")}>
         <>
-        <div
+          <div
             style={{
               display: "flex",
               justifyContent: "flex-end",

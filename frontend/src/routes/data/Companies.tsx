@@ -15,7 +15,6 @@ import UITable from "../../components/table/UITable";
 import { useSortableTable } from "../../hooks/useSortableTable";
 import { useTableFiltering } from "../../hooks/useTableFiltering";
 
-
 interface NewCompany {
   _id?: string;
   name: string;
@@ -131,7 +130,8 @@ export const Companies: React.FC = () => {
   }, [filters]);
 
   const [isOpenAddCompaniesModal, setIsOpenAddCompaniesModal] = useState(false);
-  const [isOpenEditCompaniesModal, setIsOpenEditCompaniesModal] = useState(false);
+  const [isOpenEditCompaniesModal, setIsOpenEditCompaniesModal] =
+    useState(false);
 
   const handleCancelAddCompanies = () => {
     setNewCompany(null);
@@ -194,7 +194,9 @@ export const Companies: React.FC = () => {
             }}
           >
             <PrimaryButton
-              onClick={() => setIsOpenAddCompaniesModal(!isOpenAddCompaniesModal)}
+              onClick={() =>
+                setIsOpenAddCompaniesModal(!isOpenAddCompaniesModal)
+              }
             >
               {t("addCompany")}
             </PrimaryButton>

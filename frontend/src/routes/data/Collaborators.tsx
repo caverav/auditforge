@@ -136,7 +136,7 @@ export const Collaborators: React.FC = () => {
   const handleEditCompanyButton = (collaborator: TableData) => {
     setNewCollaborator({
       ...collaborator,
-      enabled: collaborator.enabled ?? false
+      enabled: collaborator.enabled ?? false,
     });
     setIsOpenEditCollabModal(!isOpenEditCollabModal);
   };
@@ -387,17 +387,23 @@ export const Collaborators: React.FC = () => {
             value={newCollaborator?.password || ""}
             onChange={(value) => handleInputChange("password", value)}
           />
-          <div style={{ display: "flex", alignItems: "center", marginTop: "10px" }}>
-            <PrimarySwitch 
+          <div
+            style={{ display: "flex", alignItems: "center", marginTop: "10px" }}
+          >
+            <PrimarySwitch
               enabled={!!newCollaborator?.enabled}
-              onChange={() => 
-                setNewCollaborator((prevState) => 
-                  prevState ? { ...prevState, enabled: !prevState.enabled } : null
+              onChange={() =>
+                setNewCollaborator((prevState) =>
+                  prevState
+                    ? { ...prevState, enabled: !prevState.enabled }
+                    : null
                 )
               }
             />
             <span style={{ marginLeft: "10px" }}>
-              {newCollaborator?.enabled ? t("btn.accountEnabled") : t("btn.accountDisabled")}
+              {newCollaborator?.enabled
+                ? t("btn.accountEnabled")
+                : t("btn.accountDisabled")}
             </span>
           </div>
         </>
