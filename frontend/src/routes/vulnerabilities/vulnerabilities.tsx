@@ -10,6 +10,7 @@ import UITable from "../../components/table/UITable";
 import { useSortableTable } from "../../hooks/useSortableTable";
 import { useTableFiltering } from "../../hooks/useTableFiltering";
 import Card from "../../components/card/Card";
+import Modal from "../../components/modal/Modal";
 
 
 type Details = {
@@ -74,11 +75,14 @@ export const Vulnerabilities = () => {
   const [enabledValid, setEnabledValid] = useState(false)
   const [enabledNew, setEnabledNew] = useState(false)
   const [enabledUpdate, setEnabledUpdate] = useState(false)
+  const [openModalDeleteVuln, setOpenModalDeleteVuln] = useState(false)
 
   // Core
   const [vulnerabilities, setVulnerabilities] = useState<any[]>([]);
   const [tableInfo, setTableInfo] = useState<any[]>([]);
   const [error, setError] = useState<boolean>(false);
+  const [errorText, setErrorText] = useState<string | null>(null);
+
 
   // Lang
   const [languages, setLanguages] = useState<ListItem[]>([]);
@@ -174,7 +178,7 @@ export const Vulnerabilities = () => {
 
 
   // Testing Table
-
+  const [itemDelete, setItemDelete] = useState<any>()
 
   const columns = [
     { header: t('title'), accessor: "title", sortable: true, filterable: true },
@@ -189,8 +193,20 @@ export const Vulnerabilities = () => {
     setOpenEditVuln(true)
   }
 
-  const deleteRegister = async (item: any) => {
-    await deleteVulnerability(item._id)
+  const deleteRegisterConfirmation = (item: any) => {
+    setItemDelete(item)
+    setOpenModalDeleteVuln(true)
+  }
+
+  const confirmDeleteVulnerability = async () => {
+    //Add try
+    try {
+      await deleteVulnerability(itemDelete._id)
+    } catch (error) {
+      setErrorText("Error creating vulnerability");
+      console.error("Error:", error);
+    }
+    setOpenModalDeleteVuln(false);
     fetchVulnerabilities()
   }
 
@@ -209,7 +225,7 @@ export const Vulnerabilities = () => {
     },
     {
       label: "Delete",
-      onClick: (item: any) => deleteRegister(item),
+      onClick: (item: any) => deleteRegisterConfirmation(item),
     },
   ];
   
@@ -227,6 +243,21 @@ export const Vulnerabilities = () => {
   
   return (
     <div className="p-4">
+      {openModalDeleteVuln && 
+        <div className="fixed z-10">
+          <Modal 
+            title={t('msg.confirmSuppression')}
+            onCancel={() => setOpenModalDeleteVuln(false)}
+            onSubmit={confirmDeleteVulnerability}
+            cancelText={t('btn.stay')}
+            submitText={t('btn.confirm')}
+            isOpen={openModalDeleteVuln}
+            disablehr={true}
+          >
+            <span className="ml-3">{t('msg.vulnerabilityWillBeDeleted')}</span>
+          </Modal>
+        </div>
+      }
       <Card title={t("nav.vulnerabilities")}>
         <>
           <div className="fixed z-10">
