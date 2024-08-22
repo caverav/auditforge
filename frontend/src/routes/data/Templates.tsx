@@ -108,12 +108,12 @@ export const Templates: React.FC = () => {
       onClick: (item: TableData) => handleEditTemplateButton(item),
     },
     {
-      label: "Delete",
-      onClick: (item: TableData) => handleDeleteTemplateButton(item._id),
-    },
-    {
       label: "Download",
       onClick: (item: TableData) => handleDownloadTemplateButton(item),
+    },
+    {
+      label: "Delete",
+      onClick: (item: TableData) => handleDeleteTemplateButton(item._id),
     },
   ];
 
