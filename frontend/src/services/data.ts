@@ -1,6 +1,7 @@
 const API_URL = "https://localhost:4242/api/";
 
 interface NewCollaborator {
+  _id?: string;
   email: string;
   firstname: string;
   lastname: string;
@@ -9,6 +10,7 @@ interface NewCollaborator {
   role: string;
   totpenabled: boolean;
   username: string;
+  enabled?: boolean;
 }
 
 interface NewCompany {
@@ -30,10 +32,27 @@ interface NewClient {
 }
 
 interface NewTemplate {
+  _id?: string;
   name: string;
   ext: string;
   file: string;
 }
+
+export const getRoles = async (): Promise<any> => {
+  try {
+    const response = await fetch(`${API_URL}data/roles`, {
+      credentials: "include",
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
 
 export const getCollaborators = async (): Promise<any> => {
   try {
@@ -61,6 +80,30 @@ export const createCollaborator = async (
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(collab),
     }); // Incluir token
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+export const updateCollaborator = async (
+  collaborator: NewCollaborator
+): Promise<any> => {
+  try {
+    const { _id, ...collaboratorWithoutId } = collaborator;
+
+    const response = await fetch(`${API_URL}users/${_id}`, {
+      method: "PUT",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(collaboratorWithoutId),
+    });
+
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
@@ -254,7 +297,7 @@ export const getTemplates = async (): Promise<any> => {
   }
 };
 
-export const createTemplates = async (
+export const createTemplate = async (
   template: NewTemplate
 ): Promise<any> => {
   try {
@@ -272,6 +315,69 @@ export const createTemplates = async (
     return data;
   } catch (error) {
     console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+export const updateTemplate = async (
+  template: NewTemplate
+): Promise<any> => {
+  try {
+    const { _id, ...TemplateWithoutId } = template;
+
+    const response = await fetch(`${API_URL}templates/${_id}`, {
+      method: "PUT",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(TemplateWithoutId),
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+export const deleteTemplate = async (
+  templateId: string
+): Promise<any> => {
+  try {
+    const response = await fetch(`${API_URL}templates/${templateId}`, {
+      method: "DELETE",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" }
+    });
+
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+export const downloadTemplate = async (
+  templateId: string
+): Promise<any> => {
+  try {
+    const response = await fetch(`${API_URL}templates/download/${templateId}`, {
+      credentials: "include",
+    });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const blob = await response.blob();
+    return blob;
+  } catch (error) {
+    console.error("Error fetching file:", error);
     throw error;
   }
 };

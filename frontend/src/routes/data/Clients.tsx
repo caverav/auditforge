@@ -144,11 +144,11 @@ export const Clients: React.FC = () => {
         logo: matchingCompany.logo
       } : null
     });
-    setIsOpenEditCollabModal(!isOpenEditCollabModal);
+    setIsOpenEditClientModal(!isOpenEditClientModal);
   };
 
-  const handleDeleteCompanyButton = (client: TableData) => {
-    deleteClient(client._id);
+  const handleDeleteCompanyButton = async (client: TableData) => {
+    await deleteClient(client._id);
     fetchClients();
   };
   const rowActions = [
@@ -189,15 +189,15 @@ export const Clients: React.FC = () => {
   }, [filters]);
   //
 
-  const [isOpenAddCollabModal, setIsOpenAddCollabModal] = useState(false);
-  const [isOpenEditCollabModal, setIsOpenEditCollabModal] = useState(false);
+  const [isOpenAddClientModal, setIsOpenAddClientModal] = useState(false);
+  const [isOpenEditClientModal, setIsOpenEditClientModal] = useState(false);
 
-  const handleCancelAddCollab = () => {
+  const handleCancelAddClient = () => {
     setNewClient(null);
-    setIsOpenAddCollabModal(!isOpenAddCollabModal);
+    setIsOpenAddClientModal(!isOpenAddClientModal);
   };
 
-  const handleSubmitAddCollab = async () => {
+  const handleSubmitAddClient = async () => {
     if (!newClient || !selectedCompany) return;
 
     try {
@@ -226,15 +226,15 @@ export const Clients: React.FC = () => {
     }
 
     setNewClient(null);
-    setIsOpenAddCollabModal(!isOpenAddCollabModal);
+    setIsOpenAddClientModal(!isOpenAddClientModal);
   };
 
-  const handleCancelEditCollab = () => {
+  const handleCancelEditClient = () => {
     setNewClient(null);
-    setIsOpenEditCollabModal(!isOpenEditCollabModal);
+    setIsOpenEditClientModal(!isOpenEditClientModal);
   };
 
-  const handleSubmitEditCollab = async () => {
+  const handleSubmitEditClient = async () => {
     if (!newClient || !selectedCompany) return;
   
     try {
@@ -259,7 +259,7 @@ export const Clients: React.FC = () => {
   
       await updateClient(clientToUpdate);
       setNewClient(null);
-      setIsOpenEditCollabModal(!isOpenEditCollabModal);
+      setIsOpenEditClientModal(!isOpenEditClientModal);
       fetchClients();
     } catch (error) {
       setError("Error updating client");
@@ -301,7 +301,7 @@ export const Clients: React.FC = () => {
             }}
           >
             <PrimaryButton
-              onClick={() => setIsOpenAddCollabModal(!isOpenAddCollabModal)}
+              onClick={() => setIsOpenAddClientModal(!isOpenAddClientModal)}
             >
               {t("addClient")}
             </PrimaryButton>
@@ -320,11 +320,11 @@ export const Clients: React.FC = () => {
       </Card>
       <Modal
         title={t("addClient")}
-        onCancel={handleCancelAddCollab}
-        onSubmit={handleSubmitAddCollab}
+        onCancel={handleCancelAddClient}
+        onSubmit={handleSubmitAddClient}
         cancelText={t("btn.cancel")}
         submitText={t("btn.create")}
-        isOpen={isOpenAddCollabModal}
+        isOpen={isOpenAddClientModal}
       >
         <>
           <SelectDropdown
@@ -391,11 +391,11 @@ export const Clients: React.FC = () => {
       </Modal>
       <Modal
         title={t("editClient")}
-        onCancel={handleCancelEditCollab}
-        onSubmit={handleSubmitEditCollab}
+        onCancel={handleCancelEditClient}
+        onSubmit={handleSubmitEditClient}
         cancelText={t("btn.cancel")}
         submitText={t("btn.update")}
-        isOpen={isOpenEditCollabModal}
+        isOpen={isOpenEditClientModal}
       >
         <>
           <SelectDropdown

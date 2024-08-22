@@ -85,11 +85,11 @@ export const Companies: React.FC = () => {
       shortName: company.shortName,
       logo: company.logo,
     });
-    setIsOpenEditCollabModal(!isOpenEditCollabModal);
+    setIsOpenEditCompaniesModal(!isOpenEditCompaniesModal);
   };
 
-  const handleDeleteCompanyButton = (company: TableData) => {
-    deleteCompany(company._id);
+  const handleDeleteCompanyButton = async (company: TableData) => {
+    await deleteCompany(company._id);
     fetchCompanies();
   };
 
@@ -130,15 +130,15 @@ export const Companies: React.FC = () => {
     setTableData(newFilteredData ?? []);
   }, [filters]);
 
-  const [isOpenAddCollabModal, setIsOpenAddCollabModal] = useState(false);
-  const [isOpenEditCollabModal, setIsOpenEditCollabModal] = useState(false);
+  const [isOpenAddCompaniesModal, setIsOpenAddCompaniesModal] = useState(false);
+  const [isOpenEditCompaniesModal, setIsOpenEditCompaniesModal] = useState(false);
 
-  const handleCancelAddCollab = () => {
+  const handleCancelAddCompanies = () => {
     setNewCompany(null);
-    setIsOpenAddCollabModal(!isOpenAddCollabModal);
+    setIsOpenAddCompaniesModal(!isOpenAddCompaniesModal);
   };
 
-  const handleSubmitAddCollab = async () => {
+  const handleSubmitAddCompanies = async () => {
     try {
       await createCompany(newCompany!);
     } catch (error) {
@@ -146,16 +146,16 @@ export const Companies: React.FC = () => {
       console.error("Error:", error);
     }
     setNewCompany(null);
-    setIsOpenAddCollabModal(!isOpenAddCollabModal);
+    setIsOpenAddCompaniesModal(!isOpenAddCompaniesModal);
     fetchCompanies();
   };
 
-  const handleCancelEditCollab = () => {
+  const handleCancelEditCompanies = () => {
     setNewCompany(null);
-    setIsOpenEditCollabModal(!isOpenEditCollabModal);
+    setIsOpenEditCompaniesModal(!isOpenEditCompaniesModal);
   };
 
-  const handleSubmitEditCollab = async () => {
+  const handleSubmitEditCompanies = async () => {
     try {
       await updateCompany(newCompany!);
     } catch (error) {
@@ -163,7 +163,7 @@ export const Companies: React.FC = () => {
       console.error("Error:", error);
     }
     setNewCompany(null);
-    setIsOpenEditCollabModal(!isOpenEditCollabModal);
+    setIsOpenEditCompaniesModal(!isOpenEditCompaniesModal);
     fetchCompanies();
   };
 
@@ -194,7 +194,7 @@ export const Companies: React.FC = () => {
             }}
           >
             <PrimaryButton
-              onClick={() => setIsOpenAddCollabModal(!isOpenAddCollabModal)}
+              onClick={() => setIsOpenAddCompaniesModal(!isOpenAddCompaniesModal)}
             >
               {t("addCompany")}
             </PrimaryButton>
@@ -213,11 +213,11 @@ export const Companies: React.FC = () => {
       </Card>
       <Modal
         title={t("addCompany")}
-        onCancel={handleCancelAddCollab}
-        onSubmit={handleSubmitAddCollab}
+        onCancel={handleCancelAddCompanies}
+        onSubmit={handleSubmitAddCompanies}
         cancelText={t("btn.cancel")}
         submitText={t("btn.create")}
-        isOpen={isOpenAddCollabModal}
+        isOpen={isOpenAddCompaniesModal}
       >
         <>
           <SimpleInput
@@ -248,11 +248,11 @@ export const Companies: React.FC = () => {
       </Modal>
       <Modal
         title={t("editCompany")}
-        onCancel={handleCancelEditCollab}
-        onSubmit={handleSubmitEditCollab}
+        onCancel={handleCancelEditCompanies}
+        onSubmit={handleSubmitEditCompanies}
         cancelText={t("btn.cancel")}
         submitText={t("btn.update")}
-        isOpen={isOpenEditCollabModal}
+        isOpen={isOpenEditCompaniesModal}
       >
         <>
           <SimpleInput
