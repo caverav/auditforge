@@ -38,6 +38,14 @@ interface NewLanguage {
   locale: string;
 }
 
+export interface NewAuditType {
+  name: string;
+  hidden: string[];
+  sections: string[];
+  stage: string;
+  templates: { locale: string; template: string; name: string }[];
+}
+
 export const getCollaborators = async (): Promise<any> => {
   try {
     const response = await fetch(`${API_URL}users`, {
@@ -231,6 +239,51 @@ export const updateLanguages = async (
       credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(language),
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+/**
+ * Custom data: Custom sections
+ */
+
+export const getCustomSections = async (): Promise<any> => {
+  try {
+    const response = await fetch(`${API_URL}data/sections`, {
+      credentials: "include",
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+/**
+ * Custom data: Audit types
+ */
+
+export const createAuditType = async (
+  auditType: NewAuditType
+): Promise<any> => {
+  try {
+    const response = await fetch(`${API_URL}data/audit-types`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(auditType),
     }); // Incluir token
     if (!response.ok) {
       throw new Error("Network response was not ok");
