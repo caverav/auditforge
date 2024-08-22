@@ -65,14 +65,6 @@ interface ListItem {
   locale?: string;
 }
 
-type AddVulnerabilityData = {
-  cvssv3: string;
-  priority: number;
-  remediationComplexity: string;
-  details: Details[];
-  category: string; 
-};
-
 type TableData = {
   _id: string;
   title: string;
