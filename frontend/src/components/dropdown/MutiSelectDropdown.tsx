@@ -7,6 +7,7 @@ import {
   ListboxOptions,
 } from "@headlessui/react";
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
+import { Chip } from "@mui/material";
 import clsx from "clsx";
 import React from "react";
 
@@ -35,6 +36,10 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
     onChange(items);
   };
 
+  const handleDeleteChip = (deletedItem: ListItem) => {
+    handleChange(selected.filter((item) => item != deletedItem));
+  };
+
   return (
     <Field>
       <Label className={"block text-sm font-medium leading-6 text-gray-300"}>
@@ -48,9 +53,16 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
             "min-h-[2.3rem]"
           )}
         >
-          <span className="truncate">
+          <span>
             {selected.length > 0
-              ? selected.map((s) => (s.label ? s.label : s.value)).join(", ")
+              ? selected.map((s) => (
+                  <Chip
+                    color="primary"
+                    variant="outlined"
+                    label={s.label ? s.label : s.value}
+                    onDelete={() => handleDeleteChip(s)}
+                  />
+                ))
               : placeholder}
           </span>
           <ChevronDownIcon
