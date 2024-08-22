@@ -33,6 +33,10 @@ type UpdateVulnerabilityData = {
   updatedAt?: string;
 };
 
+type PostDescription = {
+  vuln: string;
+}
+
 
 export const getLanguages = async (): Promise<any> => {
   try {
@@ -140,6 +144,26 @@ export const updateVulnerability = async (vulnerability: UpdateVulnerabilityData
       credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(vulnerability),
+    });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+// Agregar el endpoint al backend https://localhost:8000/classify
+export const postDescriptionCWE = async (description: PostDescription): Promise<any> => {
+  try {
+    const response = await fetch(`http://localhost:8000/classify`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(description),
     });
     if (!response.ok) {
       throw new Error("Network response was not ok");
