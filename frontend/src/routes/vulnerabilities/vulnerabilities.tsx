@@ -173,7 +173,6 @@ export const Vulnerabilities = () => {
 
 
 
-
   // Testing Table
 
 
@@ -256,16 +255,13 @@ export const Vulnerabilities = () => {
               />}
             </div>
             <div className="ml-1">
-              <span className="mx-1">{t('btn.valid')}</span>
-              <PrimarySwitch enabled={enabledValid} onChange={setEnabledValid}/>  <></>
+              <PrimarySwitch enabled={enabledValid} onChange={setEnabledValid} label={t('btn.valid')}/>
             </div>
            <div className="ml-1"> 
-              <span className="mx-1">{t('btn.new')}</span>
-              <PrimarySwitch enabled={enabledNew} onChange={setEnabledNew}/>
+              <PrimarySwitch enabled={enabledNew} onChange={setEnabledNew} label={t('btn.new')}/>
             </div>
             <div className="ml-1 mr-6">
-              <span className="mx-1">{t('btn.updates')}</span>
-              <PrimarySwitch enabled={enabledUpdate} onChange={setEnabledUpdate}/>
+              <PrimarySwitch enabled={enabledUpdate} onChange={setEnabledUpdate} label={t('btn.updates')}/>
             </div>
             <div className="flex">
               <div className="mt-2 mx-2">
