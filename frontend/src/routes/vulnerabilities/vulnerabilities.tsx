@@ -6,13 +6,10 @@ import SelectDropdown from "../../components/dropdown/SelectDropdown";
 import { t } from "i18next"
 import AddVulnerability from "./addVulnerability";
 import EditVulnerability from "./editVulnerability";
-
-//// Testing Table
 import UITable from "../../components/table/UITable";
 import { useSortableTable } from "../../hooks/useSortableTable";
 import { useTableFiltering } from "../../hooks/useTableFiltering";
 import Card from "../../components/card/Card";
-////
 
 
 type Details = {
