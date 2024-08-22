@@ -10,7 +10,6 @@ import {
   NewAuditType,
 } from "../../../services/data";
 import { useTranslation } from "react-i18next";
-import { locale } from "dayjs";
 import PrimaryButton from "../../../components/button/PrimaryButton";
 import CheckboxButton from "../../../components/button/CheckboxButton";
 
