@@ -257,7 +257,7 @@ export const Templates: React.FC = () => {
         onCancel={handleCancelEditTemplate}
         onSubmit={handleSubmitEditTemplate}
         cancelText={t("btn.cancel")}
-        submitText={t("btn.create")}
+        submitText={t("btn.update")}
         isOpen={isOpenEditTemplateModal}
       >
         <>
