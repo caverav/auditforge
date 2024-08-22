@@ -168,7 +168,7 @@ export const Vulnerabilities = () => {
         value: item.name,
         label: item.name
       }));
-      setCategories([...categoryNames]);
+      setCategories([{id: 0, label: t('noCategory'), value: null},...categoryNames]);
     } catch (err) {
       setError(true);
     }

@@ -2,11 +2,11 @@ const API_URL = 'https://localhost:4242/api/';
 
 type Details = {
   locale: string;
-  title: string;
-  vulnType: string;
-  description: string;
-  observation: string;
-  remediation: string;
+  title?: string;
+  vulnType?: string;
+  description?: string;
+  observation?: string;
+  remediation?: string;
   cwes: string[];
   references: string[];
   customFields: string[];
@@ -18,6 +18,19 @@ type NewVulnerability = {
   remediationComplexity: number | "";
   details: Details[];
   category: string |null; 
+};
+
+type UpdateVulnerabilityData = {
+  _id: string;
+  cvssv3: string | null;
+  priority?: number | "";
+  remediationComplexity?: number | "";
+  details: Details[];
+  status?: number;
+  category?: string | null; 
+  __v: number;
+  createdAt?: string;
+  updatedAt?: string;
 };
 
 
@@ -107,6 +120,26 @@ export const deleteVulnerability = async (id: string): Promise<any> => {
     const response = await fetch(`${API_URL}vulnerabilities/${id}`, {
       method: "DELETE",
       credentials: "include",
+    });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+
+export const updateVulnerability = async (vulnerability: UpdateVulnerabilityData): Promise<any> => {
+  try {
+    const response = await fetch(`${API_URL}vulnerabilities/${vulnerability._id}`, {
+      method: "PUT",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(vulnerability),
     });
     if (!response.ok) {
       throw new Error("Network response was not ok");
