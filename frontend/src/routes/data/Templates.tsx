@@ -49,7 +49,7 @@ export const Templates: React.FC = () => {
 
   const columns = [
     { header: t("name"), accessor: "name", sortable: true, filterable: true },
-    { header: t("extension"), accessor: "ext", sortable: true },
+    { header: t("extension"), accessor: "ext", sortable: true, filterable: true },
   ];
 
   type TableData = {
@@ -92,7 +92,7 @@ export const Templates: React.FC = () => {
       setError("Error downloading template");
     }
   };
-  
+
   const rowActions = [
     {
       label: "Edit",
