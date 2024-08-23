@@ -63,34 +63,35 @@ type CollaboratorsData = {
 export const General = () => {
   const { auditId } = useParams();
 
-  const [nameAudit, setNameAudit] = useState<any>(null);
+  const [nameAudit, setNameAudit] = useState<string>("");
 
   const [languages, setLanguages] = useState<ListItem[]>([]);
-  const [currentLanguage, setCurrentLanguage] = useState<any>(null);
+  const [currentLanguage, setCurrentLanguage] = useState<ListItem | null>(null);
   const [loadingLanguages, setLoadingLanguages] = useState<boolean>(true);
 
   const [templates, setTemplates] = useState<ListItem[]>([]);
-  const [currentTemplate, setCurrentTemplate] = useState<any>(null);
+  const [currentTemplate, setCurrentTemplate] = useState<ListItem | null>(null);
   const [loadingTemplates, setLoadingTemplates] = useState<boolean>(true);
 
   const [companies, setCompanies] = useState<ListItem[]>([]);
-  const [currentCompany, setCurrentCompany] = useState<any>(null);
+  const [currentCompany, setCurrentCompany] = useState<ListItem | null>(null);
   const [loadingCompanies, setLoadingCompanies] = useState<boolean>(false);
 
   const [clients, setClients] = useState<ListItem[]>([]);
-  const [currentClient, setCurrentClient] = useState<any>(null);
+  const [currentClient, setCurrentClient] = useState<ListItem | null>(null);
   const [loadingClients, setLoadingClients] = useState<boolean>(false);
 
   const [collaborators, setCollaborators] = useState<ListItem[]>([]);
-  const [currentCollaborators, setCurrentCollaborators] = useState<any>(null);
+  const [currentCollaborators, setCurrentCollaborators] =
+    useState<ListItem | null>(null);
   const [loadingCollaborators, setLoadingCollaborators] =
     useState<boolean>(true);
 
-  const [startDate, setStartDate] = useState<Dayjs | any>(null);
-  const [endDate, setEndDate] = useState<Dayjs | any>(null);
-  const [reportingDate, setReportingDate] = useState<Dayjs | any>(null);
+  const [startDate, setStartDate] = useState<Dayjs | null>(null);
+  const [endDate, setEndDate] = useState<Dayjs | null>(null);
+  const [reportingDate, setReportingDate] = useState<Dayjs | null>(null);
 
-  const [scope, setScope] = useState<any>(null);
+  const [scope, setScope] = useState<string | string[]>("");
 
   const fetchAuditData = async () => {
     if (!auditId) return;
@@ -100,40 +101,40 @@ export const General = () => {
         setNameAudit(dataAudit.datas.name);
 
         const selectedLanguage = languages.find(
-          (item) => item.value === dataAudit.datas.language
+          (item) => item.value === dataAudit.datas.language,
         );
-        setCurrentLanguage(selectedLanguage);
+        setCurrentLanguage(selectedLanguage!);
 
         const selectedTemplate = templates.find(
-          (item) => item.value === dataAudit.datas.template.name
+          (item) => item.value === dataAudit.datas.template.name,
         );
-        setCurrentTemplate(selectedTemplate);
+        setCurrentTemplate(selectedTemplate!);
 
         const selectedCompany = companies.find(
-          (item) => item.value === dataAudit.datas.company.name
+          (item) => item.value === dataAudit.datas.company?.name,
         );
-        setCurrentCompany(selectedCompany);
+        setCurrentCompany(selectedCompany!);
 
         const selectedClient = clients.find(
-          (item) => item.value === dataAudit.datas.client.email
+          (item) => item.value === dataAudit.datas.client?.email,
         );
-        setCurrentClient(selectedClient);
+        setCurrentClient(selectedClient!);
 
         const selectedCollaborator = collaborators.find(
           (item) =>
             item.value ===
-            dataAudit.datas.collaborators[0].firstname +
-              " " +
-              dataAudit.datas.collaborators[0].lastname
+            `${dataAudit.datas.collaborators[0]?.firstname} ${dataAudit.datas.collaborators[0]?.lastname}`,
         );
-        setCurrentCollaborators(selectedCollaborator);
+        setCurrentCollaborators(selectedCollaborator!);
 
         setStartDate(dataAudit.datas.date_start);
         setEndDate(dataAudit.datas.date_end);
         setReportingDate(dataAudit.datas.date);
 
         setScope(
-          dataAudit.datas.scope.map((item: any) => item.name).join("\n")
+          dataAudit.datas.scope
+            .map((item: { name: string }) => item.name)
+            .join("\n"),
         );
       } else {
         console.error("No audit data found");
@@ -152,7 +153,7 @@ export const General = () => {
             id: index,
             value: item.locale,
             label: item.language,
-          })
+          }),
         );
         setLanguages(languagesName);
         setLoadingLanguages(false);
@@ -163,7 +164,7 @@ export const General = () => {
             id: index,
             value: item.name,
             label: item.name,
-          })
+          }),
         );
         setTemplates(templatesName);
         setLoadingTemplates(false);
@@ -174,7 +175,7 @@ export const General = () => {
             id: index,
             value: item.name,
             label: item.name,
-          })
+          }),
         );
         setCompanies(companiesName);
         setLoadingCompanies(false);
@@ -185,7 +186,7 @@ export const General = () => {
             id: index,
             value: item.email,
             label: item.email,
-          })
+          }),
         );
         setClients(clientsName);
         setLoadingClients(false);
@@ -194,9 +195,9 @@ export const General = () => {
         const collaboratorsName = dataCollaborators.datas.map(
           (item: CollaboratorsData, index: number) => ({
             id: index,
-            value: item.firstname + " " + item.lastname,
-            label: item.firstname + " " + item.lastname,
-          })
+            value: `${item.firstname} ${item.lastname}`,
+            label: `${item.firstname} ${item.lastname}`,
+          }),
         );
         setCollaborators(collaboratorsName);
         setLoadingCollaborators(false);
