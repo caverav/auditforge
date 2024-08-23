@@ -37,7 +37,7 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   };
 
   const handleDeleteChip = (deletedItem: ListItem) => {
-    handleChange(selected.filter((item) => item != deletedItem));
+    handleChange(selected.filter((item) => item !== deletedItem));
   };
 
   return (
@@ -66,7 +66,7 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
               : placeholder}
           </span>
           <ChevronDownIcon
-            className={`size-4 fill-white/60 mr-1`}
+            className={"size-4 fill-white/60 mr-1"}
             aria-hidden="true"
           />
         </ListboxButton>
