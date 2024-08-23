@@ -42,15 +42,13 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
 
   return (
     <Field>
-      <Label className={"block text-sm font-medium leading-6 text-gray-300"}>
+      <Label className="block text-sm font-medium leading-6 text-gray-300">
         {title}
       </Label>
       <Listbox value={selected} onChange={handleChange} multiple>
         <ListboxButton
           className={clsx(
-            "inline-flex items-center justify-between w-full text-left rounded-lg bg-white/5 py-1.5 pl-3 text-left text-sm/6 text-white",
-            "focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25",
-            "min-h-[2.3rem]"
+            "inline-flex items-center justify-between w-full text-left rounded-lg bg-white/5 py-1.5 pl-3 text-left text-sm/6 text-white focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25 min-h-[2.3rem]"
           )}
         >
           <span>
@@ -66,7 +64,7 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
               : placeholder}
           </span>
           <ChevronDownIcon
-            className={"size-4 fill-white/60 mr-1"}
+            className="size-4 fill-white/60 mr-1"
             aria-hidden="true"
           />
         </ListboxButton>
@@ -74,9 +72,7 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
           anchor="bottom"
           transition
           className={clsx(
-            "w-[var(--button-width)] rounded-xl border border-white/5 bg-stone-800 p-1 [--anchor-gap:var(--spacing-1)] focus:outline-none",
-            "transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0",
-            "z-50"
+            "w-[var(--button-width)] rounded-xl border border-white/5 bg-stone-800 p-1 [--anchor-gap:var(--spacing-1)] focus:outline-none transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0 z-50"
           )}
         >
           {items.map((item) => (
