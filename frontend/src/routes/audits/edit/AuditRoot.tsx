@@ -1,17 +1,23 @@
 import { useTranslation } from "react-i18next";
 import AuditSidebar from "../../../components/navbar/AuditSidebar";
-import { Outlet } from "react-router-dom";
+import { Outlet, useParams } from "react-router-dom";
 import { Settings, Globe, List, Plus } from "lucide-react";
 import { useState } from "react";
+import { Finding, getAuditById } from "../../../services/audits.ts";
 
 export const AuditRoot = () => {
   const { t } = useTranslation();
+  const { auditId } = useParams();
   const [activeItem, setActiveItem] = useState(t("generalInformation"));
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [sortBy, setSortBy] = useState<{ id: number; value: string } | null>(
     null,
   );
   const [sortOrder, setSortOrder] = useState("Descending");
+
+  const [findings, setFindings] = useState<
+    { id: number; name: string; category: string; severity: string }[]
+  >([]);
 
   const menuItems = [
     { name: t("generalInformation"), icon: Settings, value: "general" },
@@ -24,11 +30,18 @@ export const AuditRoot = () => {
     },
   ];
 
-  const findings = [
-    { id: 1, name: "Finding 1", category: "No Category", severity: "L" },
-    { id: 2, name: "Finding 2", category: "No Category", severity: "L" },
-    { id: 3, name: "Finding 3", category: "No Category", severity: "L" },
-  ];
+  getAuditById(auditId).then((audit) => {
+    setFindings(
+      audit.datas.findings.map((finding: Finding) => {
+        return {
+          id: finding.identifier,
+          name: finding.title,
+          category: "No Category",
+          severity: "L", //TODO: it's harcoded
+        };
+      }),
+    );
+  });
 
   const sortOptions = [
     { id: 1, value: "CVSS Score" },

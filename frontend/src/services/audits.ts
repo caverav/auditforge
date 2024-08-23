@@ -1,5 +1,19 @@
 const API_URL = "https://localhost:8443/api/";
 
+export interface Finding {
+  identifier: number;
+  title: string;
+  description: string;
+  observation: string;
+  remediation: string;
+  references: string[];
+  cwes: string[];
+  cvssv3: string;
+  status: number;
+  customFields: string[];
+  _id: string;
+  paragraphs: string[];
+}
 export interface Audit {
   _id: string;
   name: string;
@@ -12,6 +26,16 @@ export interface Audit {
   state: string;
   type: string;
   connected: string[];
+  sections?: string[];
+  customFields?: string[];
+  sortFindings?: string[];
+  approvals?: string[];
+  scope?: string[];
+  findings: Finding[];
+  template?: string;
+  client?: string;
+  updatedAt: string;
+  __v: number;
 }
 
 interface NewAudit {
@@ -107,7 +131,7 @@ export const getAudits = async (): Promise<any> => {
 
 export const getAuditById = async (
   auditId: string | undefined,
-): Promise<any> => {
+): Promise<{ datas: Audit }> => {
   try {
     const response = await fetch(`${API_URL}audits/${auditId}`, {
       headers: { "Content-Type": "application/json" },
