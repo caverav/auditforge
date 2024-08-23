@@ -8,7 +8,6 @@ import {
   getLanguages,
   updateLanguages,
 } from "../../../services/data";
-import Toast from "../../../components/modal/Toast";
 import LanguageList from "./LanguageList";
 
 export const Languages: React.FC = () => {
@@ -21,7 +20,6 @@ export const Languages: React.FC = () => {
   >([]);
 
   const [loading, setLoading] = useState<boolean>(true);
-  const [isOpenToast, setIsOpenToast] = useState<boolean>(false);
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [toastMsg, setToastMsg] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -47,20 +45,12 @@ export const Languages: React.FC = () => {
     } catch (error) {
       setError("Error creating language");
       console.error("Error:", error);
-      handleShowToast(t("err.errorCreatingLang"));
       setNewLanguage("");
       setNewLocale("");
       return;
     }
-    handleShowToast(t("msg.languageCreatedOk"));
     setNewLanguage("");
     setNewLocale("");
-  };
-
-  const handleShowToast = (message: string) => {
-    setToastMsg(message);
-    setIsOpenToast(true);
-    setTimeout(() => setIsOpenToast(false), 3000); // Ocultar el toast después de 3 segundos
   };
 
   /**
@@ -83,11 +73,9 @@ export const Languages: React.FC = () => {
     } catch (error) {
       setError("Error updating languages");
       console.error("Error:", error);
-      handleShowToast(t("err.errorUpdatingLangs"));
       return;
     }
     setIsEditing(false);
-    handleShowToast(t("msg.languagesUpdatedOk"));
   };
 
   return (
@@ -137,13 +125,6 @@ export const Languages: React.FC = () => {
           )}
         </>
       </EditCard>
-      {isOpenToast && (
-        <Toast
-          type={error ? "error" : "success"}
-          message={toastMsg}
-          onClose={() => setIsOpenToast(false)}
-        />
-      )}
     </div>
   );
 };
