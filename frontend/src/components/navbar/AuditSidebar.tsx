@@ -142,7 +142,7 @@ export default function AuditSidebar({
               placeholder={t("select")}
             />
           </div>
-          <div className={clsx("mb-4", isCollapsed && "sr-only")}>
+          <div className={clsx("mb-4 font-thin", isCollapsed && "sr-only")}>
             <DefaultRadioGroup
               name="sortOrder"
               options={sortOrderOptions}
