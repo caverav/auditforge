@@ -9,6 +9,7 @@ import {
   updateLanguages,
 } from "../../../services/data";
 import LanguageList from "./LanguageList";
+import { toast } from "sonner";
 
 export const Languages: React.FC = () => {
   const { t } = useTranslation();
@@ -23,18 +24,19 @@ export const Languages: React.FC = () => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchLanguages = async () => {
-      try {
-        const data = await getLanguages();
-        setLanguages(data.datas);
-        setLoading(false);
-      } catch (err) {
-        setError("Error fetching company");
-        setLoading(false);
-      }
-    };
+  const fetchLanguages = async () => {
+    try {
+      const data = await getLanguages();
+      setLanguages(data.datas);
+      console.log(data.datas);
+      setLoading(false);
+    } catch (err) {
+      setError("Error fetching company");
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchLanguages();
   }, []);
 
@@ -43,13 +45,15 @@ export const Languages: React.FC = () => {
       await createLanguage({ language: newLanguage, locale: newLocale });
     } catch (error) {
       setError("Error creating language");
-      console.error("Error:", error);
+      toast.error(t("err.errorCreatingLang"));
       setNewLanguage("");
       setNewLocale("");
       return;
     }
+    toast.success(t("msg.languageCreatedOk"));
     setNewLanguage("");
     setNewLocale("");
+    fetchLanguages();
   };
 
   /**
@@ -75,6 +79,7 @@ export const Languages: React.FC = () => {
       return;
     }
     setIsEditing(false);
+    fetchLanguages();
   };
 
   return (
