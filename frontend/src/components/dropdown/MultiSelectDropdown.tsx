@@ -32,6 +32,11 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   onChange,
   placeholder,
 }) => {
+  const ids = items.map((item) => item.id);
+  const hasDuplicateIds = new Set(ids).size !== ids.length;
+  if (hasDuplicateIds) {
+    throw new Error("Los ids de los items deben ser únicos");
+  }
   const handleChange = (items: ListItem[]) => {
     onChange(items);
   };
@@ -48,7 +53,7 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
       <Listbox value={selected} onChange={handleChange} multiple>
         <ListboxButton
           className={clsx(
-            "inline-flex items-center justify-between w-full text-left rounded-lg bg-white/5 py-1.5 pl-3 text-left text-sm/6 text-white focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25 min-h-[2.3rem]"
+            "inline-flex items-center justify-between w-full text-left rounded-lg bg-white/5 py-1.5 pl-3 text-left text-sm/6 text-white focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25 min-h-[2.3rem]",
           )}
         >
           <span>
@@ -72,12 +77,12 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
           anchor="bottom"
           transition
           className={clsx(
-            "w-[var(--button-width)] rounded-xl border border-white/5 bg-stone-800 p-1 [--anchor-gap:var(--spacing-1)] focus:outline-none transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0 z-50"
+            "w-[var(--button-width)] rounded-xl border border-white/5 bg-stone-800 p-1 [--anchor-gap:var(--spacing-1)] focus:outline-none transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0 z-50",
           )}
         >
           {items.map((item) => (
             <ListboxOption
-              key={item.value}
+              key={item.id}
               value={item}
               className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-white/10"
             >
