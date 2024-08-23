@@ -86,7 +86,7 @@ export const Vulnerabilities = () => {
 
   // Lang
   const [languages, setLanguages] = useState<ListItem[]>([]);
-  const [currentLanguage, setCurrentLanguage] = useState<ListItem>({id: 0, value: ''});
+  const [currentLanguage, setCurrentLanguage] = useState<ListItem|null>(null);
   const [loadingLanguage, setLoadingLanguage] = useState<boolean>(true);
 
   // Category
@@ -175,6 +175,19 @@ export const Vulnerabilities = () => {
   }, []);  
   //
 
+  //// Workaround para dropdown de filtrado
+  useEffect(() => {
+    const filtered = vulnerabilities.filter(vulnIter => vulnIter.details[0].locale === currentLanguage?.value)
+    const vulnDataTable =  filtered.map((item2) =>({
+      _id: item2._id,
+      title: item2.details[0].title ? item2.details[0].title : "noTitle",
+      category: item2.category ? item2.category: t('noCategory'),
+      type: item2.details[0].vulnType ? item2.details[0].vulnType : t('undefined'),
+    }))
+    setTableData(vulnDataTable)
+    setTableInfo(vulnDataTable)
+  }, [vulnerabilities, currentLanguage]);  
+  ////
 
 
   // Testing Table
@@ -277,12 +290,13 @@ export const Vulnerabilities = () => {
             emptyState={<div>{t("err.noMatchingRecords")}</div>}
           >
           <div className="flex items-center mb-4">
-            <div>
+            <div className="">
               {!loadingLanguage && <SelectDropdown 
                 title={t('languages')} 
                 items={languages}
                 selected={currentLanguage}
                 onChange={setCurrentLanguage}
+                placeholder="Language"
               />}
             </div>
             <div className="ml-1">
