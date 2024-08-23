@@ -21,7 +21,6 @@ export const Languages: React.FC = () => {
 
   const [loading, setLoading] = useState<boolean>(true);
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [toastMsg, setToastMsg] = useState("");
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
