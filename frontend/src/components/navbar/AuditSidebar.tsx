@@ -3,6 +3,7 @@ import clsx from "clsx";
 import DefaultRadioGroup from "../button/DefaultRadioGroup";
 import SelectDropdown from "../dropdown/SelectDropdown";
 import { Link } from "react-router-dom";
+import { t } from "i18next";
 interface MenuItem {
   name: string;
   icon: React.ComponentType<{ className?: string }>;
@@ -79,7 +80,7 @@ export default function AuditSidebar({
             isCollapsed ? "opacity-0 w-0" : "opacity-100",
           )}
         >
-          Audit Dashboard
+          {t("audit")}
         </h2>
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
@@ -135,10 +136,10 @@ export default function AuditSidebar({
           <div className={clsx("mb-2", isCollapsed && "sr-only")}>
             <SelectDropdown
               items={sortOptions}
-              title="Sort By"
+              title={t("sortBy")}
               selected={sortBy}
               onChange={setSortBy}
-              placeholder="Select sorting option"
+              placeholder={t("select")}
             />
           </div>
           <div className={clsx("mb-4", isCollapsed && "sr-only")}>
@@ -175,7 +176,7 @@ export default function AuditSidebar({
                 isCollapsed && "opacity-0 w-0 overflow-hidden",
               )}
             >
-              Users Connected
+              {t("usersConnected")}
             </span>
           </button>
         </div>
