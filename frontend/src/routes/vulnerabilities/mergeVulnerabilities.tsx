@@ -1,10 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { t } from "i18next";
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import PrimaryButton from "../../components/button/PrimaryButton";
 import SelectDropdown from "../../components/dropdown/SelectDropdown";
-
-
+import DefaultRadioGroup from "../../components/button/DefaultRadioGroup";
 
 type Details = {
   locale: string;
@@ -55,11 +54,69 @@ type MergeVulnProps = {
 const MergeVulnerabilities: React.FC<MergeVulnProps> = ({ isOpen, handlerIsOpen, vulnerabilities, languages}) => {
 
   const [selectedLanguageLeft, setSelectedLanguageLeft] = useState<ListItem|null>(null);
+  const [currentRadioOptionsLeft, setCurrentRadioOptionsLeft] = useState<RadioOption[]>()
+  const [selectedRadioLeft, setSelectedRadioLeft] = useState('');
+  const [isLeftEnabled, setIsLeftEnabled] = useState<boolean>(false)
+  
   const [selectedLanguageRight, setSelectedLanguageRight] = useState<ListItem|null>(null);
+  const [currentRadioOptionsRight, setCurrentRadioOptionsRight] = useState<RadioOption[]>()
+  const [selectedRadioRight, setSelectedRadioRight] = useState('');
+  const [isRightEnabled, setIsRightEnabled] = useState<boolean>(false)
 
+  const [allDetails, setAllDetails] = useState(
+    vulnerabilities.flatMap(vuln => 
+      vuln.details.map(detail => ({
+        id: vuln._id,
+        locale: detail.locale,
+        title: detail.title
+      }))
+    )
+  )
+
+  const checkLeft = () => {
+    const leftFiltered = allDetails
+      .filter(detailIter => detailIter.locale === selectedLanguageLeft?.value)
+    
+    const rightFilteredIds = new Set(
+      allDetails
+        .filter(detailIter => detailIter.locale === selectedLanguageRight?.value)
+        .map(item => item.id)
+    );
+
+    const leftOptions = leftFiltered
+      .filter(item => !rightFilteredIds.has(item.id))
+      .map((item) => ({
+        id: item.id,
+        value: item.id,
+        label: item.title || ""
+      }))
+
+    leftOptions.length > 0 ? setIsLeftEnabled(true) : setIsLeftEnabled(false)
+    setCurrentRadioOptionsLeft(leftOptions)
+  }
+
+  const checkRight = () => {
+    const rightFiltered = allDetails
+      .filter(detailIter => detailIter.locale === selectedLanguageRight?.value)
+
+    const rightOptions = rightFiltered
+      .map((item) => ({
+        id: item.id,
+        value: item.id,
+        label: item.title || ""
+      }))
+    rightOptions.length > 0 ? setIsRightEnabled(true) : setIsRightEnabled(false)
+    setCurrentRadioOptionsRight(rightOptions)
+
+  }
+
+  useEffect(() => {
+    checkLeft();
+    checkRight();
+  }, [selectedLanguageLeft, selectedLanguageRight])
 
   const handlerLeftChange = (item: ListItem) => {
-    setSelectedLanguageLeft(item)
+    setSelectedLanguageLeft(item);
   }
 
   const handlerRightChange = (item: ListItem) => {
@@ -67,22 +124,11 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({ isOpen, handlerIsOpen,
   }
 
   const onSubmitMerge = () => {
-    console.log("asd")
+    console.log(allDetails)
   }
 
-
-
-/*
-
-<div
-            className={`fixed inset-0 bg-black bg-opacity-50 transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
-            onClick={() => changed ? setOpenModal(true) : setOpenModal(false)}
-            aria-hidden="true"
-        />
-*/
   return (
     <>
-        
       <div className={`fixed inset-0 flex justify-center items-center transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}>
         <div
           className="fixed inset-0 bg-black bg-opacity-50"
@@ -109,24 +155,42 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({ isOpen, handlerIsOpen,
               placeholder={t('languageAddFromRight')}
               title=""
             />
-            
+            <div className="pl-1 mt-5">
+              { isLeftEnabled &&
+              <DefaultRadioGroup
+                name="left"
+                options={currentRadioOptionsLeft!}
+                value={selectedRadioLeft}
+                onChange={setSelectedRadioLeft}
+              />}
+            </div>
           </div>
           <div className="w-0.5 h-full bg-gray-600"></div>
           <div className="w-1/2 overflow-auto mt-2">
-            <SelectDropdown 
-              items={languages}
-              selected={selectedLanguageRight}
-              onChange={(value) => handlerRightChange(value)}
-              placeholder={t('languageMoveToLeft')}
-              title=""
-            />
+            <div className="">
+              <SelectDropdown 
+                items={languages}
+                selected={selectedLanguageRight}
+                onChange={(value) => handlerRightChange(value)}
+                placeholder={t('languageMoveToLeft')}
+                title=""
+              />
+            </div>
+            <div className="pl-1 mt-5">
+              { isRightEnabled &&
+              <DefaultRadioGroup
+                name="right"
+                options={currentRadioOptionsRight!}
+                value={selectedRadioRight}
+                onChange={setSelectedRadioRight}
+              />}
+            </div>
           </div>
         </div>
         <div className="flex justify-center pt-2 border-t-gray-600 border-t-2">
           <PrimaryButton onClick={onSubmitMerge}>
-            <span>MERGE</span>
+            <span>{t('merge')}</span>
           </PrimaryButton>
-          
         </div>
         </div>
       </div>
