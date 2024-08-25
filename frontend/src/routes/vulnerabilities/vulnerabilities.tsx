@@ -11,6 +11,7 @@ import { useSortableTable } from "../../hooks/useSortableTable";
 import { useTableFiltering } from "../../hooks/useTableFiltering";
 import Card from "../../components/card/Card";
 import Modal from "../../components/modal/Modal";
+import MergeVulnerabilities from "./mergeVulnerabilities";
 
 
 type Details = {
@@ -189,6 +190,8 @@ export const Vulnerabilities = () => {
   }, [vulnerabilities, currentLanguage]);  
   ////
 
+  const [openMerge, setOpenMerge] = useState(false)
+
 
   // Testing Table
   const [itemDelete, setItemDelete] = useState<any>()
@@ -277,7 +280,10 @@ export const Vulnerabilities = () => {
             {openAddVuln && <AddVulnerability isOpen={openAddVuln} handlerIsOpen={setOpenAddVuln} categoryVuln={selectedCategory} languages={languages} types={types} refreshVulns={fetchVulnerabilities}/>}
           </div>
           <div className="fixed z-10">
-          {openEditVuln && <EditVulnerability isOpen={openEditVuln} handlerIsOpen={setOpenEditVuln} categories={categories} languages={languages} types={types} refreshVulns={fetchVulnerabilities} currentVuln={editVuln!}/>}          
+            {openEditVuln && <EditVulnerability isOpen={openEditVuln} handlerIsOpen={setOpenEditVuln} categories={categories} languages={languages} types={types} refreshVulns={fetchVulnerabilities} currentVuln={editVuln!}/>}          
+          </div>
+          <div className="fixed z-10">
+            {openMerge && <MergeVulnerabilities isOpen={openMerge} handlerIsOpen={setOpenMerge} vulnerabilities={vulnerabilities} languages={languages}/>}          
           </div>
           <UITable
             columns={columns}
@@ -310,7 +316,7 @@ export const Vulnerabilities = () => {
             </div>
             <div className="flex">
               <div className="mt-2 mx-2">
-                <PrimaryButton>
+                <PrimaryButton onClick={() => setOpenMerge(true)}>
                   <span className="mx-1">{t('mergeVulnerabilities')}</span>
                 </PrimaryButton>
               </div>
