@@ -42,7 +42,7 @@ const SimpleInput: React.FC<SimpleInputProps> = ({
             onChange(e.target.value)
           }
           disabled={disabled}
-          className="bg-gray-800 block w-full rounded-md py-1.5 pl-7 pr-7 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          className="bg-gray-800 block w-full rounded-md py-1.5 pl-7 pr-7 placeholder:text-gray-400 sm:text-sm sm:leading-6"
         />
       </div>
     </div>
