@@ -283,7 +283,7 @@ export const Vulnerabilities = () => {
             {openEditVuln && <EditVulnerability isOpen={openEditVuln} handlerIsOpen={setOpenEditVuln} categories={categories} languages={languages} types={types} refreshVulns={fetchVulnerabilities} currentVuln={editVuln!}/>}          
           </div>
           <div className="fixed z-10">
-            {openMerge && <MergeVulnerabilities isOpen={openMerge} handlerIsOpen={setOpenMerge} vulnerabilities={vulnerabilities} languages={languages}/>}          
+            {openMerge && <MergeVulnerabilities isOpen={openMerge} handlerIsOpen={setOpenMerge} vulnerabilities={vulnerabilities} languages={languages} refreshVulns={fetchVulnerabilities}/>}          
           </div>
           <UITable
             columns={columns}

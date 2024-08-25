@@ -50,9 +50,10 @@ type MergeVulnProps = {
   handlerIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
   vulnerabilities: VulnerabilityData[];
   languages: ListItem[];
+  refreshVulns: () => void;
 }
 
-const MergeVulnerabilities: React.FC<MergeVulnProps> = ({ isOpen, handlerIsOpen, vulnerabilities, languages}) => {
+const MergeVulnerabilities: React.FC<MergeVulnProps> = ({ isOpen, handlerIsOpen, vulnerabilities, languages, refreshVulns}) => {
 
   const [selectedLanguageLeft, setSelectedLanguageLeft] = useState<ListItem|null>(null);
   const [currentRadioOptionsLeft, setCurrentRadioOptionsLeft] = useState<RadioOption[]>()
@@ -116,7 +117,7 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({ isOpen, handlerIsOpen,
         value: [item.id,item.locale].join("."),
         label: item.title || ""
       }))
-    console.log(rightOptions)
+
     rightOptions.length > 0 ? setIsRightEnabled(true) : setIsRightEnabled(false)
     setCurrentRadioOptionsRight(rightOptions)
   }
@@ -157,10 +158,8 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({ isOpen, handlerIsOpen,
       }
     }
 
-    // Se hace un refresh 
-
-    // Se cierra el modal
-    handlerIsOpen(false)
+    refreshVulns();
+    handlerIsOpen(false);
   }
 
   return (
