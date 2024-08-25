@@ -64,7 +64,12 @@ export const Collaborators: React.FC = () => {
     try {
       const data = await getCollaborators();
       setCollaborators(data.datas);
-      setTableData(data.datas);
+
+      const filteredData = data.datas.filter(
+        (item: TableData) => item.enabled === enabledFilter
+      );
+      
+      setTableData(filteredData);
       setLoading(false);
     } catch (err) {
       setError("Error fetching collaborators");
@@ -147,6 +152,8 @@ export const Collaborators: React.FC = () => {
     },
   ];
 
+  const [enabledFilter, setEnabledFilter] = useState<boolean>(true);
+
   const [tableData, handleSorting, setTableData] = useSortableTable<TableData>(
     collaborators,
     columns
@@ -159,19 +166,23 @@ export const Collaborators: React.FC = () => {
   );
 
   useEffect(() => {
-    const newFilteredData = collaborators?.filter((item) =>
-      columns.every((column) => {
-        const filterValue = filters[column.accessor];
-        if (!filterValue) {
-          return true;
-        }
-        return String(item[column.accessor as keyof TableData]) // IMPORTANTE Definir la TableData (columnas) como tipo para estos casos.
-          .toLowerCase()
-          .includes(filterValue.toLowerCase());
-      })
-    );
+    const newFilteredData = collaborators?.filter((item) => {
+      const matchesEnabled = item.enabled === enabledFilter;
+      return (
+        matchesEnabled &&
+        columns.every((column) => {
+          const filterValue = filters[column.accessor];
+          if (!filterValue) {
+            return true;
+          }
+          return String(item[column.accessor as keyof TableData])
+            .toLowerCase()
+            .includes(filterValue.toLowerCase());
+        })
+      );
+    });
     setTableData(newFilteredData ?? []);
-  }, [filters]);
+  }, [filters, enabledFilter]);
 
   const [isOpenAddCollabModal, setIsOpenAddCollabModal] = useState(false);
   const [isOpenEditCollabModal, setIsOpenEditCollabModal] = useState(false);
@@ -224,11 +235,20 @@ export const Collaborators: React.FC = () => {
           <div
             style={{
               display: "flex",
-              justifyContent: "flex-end",
+              justifyContent: "space-between",
               marginBottom: "10px",
               marginRight: "10px",
             }}
           >
+            <div style={{ display: "flex", alignItems: "center", marginLeft: "10px" }}>
+              <PrimarySwitch
+                enabled={enabledFilter}
+                onChange={() => setEnabledFilter(!enabledFilter)}
+              />
+              <span style={{ marginLeft: "10px" }}>
+                {enabledFilter ? t("btn.accountsEnabled") : t("btn.accountsDisabled")}
+              </span>
+            </div>
             <PrimaryButton
               onClick={() => setIsOpenAddCollabModal(!isOpenAddCollabModal)}
             >

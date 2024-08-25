@@ -35,6 +35,8 @@ export const Companies: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  const [selectedCompany, setSelectedCompany] = useState<TableData | null>(null);
+
   const fetchCompanies = async () => {
     try {
       const data = await getCompanies();
@@ -87,9 +89,9 @@ export const Companies: React.FC = () => {
     setIsOpenEditCompaniesModal(!isOpenEditCompaniesModal);
   };
 
-  const handleDeleteCompanyButton = async (company: TableData) => {
-    await deleteCompany(company._id);
-    fetchCompanies();
+  const handleDeleteCompanyButton = (company: TableData) => {
+    setSelectedCompany(company);
+    setIsOpenDeleteCompanyModal(!isOpenDeleteCompanyModal);
   };
 
   const rowActions = [
@@ -121,7 +123,7 @@ export const Companies: React.FC = () => {
         if (!filterValue) {
           return true;
         }
-        return String(item[column.accessor as keyof TableData]) // IMPORTANTE Definir la TableData (columnas) como tipo para estos casos.
+        return String(item[column.accessor as keyof TableData])
           .toLowerCase()
           .includes(filterValue.toLowerCase());
       })
@@ -130,8 +132,8 @@ export const Companies: React.FC = () => {
   }, [filters]);
 
   const [isOpenAddCompaniesModal, setIsOpenAddCompaniesModal] = useState(false);
-  const [isOpenEditCompaniesModal, setIsOpenEditCompaniesModal] =
-    useState(false);
+  const [isOpenEditCompaniesModal, setIsOpenEditCompaniesModal] = useState(false);
+  const [isOpenDeleteCompanyModal, setIsOpenDeleteCompanyModal] = useState(false);
 
   const handleCancelAddCompanies = () => {
     setNewCompany(null);
@@ -165,6 +167,24 @@ export const Companies: React.FC = () => {
     setNewCompany(null);
     setIsOpenEditCompaniesModal(!isOpenEditCompaniesModal);
     fetchCompanies();
+  };
+
+  const handleCancelDeleteCompany = () => {
+    setIsOpenDeleteCompanyModal(!isOpenDeleteCompanyModal);
+  };
+
+  const handleSubmitDeleteCompany = async () => {
+    if (selectedCompany?._id) {
+      try {
+        await deleteCompany(selectedCompany._id);
+      } catch (error) {
+        setError("Error deleting company");
+        console.error("Error:", error);
+      }
+      setSelectedCompany(null);
+      setIsOpenDeleteCompanyModal(!isOpenDeleteCompanyModal);
+      fetchCompanies();
+    }
   };
 
   const handleInputChange = (name: string, value: string) => {
@@ -283,6 +303,16 @@ export const Companies: React.FC = () => {
             initialImage={newCompany?.logo || ""}
           />
         </>
+      </Modal>
+      <Modal
+        title={t("msg.confirmSuppression")}
+        onCancel={handleCancelDeleteCompany}
+        onSubmit={handleSubmitDeleteCompany}
+        cancelText={t("btn.cancel")}
+        submitText={t("btn.confirm")}
+        isOpen={isOpenDeleteCompanyModal}
+      >
+        <p>{t("company") + ` <<${selectedCompany?.name}>> ` + t("msg.deleteNotice") + '!'}</p>
       </Modal>
     </>
   );

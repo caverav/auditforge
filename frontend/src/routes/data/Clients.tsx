@@ -69,6 +69,8 @@ export const Clients: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  const [selectedClient, setSelectedClient] = useState<TableData | null>(null);
+ 
   const fetchClients = async () => {
     try {
       const data = await getClients();
@@ -140,7 +142,7 @@ export const Clients: React.FC = () => {
 
   const keyExtractor = (item: any) => item.id;
 
-  const handleEditCompanyButton = (client: TableData) => {
+  const handleEditClientButton = (client: TableData) => {
     const matchingCompany = apiCompanies.find(
       (company) => company.name === client.company
     );
@@ -165,18 +167,19 @@ export const Clients: React.FC = () => {
     setIsOpenEditClientModal(!isOpenEditClientModal);
   };
 
-  const handleDeleteCompanyButton = async (client: TableData) => {
-    await deleteClient(client._id);
-    fetchClients();
+  const handleDeleteClientButton = (client: TableData) => {
+    setSelectedClient(client);
+    setIsOpenDeleteClientModal(!isOpenDeleteClientModal);
   };
+
   const rowActions = [
     {
       label: "Edit",
-      onClick: (item: TableData) => handleEditCompanyButton(item),
+      onClick: (item: TableData) => handleEditClientButton(item),
     },
     {
       label: "Delete",
-      onClick: (item: TableData) => handleDeleteCompanyButton(item),
+      onClick: (item: TableData) => handleDeleteClientButton(item),
     },
   ];
 
@@ -209,6 +212,7 @@ export const Clients: React.FC = () => {
 
   const [isOpenAddClientModal, setIsOpenAddClientModal] = useState(false);
   const [isOpenEditClientModal, setIsOpenEditClientModal] = useState(false);
+  const [isOpenDeleteClientModal, setIsOpenDeleteClientModal] = useState(false);
 
   const handleCancelAddClient = () => {
     setNewClient(null);
@@ -282,6 +286,24 @@ export const Clients: React.FC = () => {
     } catch (error) {
       setError("Error updating client");
       console.error("Error:", error);
+    }
+  };
+
+  const handleCancelDeleteClient = () => {
+    setIsOpenDeleteClientModal(!isOpenDeleteClientModal);
+  };
+
+  const handleSubmitDeleteClient = async () => {
+    if (selectedClient?._id) {
+      try {
+        await deleteClient(selectedClient._id);
+      } catch (error) {
+        setError("Error deleting client");
+        console.error("Error:", error);
+      }
+      setSelectedClient(null);
+      setIsOpenDeleteClientModal(!isOpenDeleteClientModal);
+      fetchClients();
     }
   };
 
@@ -477,6 +499,16 @@ export const Clients: React.FC = () => {
             onChange={(value) => handleInputChange("cell", value)}
           />
         </>
+      </Modal>
+      <Modal
+        title={t("msg.confirmSuppression")}
+        onCancel={handleCancelDeleteClient}
+        onSubmit={handleSubmitDeleteClient}
+        cancelText={t("btn.cancel")}
+        submitText={t("btn.confirm")}
+        isOpen={isOpenDeleteClientModal}
+      >
+        <p>{t("client") + ` <<${selectedClient?.firstname} ` + `${selectedClient?.lastname}>> ` + t("msg.deleteNotice") + '!'}</p>
       </Modal>
     </>
   );

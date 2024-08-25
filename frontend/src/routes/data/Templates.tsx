@@ -36,6 +36,8 @@ export const Templates: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  const [selectedTemplate, setSelectedTemplate] = useState<TableData | null>(null);
+
   const fetchTemplates = async () => {
     try {
       const data = await getTemplates();
@@ -78,11 +80,6 @@ export const Templates: React.FC = () => {
     setIsOpenEditTemplateModal(true);
   };
 
-  const handleDeleteTemplateButton = async (templateId: string) => {
-    await deleteTemplate(templateId);
-    fetchTemplates();
-  };
-
   const handleDownloadTemplateButton = async (template: TableData) => {
     try {
       const blob = await downloadTemplate(template._id);
@@ -102,6 +99,11 @@ export const Templates: React.FC = () => {
     }
   };
 
+  const handleDeleteTemplateButton = async (template: TableData) => {
+    setSelectedTemplate(template);
+    setIsOpenDeleteTemplateModal(!isOpenDeleteTemplateModal);
+  };
+
   const rowActions = [
     {
       label: "Edit",
@@ -113,7 +115,7 @@ export const Templates: React.FC = () => {
     },
     {
       label: "Delete",
-      onClick: (item: TableData) => handleDeleteTemplateButton(item._id),
+      onClick: (item: TableData) => handleDeleteTemplateButton(item),
     },
   ];
 
@@ -145,6 +147,7 @@ export const Templates: React.FC = () => {
 
   const [isOpenAddTemplateModal, setIsOpenAddTemplateModal] = useState(false);
   const [isOpenEditTemplateModal, setIsOpenEditTemplateModal] = useState(false);
+  const [isOpenDeleteTemplateModal, setIsOpenDeleteTemplateModal] = useState(false);
 
   const handleCancelAddTemplate = () => {
     setNewTemplate(null);
@@ -178,6 +181,24 @@ export const Templates: React.FC = () => {
     setNewTemplate(null);
     setIsOpenEditTemplateModal(!isOpenEditTemplateModal);
     fetchTemplates();
+  };
+
+  const handleCancelDeleteTemplate = () => {
+    setIsOpenDeleteTemplateModal(!isOpenDeleteTemplateModal);
+  };
+
+  const handleSubmitDeleteTemplate = async () => {
+    if (selectedTemplate?._id) {
+      try {
+        await deleteTemplate(selectedTemplate._id);
+      } catch (error) {
+        setError("Error deleting template");
+        console.error("Error:", error);
+      }
+      setSelectedTemplate(null);
+      setIsOpenDeleteTemplateModal(!isOpenDeleteTemplateModal);
+      fetchTemplates();
+    }
   };
 
   const handleInputChange = (name: string, value: string) => {
@@ -278,6 +299,16 @@ export const Templates: React.FC = () => {
             }
           />
         </>
+      </Modal>
+      <Modal
+        title={t("msg.confirmSuppression")}
+        onCancel={handleCancelDeleteTemplate}
+        onSubmit={handleSubmitDeleteTemplate}
+        cancelText={t("btn.cancel")}
+        submitText={t("btn.confirm")}
+        isOpen={isOpenDeleteTemplateModal}
+      >
+        <p>{t("template") + ` <<${selectedTemplate?.name}>> ` + t("msg.deleteNotice") + '!'}</p>
       </Modal>
     </>
   );
