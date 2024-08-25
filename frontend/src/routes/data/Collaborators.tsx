@@ -68,7 +68,7 @@ export const Collaborators: React.FC = () => {
       const filteredData = data.datas.filter(
         (item: TableData) => item.enabled === enabledFilter
       );
-      
+
       setTableData(filteredData);
       setLoading(false);
     } catch (err) {
@@ -232,26 +232,17 @@ export const Collaborators: React.FC = () => {
     <>
       <Card title={t("collaborators")}>
         <>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              marginBottom: "10px",
-              marginRight: "10px",
-            }}
-          >
-            <div style={{ display: "flex", alignItems: "center", marginLeft: "10px" }}>
+          <div className="flex justify-between mb-2 mr-2">
+            <div className="flex items-center ml-2">
               <PrimarySwitch
                 enabled={enabledFilter}
                 onChange={() => setEnabledFilter(!enabledFilter)}
               />
-              <span style={{ marginLeft: "10px" }}>
+              <span className="ml-2">
                 {enabledFilter ? t("btn.accountsEnabled") : t("btn.accountsDisabled")}
               </span>
             </div>
-            <PrimaryButton
-              onClick={() => setIsOpenAddCollabModal(!isOpenAddCollabModal)}
-            >
+            <PrimaryButton onClick={() => setIsOpenAddCollabModal(!isOpenAddCollabModal)}>
               {t("addCollaborator")}
             </PrimaryButton>
           </div>
@@ -267,6 +258,7 @@ export const Collaborators: React.FC = () => {
           ></UITable>
         </>
       </Card>
+  
       <Modal
         title={t("addCollaborator")}
         onCancel={handleCancelAddCollab}
@@ -278,45 +270,45 @@ export const Collaborators: React.FC = () => {
         <>
           <SimpleInput
             label={t("username")}
-            id={"username"}
-            name={"username"}
-            type={"text"}
+            id="username"
+            name="username"
+            type="text"
             placeholder={t("username")}
             value={newCollaborator?.username || ""}
             onChange={(value) => handleInputChange("username", value)}
           />
           <SimpleInput
             label={t("firstname")}
-            id={"firstname"}
-            name={"firstname"}
-            type={"text"}
+            id="firstname"
+            name="firstname"
+            type="text"
             placeholder={t("firstname")}
             value={newCollaborator?.firstname || ""}
             onChange={(value) => handleInputChange("firstname", value)}
           />
           <SimpleInput
             label={t("lastname")}
-            id={"lastname"}
-            name={"lastname"}
-            type={"text"}
+            id="lastname"
+            name="lastname"
+            type="text"
             placeholder={t("lastname")}
             value={newCollaborator?.lastname || ""}
             onChange={(value) => handleInputChange("lastname", value)}
           />
           <SimpleInput
             label={t("email")}
-            id={"email"}
-            name={"email"}
-            type={"text"}
+            id="email"
+            name="email"
+            type="text"
             placeholder={t("email")}
             value={newCollaborator?.email || ""}
             onChange={(value) => handleInputChange("email", value)}
           />
           <SimpleInput
             label={t("phone")}
-            id={"phone"}
-            name={"phone"}
-            type={"text"}
+            id="phone"
+            name="phone"
+            type="text"
             placeholder={t("phone")}
             value={newCollaborator?.phone || ""}
             onChange={(value) => handleInputChange("phone", value)}
@@ -329,15 +321,16 @@ export const Collaborators: React.FC = () => {
           />
           <SimpleInput
             label={t("password")}
-            id={"password"}
-            name={"password"}
-            type={"text"}
+            id="password"
+            name="password"
+            type="text"
             placeholder={t("password")}
             value={newCollaborator?.password || ""}
             onChange={(value) => handleInputChange("password", value)}
           />
         </>
       </Modal>
+  
       <Modal
         title={t("editCollaborator")}
         onCancel={handleCancelEditCollab}
@@ -349,45 +342,45 @@ export const Collaborators: React.FC = () => {
         <>
           <SimpleInput
             label={t("username")}
-            id={"username"}
-            name={"username"}
-            type={"text"}
+            id="username"
+            name="username"
+            type="text"
             placeholder={t("username")}
             value={newCollaborator?.username || ""}
             onChange={(value) => handleInputChange("username", value)}
           />
           <SimpleInput
             label={t("firstname")}
-            id={"firstname"}
-            name={"firstname"}
-            type={"text"}
+            id="firstname"
+            name="firstname"
+            type="text"
             placeholder={t("firstname")}
             value={newCollaborator?.firstname || ""}
             onChange={(value) => handleInputChange("firstname", value)}
           />
           <SimpleInput
             label={t("lastname")}
-            id={"lastname"}
-            name={"lastname"}
-            type={"text"}
+            id="lastname"
+            name="lastname"
+            type="text"
             placeholder={t("lastname")}
             value={newCollaborator?.lastname || ""}
             onChange={(value) => handleInputChange("lastname", value)}
           />
           <SimpleInput
             label={t("email")}
-            id={"email"}
-            name={"email"}
-            type={"text"}
+            id="email"
+            name="email"
+            type="text"
             placeholder={t("email")}
             value={newCollaborator?.email || ""}
             onChange={(value) => handleInputChange("email", value)}
           />
           <SimpleInput
             label={t("phone")}
-            id={"phone"}
-            name={"phone"}
-            type={"text"}
+            id="phone"
+            name="phone"
+            type="text"
             placeholder={t("phone")}
             value={newCollaborator?.phone || ""}
             onChange={(value) => handleInputChange("phone", value)}
@@ -400,27 +393,23 @@ export const Collaborators: React.FC = () => {
           />
           <SimpleInput
             label={t("password")}
-            id={"password"}
-            name={"password"}
-            type={"text"}
+            id="password"
+            name="password"
+            type="text"
             placeholder={t("password")}
             value={newCollaborator?.password || ""}
             onChange={(value) => handleInputChange("password", value)}
           />
-          <div
-            style={{ display: "flex", alignItems: "center", marginTop: "10px" }}
-          >
+          <div className="flex items-center mt-2">
             <PrimarySwitch
               enabled={!!newCollaborator?.enabled}
               onChange={() =>
                 setNewCollaborator((prevState) =>
-                  prevState
-                    ? { ...prevState, enabled: !prevState.enabled }
-                    : null
+                  prevState ? { ...prevState, enabled: !prevState.enabled } : null
                 )
               }
             />
-            <span style={{ marginLeft: "10px" }}>
+            <span className="ml-2">
               {newCollaborator?.enabled
                 ? t("btn.accountEnabled")
                 : t("btn.accountDisabled")}

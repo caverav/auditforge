@@ -36,7 +36,9 @@ export const Templates: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [selectedTemplate, setSelectedTemplate] = useState<TableData | null>(null);
+  const [selectedTemplate, setSelectedTemplate] = useState<TableData | null>(
+    null
+  );
 
   const fetchTemplates = async () => {
     try {
@@ -132,7 +134,8 @@ export const Templates: React.FC = () => {
 
   const [isOpenAddTemplateModal, setIsOpenAddTemplateModal] = useState(false);
   const [isOpenEditTemplateModal, setIsOpenEditTemplateModal] = useState(false);
-  const [isOpenDeleteTemplateModal, setIsOpenDeleteTemplateModal] = useState(false);
+  const [isOpenDeleteTemplateModal, setIsOpenDeleteTemplateModal] =
+    useState(false);
 
   const handleCancelAddTemplate = () => {
     setNewTemplate(null);
@@ -205,14 +208,7 @@ export const Templates: React.FC = () => {
     <>
       <Card title={t("templates")}>
         <>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              marginBottom: "10px",
-              marginRight: "10px",
-            }}
-          >
+          <div className="flex justify-end mb-2 mr-2">
             <PrimaryButton
               onClick={() => setIsOpenAddTemplateModal(!isOpenAddTemplateModal)}
             >
@@ -228,7 +224,7 @@ export const Templates: React.FC = () => {
             onFilter={handleFilterChange}
             rowActions={rowActions}
             emptyState={<div>{t("err.noMatchingRecords")}</div>}
-          ></UITable>
+          />
         </>
       </Card>
       <Modal
@@ -242,16 +238,16 @@ export const Templates: React.FC = () => {
         <>
           <SimpleInput
             label={t("name")}
-            id={"name"}
-            name={"name"}
-            type={"text"}
+            id="name"
+            name="name"
+            type="text"
             placeholder={t("name")}
             value={newTemplate?.name || ""}
             onChange={(value) => handleInputChange("name", value)}
           />
           <FileInput
-            id={"template"}
-            name={"template"}
+            id="template"
+            name="template"
             onFileSelect={(file) =>
               handleFileSelect(file.name.split(".").pop() || "", file.content)
             }
@@ -269,16 +265,16 @@ export const Templates: React.FC = () => {
         <>
           <SimpleInput
             label={t("name")}
-            id={"name"}
-            name={"name"}
-            type={"text"}
+            id="name"
+            name="name"
+            type="text"
             placeholder={t("name")}
             value={newTemplate?.name || ""}
             onChange={(value) => handleInputChange("name", value)}
           />
           <FileInput
-            id={"template"}
-            name={"template"}
+            id="template"
+            name="template"
             onFileSelect={(file) =>
               handleFileSelect(file.name.split(".").pop() || "", file.content)
             }
@@ -293,7 +289,12 @@ export const Templates: React.FC = () => {
         submitText={t("btn.confirm")}
         isOpen={isOpenDeleteTemplateModal}
       >
-        <p>{t("template") + ` <<${selectedTemplate?.name}>> ` + t("msg.deleteNotice") + '!'}</p>
+        <p>
+          {t("template") +
+            ` <<${selectedTemplate?.name}>> ` +
+            t("msg.deleteNotice") +
+            "!"}
+        </p>
       </Modal>
     </>
   );

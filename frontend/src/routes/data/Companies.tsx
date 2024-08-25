@@ -35,7 +35,9 @@ export const Companies: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [selectedCompany, setSelectedCompany] = useState<TableData | null>(null);
+  const [selectedCompany, setSelectedCompany] = useState<TableData | null>(
+    null
+  );
 
   const fetchCompanies = async () => {
     try {
@@ -117,8 +119,10 @@ export const Companies: React.FC = () => {
   );
 
   const [isOpenAddCompaniesModal, setIsOpenAddCompaniesModal] = useState(false);
-  const [isOpenEditCompaniesModal, setIsOpenEditCompaniesModal] = useState(false);
-  const [isOpenDeleteCompanyModal, setIsOpenDeleteCompanyModal] = useState(false);
+  const [isOpenEditCompaniesModal, setIsOpenEditCompaniesModal] =
+    useState(false);
+  const [isOpenDeleteCompanyModal, setIsOpenDeleteCompanyModal] =
+    useState(false);
 
   const handleCancelAddCompanies = () => {
     setNewCompany(null);
@@ -190,14 +194,7 @@ export const Companies: React.FC = () => {
     <>
       <Card title={t("companies")}>
         <>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              marginBottom: "10px",
-              marginRight: "10px",
-            }}
-          >
+          <div className="flex justify-end mb-2 mr-2">
             <PrimaryButton
               onClick={() =>
                 setIsOpenAddCompaniesModal(!isOpenAddCompaniesModal)
@@ -215,7 +212,7 @@ export const Companies: React.FC = () => {
             onFilter={handleFilterChange}
             rowActions={rowActions}
             emptyState={<div>{t("err.noMatchingRecords")}</div>}
-          ></UITable>
+          />
         </>
       </Card>
       <Modal
@@ -229,26 +226,26 @@ export const Companies: React.FC = () => {
         <>
           <SimpleInput
             label={t("name")}
-            id={"name"}
-            name={"name"}
-            type={"text"}
+            id="name"
+            name="name"
+            type="text"
             placeholder={t("name")}
             value={newCompany?.name || ""}
             onChange={(value) => handleInputChange("name", value)}
           />
           <SimpleInput
             label={t("shortName")}
-            id={"shortname"}
-            name={"shortname"}
-            type={"text"}
+            id="shortname"
+            name="shortname"
+            type="text"
             placeholder={t("shortName")}
             value={newCompany?.shortName || ""}
             onChange={(value) => handleInputChange("shortName", value)}
           />
           <ImageInput
             label={t("logo")}
-            id={"logo"}
-            name={"logo"}
+            id="logo"
+            name="logo"
             onImageSelect={handleImageSelect}
           />
         </>
@@ -264,26 +261,26 @@ export const Companies: React.FC = () => {
         <>
           <SimpleInput
             label={t("name")}
-            id={"name"}
-            name={"name"}
-            type={"text"}
+            id="name"
+            name="name"
+            type="text"
             placeholder={t("name")}
             value={newCompany?.name || ""}
             onChange={(value) => handleInputChange("name", value)}
           />
           <SimpleInput
             label={t("shortName")}
-            id={"shortname"}
-            name={"shortname"}
-            type={"text"}
+            id="shortname"
+            name="shortname"
+            type="text"
             placeholder={t("shortName")}
             value={newCompany?.shortName || ""}
             onChange={(value) => handleInputChange("shortName", value)}
           />
           <ImageInput
             label={t("logo")}
-            id={"logo"}
-            name={"logo"}
+            id="logo"
+            name="logo"
             onImageSelect={handleImageSelect}
             initialImage={newCompany?.logo || ""}
           />
@@ -297,7 +294,12 @@ export const Companies: React.FC = () => {
         submitText={t("btn.confirm")}
         isOpen={isOpenDeleteCompanyModal}
       >
-        <p>{t("company") + ` <<${selectedCompany?.name}>> ` + t("msg.deleteNotice") + '!'}</p>
+        <p>
+          {t("company") +
+            ` <<${selectedCompany?.name}>> ` +
+            t("msg.deleteNotice") +
+            "!"}
+        </p>
       </Modal>
     </>
   );

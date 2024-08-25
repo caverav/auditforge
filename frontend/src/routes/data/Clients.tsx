@@ -70,7 +70,7 @@ export const Clients: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const [selectedClient, setSelectedClient] = useState<TableData | null>(null);
- 
+
   const fetchClients = async () => {
     try {
       const data = await getClients();
@@ -316,14 +316,7 @@ export const Clients: React.FC = () => {
     <>
       <Card title={t("clients")}>
         <>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-              marginBottom: "10px",
-              marginRight: "10px",
-            }}
-          >
+          <div className="flex justify-end mb-2 mr-2">
             <PrimaryButton
               onClick={() => setIsOpenAddClientModal(!isOpenAddClientModal)}
             >
@@ -339,7 +332,7 @@ export const Clients: React.FC = () => {
             onFilter={handleFilterChange}
             rowActions={rowActions}
             emptyState={<div>{t("err.noMatchingRecords")}</div>}
-          ></UITable>
+          />
         </>
       </Card>
       <Modal
@@ -359,54 +352,54 @@ export const Clients: React.FC = () => {
           />
           <SimpleInput
             label={t("firstname")}
-            id={"firstname"}
-            name={"firstname"}
-            type={"text"}
+            id="firstname"
+            name="firstname"
+            type="text"
             placeholder={t("firstname")}
             value={newClient?.firstname || ""}
             onChange={(value) => handleInputChange("firstname", value)}
           />
           <SimpleInput
             label={t("lastname")}
-            id={"lastname"}
-            name={"lastname"}
-            type={"text"}
+            id="lastname"
+            name="lastname"
+            type="text"
             placeholder={t("lastname")}
             value={newClient?.lastname || ""}
             onChange={(value) => handleInputChange("lastname", value)}
           />
           <SimpleInput
             label={t("email")}
-            id={"email"}
-            name={"email"}
-            type={"text"}
+            id="email"
+            name="email"
+            type="text"
             placeholder={t("email")}
             value={newClient?.email || ""}
             onChange={(value) => handleInputChange("email", value)}
           />
           <SimpleInput
             label={t("title")}
-            id={"title"}
-            name={"title"}
-            type={"text"}
+            id="title"
+            name="title"
+            type="text"
             placeholder={t("title")}
             value={newClient?.title || ""}
             onChange={(value) => handleInputChange("title", value)}
           />
           <SimpleInput
             label={t("phone")}
-            id={"phone"}
-            name={"phone"}
-            type={"text"}
+            id="phone"
+            name="phone"
+            type="text"
             placeholder={t("phone")}
             value={newClient?.phone || ""}
             onChange={(value) => handleInputChange("phone", value)}
           />
           <SimpleInput
             label={t("cell")}
-            id={"cell"}
-            name={"cell"}
-            type={"text"}
+            id="cell"
+            name="cell"
+            type="text"
             placeholder={t("cell")}
             value={newClient?.cell || ""}
             onChange={(value) => handleInputChange("cell", value)}
@@ -430,54 +423,54 @@ export const Clients: React.FC = () => {
           />
           <SimpleInput
             label={t("firstname")}
-            id={"firstname"}
-            name={"firstname"}
-            type={"text"}
+            id="firstname"
+            name="firstname"
+            type="text"
             placeholder={t("firstname")}
             value={newClient?.firstname || ""}
             onChange={(value) => handleInputChange("firstname", value)}
           />
           <SimpleInput
             label={t("lastname")}
-            id={"lastname"}
-            name={"lastname"}
-            type={"text"}
+            id="lastname"
+            name="lastname"
+            type="text"
             placeholder={t("lastname")}
             value={newClient?.lastname || ""}
             onChange={(value) => handleInputChange("lastname", value)}
           />
           <SimpleInput
             label={t("email")}
-            id={"email"}
-            name={"email"}
-            type={"text"}
+            id="email"
+            name="email"
+            type="text"
             placeholder={t("email")}
             value={newClient?.email || ""}
             onChange={(value) => handleInputChange("email", value)}
           />
           <SimpleInput
             label={t("title")}
-            id={"title"}
-            name={"title"}
-            type={"text"}
+            id="title"
+            name="title"
+            type="text"
             placeholder={t("title")}
             value={newClient?.title || ""}
             onChange={(value) => handleInputChange("title", value)}
           />
           <SimpleInput
             label={t("phone")}
-            id={"phone"}
-            name={"phone"}
-            type={"text"}
+            id="phone"
+            name="phone"
+            type="text"
             placeholder={t("phone")}
             value={newClient?.phone || ""}
             onChange={(value) => handleInputChange("phone", value)}
           />
           <SimpleInput
             label={t("cell")}
-            id={"cell"}
-            name={"cell"}
-            type={"text"}
+            id="cell"
+            name="cell"
+            type="text"
             placeholder={t("cell")}
             value={newClient?.cell || ""}
             onChange={(value) => handleInputChange("cell", value)}
@@ -492,7 +485,13 @@ export const Clients: React.FC = () => {
         submitText={t("btn.confirm")}
         isOpen={isOpenDeleteClientModal}
       >
-        <p>{t("client") + ` <<${selectedClient?.firstname} ` + `${selectedClient?.lastname}>> ` + t("msg.deleteNotice") + '!'}</p>
+        <p>
+          {t("client") +
+            ` <<${selectedClient?.firstname} ` +
+            `${selectedClient?.lastname}>> ` +
+            t("msg.deleteNotice") +
+            "!"}
+        </p>
       </Modal>
     </>
   );
