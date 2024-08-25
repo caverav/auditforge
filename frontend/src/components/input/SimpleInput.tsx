@@ -1,4 +1,5 @@
-import { ChangeEvent } from "react";
+import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
+import { ChangeEvent, useState } from "react";
 
 interface SimpleInputProps {
   label?: string;
@@ -9,6 +10,7 @@ interface SimpleInputProps {
   value: string;
   onChange: (value: string) => void;
   disabled?: boolean;
+  required?: boolean;
 }
 
 const SimpleInput: React.FC<SimpleInputProps> = ({
@@ -20,18 +22,21 @@ const SimpleInput: React.FC<SimpleInputProps> = ({
   value,
   onChange,
   disabled = false,
+  required = false,
 }) => {
+  const [isFocused, setIsFocused] = useState(false);
+
   return (
     <div>
       {label && (
         <label
           htmlFor={id}
-          className="block text-sm font-medium leading-6 text-gray-300"
+          className="text-sm font-medium leading-6 text-gray-300"
         >
           {label}
         </label>
       )}
-      <div className="mt-2 rounded-md shadow-sm">
+      <div className="relative mt-2 rounded-md shadow-sm">
         <input
           id={id}
           name={name}
@@ -42,8 +47,17 @@ const SimpleInput: React.FC<SimpleInputProps> = ({
             onChange(e.target.value)
           }
           disabled={disabled}
-          className="bg-gray-800 block w-full rounded-md py-1.5 pl-7 pr-7 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+          className={`bg-gray-800 block w-full rounded-md py-1.5 p-2 placeholder:text-gray-400 sm:text-sm sm:leading-6 ${
+            required && value === "" && !isFocused ? "ring-1 ring-red-500" : ""
+          }`}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
         />
+        {!isFocused && required && value === "" && (
+          <span className="absolute right-3 top-0 mt-2 ml-2 text-red-500">
+            <ExclamationCircleIcon className="size-5" />
+          </span>
+        )}
       </div>
     </div>
   );

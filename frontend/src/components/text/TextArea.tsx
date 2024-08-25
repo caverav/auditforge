@@ -26,7 +26,7 @@ const TextArea: React.FC<TextAreaEditorProps> = ({
   const [isFocused, setIsFocused] = useState(false);
 
   return (
-    <div className="w-full rounded-md border-0 ring-gray-300 placeholder:text-gray-400 sm:text-sm sm:leading-6">
+    <div className="w-full rounded-md border-0 placeholder:text-gray-400 sm:text-sm sm:leading-6">
       <Field>
         <Label className="block font-medium leading-6 text-gray-300">
           {label}
