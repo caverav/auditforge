@@ -5,7 +5,7 @@ interface SimpleInputProps {
   label?: string;
   id: string;
   name: string;
-  type: "text" | "number";
+  type: "text" | "number" | "password";
   placeholder: string;
   value: string;
   onChange: (value: string) => void;
