@@ -130,21 +130,6 @@ export const Templates: React.FC = () => {
     setTableData
   );
 
-  useEffect(() => {
-    const newFilteredData = templates?.filter((item) =>
-      columns.every((column) => {
-        const filterValue = filters[column.accessor];
-        if (!filterValue) {
-          return true;
-        }
-        return String(item[column.accessor as keyof TableData]) // IMPORTANTE Definir la TableData (columnas) como tipo para estos casos.
-          .toLowerCase()
-          .includes(filterValue.toLowerCase());
-      })
-    );
-    setTableData(newFilteredData ?? []);
-  }, [filters]);
-
   const [isOpenAddTemplateModal, setIsOpenAddTemplateModal] = useState(false);
   const [isOpenEditTemplateModal, setIsOpenEditTemplateModal] = useState(false);
   const [isOpenDeleteTemplateModal, setIsOpenDeleteTemplateModal] = useState(false);

@@ -194,22 +194,6 @@ export const Clients: React.FC = () => {
     setTableData
   );
 
-  useEffect(() => {
-    const newFilteredData = clients?.filter((item) =>
-      columns.every((column) => {
-        const filterValue = filters[column.accessor];
-        if (!filterValue) {
-          return true;
-        }
-        return String(item[column.accessor as keyof TableData]) // IMPORTANTE Definir la TableData (columnas) como tipo para estos casos.
-          .toLowerCase()
-          .includes(filterValue.toLowerCase());
-      })
-    );
-    setTableData(newFilteredData ?? []);
-  }, [filters]);
-  //
-
   const [isOpenAddClientModal, setIsOpenAddClientModal] = useState(false);
   const [isOpenEditClientModal, setIsOpenEditClientModal] = useState(false);
   const [isOpenDeleteClientModal, setIsOpenDeleteClientModal] = useState(false);

@@ -116,21 +116,6 @@ export const Companies: React.FC = () => {
     setTableData
   );
 
-  useEffect(() => {
-    const newFilteredData = companies?.filter((item) =>
-      columns.every((column) => {
-        const filterValue = filters[column.accessor];
-        if (!filterValue) {
-          return true;
-        }
-        return String(item[column.accessor as keyof TableData])
-          .toLowerCase()
-          .includes(filterValue.toLowerCase());
-      })
-    );
-    setTableData(newFilteredData ?? []);
-  }, [filters]);
-
   const [isOpenAddCompaniesModal, setIsOpenAddCompaniesModal] = useState(false);
   const [isOpenEditCompaniesModal, setIsOpenEditCompaniesModal] = useState(false);
   const [isOpenDeleteCompanyModal, setIsOpenDeleteCompanyModal] = useState(false);
