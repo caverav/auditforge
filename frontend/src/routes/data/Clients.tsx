@@ -106,7 +106,6 @@ export const Clients: React.FC = () => {
     fetchCompanies();
   }, []);
 
-  // table
   const columns = [
     {
       header: t("firstname"),
@@ -233,6 +232,7 @@ export const Clients: React.FC = () => {
 
     setNewClient(null);
     setIsOpenAddClientModal(!isOpenAddClientModal);
+    fetchClients();
   };
 
   const handleCancelEditClient = () => {

@@ -228,6 +228,14 @@ export const Collaborators: React.FC = () => {
     }));
   };
 
+  const handleRoleChange = (role: RoleOption) => {
+    setSelectedRole(role);
+    setNewCollaborator((prevState) => ({
+      ...prevState!,
+      role: role.value,
+    }));
+  };
+
   return (
     <>
       <Card title={t("collaborators")}>
@@ -239,10 +247,14 @@ export const Collaborators: React.FC = () => {
                 onChange={() => setEnabledFilter(!enabledFilter)}
               />
               <span className="ml-2">
-                {enabledFilter ? t("btn.accountsEnabled") : t("btn.accountsDisabled")}
+                {enabledFilter
+                  ? t("btn.accountsEnabled")
+                  : t("btn.accountsDisabled")}
               </span>
             </div>
-            <PrimaryButton onClick={() => setIsOpenAddCollabModal(!isOpenAddCollabModal)}>
+            <PrimaryButton
+              onClick={() => setIsOpenAddCollabModal(!isOpenAddCollabModal)}
+            >
               {t("addCollaborator")}
             </PrimaryButton>
           </div>
@@ -258,7 +270,6 @@ export const Collaborators: React.FC = () => {
           ></UITable>
         </>
       </Card>
-  
       <Modal
         title={t("addCollaborator")}
         onCancel={handleCancelAddCollab}
@@ -317,7 +328,7 @@ export const Collaborators: React.FC = () => {
             items={roles}
             title={t("role")}
             selected={selectedRole}
-            onChange={setSelectedRole}
+            onChange={handleRoleChange}
           />
           <SimpleInput
             label={t("password")}
@@ -330,7 +341,6 @@ export const Collaborators: React.FC = () => {
           />
         </>
       </Modal>
-  
       <Modal
         title={t("editCollaborator")}
         onCancel={handleCancelEditCollab}
@@ -389,7 +399,7 @@ export const Collaborators: React.FC = () => {
             items={roles}
             title={t("role")}
             selected={selectedRole}
-            onChange={setSelectedRole}
+            onChange={handleRoleChange}
           />
           <SimpleInput
             label={t("password")}
@@ -405,7 +415,9 @@ export const Collaborators: React.FC = () => {
               enabled={!!newCollaborator?.enabled}
               onChange={() =>
                 setNewCollaborator((prevState) =>
-                  prevState ? { ...prevState, enabled: !prevState.enabled } : null
+                  prevState
+                    ? { ...prevState, enabled: !prevState.enabled }
+                    : null
                 )
               }
             />
