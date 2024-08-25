@@ -30,16 +30,18 @@ const DefaultRadioGroup = ({
   return (
     <div>
       {options.map((option) => (
-        <Radio
-          key={option.id}
-          id={option.id}
-          name={name}
-          label={option.label}
-          value={option.value}
-          checked={value === option.value}
-          disabled={option.disabled}
-          onChange={handleRadioGroupChange}
-        />
+        <div className="mb-3">
+          <Radio
+            key={option.id}
+            id={option.id}
+            name={name}
+            label={option.label}
+            value={option.value}
+            checked={value === option.value}
+            disabled={option.disabled}
+            onChange={handleRadioGroupChange}
+          />
+        </div>
       ))}
     </div>
   );
