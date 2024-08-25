@@ -99,7 +99,14 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({ isOpen, handlerIsOpen,
     const rightFiltered = allDetails
       .filter(detailIter => detailIter.locale === selectedLanguageRight?.value)
 
+    const leftFilteredIds = new Set(
+      allDetails
+        .filter(detailIter => detailIter.locale === selectedLanguageLeft?.value)
+        .map(item => item.id)
+    );
+
     const rightOptions = rightFiltered
+      .filter(item => !leftFilteredIds.has(item.id))
       .map((item) => ({
         id: item.id,
         value: item.id,
