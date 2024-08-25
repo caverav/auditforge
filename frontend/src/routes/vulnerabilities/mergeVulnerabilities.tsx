@@ -4,6 +4,7 @@ import { XMarkIcon } from '@heroicons/react/24/outline';
 import PrimaryButton from "../../components/button/PrimaryButton";
 import SelectDropdown from "../../components/dropdown/SelectDropdown";
 import DefaultRadioGroup from "../../components/button/DefaultRadioGroup";
+import { mergeVulnerability } from "../../services/vulnerabilities";
 
 type Details = {
   locale: string;
@@ -19,15 +20,7 @@ type Details = {
 
 type VulnerabilityData = {
   _id: string;
-  cvssv3: string | null;
-  priority?: number | "";
-  remediationComplexity?: number | "";
   details: Details[];
-  status?: number;
-  category?: string | null; 
-  __v: number;
-  createdAt?: string;
-  updatedAt?: string;
 };
 
 interface ListItem {
@@ -42,6 +35,14 @@ interface RadioOption {
   label: string;
   value: string;
   disabled?: boolean;
+}
+
+interface mergeVulnerability {
+  idIzq: string;
+  rightSide: {
+    vulnId: string;
+    locale: string;
+  }
 }
 
 type MergeVulnProps = {
@@ -62,6 +63,9 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({ isOpen, handlerIsOpen,
   const [currentRadioOptionsRight, setCurrentRadioOptionsRight] = useState<RadioOption[]>()
   const [selectedRadioRight, setSelectedRadioRight] = useState('');
   const [isRightEnabled, setIsRightEnabled] = useState<boolean>(false)
+
+  const [error, setError] = useState<string | null>(null);
+
 
   const [allDetails, setAllDetails] = useState(
     vulnerabilities.flatMap(vuln => 
@@ -87,7 +91,7 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({ isOpen, handlerIsOpen,
       .filter(item => !rightFilteredIds.has(item.id))
       .map((item) => ({
         id: item.id,
-        value: item.id,
+        value: [item.id,item.locale].join("."),
         label: item.title || ""
       }))
 
@@ -109,12 +113,12 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({ isOpen, handlerIsOpen,
       .filter(item => !leftFilteredIds.has(item.id))
       .map((item) => ({
         id: item.id,
-        value: item.id,
+        value: [item.id,item.locale].join("."),
         label: item.title || ""
       }))
+    console.log(rightOptions)
     rightOptions.length > 0 ? setIsRightEnabled(true) : setIsRightEnabled(false)
     setCurrentRadioOptionsRight(rightOptions)
-
   }
 
   useEffect(() => {
@@ -130,8 +134,33 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({ isOpen, handlerIsOpen,
     setSelectedLanguageRight(item)
   }
 
-  const onSubmitMerge = () => {
-    console.log(allDetails)
+  const onSubmitMerge = async () => {
+    
+    // Falta logica de validación que verifique que los dos radios están seleccionados
+    
+    if (selectedRadioLeft !== '' && selectedRadioRight !== ''){
+      try {
+        const [leftId, leftLocale] = selectedRadioLeft.split('.')
+        const [rightId, rightLocale] = selectedRadioRight.split('.')
+        const mergeObject : mergeVulnerability = {
+          idIzq: leftId,
+          rightSide: {
+            vulnId: rightId,
+            locale: rightLocale
+          }
+        }
+        const response = await mergeVulnerability(mergeObject);
+        console.log(response)
+      } catch (error) {
+        setError("Error creating vulnerability");
+        console.error("Error:", error);
+      }
+    }
+
+    // Se hace un refresh 
+
+    // Se cierra el modal
+    handlerIsOpen(false)
   }
 
   return (

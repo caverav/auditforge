@@ -37,6 +37,14 @@ type PostDescription = {
   vuln: string;
 }
 
+interface mergeVulnerability {
+  idIzq: string;
+  rightSide: {
+    vulnId: string;
+    locale: string;
+  }
+}
+
 
 export const getLanguages = async (): Promise<any> => {
   try {
@@ -165,6 +173,26 @@ export const postDescriptionCWE = async (description: PostDescription): Promise<
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(description),
     });
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+};
+
+export const mergeVulnerability = async (mergeObject: mergeVulnerability): Promise<any> => {
+  try {
+    const response = await fetch(`${API_URL}vulnerabilities/merge/${mergeObject.idIzq}`, {
+      method: "PUT",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(mergeObject.rightSide),
+    });
+    console.log("enviado:",mergeObject.rightSide)
     if (!response.ok) {
       throw new Error("Network response was not ok");
     }
