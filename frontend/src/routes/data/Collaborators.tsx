@@ -139,12 +139,16 @@ export const Collaborators: React.FC = () => {
   const keyExtractor = (item: any) => item.id;
 
   const handleEditCompanyButton = (collaborator: TableData) => {
+    const role = roles.find((r) => r.value === collaborator.role) || null;
+    setSelectedRole(role);
+  
     setNewCollaborator({
       ...collaborator,
       enabled: collaborator.enabled ?? false,
     });
     setIsOpenEditCollabModal(!isOpenEditCollabModal);
   };
+
   const rowActions = [
     {
       label: "Edit",
