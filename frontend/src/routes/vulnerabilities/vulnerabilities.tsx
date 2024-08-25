@@ -12,6 +12,7 @@ import { useTableFiltering } from "../../hooks/useTableFiltering";
 import Card from "../../components/card/Card";
 import Modal from "../../components/modal/Modal";
 import MergeVulnerabilities from "./mergeVulnerabilities";
+import { Toaster, toast } from "sonner";
 
 
 type Details = {
@@ -217,7 +218,8 @@ export const Vulnerabilities = () => {
   const confirmDeleteVulnerability = async () => {
     //Add try
     try {
-      await deleteVulnerability(itemDelete._id)
+      const response = await deleteVulnerability(itemDelete._id)
+      if (response) handleSuccessToast(t('msg.vulnerabilityDeletedOk'));
     } catch (error) {
       setErrorText("Error creating vulnerability");
       console.error("Error:", error);
@@ -225,6 +227,11 @@ export const Vulnerabilities = () => {
     setOpenModalDeleteVuln(false);
     fetchVulnerabilities()
   }
+
+  const handleSuccessToast = (message: string) => {
+    // Muestra el toast satisfactorio
+    toast.success(message);
+  };
 
 
 
@@ -274,16 +281,17 @@ export const Vulnerabilities = () => {
           </Modal>
         </div>
       }
+      <Toaster />
       <Card title={t("nav.vulnerabilities")}>
         <>
           <div className="fixed z-10">
-            {openAddVuln && <AddVulnerability isOpen={openAddVuln} handlerIsOpen={setOpenAddVuln} categoryVuln={selectedCategory} languages={languages} types={types} refreshVulns={fetchVulnerabilities}/>}
+            {openAddVuln && <AddVulnerability isOpen={openAddVuln} handlerIsOpen={setOpenAddVuln} categoryVuln={selectedCategory} languages={languages} types={types} refreshVulns={fetchVulnerabilities} handleOnSuccess={handleSuccessToast}/>}
           </div>
           <div className="fixed z-10">
-            {openEditVuln && <EditVulnerability isOpen={openEditVuln} handlerIsOpen={setOpenEditVuln} categories={categories} languages={languages} types={types} refreshVulns={fetchVulnerabilities} currentVuln={editVuln!}/>}          
+            {openEditVuln && <EditVulnerability isOpen={openEditVuln} handlerIsOpen={setOpenEditVuln} categories={categories} languages={languages} types={types} refreshVulns={fetchVulnerabilities} currentVuln={editVuln!} handleOnSuccess={handleSuccessToast}/>}          
           </div>
           <div className="fixed z-10">
-            {openMerge && <MergeVulnerabilities isOpen={openMerge} handlerIsOpen={setOpenMerge} vulnerabilities={vulnerabilities} languages={languages} refreshVulns={fetchVulnerabilities}/>}          
+            {openMerge && <MergeVulnerabilities isOpen={openMerge} handlerIsOpen={setOpenMerge} vulnerabilities={vulnerabilities} languages={languages} refreshVulns={fetchVulnerabilities} handleOnSuccess={handleSuccessToast}/>}          
           </div>
           <UITable
             columns={columns}

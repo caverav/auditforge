@@ -51,9 +51,10 @@ type MergeVulnProps = {
   vulnerabilities: VulnerabilityData[];
   languages: ListItem[];
   refreshVulns: () => void;
+  handleOnSuccess: (message: string) => void;
 }
 
-const MergeVulnerabilities: React.FC<MergeVulnProps> = ({ isOpen, handlerIsOpen, vulnerabilities, languages, refreshVulns}) => {
+const MergeVulnerabilities: React.FC<MergeVulnProps> = ({ isOpen, handlerIsOpen, vulnerabilities, languages, refreshVulns, handleOnSuccess}) => {
 
   const [selectedLanguageLeft, setSelectedLanguageLeft] = useState<ListItem|null>(null);
   const [currentRadioOptionsLeft, setCurrentRadioOptionsLeft] = useState<RadioOption[]>()
@@ -151,7 +152,9 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({ isOpen, handlerIsOpen,
           }
         }
         const response = await mergeVulnerability(mergeObject);
-        console.log(response)
+        if (response){
+          handleOnSuccess(t('msg.vulnerabilityMergeOk'));
+        }
       } catch (error) {
         setError("Error creating vulnerability");
         console.error("Error:", error);
