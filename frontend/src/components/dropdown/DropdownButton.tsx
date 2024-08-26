@@ -45,7 +45,7 @@ const DropdownButton: React.FC<SelectDropdownProps> = ({
           transition
           anchor={end === true ? "bottom end" : "bottom start"}
           className={clsx(
-            "rounded-b-xl border border-white/5 bg-blue-900 p-1 p text-sm/6 text-white transition duration-100 ease-out [--anchor-gap:var(--spacing-1)]",
+            "min-w-[var(--button-width)] rounded-b-xl border border-white/5 bg-blue-900 p-1 p text-sm/6 text-white transition duration-100 ease-out [--anchor-gap:var(--spacing-1)]",
             "focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0 z-50",
           )}
         >
