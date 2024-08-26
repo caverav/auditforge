@@ -53,13 +53,14 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
       <Listbox value={selected} onChange={handleChange} multiple>
         <ListboxButton
           className={clsx(
-            "inline-flex items-center justify-between w-full text-left rounded-lg bg-white/5 py-1.5 pl-3 text-left text-sm/6 text-white focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25 min-h-[2.3rem]",
+            "inline-flex items-center justify-between w-full text-left rounded-lg bg-white/5 py-1.5 pl-3 text-left text-sm/6 text-white focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25 min-h-[2.3rem]"
           )}
         >
           <span>
             {selected.length > 0
               ? selected.map((s) => (
                   <Chip
+                    key={s.id}
                     color="primary"
                     variant="outlined"
                     label={s.label ? s.label : s.value}
@@ -77,7 +78,7 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
           anchor="bottom"
           transition
           className={clsx(
-            "w-[var(--button-width)] rounded-xl border border-white/5 bg-stone-800 p-1 [--anchor-gap:var(--spacing-1)] focus:outline-none transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0 z-50",
+            "w-[var(--button-width)] rounded-xl border border-white/5 bg-stone-800 p-1 [--anchor-gap:var(--spacing-1)] focus:outline-none transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0 z-50"
           )}
         >
           {items.map((item) => (
