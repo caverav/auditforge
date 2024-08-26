@@ -9,7 +9,7 @@ import {
 import { CheckIcon, ChevronDownIcon } from "@heroicons/react/20/solid";
 import { Chip } from "@mui/material";
 import clsx from "clsx";
-import React from "react";
+import React, { useEffect } from "react";
 
 interface ListItem {
   id: number;
@@ -44,6 +44,10 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   const handleDeleteChip = (deletedItem: ListItem) => {
     handleChange(selected.filter((item) => item !== deletedItem));
   };
+
+  useEffect(() => {
+    onChange([]);
+  }, [items]);
 
   return (
     <Field>
