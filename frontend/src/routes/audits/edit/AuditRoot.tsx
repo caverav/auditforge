@@ -2,7 +2,7 @@ import { useTranslation } from "react-i18next";
 import AuditSidebar from "../../../components/navbar/AuditSidebar";
 import { Outlet, useParams } from "react-router-dom";
 import { Settings, Globe, List, Plus } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Finding, getAuditById } from "../../../services/audits.ts";
 
 export const AuditRoot = () => {
@@ -30,18 +30,20 @@ export const AuditRoot = () => {
     },
   ];
 
-  getAuditById(auditId).then((audit) => {
-    setFindings(
-      audit.datas.findings.map((finding: Finding) => {
-        return {
-          id: finding.identifier,
-          name: finding.title,
-          category: "No Category",
-          severity: "L", //TODO: it's harcoded
-        };
-      }),
-    );
-  });
+  useEffect(() => {
+    getAuditById(auditId).then((audit) => {
+      setFindings(
+        audit.datas.findings.map((finding: Finding) => {
+          return {
+            id: finding.identifier,
+            name: finding.title,
+            category: "No Category",
+            severity: "L", //TODO: it's harcoded
+          };
+        }),
+      );
+    });
+  }, [auditId]);
 
   const sortOptions = [
     { id: 1, value: "CVSS Score" },
