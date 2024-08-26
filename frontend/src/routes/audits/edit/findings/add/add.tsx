@@ -5,8 +5,7 @@ import UITable, { Column } from "../../../../../components/table/UITable";
 import { useSortableTable } from "../../../../../hooks/useSortableTable";
 import { useTableFiltering } from "../../../../../hooks/useTableFiltering";
 import PrimaryButton from "../../../../../components/button/PrimaryButton";
-import {TmpVulnFindings, exampleFindings, getVulnColumns} from "../dummy_data"
-import { getLanguages } from "../../../../../services/audits";
+import { FindingByLocale, getLanguages, getVulnByLanguage } from "../../../../../services/audits";
 
 interface ListItem {
   id: number;
@@ -19,6 +18,37 @@ type LanguagesData = {
   locale: string;
 };
 
+const column1: Column = {
+  header: "ID",
+  accessor: "id",
+  sortable: true,
+  filterable: true,
+};
+
+const column2: Column = {
+  header: "Title",
+  accessor: "title",
+  sortable: true,
+  filterable: true,
+};
+
+const column3: Column = {
+  header: "Category",
+  accessor: "category",
+  sortable: false,
+  filterable: true,
+};
+
+const column4: Column = {
+  header: "Type",
+  accessor: "type",
+  sortable: false,
+  filterable: true,
+};
+
+const getVulnColumns = () => [column1, column2, column3, column4]
+
+
 export const Add = () => {
 
   const [languages, setLanguages] = useState<ListItem[]>([]);
@@ -27,14 +57,14 @@ export const Add = () => {
 
   const [columns, setColumns] = useState<Column[]>([]);
 
-  const [filteredData, setFilteredData] = useState<TmpVulnFindings[]>([]);
+  const [filteredData, setFilteredData] = useState<FindingByLocale[]>([]);
 
-  const [tableData, handleSorting, setTableData] = useSortableTable<TmpVulnFindings>(
+  const [tableData, handleSorting, setTableData] = useSortableTable<FindingByLocale>(
     filteredData,
     columns,
   );
 
-  const [filters, handleFilterChange] = useTableFiltering<TmpVulnFindings>(
+  const [filters, handleFilterChange] = useTableFiltering<FindingByLocale>(
     filteredData,
     columns,
     setTableData,
@@ -57,14 +87,18 @@ export const Add = () => {
         const dataColumns = getVulnColumns();
         setColumns(dataColumns);
 
-        const filteredFindings = exampleFindings.filter(
-          (finding) => finding.language === currentLanguage.label
+        const vulns = await getVulnByLanguage(currentLanguage.value);
+
+        const vulnsName = vulns.datas.map(
+          (item: FindingByLocale) => ({
+            id: item._id,
+            title: item.detail.title
+            }
+          )
         );
 
-        console.log(currentLanguage.label); 
-
-        setTableData(filteredFindings);
-        setFilteredData(filteredFindings);
+        setTableData(vulnsName);
+        setFilteredData(vulnsName);
 
       } catch (err) {
         setLoadingLanguages(false);
@@ -116,3 +150,4 @@ export const Add = () => {
       </div>
   );
 };
+

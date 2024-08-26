@@ -14,6 +14,21 @@ export interface Finding {
   _id: string;
   paragraphs: string[];
 }
+
+export interface Detail {
+  customFields: string[];
+  cwes: string[];
+  locale: string;
+  title: string;
+  references: string[];
+}
+
+export interface FindingByLocale {
+  cvssv3: string;
+  _id: string;
+  detail: Detail;
+}
+
 export interface Audit {
   _id: string;
   name: string;
@@ -228,3 +243,19 @@ export const getTemplates = async (): Promise<any> => {
     throw error;
   }
 };
+
+export const getVulnByLanguage = async (locale: string): Promise<any> =>  {
+  try {
+    const response = await fetch(`${API_URL}vulnerabilities/${locale}`, {
+      credentials: "include",
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error("Network response was not ok");
+    }
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    throw error;
+  }
+}
