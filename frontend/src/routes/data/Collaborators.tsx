@@ -136,7 +136,7 @@ export const Collaborators: React.FC = () => {
     enabled?: boolean;
   };
 
-  const keyExtractor = (item: any) => item.id;
+  const keyExtractor = (item: any) => item._id;
 
   const handleEditCompanyButton = (collaborator: TableData) => {
     const role = roles.find((r) => r.value === collaborator.role) || null;

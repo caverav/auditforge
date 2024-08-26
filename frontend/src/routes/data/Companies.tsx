@@ -79,7 +79,7 @@ export const Companies: React.FC = () => {
     logo: string;
   };
 
-  const keyExtractor = (item: any) => item.id;
+  const keyExtractor = (item: any) => item._id;
 
   const handleEditCompanyButton = (company: TableData) => {
     setNewCompany({

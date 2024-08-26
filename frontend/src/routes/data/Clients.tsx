@@ -139,7 +139,7 @@ export const Clients: React.FC = () => {
     company: string;
   };
 
-  const keyExtractor = (item: any) => item.id;
+  const keyExtractor = (item: any) => item._id;
 
   const handleEditClientButton = (client: TableData) => {
     const matchingCompany = apiCompanies.find(

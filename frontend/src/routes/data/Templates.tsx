@@ -72,7 +72,7 @@ export const Templates: React.FC = () => {
     ext: string;
   };
 
-  const keyExtractor = (item: any) => item.id;
+  const keyExtractor = (item: any) => item._id;
 
   const handleEditTemplateButton = (template: TableData) => {
     setNewTemplate((prevState) => ({
