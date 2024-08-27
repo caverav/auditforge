@@ -15,7 +15,23 @@ interface SelectDropdownProps {
   onClick: (item: ListItem) => void;
   placeholder?: string;
   end?: boolean;
+  color?: "blue" | "red" | "gray";
 }
+
+const colorToClassName = {
+  blue: {
+    button: "bg-blue-800 data-[hover]:bg-blue-700 data-[open]:bg-blue-700",
+    dropdown: "bg-blue-900",
+  },
+  red: {
+    button: "bg-rose-800 data-[hover]:bg-rose-700 data-[open]:bg-rose-700",
+    dropdown: "bg-rose-900",
+  },
+  gray: {
+    button: "bg-stone-400 data-[hover]:bg-stone-500 data-[open]:bg-stone-500",
+    dropdown: "bg-stone-600",
+  },
+};
 
 const DropdownButton: React.FC<SelectDropdownProps> = ({
   items,
@@ -23,7 +39,9 @@ const DropdownButton: React.FC<SelectDropdownProps> = ({
   onClick,
   placeholder,
   end,
+  color = "blue",
 }) => {
+  const colorClassName = colorToClassName[color];
   return (
     <div>
       <Menu>
@@ -33,8 +51,9 @@ const DropdownButton: React.FC<SelectDropdownProps> = ({
         <div>
           <MenuButton
             className={clsx(
-              "inline-flex w-full items-center gap-2 rounded bg-blue-800 py-2 px-3 font-bold text-white shadow-inner shadow-white/10",
-              "focus:outline-none data-[hover]:bg-blue-700 data-[open]:bg-blue-700 data-[open]:rounded-b-none data-[focus]:outline-1 data-[focus]:outline-white min-h-[2.3rem]",
+              "inline-flex w-full items-center gap-2 rounded py-2 px-3 font-bold text-white shadow-inner shadow-white/10",
+              "focus:outline-none data-[open]:rounded-b-none data-[focus]:outline-1 data-[focus]:outline-white min-h-[2.3rem]",
+              `${colorClassName.button}`,
             )}
           >
             <span className="truncate">{placeholder}</span>
@@ -45,8 +64,9 @@ const DropdownButton: React.FC<SelectDropdownProps> = ({
           transition
           anchor={end === true ? "bottom end" : "bottom start"}
           className={clsx(
-            "min-w-[var(--button-width)] rounded-b-xl border border-white/5 bg-blue-900 p-1 p text-sm/6 text-white transition duration-100 ease-out [--anchor-gap:var(--spacing-1)]",
+            "min-w-[var(--button-width)] rounded-b-xl border border-white/5 p-1 p text-sm/6 text-white transition duration-100 ease-out [--anchor-gap:var(--spacing-1)]",
             "focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0 z-50",
+            `${colorClassName.dropdown}`,
           )}
         >
           {items.map((item) => (
