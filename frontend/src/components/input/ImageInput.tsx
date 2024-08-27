@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState, useEffect } from "react";
 
-interface ImageInputProps {
+type ImageInputProps = {
   label: string;
   id: string;
   name: string;

@@ -1,6 +1,6 @@
 const API_URL = "https://localhost:4242/api/";
 
-interface NewCollaborator {
+type NewCollaborator = {
   _id?: string;
   email: string;
   firstname: string;
@@ -13,14 +13,14 @@ interface NewCollaborator {
   enabled?: boolean;
 }
 
-interface NewCompany {
+type NewCompany = {
   _id?: string;
   name: string;
   shortName: string;
   logo: string;
 }
 
-interface NewClient {
+type NewClient = {
   _id?: string;
   firstname: string;
   lastname: string;
@@ -31,7 +31,7 @@ interface NewClient {
   company: NewCompany | null;
 }
 
-interface NewTemplate {
+type NewTemplate = {
   _id?: string;
   name: string;
   ext: string;

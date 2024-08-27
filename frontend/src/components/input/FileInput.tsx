@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from "react";
 
-interface FileInputProps {
+type FileInputProps = {
   id: string;
   name: string;
   onFileSelect: (file: { name: string; content: string }) => void;
