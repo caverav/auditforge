@@ -2,7 +2,7 @@ import { Field, Label, Textarea } from "@headlessui/react";
 import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
 import { ChangeEvent, useState } from "react";
 
-interface TextAreaEditorProps {
+type TextAreaEditorProps = {
   label: string;
   rows: number;
   value: string | string[];
@@ -11,7 +11,7 @@ interface TextAreaEditorProps {
   placeholder: string;
   onChange: (content: string) => void;
   required?: boolean;
-}
+};
 
 const TextArea: React.FC<TextAreaEditorProps> = ({
   label,
@@ -34,22 +34,22 @@ const TextArea: React.FC<TextAreaEditorProps> = ({
         <div className="relative">
           <Textarea
             className={`${required && "empty:ring empty:ring-red-500 empty:ring-1"} bg-gray-800 w-full mt-2 p-2 rounded-lg shadow-sm`}
-            rows={rows}
-            value={value}
+            id={id}
+            name={name}
+            onBlur={() => setIsFocused(false)}
             onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
               onChange(e.target.value)
             }
-            placeholder={placeholder}
-            id={id}
-            name={name}
             onFocus={() => setIsFocused(true)}
-            onBlur={() => setIsFocused(false)}
+            placeholder={placeholder}
+            rows={rows}
+            value={value}
           />
-          {!isFocused && required && value === "" && (
+          {!isFocused && required && value === "" ? (
             <span className="absolute right-3 top-2 mt-2 ml-2 text-red-500">
               <ExclamationCircleIcon className="size-5" />
             </span>
-          )}
+          ) : null}
         </div>
       </Field>
     </div>
