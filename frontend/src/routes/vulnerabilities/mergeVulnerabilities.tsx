@@ -5,6 +5,7 @@ import PrimaryButton from "../../components/button/PrimaryButton";
 import SelectDropdown from "../../components/dropdown/SelectDropdown";
 import DefaultRadioGroup from "../../components/button/DefaultRadioGroup";
 import { mergeVulnerability } from "../../services/vulnerabilities";
+import { Toaster, toast } from "sonner";
 
 type Details = {
   locale: string;
@@ -174,6 +175,8 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({
       } catch (error) {
         setError("Error creating vulnerability");
         console.error("Error:", error);
+        toast.error("Error merging vulnerabilities");
+        return;
       }
     }
 
@@ -191,6 +194,7 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({
           onClick={() => handlerIsOpen(false)}
           aria-hidden="true"
         />
+        <Toaster />
         <div className="relative bg-gray-700 p-2 rounded-lg shadow-lg w-3/5 h-1/2 flex flex-col">
           <div className="mx-3 mt-2 flex items-center justify-between">
             <span className="text-xl text-white font-bold p-1">
