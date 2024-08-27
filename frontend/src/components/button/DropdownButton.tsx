@@ -1,22 +1,22 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
-import clsx from "clsx";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
+import clsx from "clsx";
 
-interface ListItem {
+type ListItem = {
   id: number;
   value: string;
   label?: string;
   hrEnabled?: boolean;
-}
+};
 
-interface SelectDropdownProps {
+type SelectDropdownProps = {
   items: ListItem[];
   title?: string;
   onClick: (item: ListItem) => void;
   placeholder?: string;
   end?: boolean;
   color?: "blue" | "red" | "gray";
-}
+};
 
 const colorToClassName = {
   blue: {
@@ -45,7 +45,7 @@ const DropdownButton: React.FC<SelectDropdownProps> = ({
   return (
     <div>
       <Menu>
-        <span className={"block text-sm font-medium leading-6 text-gray-300"}>
+        <span className="block text-sm font-medium leading-6 text-gray-300">
           {title}
         </span>
         <div>
@@ -61,23 +61,24 @@ const DropdownButton: React.FC<SelectDropdownProps> = ({
           </MenuButton>
         </div>
         <MenuItems
-          transition
           anchor={end === true ? "bottom end" : "bottom start"}
           className={clsx(
             "min-w-[var(--button-width)] rounded-b-xl border border-white/5 p-1 p text-sm/6 text-white transition duration-100 ease-out [--anchor-gap:var(--spacing-1)]",
             "focus:outline-none data-[closed]:scale-95 data-[closed]:opacity-0 z-50",
             `${colorClassName.dropdown}`,
           )}
+          transition
         >
           {items.map((item) => (
             <MenuItem key={item.id}>
               {() => (
                 <div className="w-full gap-2 rounded-lg data-[focus]:bg-white/10">
                   <button
+                    className="w-full group cursor-default text-left items-center py-1.5 px-3 select-none "
                     onClick={() => {
                       onClick(item);
                     }}
-                    className="w-full group cursor-default text-left items-center py-1.5 px-3 select-none "
+                    type="button"
                   >
                     <span className="text-sm/6 text-white">
                       {item.label ? item.label : item.value}
@@ -85,9 +86,7 @@ const DropdownButton: React.FC<SelectDropdownProps> = ({
                   </button>
                   {item.hrEnabled ? (
                     <hr className="h-px bg-gray-400 border-0 rounded w-full" />
-                  ) : (
-                    <></>
-                  )}
+                  ) : null}
                 </div>
               )}
             </MenuItem>
