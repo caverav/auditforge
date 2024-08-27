@@ -85,6 +85,7 @@ export default {
         templateNotFound: 'Vorlage nicht gefunden',
         templateCreatedOk: 'Vorlage erfolgreich erstellt',
         templateUpdatedOk: 'Vorlage erfolgreich aktualisiert',
+        templateDeletedOk: 'Vorlage erfolgreich erstellt',
         allVulnerabilitesDeleteNotice: 'Alle Schwachstellen werden endgültig gelöscht',
         allVulnerabilitesDeleteOk: 'Alle Schwachstellen wurden erfolgreich gelöscht',
         profileUpdateOk: 'Profil erfolgreich aktualisiert',

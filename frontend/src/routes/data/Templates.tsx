@@ -15,6 +15,7 @@ import FileInput from "../../components/input/FileInput";
 import UITable from "../../components/table/UITable";
 import { useSortableTable } from "../../hooks/useSortableTable";
 import { useTableFiltering } from "../../hooks/useTableFiltering";
+import { toast } from "sonner";
 
 interface NewTemplate {
   id?: string;
@@ -149,6 +150,7 @@ export const Templates: React.FC = () => {
       setError("Error creating company");
       console.error("Error:", error);
     }
+    toast.success(t("msg.templateCreatedOk"));
     setNewTemplate(null);
     setIsOpenAddTemplateModal(!isOpenAddTemplateModal);
     fetchTemplates();
@@ -166,6 +168,7 @@ export const Templates: React.FC = () => {
       setError("Error updating template");
       console.error("Error:", error);
     }
+    toast.success(t("msg.templateUpdatedOk"));
     setNewTemplate(null);
     setIsOpenEditTemplateModal(!isOpenEditTemplateModal);
     fetchTemplates();
@@ -183,6 +186,7 @@ export const Templates: React.FC = () => {
         setError("Error deleting template");
         console.error("Error:", error);
       }
+      toast.success(t("msg.templateDeletedOk"));
       setSelectedTemplate(null);
       setIsOpenDeleteTemplateModal(!isOpenDeleteTemplateModal);
       fetchTemplates();

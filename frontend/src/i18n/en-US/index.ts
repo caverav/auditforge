@@ -102,6 +102,7 @@ export default {
         templateNotFound: 'Template Not Found',
         templateCreatedOk: 'Template created successfully',
         templateUpdatedOk: 'Template updated successfully',
+        templateDeletedOk: 'Template deleted succesfully',
         allVulnerabilitesDeleteNotice: 'All Vulnerabilities will be permanently deleted',
         allVulnerabilitesDeleteOk: 'All vulnerabilities deleted successfully',
         profileUpdateOk: 'Profile updated successfully',

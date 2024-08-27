@@ -95,6 +95,7 @@ export default {
         templateNotFound: 'Modèle introuvable',
         templateCreatedOk: 'Modèle créé avec succès',
         templateUpdatedOk: 'Modèle modifié avec succès',
+        templateDeletedOk: 'Modèle supprimé avec succès',
         allVulnerabilitesDeleteNotice: 'Toutes les vulnérabilités seront définitivement supprimées',
         allVulnerabilitesDeleteOk: 'Toutes les vulnérabilités ont été supprimées avec succès',
         profileUpdateOk: 'Mise à jour du profil réussie',

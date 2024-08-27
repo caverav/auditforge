@@ -15,6 +15,7 @@ import { useSortableTable } from "../../hooks/useSortableTable";
 import { useTableFiltering } from "../../hooks/useTableFiltering";
 import UITable from "../../components/table/UITable";
 import PrimarySwitch from "../../components/switch/PrimarySwitch";
+import { toast } from "sonner";
 
 interface NewCollaborator {
   _id?: string;
@@ -141,7 +142,7 @@ export const Collaborators: React.FC = () => {
   const handleEditCompanyButton = (collaborator: TableData) => {
     const role = roles.find((r) => r.value === collaborator.role) || null;
     setSelectedRole(role);
-  
+
     setNewCollaborator({
       ...collaborator,
       enabled: collaborator.enabled ?? false,
@@ -203,6 +204,7 @@ export const Collaborators: React.FC = () => {
       setError("Error creating collaborator");
       console.error("Error:", error);
     }
+    toast.success(t("msg.collaboratorCreatedOk"));
     setNewCollaborator(null);
     setIsOpenAddCollabModal(!isOpenAddCollabModal);
     fetchCollaborators();
@@ -220,6 +222,7 @@ export const Collaborators: React.FC = () => {
       setError("Error updating collaborator");
       console.error("Error:", error);
     }
+    toast.success(t("msg.collaboratorUpdatedOk"));
     setNewCollaborator(null);
     setIsOpenEditCollabModal(!isOpenEditCollabModal);
     fetchCollaborators();

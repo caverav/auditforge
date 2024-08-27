@@ -15,6 +15,7 @@ import SelectDropdown from "../../components/dropdown/SelectDropdown";
 import { useSortableTable } from "../../hooks/useSortableTable";
 import { useTableFiltering } from "../../hooks/useTableFiltering";
 import UITable from "../../components/table/UITable";
+import { toast } from "sonner";
 
 interface NewClient {
   _id?: string;
@@ -229,7 +230,7 @@ export const Clients: React.FC = () => {
       setError("Error creating client");
       console.error("Error:", error);
     }
-
+    toast.success(t("msg.clientCreatedOk"));
     setNewClient(null);
     setIsOpenAddClientModal(!isOpenAddClientModal);
     fetchClients();
@@ -264,13 +265,14 @@ export const Clients: React.FC = () => {
       };
 
       await updateClient(clientToUpdate);
-      setNewClient(null);
-      setIsOpenEditClientModal(!isOpenEditClientModal);
-      fetchClients();
     } catch (error) {
       setError("Error updating client");
       console.error("Error:", error);
     }
+    toast.success(t("msg.clientUpdatedOk"));
+    setNewClient(null);
+    setIsOpenEditClientModal(!isOpenEditClientModal);
+    fetchClients();
   };
 
   const handleCancelDeleteClient = () => {
@@ -285,6 +287,7 @@ export const Clients: React.FC = () => {
         setError("Error deleting client");
         console.error("Error:", error);
       }
+      toast.success(t("msg.clientDeletedOk"));
       setSelectedClient(null);
       setIsOpenDeleteClientModal(!isOpenDeleteClientModal);
       fetchClients();

@@ -89,6 +89,7 @@ export default {
         templateNotFound: '未找到模板',
         templateCreatedOk: '模板创建成功',
         templateUpdatedOk: '目标更新成功',
+        templateDeletedOk : '模板删除成功',
         allVulnerabilitesDeleteNotice: '所有漏洞将会被永久删除？',
         allVulnerabilitesDeleteOk: '所有漏洞删除成功',
         profileUpdateOk: '个人信息更新成功',

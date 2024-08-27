@@ -14,6 +14,7 @@ import ImageInput from "../../components/input/ImageInput";
 import UITable from "../../components/table/UITable";
 import { useSortableTable } from "../../hooks/useSortableTable";
 import { useTableFiltering } from "../../hooks/useTableFiltering";
+import { toast } from "sonner";
 
 interface NewCompany {
   _id?: string;
@@ -136,6 +137,7 @@ export const Companies: React.FC = () => {
       setError("Error creating company");
       console.error("Error:", error);
     }
+    toast.success(t("msg.companyCreatedOk"));
     setNewCompany(null);
     setIsOpenAddCompaniesModal(!isOpenAddCompaniesModal);
     fetchCompanies();
@@ -153,6 +155,7 @@ export const Companies: React.FC = () => {
       setError("Error updating company");
       console.error("Error:", error);
     }
+    toast.success(t("msg.companyUpdatedOk"));
     setNewCompany(null);
     setIsOpenEditCompaniesModal(!isOpenEditCompaniesModal);
     fetchCompanies();
@@ -170,6 +173,7 @@ export const Companies: React.FC = () => {
         setError("Error deleting company");
         console.error("Error:", error);
       }
+      toast.success(t("msg.companyDeletedOk"));
       setSelectedCompany(null);
       setIsOpenDeleteCompanyModal(!isOpenDeleteCompanyModal);
       fetchCompanies();
