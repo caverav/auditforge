@@ -1,5 +1,6 @@
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import DefaultRadioGroup from '../../components/button/DefaultRadioGroup';
 import PrimaryButton from '../../components/button/PrimaryButton';
@@ -20,9 +21,15 @@ import {
   getTypes,
 } from '../../services/audits';
 
+type RowAction = {
+  label: string;
+  onClick: (item: TableData) => void;
+};
+
 type ListItem = {
   id: number;
   value: string;
+  label?: string;
 };
 
 const RadioOptions = [
@@ -47,6 +54,7 @@ type LanguageData = {
 };
 
 type TableData = {
+  id: string;
   Name: string;
   AuditType: string;
   Language: string;
@@ -56,6 +64,7 @@ type TableData = {
 };
 
 export const Audits = () => {
+  const navigate = useNavigate();
   const [myAudits, setMyAudits] = useState(false);
 
   const [usersConnected, setUsersConnected] = useState(false);
@@ -67,6 +76,14 @@ export const Audits = () => {
   const [, setError] = useState<string | null>(null);
 
   const [nameAudit, setNameAudit] = useState<string>('');
+
+  const rowActions: RowAction[] = [
+    {
+      label: 'Edit',
+      onClick: (item: TableData) => navigate(`/audits/${item.id}/general`),
+    },
+    { label: 'Delete', onClick: () => void 0 }, // TODO: Implement delete
+  ];
 
   const [auditType, setAuditType] = useState<ListItem[]>([]);
   const [currentAuditType, setCurrentAuditType] = useState<ListItem>({
@@ -166,6 +183,7 @@ export const Audits = () => {
 
         const dataAudits = await getAudits().then(res => {
           return res.datas.map((audit: Audit) => ({
+            id: audit._id,
             Name: audit.name,
             AuditType: audit.auditType,
             Language: audit.language,
@@ -280,6 +298,7 @@ export const Audits = () => {
           keyExtractor={item => item._id}
           onFilter={handleFilterChange}
           onSort={handleSorting}
+          rowActions={rowActions}
           sortable={true}
         />
       </div>
