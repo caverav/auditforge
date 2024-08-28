@@ -18,17 +18,23 @@ export type Finding = {
 };
 
 export type Detail = {
-  customFields: string[];
-  cwes: string[];
   locale: string;
   title: string;
+  description: string;
+  observation: string;
+  remediation: string;
+  cwes: string[];
   references: string[];
+  customFields: string[];
+  vulnType?: string;
 };
 
+//{"status":"success","datas":[{"cvssv3":"CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:L/A:N","detail":{"locale":"es_CL","title":"asd","description":"<p>asd</p>","observation":"<p>asd</p>","remediation":"<p>asd</p>","cwes":[],"references":[],"customFields":[]},"_id":"66c8f9ecc3613d3bcc6438c1"}]}
 export type FindingByLocale = {
   cvssv3: string;
-  _id: string;
   detail: Detail;
+  _id: string;
+  category?: string;
 };
 
 export type Audit = {
@@ -57,7 +63,6 @@ export type Audit = {
   createdAt: string;
 };
 
-//{"status":"success","datas":{"_id":"66c79cbd521d8a947124b115","name":"HOALAAAAAA","auditType":"tipo2","collaborators":[{"_id":"66bcfe7e7591413e4b9881a7","username":"testing","firstname":"testing","lastname":"testing","email":"testing@test.com","phone":"123123123","role":"user"},{"_id":"66bcfdb27591413e4b987bf5","username":"camilo2","firstname":"camilo2","lastname":"camilo2","email":"camilo2@gmail.com","phone":"123123123","role":"admin"}],"reviewers":[],"language":"Español","creator":{"_id":"669adc9b1c7c2bd53fecdafd","username":"camilo","firstname":"camilo","lastname":"camilo","role":"admin"},"sections":[],"customFields":[],"sortFindings":[],"state":"EDIT","approvals":[],"type":"default","scope":[{"name":"asdasd","hosts":[]},{"name":"asdasd","hosts":[]},{"name":"assdasd","hosts":[]}],"findings":[],"createdAt":"2024-08-22T20:17:01.657Z","updatedAt":"2024-08-28T00:49:34.611Z","__v":0,"template":{"_id":"66bb89353b73b982bec9c982","name":"template1","ext":"docx","createdAt":"2024-08-13T16:26:29.869Z","updatedAt":"2024-08-13T16:26:29.869Z","__v":0},"client":{"_id":"66bb89b73b73b982bec9c9c3","email":"pepe@pepe.cl","company":"66bb89a63b73b982bec9c9bd","lastname":"flores","firstname":"pepe","phone":"123123123","cell":"123123123","title":"jefe","createdAt":"2024-08-13T16:28:39.934Z","updatedAt":"2024-08-13T16:28:39.934Z","__v":0},"company":{"_id":"66bb89a63b73b982bec9c9bd","name":"NTG","shortName":"ntg","createdAt":"2024-08-13T16:28:22.360Z","updatedAt":"2024-08-13T16:28:39.927Z","__v":0},"date":"2024-08-12","date_end":"2024-08-15","date_start":"2024-08-07"}}
 export type AuditById = {
   _id: string;
   name: string;
@@ -271,7 +276,6 @@ export const getAudits = async (): Promise<{
   }
 };
 
-//{"status":"success","datas":{"_id":"66bb89693b73b982bec9c99d","name":"audit1","auditType":"tipo1","collaborators":[],"reviewers":[],"language":"es_CL","template":{"_id":"66bb89353b73b982bec9c982","name":"template1","ext":"docx","createdAt":"2024-08-13T16:26:29.869Z","updatedAt":"2024-08-13T16:26:29.869Z","__v":0},"creator":{"_id":"669adc9b1c7c2bd53fecdafd","username":"camilo","firstname":"camilo","lastname":"camilo","role":"admin"},"sections":[],"customFields":[],"sortFindings":[],"state":"EDIT","approvals":[],"type":"default","scope":[],"findings":[],"createdAt":"2024-08-13T16:27:21.516Z","updatedAt":"2024-08-13T16:27:21.516Z","__v":0}}
 export const getAuditById = async (
   auditId: string | undefined,
 ): Promise<{ status: string; datas: AuditById }> => {
@@ -391,7 +395,7 @@ export const getTemplates = async (): Promise<{
 
 export const getVulnByLanguage = async (
   locale: string,
-): Promise<{ status: string; datas: Finding[] }> => {
+): Promise<{ status: string; datas: FindingByLocale[] }> => {
   try {
     const response = await fetch(`${API_URL}vulnerabilities/${locale}`, {
       credentials: 'include',
