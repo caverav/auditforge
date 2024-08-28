@@ -133,11 +133,11 @@ export const Companies: React.FC = () => {
   const handleSubmitAddCompanies = async () => {
     try {
       await createCompany(newCompany!);
+      toast.success(t("msg.companyCreatedOk"));
     } catch (error) {
       setError("Error creating company");
       console.error("Error:", error);
     }
-    toast.success(t("msg.companyCreatedOk"));
     setNewCompany(null);
     setIsOpenAddCompaniesModal(!isOpenAddCompaniesModal);
     fetchCompanies();
@@ -151,11 +151,11 @@ export const Companies: React.FC = () => {
   const handleSubmitEditCompanies = async () => {
     try {
       await updateCompany(newCompany!);
+      toast.success(t("msg.companyUpdatedOk"));
     } catch (error) {
       setError("Error updating company");
       console.error("Error:", error);
     }
-    toast.success(t("msg.companyUpdatedOk"));
     setNewCompany(null);
     setIsOpenEditCompaniesModal(!isOpenEditCompaniesModal);
     fetchCompanies();
@@ -169,11 +169,11 @@ export const Companies: React.FC = () => {
     if (selectedCompany?._id) {
       try {
         await deleteCompany(selectedCompany._id);
+        toast.success(t("msg.companyDeletedOk"));
       } catch (error) {
         setError("Error deleting company");
         console.error("Error:", error);
       }
-      toast.success(t("msg.companyDeletedOk"));
       setSelectedCompany(null);
       setIsOpenDeleteCompanyModal(!isOpenDeleteCompanyModal);
       fetchCompanies();

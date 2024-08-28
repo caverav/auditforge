@@ -200,11 +200,11 @@ export const Collaborators: React.FC = () => {
   const handleSubmitAddCollab = async () => {
     try {
       await createCollaborator(newCollaborator!);
+      toast.success(t("msg.collaboratorCreatedOk"));
     } catch (error) {
       setError("Error creating collaborator");
       console.error("Error:", error);
     }
-    toast.success(t("msg.collaboratorCreatedOk"));
     setNewCollaborator(null);
     setIsOpenAddCollabModal(!isOpenAddCollabModal);
     fetchCollaborators();
@@ -218,11 +218,11 @@ export const Collaborators: React.FC = () => {
   const handleSubmitEditCollab = async () => {
     try {
       await updateCollaborator(newCollaborator!);
+      toast.success(t("msg.collaboratorUpdatedOk"));
     } catch (error) {
       setError("Error updating collaborator");
       console.error("Error:", error);
     }
-    toast.success(t("msg.collaboratorUpdatedOk"));
     setNewCollaborator(null);
     setIsOpenEditCollabModal(!isOpenEditCollabModal);
     fetchCollaborators();

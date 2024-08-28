@@ -146,11 +146,11 @@ export const Templates: React.FC = () => {
   const handleSubmitAddTemplate = async () => {
     try {
       await createTemplate(newTemplate!);
+      toast.success(t("msg.templateCreatedOk"));
     } catch (error) {
       setError("Error creating company");
       console.error("Error:", error);
     }
-    toast.success(t("msg.templateCreatedOk"));
     setNewTemplate(null);
     setIsOpenAddTemplateModal(!isOpenAddTemplateModal);
     fetchTemplates();
@@ -164,11 +164,11 @@ export const Templates: React.FC = () => {
   const handleSubmitEditTemplate = async () => {
     try {
       await updateTemplate(newTemplate!);
+      toast.success(t("msg.templateUpdatedOk"));
     } catch (error) {
       setError("Error updating template");
       console.error("Error:", error);
     }
-    toast.success(t("msg.templateUpdatedOk"));
     setNewTemplate(null);
     setIsOpenEditTemplateModal(!isOpenEditTemplateModal);
     fetchTemplates();
@@ -182,11 +182,11 @@ export const Templates: React.FC = () => {
     if (selectedTemplate?._id) {
       try {
         await deleteTemplate(selectedTemplate._id);
+        toast.success(t("msg.templateDeletedOk"));
       } catch (error) {
         setError("Error deleting template");
         console.error("Error:", error);
       }
-      toast.success(t("msg.templateDeletedOk"));
       setSelectedTemplate(null);
       setIsOpenDeleteTemplateModal(!isOpenDeleteTemplateModal);
       fetchTemplates();

@@ -226,11 +226,11 @@ export const Clients: React.FC = () => {
         },
       };
       await createClient(clientToCreate);
+      toast.success(t("msg.clientCreatedOk"));
     } catch (error) {
       setError("Error creating client");
       console.error("Error:", error);
     }
-    toast.success(t("msg.clientCreatedOk"));
     setNewClient(null);
     setIsOpenAddClientModal(!isOpenAddClientModal);
     fetchClients();
@@ -265,11 +265,11 @@ export const Clients: React.FC = () => {
       };
 
       await updateClient(clientToUpdate);
+      toast.success(t("msg.clientUpdatedOk"));
     } catch (error) {
       setError("Error updating client");
       console.error("Error:", error);
     }
-    toast.success(t("msg.clientUpdatedOk"));
     setNewClient(null);
     setIsOpenEditClientModal(!isOpenEditClientModal);
     fetchClients();
@@ -283,11 +283,11 @@ export const Clients: React.FC = () => {
     if (selectedClient?._id) {
       try {
         await deleteClient(selectedClient._id);
+        toast.success(t("msg.clientDeletedOk"));
       } catch (error) {
         setError("Error deleting client");
         console.error("Error:", error);
       }
-      toast.success(t("msg.clientDeletedOk"));
       setSelectedClient(null);
       setIsOpenDeleteClientModal(!isOpenDeleteClientModal);
       fetchClients();
