@@ -54,6 +54,7 @@ const SimpleInput: React.FC<SimpleInputProps> = ({
           }
           onFocus={() => setIsFocused(true)}
           placeholder={placeholder + (requiredField && !label ? ' (*)' : '')}
+          required={requiredField}
           type={type}
           value={value}
         />
