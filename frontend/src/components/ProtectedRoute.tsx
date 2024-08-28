@@ -1,8 +1,8 @@
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import { useAuth } from './AuthProvider';
 import { checktoken } from '../hooks/useAuth';
+import { useAuth } from './AuthProvider';
 
 type ProtectedRouteProps = PropsWithChildren;
 
@@ -21,7 +21,7 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
       }
     };
 
-    verifyAuth();
+    verifyAuth().catch(console.error);
   }, [isAuth, navigate]);
 
   if (loading) {

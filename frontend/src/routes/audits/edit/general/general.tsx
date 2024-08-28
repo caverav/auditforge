@@ -1,5 +1,19 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import dayjs, { Dayjs } from 'dayjs';
+import { t } from 'i18next';
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+
+import DayPicker from '../../../../components/button/DayPicker';
+import SelectDropdown from '../../../../components/dropdown/SelectDropdown';
+import SimpleInput from '../../../../components/input/SimpleInput';
+import TextArea from '../../../../components/text/TextArea';
+import type {
+  Client,
+  Company,
+  Language,
+  Template,
+  User as Collaborator,
+} from '../../../../services/audits';
 import {
   getAuditById,
   getClients,
@@ -7,63 +21,18 @@ import {
   getCompanies,
   getLanguages,
   getTemplates,
-} from "../../../../services/audits";
-import { t } from "i18next";
-import { Dayjs } from "dayjs";
-import DayPicker from "../../../../components/button/DayPicker";
-import SelectDropdown from "../../../../components/dropdown/SelectDropdown";
-import SimpleInput from "../../../../components/input/SimpleInput";
-import TextArea from "../../../../components/text/TextArea";
+} from '../../../../services/audits';
 
-interface ListItem {
+type ListItem = {
   id: number;
   value: string;
   label?: string;
-}
-
-type LanguagesData = {
-  language: string;
-  locale: string;
-};
-
-type TemplatesData = {
-  id: string;
-  name: string;
-  ext: string;
-};
-
-type CompaniesData = {
-  id: string;
-  name: string;
-  shortName: string;
-};
-
-type ClientsData = {
-  id: string;
-  email: string;
-  company: string[];
-  lastname: string;
-  firstname: string;
-  phone: string;
-  title: string;
-};
-
-type CollaboratorsData = {
-  id: string;
-  username: string;
-  firstname: string;
-  lastname: string;
-  email: string;
-  phone: string;
-  role: string;
-  totpenabled: boolean;
-  enabled: boolean;
 };
 
 export const General = () => {
   const { auditId } = useParams();
 
-  const [nameAudit, setNameAudit] = useState<string>("");
+  const [nameAudit, setNameAudit] = useState<string>('');
 
   const [languages, setLanguages] = useState<ListItem[]>([]);
   const [currentLanguage, setCurrentLanguage] = useState<ListItem | null>(null);
@@ -91,65 +60,14 @@ export const General = () => {
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
   const [reportingDate, setReportingDate] = useState<Dayjs | null>(null);
 
-  const [scope, setScope] = useState<string | string[]>("");
-
-  const fetchAuditData = async () => {
-    if (!auditId) return;
-    try {
-      const dataAudit = await getAuditById(auditId);
-      if (dataAudit) {
-        setNameAudit(dataAudit.datas.name);
-
-        const selectedLanguage = languages.find(
-          (item) => item.value === dataAudit.datas.language,
-        );
-        setCurrentLanguage(selectedLanguage!);
-
-        const selectedTemplate = templates.find(
-          (item) => item.value === dataAudit.datas.template.name,
-        );
-        setCurrentTemplate(selectedTemplate!);
-
-        const selectedCompany = companies.find(
-          (item) => item.value === dataAudit.datas.company?.name,
-        );
-        setCurrentCompany(selectedCompany!);
-
-        const selectedClient = clients.find(
-          (item) => item.value === dataAudit.datas.client?.email,
-        );
-        setCurrentClient(selectedClient!);
-
-        const selectedCollaborator = collaborators.find(
-          (item) =>
-            item.value ===
-            `${dataAudit.datas.collaborators[0]?.firstname} ${dataAudit.datas.collaborators[0]?.lastname}`,
-        );
-        setCurrentCollaborators(selectedCollaborator!);
-
-        setStartDate(dataAudit.datas.date_start);
-        setEndDate(dataAudit.datas.date_end);
-        setReportingDate(dataAudit.datas.date);
-
-        setScope(
-          dataAudit.datas.scope
-            .map((item: { name: string }) => item.name)
-            .join("\n"),
-        );
-      } else {
-        console.error("No audit data found");
-      }
-    } catch (error) {
-      console.error("Error fetching audit data:", error);
-    }
-  };
+  const [scope, setScope] = useState<string | string[]>('');
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const dataLanguage = await getLanguages();
         const languagesName = dataLanguage.datas.map(
-          (item: LanguagesData, index: number) => ({
+          (item: Language, index: number): ListItem => ({
             id: index,
             value: item.locale,
             label: item.language,
@@ -160,18 +78,19 @@ export const General = () => {
 
         const dataTemplates = await getTemplates();
         const templatesName = dataTemplates.datas.map(
-          (item: TemplatesData, index: number) => ({
+          (item: Template, index: number) => ({
             id: index,
             value: item.name,
             label: item.name,
           }),
         );
+
         setTemplates(templatesName);
         setLoadingTemplates(false);
 
         const dataCompany = await getCompanies();
         const companiesName = dataCompany.datas.map(
-          (item: CompaniesData, index: number) => ({
+          (item: Company, index: number): ListItem => ({
             id: index,
             value: item.name,
             label: item.name,
@@ -182,9 +101,9 @@ export const General = () => {
 
         const dataClients = await getClients();
         const clientsName = dataClients.datas.map(
-          (item: ClientsData, index: number) => ({
+          (item: Client, index: number): ListItem => ({
             id: index,
-            value: item.email,
+            value: item._id,
             label: item.email,
           }),
         );
@@ -193,9 +112,9 @@ export const General = () => {
 
         const dataCollaborators = await getCollaborators();
         const collaboratorsName = dataCollaborators.datas.map(
-          (item: CollaboratorsData, index: number) => ({
+          (item: Collaborator, index: number): ListItem => ({
             id: index,
-            value: `${item.firstname} ${item.lastname}`,
+            value: `${item._id}`,
             label: `${item.firstname} ${item.lastname}`,
           }),
         );
@@ -205,10 +124,54 @@ export const General = () => {
         setLoadingLanguages(false);
       }
     };
-    fetchData();
+    fetchData().catch(console.error);
   }, []);
 
   useEffect(() => {
+    const fetchAuditData = async () => {
+      if (!auditId) {
+        return;
+      }
+
+      try {
+        const dataAudit = await getAuditById(auditId);
+        setNameAudit(dataAudit.datas.name);
+
+        const selectedLanguage =
+          languages.find(item => item.value === dataAudit.datas.language) ??
+          null;
+        setCurrentLanguage(selectedLanguage);
+
+        const selectedTemplate = templates.find(
+          item => item.value === dataAudit.datas.template.name,
+        );
+        setCurrentTemplate(selectedTemplate ?? null);
+
+        const selectedCompany = companies.find(
+          item => item.value === dataAudit.datas.company?.name,
+        );
+        setCurrentCompany(selectedCompany ?? null);
+
+        const selectedClient = clients.find(
+          item => item.value === dataAudit.datas.client._id,
+        );
+        setCurrentClient(selectedClient ?? null);
+
+        const selectedCollaborator =
+          collaborators.find(
+            item => item.value === dataAudit.datas.creator._id,
+          ) ?? null;
+        setCurrentCollaborators(selectedCollaborator);
+
+        setStartDate(dayjs(dataAudit.datas.date_start));
+        setEndDate(dayjs(dataAudit.datas.date_end));
+        setReportingDate(dayjs(dataAudit.datas.date));
+
+        setScope(dataAudit.datas.scope.map(item => item.name).join('\n'));
+      } catch (error) {
+        console.error('Error fetching audit data:', error);
+      }
+    };
     if (
       auditId &&
       languages.length > 0 &&
@@ -217,7 +180,7 @@ export const General = () => {
       clients.length > 0 &&
       collaborators.length > 0
     ) {
-      fetchAuditData();
+      fetchAuditData().catch(console.error);
     }
   }, [auditId, languages, templates, companies, clients, collaborators]);
 
@@ -228,106 +191,106 @@ export const General = () => {
           <div className="flex flex-col space-y-6">
             <div className="flex flex-col">
               <SimpleInput
-                label={t("name")}
                 id="name"
+                label={t('name')}
                 name="name"
-                type="text"
-                placeholder="Search"
-                value={nameAudit}
                 onChange={setNameAudit}
+                placeholder="Search"
+                type="text"
+                value={nameAudit}
               />
             </div>
 
             <div className="flex space-x-6">
               <div className="w-1/2">
-                {!loadingLanguages && (
+                {!loadingLanguages ? (
                   <SelectDropdown
-                    title={t("language")}
                     items={languages}
-                    selected={currentLanguage}
                     onChange={setCurrentLanguage}
+                    selected={currentLanguage}
+                    title={t('language')}
                   />
-                )}
+                ) : null}
               </div>
               <div className="w-1/2">
-                {!loadingTemplates && (
+                {!loadingTemplates ? (
                   <SelectDropdown
-                    title={t("template")}
                     items={templates}
-                    selected={currentTemplate}
                     onChange={setCurrentTemplate}
+                    selected={currentTemplate}
+                    title={t('template')}
                   />
-                )}
+                ) : null}
               </div>
             </div>
 
             <div className="flex space-x-6">
               <div className="w-1/2">
-                {!loadingCompanies && (
+                {!loadingCompanies ? (
                   <SelectDropdown
-                    title={t("company")}
                     items={companies}
-                    selected={currentCompany}
                     onChange={setCurrentCompany}
+                    selected={currentCompany}
+                    title={t('company')}
                   />
-                )}
+                ) : null}
               </div>
               <div className="w-1/2">
-                {!loadingClients && (
+                {!loadingClients ? (
                   <SelectDropdown
-                    title={t("client")}
                     items={clients}
-                    selected={currentClient}
                     onChange={setCurrentClient}
+                    selected={currentClient}
+                    title={t('client')}
                   />
-                )}
+                ) : null}
               </div>
             </div>
 
             <div className="flex flex-col">
-              {!loadingCollaborators && (
+              {!loadingCollaborators ? (
                 <SelectDropdown
-                  title={t("collaborators")}
                   items={collaborators}
-                  selected={currentCollaborators}
                   onChange={setCurrentCollaborators}
+                  selected={currentCollaborators}
+                  title={t('collaborators')}
                 />
-              )}
+              ) : null}
             </div>
 
             <div className="flex space-x-6">
               <div className="w-1/3">
                 <DayPicker
-                  label={t("startDate")}
-                  selectedDay={startDate}
+                  label={t('startDate')}
                   onChange={setStartDate}
+                  selectedDay={startDate}
                 />
               </div>
               <div className="w-1/3">
                 <DayPicker
-                  label={t("endDate")}
-                  selectedDay={endDate}
+                  label={t('endDate')}
                   onChange={setEndDate}
+                  selectedDay={endDate}
                 />
               </div>
               <div className="w-1/3">
                 <DayPicker
-                  label={t("reportingDate")}
-                  selectedDay={reportingDate}
+                  label={t('reportingDate')}
                   onChange={setReportingDate}
+                  selectedDay={reportingDate}
                 />
               </div>
             </div>
 
             <div className="flex flex-col">
               <TextArea
-                label={t("auditScope")}
-                rows={4}
-                id={"references"}
-                name={"references"}
-                placeholder={""}
-                value={scope}
+                id="references"
+                label={t('auditScope')}
+                name="references"
                 onChange={setScope}
+                placeholder=""
+                rows={4}
+                value={scope}
               />
             </div>
           </div>
