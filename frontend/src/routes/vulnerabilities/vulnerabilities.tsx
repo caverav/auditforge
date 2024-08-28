@@ -1,24 +1,24 @@
-import PrimarySwitch from "../../components/switch/PrimarySwitch";
-import PrimaryButton from "../../components/button/PrimaryButton";
-import { useState, useEffect } from "react";
+import PrimarySwitch from '../../components/switch/PrimarySwitch';
+import PrimaryButton from '../../components/button/PrimaryButton';
+import { useState, useEffect } from 'react';
 import {
   getLanguages,
   getCategories,
   getTypes,
   getVulnerabilities,
   deleteVulnerability,
-} from "../../services/vulnerabilities";
-import SelectDropdown from "../../components/dropdown/SelectDropdown";
-import { t } from "i18next";
-import AddVulnerability from "./addVulnerability";
-import EditVulnerability from "./editVulnerability";
-import UITable from "../../components/table/UITable";
-import { useSortableTable } from "../../hooks/useSortableTable";
-import { useTableFiltering } from "../../hooks/useTableFiltering";
-import Card from "../../components/card/Card";
-import Modal from "../../components/modal/Modal";
-import MergeVulnerabilities from "./mergeVulnerabilities";
-import { Toaster, toast } from "sonner";
+} from '../../services/vulnerabilities';
+import SelectDropdown from '../../components/dropdown/SelectDropdown';
+import { t } from 'i18next';
+import AddVulnerability from './addVulnerability';
+import EditVulnerability from './editVulnerability';
+import UITable from '../../components/table/UITable';
+import { useSortableTable } from '../../hooks/useSortableTable';
+import { useTableFiltering } from '../../hooks/useTableFiltering';
+import Card from '../../components/card/Card';
+import Modal from '../../components/modal/Modal';
+import MergeVulnerabilities from './mergeVulnerabilities';
+import { Toaster, toast } from 'sonner';
 
 type Details = {
   locale: string;
@@ -35,8 +35,8 @@ type Details = {
 type VulnerabilityData = {
   _id: string;
   cvssv3: string | null;
-  priority?: number | "";
-  remediationComplexity?: number | "";
+  priority?: number | '';
+  remediationComplexity?: number | '';
   details: Details[];
   status?: number;
   category?: string | null;
@@ -73,7 +73,7 @@ interface ListItem {
 type TableData = {
   _id: string;
   title: string;
-  category?: number;
+  category?: string;
   type?: string;
 };
 
@@ -85,8 +85,10 @@ export const Vulnerabilities = () => {
   const [openModalDeleteVuln, setOpenModalDeleteVuln] = useState(false);
 
   // Core
-  const [vulnerabilities, setVulnerabilities] = useState<any[]>([]);
-  const [tableInfo, setTableInfo] = useState<any[]>([]);
+  const [vulnerabilities, setVulnerabilities] = useState<VulnerabilityData[]>(
+    [],
+  );
+  const [tableInfo, setTableInfo] = useState<TableData[]>([]);
   const [error, setError] = useState<boolean>(false);
   const [errorText, setErrorText] = useState<string | null>(null);
 
@@ -119,10 +121,10 @@ export const Vulnerabilities = () => {
         (item2: VulnerabilityData) => ({
           _id: item2._id,
           title: item2.details[0].title,
-          category: item2.category ? item2.category : t("noCategory"),
+          category: item2.category ? item2.category : t('noCategory'),
           type: item2.details[0].vulnType
             ? item2.details[0].vulnType
-            : t("undefined"),
+            : t('undefined'),
         }),
       );
       setTableData(vulnDataTable);
@@ -176,7 +178,7 @@ export const Vulnerabilities = () => {
         }),
       );
       setCategories([
-        { id: 0, label: t("noCategory"), value: null },
+        { id: 0, label: t('noCategory'), value: null },
         ...categoryNames,
       ]);
     } catch (err) {
@@ -195,15 +197,15 @@ export const Vulnerabilities = () => {
   //// Workaround para dropdown de filtrado
   useEffect(() => {
     const filtered = vulnerabilities.filter(
-      (vulnIter) => vulnIter.details[0].locale === currentLanguage?.value,
+      vulnIter => vulnIter.details[0].locale === currentLanguage?.value,
     );
-    const vulnDataTable = filtered.map((item2) => ({
+    const vulnDataTable: TableData[] = filtered.map(item2 => ({
       _id: item2._id,
-      title: item2.details[0].title ? item2.details[0].title : "noTitle",
-      category: item2.category ? item2.category : t("noCategory"),
+      title: item2.details[0].title ? item2.details[0].title : 'noTitle',
+      category: item2.category ? item2.category : t('noCategory'),
       type: item2.details[0].vulnType
         ? item2.details[0].vulnType
-        : t("undefined"),
+        : t('undefined'),
     }));
     setTableData(vulnDataTable);
     setTableInfo(vulnDataTable);
@@ -213,26 +215,26 @@ export const Vulnerabilities = () => {
   const [openMerge, setOpenMerge] = useState(false);
 
   // Testing Table
-  const [itemDelete, setItemDelete] = useState<any>();
+  const [itemDelete, setItemDelete] = useState<TableData>();
 
   const columns = [
-    { header: t("title"), accessor: "title", sortable: true, filterable: true },
+    { header: t('title'), accessor: 'title', sortable: true, filterable: true },
     {
-      header: t("category"),
-      accessor: "category",
+      header: t('category'),
+      accessor: 'category',
       sortable: true,
       filterable: true,
     },
-    { header: t("type"), accessor: "type", sortable: true, filterable: true },
+    { header: t('type'), accessor: 'type', sortable: true, filterable: true },
   ];
 
-  const editRegister = (item: any) => {
-    const vuln = vulnerabilities.find((vuln) => vuln._id === item._id);
+  const editRegister = (item: TableData) => {
+    const vuln = vulnerabilities.find(vuln => vuln._id === item._id);
     setEditVuln(vuln);
     setOpenEditVuln(true);
   };
 
-  const deleteRegisterConfirmation = (item: any) => {
+  const deleteRegisterConfirmation = (item: TableData) => {
     setItemDelete(item);
     setOpenModalDeleteVuln(true);
   };
@@ -240,11 +242,11 @@ export const Vulnerabilities = () => {
   const confirmDeleteVulnerability = async () => {
     //Add try
     try {
-      const response = await deleteVulnerability(itemDelete._id);
-      if (response) handleSuccessToast(t("msg.vulnerabilityDeletedOk"));
+      const response = await deleteVulnerability(itemDelete!._id);
+      if (response) handleSuccessToast(t('msg.vulnerabilityDeletedOk'));
     } catch (error) {
-      setErrorText("Error creating vulnerability");
-      console.error("Error:", error);
+      setErrorText('Error creating vulnerability');
+      console.error('Error:', error);
     }
     setOpenModalDeleteVuln(false);
     fetchVulnerabilities();
@@ -255,20 +257,20 @@ export const Vulnerabilities = () => {
     toast.success(message);
   };
 
-  const keyExtractor = (item: any) => item._id;
+  const keyExtractor = (item: TableData) => item._id;
 
   const rowActions = [
     {
-      label: "Edit",
-      onClick: (item: any) => editRegister(item),
+      label: 'Edit',
+      onClick: (item: TableData) => editRegister(item),
     },
     {
-      label: "Download",
-      onClick: (item: any) => alert(`Find audits ${item.title}`),
+      label: 'Download',
+      onClick: (item: TableData) => alert(`Find audits ${item.title}`),
     },
     {
-      label: "Delete",
-      onClick: (item: any) => deleteRegisterConfirmation(item),
+      label: 'Delete',
+      onClick: (item: TableData) => deleteRegisterConfirmation(item),
     },
   ];
 
@@ -288,20 +290,20 @@ export const Vulnerabilities = () => {
       {openModalDeleteVuln && (
         <div className="fixed z-10">
           <Modal
-            title={t("msg.confirmSuppression")}
+            title={t('msg.confirmSuppression')}
             onCancel={() => setOpenModalDeleteVuln(false)}
             onSubmit={confirmDeleteVulnerability}
-            cancelText={t("btn.stay")}
-            submitText={t("btn.confirm")}
+            cancelText={t('btn.stay')}
+            submitText={t('btn.confirm')}
             isOpen={openModalDeleteVuln}
             disablehr={true}
           >
-            <span className="ml-3">{t("msg.vulnerabilityWillBeDeleted")}</span>
+            <span className="ml-3">{t('msg.vulnerabilityWillBeDeleted')}</span>
           </Modal>
         </div>
       )}
       <Toaster />
-      <Card title={t("nav.vulnerabilities")}>
+      <Card title={t('nav.vulnerabilities')}>
         <>
           <div className="fixed z-10">
             {openAddVuln && (
@@ -350,13 +352,13 @@ export const Vulnerabilities = () => {
             filters={filters}
             onFilter={handleFilterChange}
             rowActions={rowActions}
-            emptyState={<div>{t("err.noMatchingRecords")}</div>}
+            emptyState={<div>{t('err.noMatchingRecords')}</div>}
           >
             <div className="flex items-center mb-4">
               <div className="">
                 {!loadingLanguage && (
                   <SelectDropdown
-                    title={t("languages")}
+                    title={t('languages')}
                     items={languages}
                     selected={currentLanguage}
                     onChange={setCurrentLanguage}
@@ -368,32 +370,32 @@ export const Vulnerabilities = () => {
                 <PrimarySwitch
                   enabled={enabledValid}
                   onChange={setEnabledValid}
-                  label={t("btn.valid")}
+                  label={t('btn.valid')}
                 />
               </div>
               <div className="ml-1">
                 <PrimarySwitch
                   enabled={enabledNew}
                   onChange={setEnabledNew}
-                  label={t("btn.new")}
+                  label={t('btn.new')}
                 />
               </div>
               <div className="ml-1 mr-6">
                 <PrimarySwitch
                   enabled={enabledUpdate}
                   onChange={setEnabledUpdate}
-                  label={t("btn.updates")}
+                  label={t('btn.updates')}
                 />
               </div>
               <div className="flex">
                 <div className="mt-2 mx-2">
                   <PrimaryButton onClick={() => setOpenMerge(true)}>
-                    <span className="mx-1">{t("mergeVulnerabilities")}</span>
+                    <span className="mx-1">{t('mergeVulnerabilities')}</span>
                   </PrimaryButton>
                 </div>
                 <div className="flex mt-2 mx-2">
                   <PrimaryButton onClick={openAddVulnSlidingPage}>
-                    <span className="mx-1">{t("newVulnerability")}</span>
+                    <span className="mx-1">{t('newVulnerability')}</span>
                   </PrimaryButton>
                 </div>
               </div>
