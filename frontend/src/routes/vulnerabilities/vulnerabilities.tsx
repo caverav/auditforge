@@ -1,24 +1,25 @@
-import PrimarySwitch from '../../components/switch/PrimarySwitch';
-import PrimaryButton from '../../components/button/PrimaryButton';
-import { useState, useEffect } from 'react';
-import {
-  getLanguages,
-  getCategories,
-  getTypes,
-  getVulnerabilities,
-  deleteVulnerability,
-} from '../../services/vulnerabilities';
-import SelectDropdown from '../../components/dropdown/SelectDropdown';
 import { t } from 'i18next';
-import AddVulnerability from './addVulnerability';
-import EditVulnerability from './editVulnerability';
+import { useEffect, useState } from 'react';
+import { toast, Toaster } from 'sonner';
+
+import PrimaryButton from '../../components/button/PrimaryButton';
+import Card from '../../components/card/Card';
+import SelectDropdown from '../../components/dropdown/SelectDropdown';
+import Modal from '../../components/modal/Modal';
+import PrimarySwitch from '../../components/switch/PrimarySwitch';
 import UITable from '../../components/table/UITable';
 import { useSortableTable } from '../../hooks/useSortableTable';
 import { useTableFiltering } from '../../hooks/useTableFiltering';
-import Card from '../../components/card/Card';
-import Modal from '../../components/modal/Modal';
+import {
+  deleteVulnerability,
+  getCategories,
+  getLanguages,
+  getTypes,
+  getVulnerabilities,
+} from '../../services/vulnerabilities';
+import AddVulnerability from './addVulnerability';
+import EditVulnerability from './editVulnerability';
 import MergeVulnerabilities from './mergeVulnerabilities';
-import { Toaster, toast } from 'sonner';
 
 type Details = {
   locale: string;
@@ -63,12 +64,12 @@ type TypeData = {
   locale: string;
 };
 
-interface ListItem {
+type ListItem = {
   id: number;
   value: string;
   label?: string;
   locale?: string;
-}
+};
 
 type TableData = {
   _id: string;
@@ -113,6 +114,22 @@ export const Vulnerabilities = () => {
     null,
   );
 
+  const columns = [
+    { header: t('title'), accessor: 'title', sortable: true, filterable: true },
+    {
+      header: t('category'),
+      accessor: 'category',
+      sortable: true,
+      filterable: true,
+    },
+    { header: t('type'), accessor: 'type', sortable: true, filterable: true },
+  ];
+
+  const [tableData, handleSorting, setTableData] = useSortableTable<TableData>(
+    tableInfo,
+    columns,
+  );
+
   const fetchVulnerabilities = async () => {
     try {
       const dataVulnerability = await getVulnerabilities();
@@ -120,7 +137,7 @@ export const Vulnerabilities = () => {
       const vulnDataTable = dataVulnerability.datas.map(
         (item2: VulnerabilityData) => ({
           _id: item2._id,
-          title: item2.details[0].title,
+          title: item2.details[0].title ?? '',
           category: item2.category ? item2.category : t('noCategory'),
           type: item2.details[0].vulnType
             ? item2.details[0].vulnType
@@ -187,46 +204,44 @@ export const Vulnerabilities = () => {
   };
 
   useEffect(() => {
-    fetchVulnerabilities();
-    fetchLanguages();
-    fetchTypes();
-    fetchCategories();
+    void fetchVulnerabilities();
+    void fetchLanguages();
+    void fetchTypes();
+    void fetchCategories();
   }, []);
   //
 
-  //// Workaround para dropdown de filtrado
+  //// Workaround para dropdown de filtrado, al parecer funciona bien btw
   useEffect(() => {
-    const filtered = vulnerabilities.filter(
-      vulnIter => vulnIter.details[0].locale === currentLanguage?.value,
-    );
+    const filtered = vulnerabilities
+      .filter(vulnIter =>
+        vulnIter.details.some(
+          detail => detail.locale === currentLanguage?.value,
+        ),
+      )
+      .map(vulnIter => {
+        const index = vulnIter.details.findIndex(
+          detail => detail.locale === currentLanguage?.value,
+        );
+        return { ...vulnIter, matchingDetailIndex: index };
+      });
+
     const vulnDataTable: TableData[] = filtered.map(item2 => ({
       _id: item2._id,
-      title: item2.details[0].title ? item2.details[0].title : 'noTitle',
+      title: item2.details[item2.matchingDetailIndex].title ?? 'noTitle',
       category: item2.category ? item2.category : t('noCategory'),
-      type: item2.details[0].vulnType
-        ? item2.details[0].vulnType
+      type: item2.details[item2.matchingDetailIndex].vulnType
+        ? item2.details[item2.matchingDetailIndex].vulnType
         : t('undefined'),
     }));
     setTableData(vulnDataTable);
     setTableInfo(vulnDataTable);
-  }, [vulnerabilities, currentLanguage]);
-  ////
+  }, [vulnerabilities, currentLanguage, setTableData]);
 
   const [openMerge, setOpenMerge] = useState(false);
 
   // Testing Table
   const [itemDelete, setItemDelete] = useState<TableData>();
-
-  const columns = [
-    { header: t('title'), accessor: 'title', sortable: true, filterable: true },
-    {
-      header: t('category'),
-      accessor: 'category',
-      sortable: true,
-      filterable: true,
-    },
-    { header: t('type'), accessor: 'type', sortable: true, filterable: true },
-  ];
 
   const editRegister = (item: TableData) => {
     const vuln = vulnerabilities.find(vuln => vuln._id === item._id);
@@ -239,22 +254,24 @@ export const Vulnerabilities = () => {
     setOpenModalDeleteVuln(true);
   };
 
+  const handleSuccessToast = (message: string) => {
+    // Muestra el toast satisfactorio
+    toast.success(message);
+  };
+
   const confirmDeleteVulnerability = async () => {
     //Add try
     try {
       const response = await deleteVulnerability(itemDelete!._id);
-      if (response) handleSuccessToast(t('msg.vulnerabilityDeletedOk'));
+      if (response) {
+        handleSuccessToast(t('msg.vulnerabilityDeletedOk'));
+      }
     } catch (error) {
       setErrorText('Error creating vulnerability');
       console.error('Error:', error);
     }
     setOpenModalDeleteVuln(false);
-    fetchVulnerabilities();
-  };
-
-  const handleSuccessToast = (message: string) => {
-    // Muestra el toast satisfactorio
-    toast.success(message);
+    void fetchVulnerabilities();
   };
 
   const keyExtractor = (item: TableData) => item._id;
@@ -273,11 +290,6 @@ export const Vulnerabilities = () => {
       onClick: (item: TableData) => deleteRegisterConfirmation(item),
     },
   ];
-
-  const [tableData, handleSorting, setTableData] = useSortableTable<TableData>(
-    tableInfo,
-    columns,
-  );
 
   const [filters, handleFilterChange] = useTableFiltering<TableData>(
     tableInfo,
