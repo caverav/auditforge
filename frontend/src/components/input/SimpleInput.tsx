@@ -11,6 +11,7 @@ type SimpleInputProps = {
   onChange: (value: string) => void;
   disabled?: boolean;
   requiredAlert?: boolean;
+  requiredField?: boolean;
 };
 
 const SimpleInput: React.FC<SimpleInputProps> = ({
@@ -23,6 +24,7 @@ const SimpleInput: React.FC<SimpleInputProps> = ({
   onChange,
   disabled = false,
   requiredAlert = false,
+  requiredField = false,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
 
@@ -33,7 +35,7 @@ const SimpleInput: React.FC<SimpleInputProps> = ({
           className="text-sm font-medium leading-6 text-gray-300"
           htmlFor={id}
         >
-          {label}
+          {label + (requiredField ? ' (*)' : '')}
         </label>
       ) : null}
       <div className="relative mt-2 rounded-md shadow-sm">
@@ -51,7 +53,7 @@ const SimpleInput: React.FC<SimpleInputProps> = ({
             onChange(e.target.value)
           }
           onFocus={() => setIsFocused(true)}
-          placeholder={placeholder}
+          placeholder={placeholder + (requiredField && !label ? ' (*)' : '')}
           type={type}
           value={value}
         />
