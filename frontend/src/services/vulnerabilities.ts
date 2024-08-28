@@ -37,7 +37,7 @@ type PostDescription = {
   vuln: string;
 }
 
-interface mergeVulnerability {
+type mergeVulnerability {
   idIzq: string;
   rightSide: {
     vulnId: string;
