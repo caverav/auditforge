@@ -1,7 +1,7 @@
-import "./css/quill.snow.css";
-import ReactQuill from "react-quill-new";
-import { Field, Label } from "@headlessui/react";
-import "./css/quill-styles.css";
+import './css/quill.snow.css';
+import ReactQuill from 'react-quill-new';
+import { Field, Label } from '@headlessui/react';
+import './css/quill-styles.css';
 
 interface RichTextEditorProps {
   label: string;
@@ -20,15 +20,15 @@ const RichText: React.FC<RichTextEditorProps> = ({
     toolbar: [
       [{ header: [1, 2, 3, false] }, { font: [] }],
       [{ size: [] }],
-      ["bold", "italic", "underline", "strike", "blockquote"],
+      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
       [
-        { list: "ordered" },
-        { list: "bullet" },
-        { indent: "-1" },
-        { indent: "+1" },
+        { list: 'ordered' },
+        { list: 'bullet' },
+        { indent: '-1' },
+        { indent: '+1' },
       ],
-      ["link", "image", "code-block"],
-      ["clean"],
+      ['link', 'image', 'code-block'],
+      ['clean'],
     ],
     clipboard: {
       matchVisual: false,
@@ -46,19 +46,19 @@ const RichText: React.FC<RichTextEditorProps> = ({
           value={value}
           onChange={(value: string) => onChange(value)}
           formats={[
-            "header",
-            "font",
-            "size",
-            "bold",
-            "italic",
-            "underline",
-            "strike",
-            "blockquote",
-            "list",
-            "indent",
-            "link",
-            "image",
-            "code-block",
+            'header',
+            'font',
+            'size',
+            'bold',
+            'italic',
+            'underline',
+            'strike',
+            'blockquote',
+            'list',
+            'indent',
+            'link',
+            'image',
+            'code-block',
           ]}
           placeholder={placeholder}
           className="w-full overflow-auto bg-white mt-2 p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"

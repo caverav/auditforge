@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Column } from "../components/table/UITable";
+import { useState } from 'react';
+import { Column } from '../components/table/UITable';
 /**
  * Hook creado para manejar de manera simple el sorting de la tabla.
  *
@@ -30,9 +30,9 @@ import { Column } from "../components/table/UITable";
 export function useSortableTable<T>(data: T[], columns: Column[]) {
   const [tableData, setTableData] = useState(data);
 
-  const accesors = columns.map((col) => col.accessor);
+  const accesors = columns.map(col => col.accessor);
 
-  const handleSorting = (column: string, direction: "asc" | "desc") => {
+  const handleSorting = (column: string, direction: 'asc' | 'desc') => {
     if (column && accesors.includes(column)) {
       const sorted = [...tableData].sort((a, b) => {
         if (a[column as keyof T] === null) return 1;
@@ -42,11 +42,11 @@ export function useSortableTable<T>(data: T[], columns: Column[]) {
         return (
           a[column as keyof T]!.toString().localeCompare(
             b[column as keyof T]!.toString(),
-            "en",
+            'en',
             {
               numeric: true,
-            }
-          ) * (direction === "asc" ? 1 : -1)
+            },
+          ) * (direction === 'asc' ? 1 : -1)
         );
       });
 

@@ -5,10 +5,10 @@ import {
   ChevronRightIcon,
   PencilSquareIcon,
   TrashIcon,
-} from "@heroicons/react/24/outline";
-import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
-import SimpleInput from "../input/SimpleInput";
+} from '@heroicons/react/24/outline';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import SimpleInput from '../input/SimpleInput';
 
 export type Column = {
   header: string;
@@ -28,7 +28,7 @@ interface TableProps {
   data: any[];
   keyExtractor: (item: any) => string | number;
   sortable?: boolean;
-  onSort?: (column: string, direction: "asc" | "desc") => void;
+  onSort?: (column: string, direction: 'asc' | 'desc') => void;
   onFilter?: (value: string, accessor: string) => void;
   filters?: { [key: string]: string };
   rowSelection?: {
@@ -42,11 +42,11 @@ interface TableProps {
 
 const mapActionLabelToIcon = (label: string) => {
   switch (label) {
-    case "Edit":
+    case 'Edit':
       return <PencilSquareIcon className="size-6" />;
-    case "Delete":
+    case 'Delete':
       return <TrashIcon className="size-6" />;
-    case "Download":
+    case 'Download':
       return <ArrowDownTrayIcon className="size-6" />;
     default:
       return label;
@@ -69,12 +69,12 @@ const UITable: React.FC<TableProps> = ({
   /**
    * Sorting
    */
-  const [sortField, setSortField] = useState("");
-  const [order, setOrder] = useState<"asc" | "desc">("asc");
+  const [sortField, setSortField] = useState('');
+  const [order, setOrder] = useState<'asc' | 'desc'>('asc');
   const handleSortingChange = (accessor: string) => {
     if (onSort) {
       const sortOrder =
-        accessor === sortField && order === "asc" ? "desc" : "asc";
+        accessor === sortField && order === 'asc' ? 'desc' : 'asc';
       setSortField(accessor);
       setOrder(sortOrder);
       onSort(accessor, sortOrder);
@@ -90,7 +90,7 @@ const UITable: React.FC<TableProps> = ({
 
   const goOnPrevPage = () => {
     if (currentPageNumber === 1 || totalValuesPerPage === 0) return;
-    setCurrentPageNumber((prev) => prev - 1);
+    setCurrentPageNumber(prev => prev - 1);
   };
   const goOnNextPage = () => {
     if (
@@ -98,7 +98,7 @@ const UITable: React.FC<TableProps> = ({
       totalValuesPerPage === 0
     )
       return;
-    setCurrentPageNumber((prev) => prev + 1);
+    setCurrentPageNumber(prev => prev + 1);
   };
 
   /**
@@ -127,7 +127,7 @@ const UITable: React.FC<TableProps> = ({
         <table className="min-w-full divide-y divide-gray-600">
           <thead className="bg-gray-700">
             <tr>
-              {columns.map((column) => (
+              {columns.map(column => (
                 <th
                   className="px-6 py-3 text-left tracking-wider"
                   key={column.accessor}
@@ -153,9 +153,9 @@ const UITable: React.FC<TableProps> = ({
                         id={column.header}
                         name={column.header}
                         type="text"
-                        placeholder={t("search")}
-                        value={(filters && filters[column.accessor]) || ""}
-                        onChange={(value) => {
+                        placeholder={t('search')}
+                        value={(filters && filters[column.accessor]) || ''}
+                        onChange={value => {
                           onFilter(column.accessor, value);
                         }}
                       />
@@ -179,16 +179,16 @@ const UITable: React.FC<TableProps> = ({
                 </td>
               </tr>
             ) : (
-              dataToDisplay.map((item) => (
+              dataToDisplay.map(item => (
                 <tr key={keyExtractor(item)} className="hover:bg-gray-800">
-                  {columns.map((column) => (
+                  {columns.map(column => (
                     <td
                       key={column.accessor}
                       className="px-6 py-4 whitespace-nowrap"
                     >
                       {column.render
                         ? column.render(item[column.accessor])
-                        : (item[column.accessor] ?? "-")}
+                        : (item[column.accessor] ?? '-')}
                     </td>
                   ))}
                   {rowActions && (
@@ -196,7 +196,7 @@ const UITable: React.FC<TableProps> = ({
                       key={keyExtractor(item)}
                       className="px-6 py-4 whitespace-nowrap"
                     >
-                      {rowActions.map((action) => (
+                      {rowActions.map(action => (
                         <button
                           key={action.label}
                           onClick={() => action.onClick(item)}
@@ -220,7 +220,7 @@ const UITable: React.FC<TableProps> = ({
                   <ChevronLeftIcon className="size-4" />
                 </button>
                 <span className="text-gray-100 bg-gray-900 px-2 select-none rounded-xl">
-                  {currentPageNumber} /{" "}
+                  {currentPageNumber} /{' '}
                   {totalValuesPerPage !== 0
                     ? Math.ceil(data.length / totalValuesPerPage)
                     : 1}
@@ -234,12 +234,12 @@ const UITable: React.FC<TableProps> = ({
               <select
                 className="bg-gray-900 rounded-xl px-2"
                 value={totalValuesPerPage}
-                onChange={(e) => setTotalValuesPerPage(Number(e.target.value))}
+                onChange={e => setTotalValuesPerPage(Number(e.target.value))}
               >
                 <option value={25}>25</option>
                 <option value={50}>50</option>
                 <option value={100}>100</option>
-                <option value={0}>{t("btn.all")}</option>
+                <option value={0}>{t('btn.all')}</option>
               </select>
             </div>
           </div>

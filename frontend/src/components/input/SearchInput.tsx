@@ -1,11 +1,11 @@
-import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
-import { ChangeEvent } from "react";
+import { MagnifyingGlassIcon } from '@heroicons/react/24/outline';
+import { ChangeEvent } from 'react';
 
 interface SearchInputProps {
   label: string;
   id: string;
   name: string;
-  type: "text" | "number";
+  type: 'text' | 'number';
   placeholder: string;
   value: string;
   onChange: (value: string) => void;
@@ -24,7 +24,7 @@ const SearchInput: React.FC<SearchInputProps> = ({
   onClick,
 }) => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       onClick();
     }
   };

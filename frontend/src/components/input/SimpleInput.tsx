@@ -1,10 +1,10 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent } from 'react';
 
 interface SimpleInputProps {
   label?: string;
   id: string;
   name: string;
-  type: "text" | "number";
+  type: 'text' | 'number';
   placeholder: string;
   value: string;
   onChange: (value: string) => void;

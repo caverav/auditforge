@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 /**
  * **name**: Traducción.
@@ -33,11 +33,11 @@ export const Sidebar: React.FC<SidebarProps> = ({
    * actualiza el estado `selected`.
    */
   useEffect(() => {
-    if(location) {
-        let tmp = location.pathname.split('/').filter(Boolean).pop();
-        setSelected(tmp ?? defaultItem.value);
+    if (location) {
+      let tmp = location.pathname.split('/').filter(Boolean).pop();
+      setSelected(tmp ?? defaultItem.value);
     }
-  }, [location])
+  }, [location]);
 
   return (
     <div className="w-64 h-screen bg-gray-700 text-white">
@@ -46,12 +46,12 @@ export const Sidebar: React.FC<SidebarProps> = ({
       </div>
       <nav>
         <ul>
-          {items.map((item) => (
+          {items.map(item => (
             <div key={item.id}>
               <Link to={item.value}>
                 <li
                   onClick={() => setSelected(item.value)}
-                  className={`p-4 hover:bg-gray-600 cursor-pointer ${item.value == selected ? "bg-gray-600" : ""}`}
+                  className={`p-4 hover:bg-gray-600 cursor-pointer ${item.value == selected ? 'bg-gray-600' : ''}`}
                 >
                   <div>{item.name}</div>
                 </li>
