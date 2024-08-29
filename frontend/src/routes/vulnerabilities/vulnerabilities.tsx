@@ -20,6 +20,7 @@ import {
 import AddVulnerability from './addVulnerability';
 import EditVulnerability from './editVulnerability';
 import MergeVulnerabilities from './mergeVulnerabilities';
+import VulnerabilityButtons from './components/vulnerabilityButtons';
 
 type Details = {
   locale: string;
@@ -374,18 +375,10 @@ export const Vulnerabilities = () => {
                   />
                 ) : null}
               </div>
-              <div className="flex">
-                <div className="mt-2 mx-2">
-                  <PrimaryButton onClick={() => setOpenMerge(true)}>
-                    <span className="mx-1">{t('mergeVulnerabilities')}</span>
-                  </PrimaryButton>
-                </div>
-                <div className="flex mt-2 mx-2">
-                  <PrimaryButton onClick={openAddVulnSlidingPage}>
-                    <span className="mx-1">{t('newVulnerability')}</span>
-                  </PrimaryButton>
-                </div>
-              </div>
+              <VulnerabilityButtons
+                openAddVulnSlidingPage={openAddVulnSlidingPage}
+                setOpenMerge={setOpenMerge}
+              />
             </div>
           </UITable>
         </>
