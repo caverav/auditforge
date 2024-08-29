@@ -79,10 +79,6 @@ type TableData = {
 };
 
 export const Vulnerabilities = () => {
-  // Switches
-  const [enabledValid, setEnabledValid] = useState(false);
-  const [enabledNew, setEnabledNew] = useState(false);
-  const [enabledUpdate, setEnabledUpdate] = useState(false);
   const [openModalDeleteVuln, setOpenModalDeleteVuln] = useState(false);
 
   // Core
@@ -299,105 +295,84 @@ export const Vulnerabilities = () => {
 
   return (
     <div className="p-4">
-      {openModalDeleteVuln && (
+      {openModalDeleteVuln ? (
         <div className="fixed z-10">
           <Modal
-            title={t('msg.confirmSuppression')}
+            cancelText={t('btn.stay')}
+            disablehr={true}
+            isOpen={openModalDeleteVuln}
             onCancel={() => setOpenModalDeleteVuln(false)}
             onSubmit={confirmDeleteVulnerability}
-            cancelText={t('btn.stay')}
             submitText={t('btn.confirm')}
-            isOpen={openModalDeleteVuln}
-            disablehr={true}
+            title={t('msg.confirmSuppression')}
           >
             <span className="ml-3">{t('msg.vulnerabilityWillBeDeleted')}</span>
           </Modal>
         </div>
-      )}
+      ) : null}
       <Toaster />
       <Card title={t('nav.vulnerabilities')}>
         <>
           <div className="fixed z-10">
-            {openAddVuln && (
+            {openAddVuln ? (
               <AddVulnerability
-                isOpen={openAddVuln}
-                handlerIsOpen={setOpenAddVuln}
                 categoryVuln={selectedCategory}
-                languages={languages}
-                types={types}
-                refreshVulns={fetchVulnerabilities}
                 handleOnSuccess={handleSuccessToast}
+                handlerIsOpen={setOpenAddVuln}
+                isOpen={openAddVuln}
+                languages={languages}
+                refreshVulns={fetchVulnerabilities}
+                types={types}
               />
-            )}
+            ) : null}
           </div>
           <div className="fixed z-10">
-            {openEditVuln && (
+            {openEditVuln ? (
               <EditVulnerability
-                isOpen={openEditVuln}
-                handlerIsOpen={setOpenEditVuln}
                 categories={categories}
-                languages={languages}
-                types={types}
-                refreshVulns={fetchVulnerabilities}
                 currentVuln={editVuln!}
                 handleOnSuccess={handleSuccessToast}
-              />
-            )}
-          </div>
-          <div className="fixed z-10">
-            {openMerge && (
-              <MergeVulnerabilities
-                isOpen={openMerge}
-                handlerIsOpen={setOpenMerge}
-                vulnerabilities={vulnerabilities}
+                handlerIsOpen={setOpenEditVuln}
+                isOpen={openEditVuln}
                 languages={languages}
                 refreshVulns={fetchVulnerabilities}
-                handleOnSuccess={handleSuccessToast}
+                types={types}
               />
-            )}
+            ) : null}
+          </div>
+          <div className="fixed z-10">
+            {openMerge ? (
+              <MergeVulnerabilities
+                handleOnSuccess={handleSuccessToast}
+                handlerIsOpen={setOpenMerge}
+                isOpen={openMerge}
+                languages={languages}
+                refreshVulns={fetchVulnerabilities}
+                vulnerabilities={vulnerabilities}
+              />
+            ) : null}
           </div>
           <UITable
             columns={columns}
             data={tableData}
-            keyExtractor={keyExtractor}
-            onSort={handleSorting}
-            filters={filters}
-            onFilter={handleFilterChange}
-            rowActions={rowActions}
             emptyState={<div>{t('err.noMatchingRecords')}</div>}
+            filters={filters}
+            keyExtractor={keyExtractor}
+            onFilter={handleFilterChange}
+            onSort={handleSorting}
+            rowActions={rowActions}
           >
             <div className="flex items-center mb-4">
               <div className="">
-                {!loadingLanguage && (
+                {!loadingLanguage ? (
                   <SelectDropdown
-                    title={t('languages')}
                     items={languages}
-                    selected={currentLanguage}
                     onChange={setCurrentLanguage}
                     placeholder="Language"
+                    selected={currentLanguage}
+                    title={t('languages')}
                   />
-                )}
-              </div>
-              <div className="ml-1">
-                <PrimarySwitch
-                  enabled={enabledValid}
-                  onChange={setEnabledValid}
-                  label={t('btn.valid')}
-                />
-              </div>
-              <div className="ml-1">
-                <PrimarySwitch
-                  enabled={enabledNew}
-                  onChange={setEnabledNew}
-                  label={t('btn.new')}
-                />
-              </div>
-              <div className="ml-1 mr-6">
-                <PrimarySwitch
-                  enabled={enabledUpdate}
-                  onChange={setEnabledUpdate}
-                  label={t('btn.updates')}
-                />
+                ) : null}
               </div>
               <div className="flex">
                 <div className="mt-2 mx-2">
