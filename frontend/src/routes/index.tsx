@@ -1,8 +1,8 @@
-import { Audits } from "./audits/audits"
-import { Vulnerabilities } from "./vulnerabilities/vulnerabilities"
-import { Data } from "./data/data"
-import { Settings } from "./settings/settings"
-import { Root } from "./root"
-import { Login } from "./login"
+import { Audits } from './audits/audits';
+import { Data } from './data/data';
+import { Login } from './login';
+import { Root } from './root';
+import { Settings } from './settings/settings';
+import { Vulnerabilities } from './vulnerabilities/vulnerabilities';
 
-export { Audits, Root, Vulnerabilities, Data, Settings, Login }
+export { Audits, Data, Login, Root, Settings, Vulnerabilities };
