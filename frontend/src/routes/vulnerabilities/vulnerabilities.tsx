@@ -72,6 +72,13 @@ type ListItem = {
   locale?: string;
 };
 
+type ListItemCategory = {
+  id: number;
+  value: string;
+  label?: string;
+  isNull?: boolean;
+};
+
 type TableData = {
   _id: string;
   title: string;
@@ -96,7 +103,7 @@ export const Vulnerabilities = () => {
   const [loadingLanguage, setLoadingLanguage] = useState<boolean>(true);
 
   // Category
-  const [categories, setCategories] = useState<ListItem[]>([]);
+  const [categories, setCategories] = useState<ListItemCategory[]>([]);
 
   // Types
   const [types, setTypes] = useState<ListItem[]>([]);
@@ -192,7 +199,7 @@ export const Vulnerabilities = () => {
         }),
       );
       setCategories([
-        { id: 0, label: t('noCategory'), value: null },
+        { id: 0, label: t('noCategory'), value: '', isNull: true },
         ...categoryNames,
       ]);
     } catch (err) {
