@@ -22,6 +22,7 @@ import {
   getLanguages,
   getTemplates,
 } from '../../../../services/audits';
+import { GeneralDivWrapper } from './GeneralDivWrapper';
 
 type ListItem = {
   id: number;
@@ -185,117 +186,111 @@ export const General = () => {
   }, [auditId, languages, templates, companies, clients, collaborators]);
 
   return (
-    <div className="min-h-screen bg-gray-800 pt-16">
-      <div className="bg-gray-800 flex justify-center items-center">
-        <div className="w-full max-w-4xl bg-gray-900 shadow-lg rounded-lg p-8 mt-6">
-          <div className="flex flex-col space-y-6">
-            <div className="flex flex-col">
-              <SimpleInput
-                id="name"
-                label={t('name')}
-                name="name"
-                onChange={setNameAudit}
-                placeholder="Search"
-                type="text"
-                value={nameAudit}
-              />
-            </div>
+    <GeneralDivWrapper>
+      <div className="flex flex-col">
+        <SimpleInput
+          id="name"
+          label={t('name')}
+          name="name"
+          onChange={setNameAudit}
+          placeholder="Search"
+          type="text"
+          value={nameAudit}
+        />
+      </div>
 
-            <div className="flex space-x-6">
-              <div className="w-1/2">
-                {!loadingLanguages ? (
-                  <SelectDropdown
-                    items={languages}
-                    onChange={setCurrentLanguage}
-                    selected={currentLanguage}
-                    title={t('language')}
-                  />
-                ) : null}
-              </div>
-              <div className="w-1/2">
-                {!loadingTemplates ? (
-                  <SelectDropdown
-                    items={templates}
-                    onChange={setCurrentTemplate}
-                    selected={currentTemplate}
-                    title={t('template')}
-                  />
-                ) : null}
-              </div>
-            </div>
-
-            <div className="flex space-x-6">
-              <div className="w-1/2">
-                {!loadingCompanies ? (
-                  <SelectDropdown
-                    items={companies}
-                    onChange={setCurrentCompany}
-                    selected={currentCompany}
-                    title={t('company')}
-                  />
-                ) : null}
-              </div>
-              <div className="w-1/2">
-                {!loadingClients ? (
-                  <SelectDropdown
-                    items={clients}
-                    onChange={setCurrentClient}
-                    selected={currentClient}
-                    title={t('client')}
-                  />
-                ) : null}
-              </div>
-            </div>
-
-            <div className="flex flex-col">
-              {!loadingCollaborators ? (
-                <SelectDropdown
-                  items={collaborators}
-                  onChange={setCurrentCollaborators}
-                  selected={currentCollaborators}
-                  title={t('collaborators')}
-                />
-              ) : null}
-            </div>
-
-            <div className="flex space-x-6">
-              <div className="w-1/3">
-                <DayPicker
-                  label={t('startDate')}
-                  onChange={setStartDate}
-                  selectedDay={startDate}
-                />
-              </div>
-              <div className="w-1/3">
-                <DayPicker
-                  label={t('endDate')}
-                  onChange={setEndDate}
-                  selectedDay={endDate}
-                />
-              </div>
-              <div className="w-1/3">
-                <DayPicker
-                  label={t('reportingDate')}
-                  onChange={setReportingDate}
-                  selectedDay={reportingDate}
-                />
-              </div>
-            </div>
-
-            <div className="flex flex-col">
-              <TextArea
-                id="references"
-                label={t('auditScope')}
-                name="references"
-                onChange={setScope}
-                placeholder=""
-                rows={4}
-                value={scope}
-              />
-            </div>
-          </div>
+      <div className="flex space-x-6">
+        <div className="w-1/2">
+          {!loadingLanguages ? (
+            <SelectDropdown
+              items={languages}
+              onChange={setCurrentLanguage}
+              selected={currentLanguage}
+              title={t('language')}
+            />
+          ) : null}
+        </div>
+        <div className="w-1/2">
+          {!loadingTemplates ? (
+            <SelectDropdown
+              items={templates}
+              onChange={setCurrentTemplate}
+              selected={currentTemplate}
+              title={t('template')}
+            />
+          ) : null}
         </div>
       </div>
-    </div>
+
+      <div className="flex space-x-6">
+        <div className="w-1/2">
+          {!loadingCompanies ? (
+            <SelectDropdown
+              items={companies}
+              onChange={setCurrentCompany}
+              selected={currentCompany}
+              title={t('company')}
+            />
+          ) : null}
+        </div>
+        <div className="w-1/2">
+          {!loadingClients ? (
+            <SelectDropdown
+              items={clients}
+              onChange={setCurrentClient}
+              selected={currentClient}
+              title={t('client')}
+            />
+          ) : null}
+        </div>
+      </div>
+
+      <div className="flex flex-col">
+        {!loadingCollaborators ? (
+          <SelectDropdown
+            items={collaborators}
+            onChange={setCurrentCollaborators}
+            selected={currentCollaborators}
+            title={t('collaborators')}
+          />
+        ) : null}
+      </div>
+
+      <div className="flex space-x-6">
+        <div className="w-1/3">
+          <DayPicker
+            label={t('startDate')}
+            onChange={setStartDate}
+            selectedDay={startDate}
+          />
+        </div>
+        <div className="w-1/3">
+          <DayPicker
+            label={t('endDate')}
+            onChange={setEndDate}
+            selectedDay={endDate}
+          />
+        </div>
+        <div className="w-1/3">
+          <DayPicker
+            label={t('reportingDate')}
+            onChange={setReportingDate}
+            selectedDay={reportingDate}
+          />
+        </div>
+      </div>
+
+      <div className="flex flex-col">
+        <TextArea
+          id="references"
+          label={t('auditScope')}
+          name="references"
+          onChange={setScope}
+          placeholder=""
+          rows={4}
+          value={scope}
+        />
+      </div>
+    </GeneralDivWrapper>
   );
 };

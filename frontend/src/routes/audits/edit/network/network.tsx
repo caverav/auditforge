@@ -45,10 +45,6 @@ export const Network = () => {
     fetchAuditData().catch(console.error);
   }, [auditId]);
 
-  useEffect(() => {
-    console.log(scope);
-  }, [scope]);
-
   const handleSelectChange = (name: string, selectedHost: ListItem) => {
     setSelectedHosts(prevSelectedHosts => ({
       ...prevSelectedHosts,
