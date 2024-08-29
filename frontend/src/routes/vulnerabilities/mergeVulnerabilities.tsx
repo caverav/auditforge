@@ -1,6 +1,6 @@
 import { XMarkIcon } from '@heroicons/react/24/outline';
 import { t } from 'i18next';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { toast, Toaster } from 'sonner';
 
 import DefaultRadioGroup from '../../components/button/DefaultRadioGroup';
@@ -80,7 +80,7 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({
 
   const [error, setError] = useState<string | null>(null);
 
-  const [allDetails, setAllDetails] = useState(
+  const [allDetails] = useState(
     vulnerabilities.flatMap(vuln =>
       vuln.details.map(detail => ({
         id: vuln._id,
@@ -90,7 +90,7 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({
     ),
   );
 
-  const checkLeft = () => {
+  const checkLeft = useCallback(() => {
     const leftFiltered = allDetails.filter(
       detailIter => detailIter.locale === selectedLanguageLeft?.value,
     );
@@ -111,11 +111,11 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({
         label: item.title ?? '',
       }));
 
-    leftOptions.length > 0 ? setIsLeftEnabled(true) : setIsLeftEnabled(false);
+    setIsLeftEnabled(leftOptions.length > 0);
     setCurrentRadioOptionsLeft(leftOptions);
-  };
+  }, [allDetails, selectedLanguageLeft?.value, selectedLanguageRight?.value]);
 
-  const checkRight = () => {
+  const checkRight = useCallback(() => {
     const rightFiltered = allDetails.filter(
       detailIter => detailIter.locale === selectedLanguageRight?.value,
     );
@@ -134,16 +134,14 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({
         label: item.title ?? '',
       }));
 
-    rightOptions.length > 0
-      ? setIsRightEnabled(true)
-      : setIsRightEnabled(false);
+    setIsRightEnabled(rightOptions.length > 0);
     setCurrentRadioOptionsRight(rightOptions);
-  };
+  }, [allDetails, selectedLanguageLeft?.value, selectedLanguageRight?.value]);
 
   useEffect(() => {
     checkLeft();
     checkRight();
-  }, [selectedLanguageLeft, selectedLanguageRight]);
+  }, [checkLeft, checkRight, selectedLanguageLeft, selectedLanguageRight]);
 
   const handlerLeftChange = (item: ListItem) => {
     setSelectedLanguageLeft(item);
@@ -158,7 +156,7 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({
 
     if (selectedRadioLeft !== '' && selectedRadioRight !== '') {
       try {
-        const [leftId, leftLocale] = selectedRadioLeft.split('.');
+        const [leftId] = selectedRadioLeft.split('.');
         const [rightId, rightLocale] = selectedRadioRight.split('.');
         const mergeObject: MergeVulnerability = {
           idIzq: leftId,
