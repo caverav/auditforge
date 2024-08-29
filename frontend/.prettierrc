@@ -1,0 +1,12 @@
+{
+  "arrowParens": "avoid",
+  "singleQuote": true,
+  "overrides": [
+    {
+      "files": ".changeset/**/*",
+      "options": {
+        "singleQuote": false
+      }
+    }
+  ]
+}
