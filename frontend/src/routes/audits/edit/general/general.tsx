@@ -154,7 +154,7 @@ export const General = () => {
         setCurrentCompany(selectedCompany ?? null);
 
         const selectedClient = clients.find(
-          item => item.value === dataAudit.datas.client._id,
+          item => item.value === dataAudit.datas.client?._id,
         );
         setCurrentClient(selectedClient ?? null);
 

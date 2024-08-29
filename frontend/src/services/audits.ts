@@ -108,7 +108,7 @@ export type AuditById = {
     createdAt: string;
     updatedAt: string;
     __v: number;
-  };
+  } | null;
   sections: string[];
   customFields: string[];
   sortFindings: string[];
