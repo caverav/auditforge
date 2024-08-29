@@ -1,19 +1,20 @@
-import React from "react";
-import Radio from "./Radio";
+import React from 'react';
 
-export interface RadioOption {
+import Radio from './Radio';
+
+export type RadioOption = {
   id: string;
   label: string;
   value: string;
   disabled?: boolean;
-}
+};
 
-interface RadioGroupProps {
+type RadioGroupProps = {
   name: string;
   options: RadioOption[];
   value: string;
   onChange: (value: string) => void;
-}
+};
 
 const DefaultRadioGroup = ({
   name,
@@ -22,23 +23,23 @@ const DefaultRadioGroup = ({
   onChange,
 }: RadioGroupProps) => {
   const handleRadioGroupChange = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     onChange(event.target.value);
   };
 
   return (
     <div>
-      {options.map((option) => (
+      {options.map(option => (
         <Radio
-          key={option.id}
-          id={option.id}
-          name={name}
-          label={option.label}
-          value={option.value}
           checked={value === option.value}
           disabled={option.disabled}
+          id={option.id}
+          key={option.id}
+          label={option.label}
+          name={name}
           onChange={handleRadioGroupChange}
+          value={option.value}
         />
       ))}
     </div>
