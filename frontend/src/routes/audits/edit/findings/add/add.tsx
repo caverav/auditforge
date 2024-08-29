@@ -1,7 +1,6 @@
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 
-import PrimaryButton from '../../../../../components/button/PrimaryButton';
 import SelectDropdown from '../../../../../components/dropdown/SelectDropdown';
 import UITable, { Column } from '../../../../../components/table/UITable';
 import { useSortableTable } from '../../../../../hooks/useSortableTable';
@@ -11,6 +10,8 @@ import {
   getLanguages,
   getVulnByLanguage,
 } from '../../../../../services/audits';
+import DivWrapper from './DivWrapper';
+import NewVulnButton from './NewVulnButton';
 
 type ListItem = {
   id: number;
@@ -106,42 +107,33 @@ export const Add = () => {
   }, [currentLanguage, setTableData]);
 
   return (
-    <div className="min-h-screen bg-gray-800 pt-16">
-      <div className="bg-gray-800 flex justify-center items-center">
-        <div className="w-full max-w-4xl bg-gray-900 shadow-lg rounded-lg p-8 mt-6">
-          <div className="flex justify-between">
-            <div className=" w-1/2">
-              {!loadingLanguages ? (
-                <SelectDropdown
-                  items={languages}
-                  onChange={setCurrentLanguage}
-                  selected={currentLanguage}
-                  title={t('language')}
-                />
-              ) : null}
-            </div>
-
-            <div className="">
-              <PrimaryButton onClick={() => {}}>
-                {t('newVulnerability')}
-              </PrimaryButton>
-            </div>
-          </div>
-
-          <div className="mt-5">
-            <UITable
-              columns={columns}
-              data={tableData}
-              emptyState={t('noAudits')}
-              filters={filters}
-              keyExtractor={item => item._id}
-              onFilter={handleFilterChange}
-              onSort={handleSorting}
-              sortable={true}
+    <DivWrapper>
+      <div className="flex justify-between">
+        <div className=" w-1/2">
+          {!loadingLanguages ? (
+            <SelectDropdown
+              items={languages}
+              onChange={setCurrentLanguage}
+              selected={currentLanguage}
+              title={t('language')}
             />
-          </div>
+          ) : null}
         </div>
+        <NewVulnButton />
       </div>
-    </div>
+
+      <div className="mt-5">
+        <UITable
+          columns={columns}
+          data={tableData}
+          emptyState={t('noAudits')}
+          filters={filters}
+          keyExtractor={item => item._id}
+          onFilter={handleFilterChange}
+          onSort={handleSorting}
+          sortable={true}
+        />
+      </div>
+    </DivWrapper>
   );
 };
