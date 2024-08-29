@@ -1,22 +1,22 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-const apiUrl = "https://localhost:8443/api/users/token";
-const checktokenUrl = "https://localhost:8443/api/users/checktoken";
+const apiUrl = 'https://localhost:8443/api/users/token';
+const checktokenUrl = 'https://localhost:8443/api/users/checktoken';
 
 export const checktoken = async (): Promise<boolean> => {
   try {
     const response = await fetch(checktokenUrl, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
-      credentials: "include",
+      credentials: 'include',
     });
     const data = await response.json();
-    return data.status === "success";
+    return data.status === 'success';
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 };
@@ -27,7 +27,9 @@ const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    checktoken().then((result) => setIsAuthenticated(result));
+    checktoken()
+      .then(result => setIsAuthenticated(result))
+      .catch(console.error);
   }, []);
 
   const login = async (username: string, password: string, totp: string) => {
@@ -35,40 +37,41 @@ const useAuth = () => {
 
     try {
       const response = await fetch(apiUrl, {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        credentials: "include",
+        credentials: 'include',
         body: data,
       });
       const responseData = await response.json();
-      if (responseData.status === "success") {
+      if (responseData.status === 'success') {
         setIsAuthenticated(true);
-        navigate("/audits", { replace: true });
+        navigate('/audits', { replace: true });
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
   const logout = async () => {
-    const path = "/api/users/refreshtoken";
+    const path = '/api/users/refreshtoken';
+
     try {
-      const response = await fetch("https://localhost:8443" + path, {
-        method: "DELETE",
+      const response = await fetch('https://localhost:8443' + path, {
+        method: 'DELETE',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
-        credentials: "include",
+        credentials: 'include',
       });
       const data = await response.json();
-      if (data.status === "success") {
+      if (data.status === 'success') {
         setIsAuthenticated(false);
-        navigate("/login", { replace: true });
+        navigate('/login', { replace: true });
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 

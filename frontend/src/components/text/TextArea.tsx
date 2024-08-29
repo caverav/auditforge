@@ -1,6 +1,6 @@
-import { Field, Label, Textarea } from "@headlessui/react";
-import { ExclamationCircleIcon } from "@heroicons/react/24/outline";
-import { ChangeEvent, useState } from "react";
+import { Field, Label, Textarea } from '@headlessui/react';
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
+import { ChangeEvent, useState } from 'react';
 
 type TextAreaEditorProps = {
   label: string;
@@ -33,7 +33,7 @@ const TextArea: React.FC<TextAreaEditorProps> = ({
         </Label>
         <div className="relative">
           <Textarea
-            className={`${required && "empty:ring empty:ring-red-500 empty:ring-1"} bg-gray-800 w-full mt-2 p-2 rounded-lg shadow-sm`}
+            className={`${required && 'empty:ring empty:ring-red-500 empty:ring-1'} bg-gray-800 w-full mt-2 p-2 rounded-lg shadow-sm`}
             id={id}
             name={name}
             onBlur={() => setIsFocused(false)}
@@ -45,7 +45,7 @@ const TextArea: React.FC<TextAreaEditorProps> = ({
             rows={rows}
             value={value}
           />
-          {!isFocused && required && value === "" ? (
+          {!isFocused && required && value === '' ? (
             <span className="absolute right-3 top-2 mt-2 ml-2 text-red-500">
               <ExclamationCircleIcon className="size-5" />
             </span>

@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
-import { Column } from "../components/table/UITable";
+import { useEffect, useState } from 'react';
+
+import { Column } from '../components/table/UITable';
 
 /**
  *
@@ -11,9 +12,9 @@ import { Column } from "../components/table/UITable";
 export const useTableFiltering = <T>(
   fullData: any[],
   columns: Column[],
-  setTableData: (data: any[]) => void
+  setTableData: (data: any[]) => void,
 ) => {
-  const [filters, setFilters] = useState<{ [key: string]: string }>({});
+  const [filters, setFilters] = useState<Record<string, string>>({});
 
   const handleFilterChange = (accessor: string, value: string) => {
     const newFilters = { ...filters, [accessor]: value };
@@ -21,8 +22,8 @@ export const useTableFiltering = <T>(
   };
 
   useEffect(() => {
-    const newFilteredData = fullData?.filter((item) =>
-      columns.every((column) => {
+    const newFilteredData = fullData.filter(item =>
+      columns.every(column => {
         const filterValue = filters[column.accessor];
         if (!filterValue) {
           return true;
@@ -30,9 +31,9 @@ export const useTableFiltering = <T>(
         return String(item[column.accessor as keyof T])
           .toLowerCase()
           .includes(filterValue.toLowerCase());
-      })
+      }),
     );
-    setTableData(newFilteredData ?? []);
+    setTableData(newFilteredData);
   }, [filters]);
 
   return [filters, handleFilterChange] as const;

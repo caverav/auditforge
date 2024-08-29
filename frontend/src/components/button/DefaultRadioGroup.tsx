@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import Radio from "./Radio";
+import Radio from './Radio';
 
 export type RadioOption = {
   id: string;
@@ -30,7 +30,7 @@ const DefaultRadioGroup = ({
 
   return (
     <div>
-      {options.map((option) => (
+      {options.map(option => (
         <div className="mb-3" key={option.id}>
           <Radio
             checked={value === option.value}

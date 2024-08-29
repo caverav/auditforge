@@ -1,15 +1,15 @@
-import React from "react";
-import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { Dayjs } from "dayjs";
-import { TextField, Box } from "@mui/material";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { Box, TextField } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { Dayjs } from 'dayjs';
+import React from 'react';
 
-interface DayPickerProps {
+type DayPickerProps = {
   label: string;
   selectedDay: Dayjs | null;
   onChange: React.Dispatch<React.SetStateAction<Dayjs | null>>;
-}
+};
 
 const DayPicker: React.FC<DayPickerProps> = ({
   label,
@@ -18,40 +18,40 @@ const DayPicker: React.FC<DayPickerProps> = ({
 }) => {
   const customTheme = createTheme({
     palette: {
-      mode: "dark",
+      mode: 'dark',
       background: {
-        paper: "#1e1e2e",
-        default: "#1e1e2e",
+        paper: '#1e1e2e',
+        default: '#1e1e2e',
       },
       text: {
-        primary: "#ffffff",
+        primary: '#ffffff',
       },
     },
     components: {
       MuiTextField: {
         styleOverrides: {
           root: {
-            backgroundColor: "#1d2432",
-            "& .MuiInputBase-input": {
-              color: "#ffffff",
+            backgroundColor: '#1d2432',
+            '& .MuiInputBase-input': {
+              color: '#ffffff',
             },
-            "& .MuiInputLabel-root": {
-              color: "#ffffff",
+            '& .MuiInputLabel-root': {
+              color: '#ffffff',
             },
-            "& .MuiOutlinedInput-root": {
-              "& fieldset": {
-                borderColor: "#1d2432",
+            '& .MuiOutlinedInput-root': {
+              '& fieldset': {
+                borderColor: '#1d2432',
               },
-              "&:hover fieldset": {
-                borderColor: "#1d2432",
+              '&:hover fieldset': {
+                borderColor: '#1d2432',
               },
-              "&.Mui-focused fieldset": {
-                borderColor: "#1d2432",
+              '&.Mui-focused fieldset': {
+                borderColor: '#1d2432',
               },
-              "& .MuiFormLabel-root": {
-                color: "#ffffff",
-                "&.Mui-focused": {
-                  color: "#ffffff",
+              '& .MuiFormLabel-root': {
+                color: '#ffffff',
+                '&.Mui-focused': {
+                  color: '#ffffff',
                 },
               },
             },
@@ -70,13 +70,13 @@ const DayPicker: React.FC<DayPickerProps> = ({
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Box sx={{ p: 2 }}>
           <DatePicker
-            label={label}
-            value={selectedDay}
-            onChange={handleDayChange}
             inputFormat="DD/MM/YYYY"
-            renderInput={(params) => (
+            label={label}
+            onChange={handleDayChange}
+            renderInput={params => (
               <TextField {...params} size="small" sx={{ minWidth: 200 }} />
             )}
+            value={selectedDay}
           />
         </Box>
       </LocalizationProvider>

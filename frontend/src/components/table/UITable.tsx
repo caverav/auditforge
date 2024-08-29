@@ -7,11 +7,11 @@ import {
   PencilSquareIcon,
   PlusCircleIcon,
   TrashIcon,
-} from "@heroicons/react/24/outline";
-import React, { useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+} from '@heroicons/react/24/outline';
+import React, { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-import SimpleInput from "../input/SimpleInput";
+import SimpleInput from '../input/SimpleInput';
 
 export type Column = {
   header: string;
@@ -31,7 +31,7 @@ type TableProps = {
   data: any[];
   keyExtractor: (item: any) => string | number;
   sortable?: boolean;
-  onSort?: (column: string, direction: "asc" | "desc") => void;
+  onSort?: (column: string, direction: 'asc' | 'desc') => void;
   onFilter?: (value: string, accessor: string) => void;
   filters?: Record<string, string>;
   rowSelection?: {
@@ -45,19 +45,19 @@ type TableProps = {
 
 const mapActionLabelToIcon = (label: string) => {
   switch (label) {
-    case "Add":
+    case 'Add':
       return <PlusCircleIcon className="size-6" />;
 
-    case "Edit":
+    case 'Edit':
       return <PencilSquareIcon className="size-6" />;
 
-    case "Delete":
+    case 'Delete':
       return <TrashIcon className="size-6" />;
 
-    case "Download":
+    case 'Download':
       return <ArrowDownTrayIcon className="size-6" />;
 
-    case "FindAudit":
+    case 'FindAudit':
       return <FingerPrintIcon className="size-6" />;
 
     default:
@@ -81,12 +81,12 @@ const UITable: React.FC<TableProps> = ({
   /**
    * Sorting
    */
-  const [sortField, setSortField] = useState("");
-  const [order, setOrder] = useState<"asc" | "desc">("asc");
+  const [sortField, setSortField] = useState('');
+  const [order, setOrder] = useState<'asc' | 'desc'>('asc');
   const handleSortingChange = (accessor: string) => {
     if (onSort) {
       const sortOrder =
-        accessor === sortField && order === "asc" ? "desc" : "asc";
+        accessor === sortField && order === 'asc' ? 'desc' : 'asc';
       setSortField(accessor);
       setOrder(sortOrder);
       onSort(accessor, sortOrder);
@@ -104,7 +104,7 @@ const UITable: React.FC<TableProps> = ({
     if (currentPageNumber === 1 || totalValuesPerPage === 0) {
       return;
     }
-    setCurrentPageNumber((prev) => prev - 1);
+    setCurrentPageNumber(prev => prev - 1);
   };
   const goOnNextPage = () => {
     if (
@@ -113,7 +113,7 @@ const UITable: React.FC<TableProps> = ({
     ) {
       return;
     }
-    setCurrentPageNumber((prev) => prev + 1);
+    setCurrentPageNumber(prev => prev + 1);
   };
 
   /**
@@ -142,7 +142,7 @@ const UITable: React.FC<TableProps> = ({
         <table className="min-w-full divide-y divide-gray-600">
           <thead className="bg-gray-700">
             <tr>
-              {columns.map((column) => (
+              {columns.map(column => (
                 <th
                   className="px-6 py-3 text-left tracking-wider"
                   key={column.accessor}
@@ -168,12 +168,12 @@ const UITable: React.FC<TableProps> = ({
                       <SimpleInput
                         id={column.header}
                         name={column.header}
-                        onChange={(value) => {
+                        onChange={value => {
                           onFilter(column.accessor, value);
                         }}
-                        placeholder={t("search")}
+                        placeholder={t('search')}
                         type="text"
-                        value={(filters && filters[column.accessor]) ?? ""}
+                        value={(filters && filters[column.accessor]) ?? ''}
                       />
                     ) : null}
                   </div>
@@ -195,16 +195,16 @@ const UITable: React.FC<TableProps> = ({
                 </td>
               </tr>
             ) : (
-              dataToDisplay.map((item) => (
+              dataToDisplay.map(item => (
                 <tr className="hover:bg-gray-800" key={keyExtractor(item)}>
-                  {columns.map((column) => (
+                  {columns.map(column => (
                     <td
                       className="px-6 py-4 whitespace-nowrap"
                       key={column.accessor}
                     >
                       {column.render
                         ? column.render(item[column.accessor])
-                        : (item[column.accessor] ?? "-")}
+                        : (item[column.accessor] ?? '-')}
                     </td>
                   ))}
                   {rowActions ? (
@@ -212,7 +212,7 @@ const UITable: React.FC<TableProps> = ({
                       className="px-6 py-4 whitespace-nowrap"
                       key={keyExtractor(item)}
                     >
-                      {rowActions.map((action) => (
+                      {rowActions.map(action => (
                         <button
                           className="text-indigo-300 hover:text-indigo-600"
                           key={action.label}
@@ -237,7 +237,7 @@ const UITable: React.FC<TableProps> = ({
                   <ChevronLeftIcon className="size-4" />
                 </button>
                 <span className="text-gray-100 bg-gray-900 px-2 select-none rounded-xl">
-                  {currentPageNumber} /{" "}
+                  {currentPageNumber} /{' '}
                   {totalValuesPerPage !== 0
                     ? Math.ceil(data.length / totalValuesPerPage)
                     : 1}
@@ -250,13 +250,13 @@ const UITable: React.FC<TableProps> = ({
             <div className="mt-4 bg-gray-700 rounded-xl px-1">
               <select
                 className="bg-gray-900 rounded-xl px-2"
-                onChange={(e) => setTotalValuesPerPage(Number(e.target.value))}
+                onChange={e => setTotalValuesPerPage(Number(e.target.value))}
                 value={totalValuesPerPage}
               >
                 <option value={25}>25</option>
                 <option value={50}>50</option>
                 <option value={100}>100</option>
-                <option value={0}>{t("btn.all")}</option>
+                <option value={0}>{t('btn.all')}</option>
               </select>
             </div>
           </div>
