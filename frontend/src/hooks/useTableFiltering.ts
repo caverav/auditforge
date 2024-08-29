@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+
 import { Column } from '../components/table/UITable';
 
 /**
@@ -13,7 +14,7 @@ export const useTableFiltering = <T>(
   columns: Column[],
   setTableData: (data: any[]) => void,
 ) => {
-  const [filters, setFilters] = useState<{ [key: string]: string }>({});
+  const [filters, setFilters] = useState<Record<string, string>>({});
 
   const handleFilterChange = (accessor: string, value: string) => {
     const newFilters = { ...filters, [accessor]: value };
@@ -21,7 +22,7 @@ export const useTableFiltering = <T>(
   };
 
   useEffect(() => {
-    const newFilteredData = fullData?.filter(item =>
+    const newFilteredData = fullData.filter(item =>
       columns.every(column => {
         const filterValue = filters[column.accessor];
         if (!filterValue) {
@@ -32,7 +33,7 @@ export const useTableFiltering = <T>(
           .includes(filterValue.toLowerCase());
       }),
     );
-    setTableData(newFilteredData ?? []);
+    setTableData(newFilteredData);
   }, [filters]);
 
   return [filters, handleFilterChange] as const;

@@ -1,14 +1,15 @@
 import './css/quill.snow.css';
-import ReactQuill from 'react-quill-new';
-import { Field, Label } from '@headlessui/react';
 import './css/quill-styles.css';
 
-interface RichTextEditorProps {
+import { Field, Label } from '@headlessui/react';
+import ReactQuill from 'react-quill-new';
+
+type RichTextEditorProps = {
   label: string;
   value: string;
   placeholder: string;
   onChange: (content: string) => void;
-}
+};
 
 const RichText: React.FC<RichTextEditorProps> = ({
   label,
@@ -42,9 +43,7 @@ const RichText: React.FC<RichTextEditorProps> = ({
           {label}
         </Label>
         <ReactQuill
-          theme="snow"
-          value={value}
-          onChange={(value: string) => onChange(value)}
+          className="w-full overflow-auto bg-white mt-2 p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           formats={[
             'header',
             'font',
@@ -60,9 +59,11 @@ const RichText: React.FC<RichTextEditorProps> = ({
             'image',
             'code-block',
           ]}
-          placeholder={placeholder}
-          className="w-full overflow-auto bg-white mt-2 p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
           modules={modules}
+          onChange={(value: string) => onChange(value)}
+          placeholder={placeholder}
+          theme="snow"
+          value={value}
         />
       </Field>
     </div>

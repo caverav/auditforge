@@ -1,7 +1,7 @@
-import React from 'react';
 import { XMarkIcon } from '@heroicons/react/24/outline';
+import React from 'react';
 
-interface ModalProps {
+type ModalProps = {
   title: string;
   children: React.ReactNode;
   onCancel: () => void;
@@ -10,7 +10,7 @@ interface ModalProps {
   submitText: string;
   isOpen: boolean;
   disablehr?: boolean;
-}
+};
 
 const Modal: React.FC<ModalProps> = ({
   title,
@@ -31,30 +31,33 @@ const Modal: React.FC<ModalProps> = ({
               {title}
             </h2>
             <button
-              onClick={onCancel}
               className="bg-transparent text-white p-2 rounded mx-3"
+              onClick={onCancel}
+              type="button"
             >
               <XMarkIcon className="h-6 w-6" />
             </button>
           </div>
 
-          {!disablehr && (
+          {!disablehr ? (
             <hr className="h-1 mb-3 bg-gray-600 border-0 rounded" />
-          )}
+          ) : null}
           <div className="mb-4 text-gray-200 py-4">{children}</div>
-          {!disablehr && (
+          {!disablehr ? (
             <hr className="h-1 mb-3 bg-gray-600 border-0 rounded" />
-          )}
+          ) : null}
           <div className="flex justify-end">
             <button
-              onClick={onCancel}
               className="bg-gray-500 text-white px-4 py-2 rounded mr-2"
+              onClick={onCancel}
+              type="button"
             >
               {cancelText}
             </button>
             <button
-              onClick={onSubmit}
               className="bg-blue-500 text-white px-4 py-2 rounded"
+              onClick={onSubmit}
+              type="button"
             >
               {submitText}
             </button>

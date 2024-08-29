@@ -1,10 +1,12 @@
 import { useState } from 'react';
+
 import MultiSelectDropdown from '../../components/dropdown/MultiSelectDropdown';
-interface ListItem {
+
+type ListItem = {
   id: number;
   value: string;
   label?: string;
-}
+};
 export const Vulnerabilities = () => {
   const initialItems = [
     { id: 1, label: 'opt 1', value: '1' },
@@ -25,20 +27,21 @@ export const Vulnerabilities = () => {
   return (
     <div className="p-4">
       <MultiSelectDropdown
-        title="titulo"
         items={items}
-        selected={selected}
         onChange={i => setSelected(i)}
+        selected={selected}
+        title="titulo"
       />
       <button
         className="mt-4 p-2 bg-blue-500 text-white rounded"
         onClick={() => setItems(newItems)}
+        type="button"
       >
         click
       </button>
-      <br></br>
+      <br />
       {JSON.stringify(items)}
-      <br></br>
+      <br />
       {JSON.stringify(selected)}
     </div>
   );

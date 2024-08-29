@@ -1,9 +1,9 @@
 import React, { ReactElement } from 'react';
 
-interface CardProps {
+type CardProps = {
   title: string;
   children: ReactElement;
-}
+};
 
 const Card: React.FC<CardProps> = ({ title, children }) => {
   return (

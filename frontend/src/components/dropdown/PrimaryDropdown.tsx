@@ -1,15 +1,15 @@
 import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/24/outline';
 
-interface ListItem {
+type ListItem = {
   href: string;
   label: string;
-}
+};
 
-interface PrimaryDropdownProps {
+type PrimaryDropdownProps = {
   items: ListItem[];
   title: string;
-}
+};
 /**
  * ### [WIP] No utilizar!!
  */

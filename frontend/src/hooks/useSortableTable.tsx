@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import { Column } from '../components/table/UITable';
 /**
  * Hook creado para manejar de manera simple el sorting de la tabla.
@@ -27,7 +28,7 @@ import { Column } from '../components/table/UITable';
  * @param columns Columnas de la tabla. Utiliza el type `Column`.
  * @returns Hook para mostrar los datos de la tabla y func. `setTableData` para UITable.
  */
-export function useSortableTable<T>(data: T[], columns: Column[]) {
+export const useSortableTable = <T,>(data: T[], columns: Column[]) => {
   const [tableData, setTableData] = useState(data);
 
   const accesors = columns.map(col => col.accessor);
@@ -35,18 +36,21 @@ export function useSortableTable<T>(data: T[], columns: Column[]) {
   const handleSorting = (column: string, direction: 'asc' | 'desc') => {
     if (column && accesors.includes(column)) {
       const sorted = [...tableData].sort((a, b) => {
-        if (a[column as keyof T] === null) return 1;
-        if (b[column as keyof T] === null) return -1;
-        if (a[column as keyof T] === null && b[column as keyof T] === null)
+        if (a[column as keyof T] === null) {
+          return 1;
+        }
+        if (b[column as keyof T] === null) {
+          return -1;
+        }
+        if (a[column as keyof T] === null && b[column as keyof T] === null) {
           return 0;
+        }
         return (
-          a[column as keyof T]!.toString().localeCompare(
-            b[column as keyof T]!.toString(),
-            'en',
-            {
+          a[column as keyof T]
+            .toString()
+            .localeCompare(b[column as keyof T].toString(), 'en', {
               numeric: true,
-            },
-          ) * (direction === 'asc' ? 1 : -1)
+            }) * (direction === 'asc' ? 1 : -1)
         );
       });
 
@@ -55,4 +59,4 @@ export function useSortableTable<T>(data: T[], columns: Column[]) {
   };
 
   return [tableData, handleSorting, setTableData] as const;
-}
+};

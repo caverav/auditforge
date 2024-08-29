@@ -1,6 +1,7 @@
 import { useTranslation } from 'react-i18next';
-import { Sidebar } from '../../components/navbar/Sidebar';
 import { Outlet } from 'react-router-dom';
+
+import { Sidebar } from '../../components/navbar/Sidebar';
 
 export const Data = () => {
   const { t } = useTranslation();
@@ -13,17 +14,15 @@ export const Data = () => {
     { name: `${t('import')} / ${t('export')}`, value: 'importExport', id: 6 },
   ];
   return (
-    <>
-      <div className="flex overflow-hidden">
-        <Sidebar
-          title={t('handleCustomData')}
-          items={sidebarList}
-          defaultItem={sidebarList[0]}
-        />
-        <div className="flex-1 overflow-auto p-8">
-          <Outlet />
-        </div>
+    <div className="flex overflow-hidden">
+      <Sidebar
+        defaultItem={sidebarList[0]}
+        items={sidebarList}
+        title={t('handleCustomData')}
+      />
+      <div className="flex-1 overflow-auto p-8">
+        <Outlet />
       </div>
-    </>
+    </div>
   );
 };
