@@ -1,31 +1,30 @@
-import React from "react";
-import ReactDOM from "react-dom/client";
-import AuthProvider from "./components/AuthProvider";
-import { checktoken } from "./hooks/useAuth";
+import './index.css';
+import './i18n';
 
+import React from 'react';
+import ReactDOM from 'react-dom/client';
 import {
   createBrowserRouter,
   Navigate,
   RouterProvider,
-} from "react-router-dom";
+} from 'react-router-dom';
 
-import "./index.css";
-import { Root, Audits, Vulnerabilities, Data, Settings, Login } from "./routes";
-import { ErrorPage } from "./error-page.tsx";
-import "./i18n";
-import { AuditRoot, General, Network, Add, Edit } from "./routes/audits";
+import AuthProvider from './components/AuthProvider';
+import { ErrorPage } from './error-page';
+import { checktoken } from './hooks/useAuth';
+import { Audits, Data, Login, Root, Settings, Vulnerabilities } from './routes';
 import {
+  Clients,
   Collaborators,
   Companies,
-  Clients,
-  Templates,
   CustomData,
   ImportExport,
-} from "./routes/data";
+  Templates,
+} from './routes/data';
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <Root />,
     errorElement: <ErrorPage />,
     children: [
@@ -34,37 +33,15 @@ const router = createBrowserRouter([
         element: <Navigate to="/audits" />,
       },
       {
-        path: "/audits",
+        path: '/audits',
         element: <Audits />,
       },
       {
-        path: "/audits/:auditId",
-        element: <AuditRoot />,
-        children: [
-          {
-            path: "general",
-            element: <General />,
-          },
-          {
-            path: "network",
-            element: <Network />,
-          },
-          {
-            path: "findings/add",
-            element: <Add />,
-          },
-          {
-            path: "findings/:findingId",
-            element: <Edit />,
-          },
-        ],
-      },
-      {
-        path: "/vulnerabilities",
+        path: '/vulnerabilities',
         element: <Vulnerabilities />,
       },
       {
-        path: "/data",
+        path: '/data',
         element: <Data />,
         children: [
           {
@@ -72,49 +49,53 @@ const router = createBrowserRouter([
             element: <Navigate to="/data/collaborators" />,
           },
           {
-            path: "/data/collaborators",
+            path: '/data/collaborators',
             element: <Collaborators />,
           },
           {
-            path: "/data/companies",
+            path: '/data/companies',
             element: <Companies />,
           },
           {
-            path: "/data/clients",
+            path: '/data/clients',
             element: <Clients />,
           },
           {
-            path: "/data/templates",
+            path: '/data/templates',
             element: <Templates />,
           },
           {
-            path: "/data/customData",
+            path: '/data/customData',
             element: <CustomData />,
           },
           {
-            path: "/data/importExport",
+            path: '/data/importExport',
             element: <ImportExport />,
           },
         ],
       },
       {
-        path: "/settings",
+        path: '/settings',
         element: <Settings />,
       },
     ],
   },
   {
-    path: "/login",
+    path: '/login',
     element: <Login />,
   },
 ]);
 
-checktoken().then((result) => {
-  ReactDOM.createRoot(document.getElementById("root")!).render(
-    <React.StrictMode>
-      <AuthProvider isSignedIn={result}>
-        <RouterProvider router={router} />
-      </AuthProvider>
-    </React.StrictMode>
-  );
-});
+checktoken()
+  .then(result => {
+    ReactDOM.createRoot(
+      document.getElementById('root') ?? document.body,
+    ).render(
+      <React.StrictMode>
+        <AuthProvider isSignedIn={result}>
+          <RouterProvider router={router} />
+        </AuthProvider>
+      </React.StrictMode>,
+    );
+  })
+  .catch(console.error);

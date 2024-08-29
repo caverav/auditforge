@@ -6,7 +6,7 @@ import { useAuth } from './AuthProvider';
 
 type ProtectedRouteProps = PropsWithChildren;
 
-export default function ProtectedRoute({ children }: ProtectedRouteProps) {
+const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
   const [loading, setLoading] = useState(true);
   const isAuth = useAuth();
   const navigate = useNavigate();
@@ -29,4 +29,6 @@ export default function ProtectedRoute({ children }: ProtectedRouteProps) {
   }
 
   return children;
-}
+};
+
+export default ProtectedRoute;
