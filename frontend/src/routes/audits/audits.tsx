@@ -1,11 +1,3 @@
 export const Audits = () => {
-
-    return (
-        <>
-
-            "Auditoria(s)"
-        
-        </>
-    )
-
-}
+  return <>"Auditoria(s)"</>;
+};

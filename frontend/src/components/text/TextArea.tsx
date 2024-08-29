@@ -1,7 +1,7 @@
-import { Field, Label, Textarea } from "@headlessui/react";
-import { ChangeEvent } from "react";
+import { Field, Label, Textarea } from '@headlessui/react';
+import { ChangeEvent } from 'react';
 
-interface TextAreaEditorProps {
+type TextAreaEditorProps = {
   label: string;
   rows: number;
   value: string | string[];
@@ -9,7 +9,7 @@ interface TextAreaEditorProps {
   name: string;
   placeholder: string;
   onChange: (content: string) => void;
-}
+};
 
 const TextArea: React.FC<TextAreaEditorProps> = ({
   label,
@@ -27,17 +27,15 @@ const TextArea: React.FC<TextAreaEditorProps> = ({
           {label}
         </Label>
         <Textarea
-          className={
-            "w-full mt-2 p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-          }
-          rows={rows}
-          value={value}
+          className="w-full mt-2 p-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+          id={id}
+          name={name}
           onChange={(e: ChangeEvent<HTMLTextAreaElement>) =>
             onChange(e.target.value)
           }
           placeholder={placeholder}
-          id={id}
-          name={name}
+          rows={rows}
+          value={value}
         />
       </Field>
     </div>
