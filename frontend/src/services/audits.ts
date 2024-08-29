@@ -116,7 +116,7 @@ export type AuditById = {
     name: string;
     hosts: string[];
   }[];
-  findings: string[];
+  findings: Finding[];
   date_end: string;
   date_start: string;
 };

@@ -1,41 +1,43 @@
-import { Users, ChevronUp, ChevronDown } from "lucide-react";
-import clsx from "clsx";
-import DefaultRadioGroup from "../button/DefaultRadioGroup";
-import SelectDropdown from "../dropdown/SelectDropdown";
-import { Link } from "react-router-dom";
-import { t } from "i18next";
-interface MenuItem {
+import clsx from 'clsx';
+import { t } from 'i18next';
+import { ChevronDown, ChevronUp, Users } from 'lucide-react';
+import { Link } from 'react-router-dom';
+
+import DefaultRadioGroup from '../button/DefaultRadioGroup';
+import SelectDropdown from '../dropdown/SelectDropdown';
+
+type MenuItem = {
   name: string;
   icon: React.ComponentType<{ className?: string }>;
   value: string;
   additionalIcon?: React.ComponentType<{ className?: string }>;
-}
+};
 
-interface Finding {
+type Finding = {
   id: number;
   name: string;
   category: string;
   severity: string;
-}
+};
 
-interface SortOption {
+type SortOption = {
   id: number;
   value: string;
-}
+};
 
-interface SortOrderOption {
+type SortOrderOption = {
   id: string;
   label: string;
   value: string;
-}
+};
 
-interface ConnectedUser {
+type ConnectedUser = {
   id: number;
   name: string;
   online: boolean;
-}
+};
 
-interface AuditSidebarProps {
+type AuditSidebarProps = {
   activeItem: string;
   setActiveItem: (item: string) => void;
   isCollapsed: boolean;
@@ -49,9 +51,9 @@ interface AuditSidebarProps {
   sortOptions: SortOption[];
   sortOrderOptions: SortOrderOption[];
   connectedUsers: ConnectedUser[];
-}
+};
 
-export default function AuditSidebar({
+const AuditSidebar = ({
   activeItem,
   setActiveItem,
   isCollapsed,
@@ -65,9 +67,7 @@ export default function AuditSidebar({
   sortOptions,
   sortOrderOptions,
   connectedUsers,
-}: AuditSidebarProps) {
-  return (
-    <div
+}: AuditSidebarProps) => <div
       className={clsx(
         "flex flex-col h-screen bg-gray-900 text-gray-100 transition-all duration-300",
         isCollapsed ? "w-20" : "w-64",
@@ -199,6 +199,7 @@ export default function AuditSidebar({
           ))}
         </ul>
       </div>
-    </div>
-  );
+    </div>;
 }
+
+export default AuditSidebar;
