@@ -11,6 +11,19 @@ type NewCollaborator = {
   username: string;
 };
 
+type Collaborator = {
+  email: string;
+  firstname: string;
+  lastname: string;
+  password: string;
+  phone: string;
+  role: string;
+  totpenabled: boolean;
+  enabled: boolean;
+  username: string;
+  _id: string;
+};
+
 type NewCompany = {
   name: string;
   shortname: string;
@@ -33,25 +46,33 @@ type NewTemplate = {
   file: string;
 };
 
-export const getCollaborators = async (): Promise<any> => {
+const networkErrorMsg = 'Network response was not ok';
+
+export const getCollaborators = async (): Promise<{
+  status: string;
+  datas: Collaborator[];
+}> => {
   try {
     const response = await fetch(`${API_URL}users`, {
       credentials: 'include',
     }); // Incluir token
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error(networkErrorMsg);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error(error);
+
     throw error;
   }
 };
 
 export const createCollaborator = async (
   collab: NewCollaborator,
-): Promise<any> => {
+): Promise<{
+  status: string;
+  datas: string;
+}> => {
   try {
     const response = await fetch(`${API_URL}users`, {
       method: 'POST',
@@ -60,33 +81,41 @@ export const createCollaborator = async (
       body: JSON.stringify(collab),
     }); // Incluir token
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error(networkErrorMsg);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error(error);
+
     throw error;
   }
 };
 
-export const getCompanies = async (): Promise<any> => {
+export const getCompanies = async (): Promise<{
+  status: string;
+  datas: NewCompany[];
+}> => {
   try {
     const response = await fetch(`${API_URL}companies`, {
       credentials: 'include',
     }); // Incluir token
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error(networkErrorMsg);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error(error);
+
     throw error;
   }
 };
 
-export const createCompany = async (company: NewCompany): Promise<any> => {
+export const createCompany = async (
+  company: NewCompany,
+): Promise<{
+  status: string;
+  datas: { _id: string; name: string };
+}> => {
   try {
     const response = await fetch(`${API_URL}companies`, {
       method: 'POST',
@@ -96,33 +125,41 @@ export const createCompany = async (company: NewCompany): Promise<any> => {
     });
 
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error(networkErrorMsg);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error(error);
+
     throw error;
   }
 };
 
-export const getClients = async (): Promise<any> => {
+export const getClients = async (): Promise<{
+  status: string;
+  datas: NewClient[];
+}> => {
   try {
     const response = await fetch(`${API_URL}clients`, {
       credentials: 'include',
     }); // Incluir token
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error(networkErrorMsg);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error(error);
+
     throw error;
   }
 };
 
-export const createClient = async (client: NewClient): Promise<any> => {
+export const createClient = async (
+  client: NewClient,
+): Promise<{
+  status: string;
+  datas: { _id: string; email: string; firstname: string; lastname: string }[];
+}> => {
   try {
     const response = await fetch(`${API_URL}clients`, {
       method: 'POST',
@@ -132,33 +169,41 @@ export const createClient = async (client: NewClient): Promise<any> => {
     });
 
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error(networkErrorMsg);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error(error);
+
     throw error;
   }
 };
 
-export const getTemplates = async (): Promise<any> => {
+export const getTemplates = async (): Promise<{
+  status: string;
+  datas: { _id: string; name: string; ext: string }[];
+}> => {
   try {
     const response = await fetch(`${API_URL}templates`, {
       credentials: 'include',
     }); // Incluir token
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error(networkErrorMsg);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error(error);
+
     throw error;
   }
 };
 
-export const createTemplates = async (template: NewTemplate): Promise<any> => {
+export const createTemplates = async (
+  template: NewTemplate,
+): Promise<{
+  status: string;
+  datas: { _id: string; name: string; ext: string }[];
+}> => {
   try {
     const response = await fetch(`${API_URL}templates`, {
       method: 'POST',
@@ -168,12 +213,12 @@ export const createTemplates = async (template: NewTemplate): Promise<any> => {
     });
 
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error(networkErrorMsg);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error(error);
+
     throw error;
   }
 };
