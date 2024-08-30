@@ -1,12 +1,10 @@
 import { t } from 'i18next';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { toast, Toaster } from 'sonner';
 
-import PrimaryButton from '../../components/button/PrimaryButton';
 import Card from '../../components/card/Card';
 import SelectDropdown from '../../components/dropdown/SelectDropdown';
 import Modal from '../../components/modal/Modal';
-import PrimarySwitch from '../../components/switch/PrimarySwitch';
 import UITable from '../../components/table/UITable';
 import { useSortableTable } from '../../hooks/useSortableTable';
 import { useTableFiltering } from '../../hooks/useTableFiltering';
@@ -18,9 +16,9 @@ import {
   getVulnerabilities,
 } from '../../services/vulnerabilities';
 import AddVulnerability from './addVulnerability';
+import VulnerabilityButtons from './components/vulnerabilityButtons';
 import EditVulnerability from './editVulnerability';
 import MergeVulnerabilities from './mergeVulnerabilities';
-import VulnerabilityButtons from './components/vulnerabilityButtons';
 
 type Details = {
   locale: string;
@@ -87,31 +85,34 @@ type TableData = {
 };
 
 export const Vulnerabilities = () => {
-  const [openModalDeleteVuln, setOpenModalDeleteVuln] = useState(false);
-
   const [vulnerabilities, setVulnerabilities] = useState<VulnerabilityData[]>(
     [],
   );
   const [tableInfo, setTableInfo] = useState<TableData[]>([]);
+
   const [error, setError] = useState<boolean>(false);
   const [errorText, setErrorText] = useState<string | null>(null);
 
-  const [languages, setLanguages] = useState<ListItem[]>([]);
+  const [languagesList, setLanguagesList] = useState<ListItem[]>([]);
   const [currentLanguage, setCurrentLanguage] = useState<ListItem | null>(null);
   const [loadingLanguage, setLoadingLanguage] = useState<boolean>(true);
 
-  const [categories, setCategories] = useState<ListItemCategory[]>([]);
+  const [categoriesList, setCategoriesList] = useState<ListItemCategory[]>([]);
+  const [typesList, setTypesList] = useState<ListItem[]>([]);
 
-  const [types, setTypes] = useState<ListItem[]>([]);
+  const [isOpenAddVuln, setIsOpenAddVuln] = useState(false);
+  const openAddVulnSlidingPage = () => setIsOpenAddVuln(true);
 
-  const [openAddVuln, setOpenAddVuln] = useState(false);
-  const openAddVulnSlidingPage = () => setOpenAddVuln(true);
-
-  const [openEditVuln, setOpenEditVuln] = useState<boolean>(false);
+  const [isOpenEditVuln, setIsOpenEditVuln] = useState<boolean>(false);
   const [editVuln, setEditVuln] = useState<VulnerabilityData>();
-  const [selectedCategory, setSelectedCategory] = useState<ListItem | null>(
-    null,
-  );
+  const [selectedCategoryAddVuln, setSelectedCategoryAddVuln] =
+    useState<ListItem | null>(null);
+
+  const handleSuccessToast = (message: string) => {
+    toast.success(message);
+  };
+
+  const [openModalDeleteVuln, setOpenModalDeleteVuln] = useState(false);
 
   const columns = [
     { header: t('title'), accessor: 'title', sortable: true, filterable: true },
@@ -129,17 +130,17 @@ export const Vulnerabilities = () => {
     columns,
   );
 
-  const fetchVulnerabilities = async () => {
+  const fetchVulnerabilities = useCallback(async () => {
     try {
       const dataVulnerability = await getVulnerabilities();
       setVulnerabilities(dataVulnerability.datas);
       const vulnDataTable = dataVulnerability.datas.map(
-        (item2: VulnerabilityData) => ({
-          _id: item2._id,
-          title: item2.details[0].title ?? '',
-          category: item2.category ? item2.category : t('noCategory'),
-          type: item2.details[0].vulnType
-            ? item2.details[0].vulnType
+        (item: VulnerabilityData) => ({
+          _id: item._id,
+          title: item.details[0].title ?? '',
+          category: item.category ?? t('noCategory'),
+          type: item.details[0].vulnType
+            ? item.details[0].vulnType
             : t('undefined'),
         }),
       );
@@ -148,7 +149,7 @@ export const Vulnerabilities = () => {
     } catch (err) {
       setError(true);
     }
-  };
+  }, [setTableData]);
 
   const fetchLanguages = async () => {
     try {
@@ -160,7 +161,7 @@ export const Vulnerabilities = () => {
           label: item.language,
         }),
       );
-      setLanguages(languageNames);
+      setLanguagesList(languageNames);
       setCurrentLanguage(languageNames[0]);
       setLoadingLanguage(false);
     } catch (err) {
@@ -177,7 +178,7 @@ export const Vulnerabilities = () => {
         label: item.name,
         locale: item.locale,
       }));
-      setTypes([...typeNames]);
+      setTypesList([...typeNames]);
     } catch (err) {
       setError(true);
     }
@@ -193,7 +194,7 @@ export const Vulnerabilities = () => {
           label: item.name,
         }),
       );
-      setCategories([
+      setCategoriesList([
         { id: 0, label: t('noCategory'), value: '', isNull: true },
         ...categoryNames,
       ]);
@@ -207,7 +208,7 @@ export const Vulnerabilities = () => {
     void fetchLanguages();
     void fetchTypes();
     void fetchCategories();
-  }, []);
+  }, [fetchVulnerabilities]);
   //
 
   //// Workaround para dropdown de filtrado, al parecer funciona bien btw
@@ -225,36 +226,18 @@ export const Vulnerabilities = () => {
         return { ...vulnIter, matchingDetailIndex: index };
       });
 
-    const vulnDataTable: TableData[] = filtered.map(item2 => ({
-      _id: item2._id,
-      title: item2.details[item2.matchingDetailIndex].title ?? 'noTitle',
-      category: item2.category ? item2.category : t('noCategory'),
-      type: item2.details[item2.matchingDetailIndex].vulnType
-        ? item2.details[item2.matchingDetailIndex].vulnType
-        : t('undefined'),
+    const vulnDataTable: TableData[] = filtered.map(item => ({
+      _id: item._id,
+      title: item.details[item.matchingDetailIndex].title ?? 'noTitle',
+      category: item.category ?? t('noCategory'),
+      type: item.details[item.matchingDetailIndex].vulnType ?? t('undefined'),
     }));
     setTableData(vulnDataTable);
     setTableInfo(vulnDataTable);
   }, [vulnerabilities, currentLanguage, setTableData]);
 
-  const [openMerge, setOpenMerge] = useState(false);
-
+  const [isOpenMerge, setIsOpenMerge] = useState(false);
   const [itemDelete, setItemDelete] = useState<TableData>();
-
-  const editRegister = (item: TableData) => {
-    const vuln = vulnerabilities.find(vuln => vuln._id === item._id);
-    setEditVuln(vuln);
-    setOpenEditVuln(true);
-  };
-
-  const deleteRegisterConfirmation = (item: TableData) => {
-    setItemDelete(item);
-    setOpenModalDeleteVuln(true);
-  };
-
-  const handleSuccessToast = (message: string) => {
-    toast.success(message);
-  };
 
   const confirmDeleteVulnerability = async () => {
     try {
@@ -268,6 +251,17 @@ export const Vulnerabilities = () => {
     }
     setOpenModalDeleteVuln(false);
     void fetchVulnerabilities();
+  };
+
+  const deleteRegisterConfirmation = (item: TableData) => {
+    setItemDelete(item);
+    setOpenModalDeleteVuln(true);
+  };
+
+  const editRegister = (item: TableData) => {
+    const vuln = vulnerabilities.find(vuln => vuln._id === item._id);
+    setEditVuln(vuln);
+    setIsOpenEditVuln(true);
   };
 
   const keyExtractor = (item: TableData) => item._id;
@@ -314,39 +308,39 @@ export const Vulnerabilities = () => {
       <Card title={t('nav.vulnerabilities')}>
         <>
           <div className="fixed z-10">
-            {openAddVuln ? (
+            {isOpenAddVuln ? (
               <AddVulnerability
-                categoryVuln={selectedCategory}
+                categoryVuln={selectedCategoryAddVuln}
                 handleOnSuccess={handleSuccessToast}
-                handlerIsOpen={setOpenAddVuln}
-                isOpen={openAddVuln}
-                languages={languages}
+                handlerIsOpen={setIsOpenAddVuln}
+                isOpen={isOpenAddVuln}
+                languages={languagesList}
                 refreshVulns={fetchVulnerabilities}
-                types={types}
+                types={typesList}
               />
             ) : null}
           </div>
           <div className="fixed z-10">
-            {openEditVuln ? (
+            {isOpenEditVuln ? (
               <EditVulnerability
-                categories={categories}
+                categories={categoriesList}
                 currentVuln={editVuln!}
                 handleOnSuccess={handleSuccessToast}
-                handlerIsOpen={setOpenEditVuln}
-                isOpen={openEditVuln}
-                languages={languages}
+                handlerIsOpen={setIsOpenEditVuln}
+                isOpen={isOpenEditVuln}
+                languages={languagesList}
                 refreshVulns={fetchVulnerabilities}
-                types={types}
+                types={typesList}
               />
             ) : null}
           </div>
           <div className="fixed z-10">
-            {openMerge ? (
+            {isOpenMerge ? (
               <MergeVulnerabilities
                 handleOnSuccess={handleSuccessToast}
-                handlerIsOpen={setOpenMerge}
-                isOpen={openMerge}
-                languages={languages}
+                handlerIsOpen={setIsOpenMerge}
+                isOpen={isOpenMerge}
+                languages={languagesList}
                 refreshVulns={fetchVulnerabilities}
                 vulnerabilities={vulnerabilities}
               />
@@ -366,7 +360,7 @@ export const Vulnerabilities = () => {
               <div className="">
                 {!loadingLanguage ? (
                   <SelectDropdown
-                    items={languages}
+                    items={languagesList}
                     onChange={setCurrentLanguage}
                     placeholder="Language"
                     selected={currentLanguage}
@@ -376,7 +370,7 @@ export const Vulnerabilities = () => {
               </div>
               <VulnerabilityButtons
                 openAddVulnSlidingPage={openAddVulnSlidingPage}
-                setOpenMerge={setOpenMerge}
+                setOpenMerge={setIsOpenMerge}
               />
             </div>
           </UITable>
