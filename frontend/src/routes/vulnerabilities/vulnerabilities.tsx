@@ -89,7 +89,6 @@ type TableData = {
 export const Vulnerabilities = () => {
   const [openModalDeleteVuln, setOpenModalDeleteVuln] = useState(false);
 
-  // Core
   const [vulnerabilities, setVulnerabilities] = useState<VulnerabilityData[]>(
     [],
   );
@@ -97,18 +96,14 @@ export const Vulnerabilities = () => {
   const [error, setError] = useState<boolean>(false);
   const [errorText, setErrorText] = useState<string | null>(null);
 
-  // Lang
   const [languages, setLanguages] = useState<ListItem[]>([]);
   const [currentLanguage, setCurrentLanguage] = useState<ListItem | null>(null);
   const [loadingLanguage, setLoadingLanguage] = useState<boolean>(true);
 
-  // Category
   const [categories, setCategories] = useState<ListItemCategory[]>([]);
 
-  // Types
   const [types, setTypes] = useState<ListItem[]>([]);
 
-  // Sliding Pages
   const [openAddVuln, setOpenAddVuln] = useState(false);
   const openAddVulnSlidingPage = () => setOpenAddVuln(true);
 
@@ -244,7 +239,6 @@ export const Vulnerabilities = () => {
 
   const [openMerge, setOpenMerge] = useState(false);
 
-  // Testing Table
   const [itemDelete, setItemDelete] = useState<TableData>();
 
   const editRegister = (item: TableData) => {
@@ -259,12 +253,10 @@ export const Vulnerabilities = () => {
   };
 
   const handleSuccessToast = (message: string) => {
-    // Muestra el toast satisfactorio
     toast.success(message);
   };
 
   const confirmDeleteVulnerability = async () => {
-    //Add try
     try {
       const response = await deleteVulnerability(itemDelete!._id);
       if (response) {

@@ -152,7 +152,6 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({
   };
 
   const onSubmitMerge = async () => {
-    // Falta logica de validación que verifique que los dos radios están seleccionados
 
     if (selectedRadioLeft !== '' && selectedRadioRight !== '') {
       try {
