@@ -46,6 +46,25 @@ type NewTemplate = {
   file: string;
 };
 
+type NewLanguage = { language: string; locale: string };
+
+type NewAuditType = {
+  name: string;
+  hidden: string[];
+  sections: string[]; // temporal
+  stage: string;
+  templates: { template: string; locale: string }[];
+};
+
+type AuditType = {
+  _id: string;
+  name: string;
+  hidden: string[];
+  sections: string[]; // temporal
+  stage: string;
+  templates: { template: string; locale: string }[];
+};
+
 const networkErrorMsg = 'Network response was not ok';
 
 export const getCollaborators = async (): Promise<{
@@ -227,23 +246,31 @@ export const createTemplates = async (
  * Custom data: Languages
  */
 
-export const getLanguages = async (): Promise<any> => {
+export const getLanguages = async (): Promise<{
+  status: string;
+  datas: NewLanguage[];
+}> => {
   try {
     const response = await fetch(`${API_URL}data/languages`, {
       credentials: 'include',
     }); // Incluir token
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error(networkErrorMsg);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error(error);
+
     throw error;
   }
 };
 
-export const createLanguage = async (language: NewLanguage): Promise<any> => {
+export const createLanguage = async (
+  language: NewLanguage,
+): Promise<{
+  status: string;
+  datas: { language: string; locale: string; _id: string };
+}> => {
   try {
     const response = await fetch(`${API_URL}data/languages`, {
       method: 'POST',
@@ -252,19 +279,22 @@ export const createLanguage = async (language: NewLanguage): Promise<any> => {
       body: JSON.stringify(language),
     }); // Incluir token
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error(networkErrorMsg);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error(error);
+
     throw error;
   }
 };
 
 export const updateLanguages = async (
   language: NewLanguage[],
-): Promise<any> => {
+): Promise<{
+  status: string;
+  datas: string;
+}> => {
   try {
     const response = await fetch(`${API_URL}data/languages`, {
       method: 'PUT',
@@ -273,12 +303,12 @@ export const updateLanguages = async (
       body: JSON.stringify(language),
     }); // Incluir token
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error(networkErrorMsg);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error(error);
+
     throw error;
   }
 };
@@ -287,18 +317,21 @@ export const updateLanguages = async (
  * Custom data: Custom sections
  */
 
-export const getCustomSections = async (): Promise<any> => {
+export const getCustomSections = async (): Promise<{
+  status: string;
+  datas: { field: string; name: string; icon: string }[];
+}> => {
   try {
     const response = await fetch(`${API_URL}data/sections`, {
       credentials: 'include',
     }); // Incluir token
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error(networkErrorMsg);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error(error);
+
     throw error;
   }
 };
@@ -309,7 +342,10 @@ export const getCustomSections = async (): Promise<any> => {
 
 export const createAuditType = async (
   auditType: NewAuditType,
-): Promise<any> => {
+): Promise<{
+  status: string;
+  datas: AuditType[];
+}> => {
   try {
     const response = await fetch(`${API_URL}data/audit-types`, {
       method: 'POST',
@@ -318,12 +354,12 @@ export const createAuditType = async (
       body: JSON.stringify(auditType),
     }); // Incluir token
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error(networkErrorMsg);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error(error);
+
     throw error;
   }
 };
