@@ -5,6 +5,7 @@ import {
   ListboxButton,
   ListboxOption,
   ListboxOptions,
+  ListboxSelectedOption,
 } from '@headlessui/react';
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
@@ -53,13 +54,21 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({
               'min-h-[2.3rem]',
             )}
           >
-            <span className="truncate">
-              {selected
-                ? selected.label
-                  ? selected.label
-                  : selected.value
-                : placeholder}
-            </span>
+            <ListboxSelectedOption
+              options={items.map(item => (
+                <ListboxOption
+                  className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-white/10"
+                  key={item.value}
+                  value={item}
+                >
+                  <CheckIcon className="invisible size-4 fill-white group-data-[selected]:visible" />
+                  <div className="text-sm/6 text-white">
+                    {item.label ? item.label : item.value}
+                  </div>
+                </ListboxOption>
+              ))}
+              placeholder={placeholder}
+            />
             <ChevronDownIcon
               aria-hidden="true"
               className="size-4 fill-white/60 mr-1"
