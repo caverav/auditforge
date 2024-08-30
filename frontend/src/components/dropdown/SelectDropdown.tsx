@@ -23,7 +23,8 @@ type SelectDropdownProps = {
   title: string;
   onChange: (item: ListItem) => void;
   placeholder?: string;
-  required?: boolean;
+  requiredAlert?: boolean;
+  requiredField?: boolean;
 };
 
 const SelectDropdown: React.FC<SelectDropdownProps> = ({
@@ -32,15 +33,17 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({
   selected,
   onChange,
   placeholder,
-  required = false,
+  requiredAlert = false,
+  requiredField = false,
 }) => {
   return (
-    <Field>
+    <Field aria-required={requiredField}>
       <Label className="block text-sm font-medium leading-6 text-gray-300">
-        {title}
+        {title + ' '}
+        {requiredField ? <span className="text-red-500 text-lg">*</span> : ''}
       </Label>
       <div
-        className={`relative ${required && (!selected?.id || !selected.value) && 'rounded-lg ring-1 ring-red-500'}`}
+        className={`relative ${requiredAlert && (!selected?.id || !selected.value) && 'rounded-lg ring-1 ring-red-500'}`}
       >
         <Listbox onChange={onChange} value={selected}>
           <ListboxButton
@@ -85,7 +88,7 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({
             ))}
           </ListboxOptions>
         </Listbox>
-        {required && (!selected?.id || !selected.value) ? (
+        {requiredAlert && (!selected?.id || !selected.value) ? (
           <span className="absolute right-5 top-0 mt-2 ml-2 text-red-500">
             <ExclamationCircleIcon className="size-5" />
           </span>
