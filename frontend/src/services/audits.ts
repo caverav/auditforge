@@ -1,3 +1,5 @@
+import { NavigateFunction } from 'react-router-dom';
+
 const API_URL = 'https://localhost:8443/api/';
 
 const networkError = new Error('Network response was not ok');
@@ -29,7 +31,6 @@ export type Detail = {
   vulnType?: string;
 };
 
-//{"status":"success","datas":[{"cvssv3":"CVSS:3.1/AV:N/AC:H/PR:L/UI:N/S:U/C:N/I:L/A:N","detail":{"locale":"es_CL","title":"asd","description":"<p>asd</p>","observation":"<p>asd</p>","remediation":"<p>asd</p>","cwes":[],"references":[],"customFields":[]},"_id":"66c8f9ecc3613d3bcc6438c1"}]}
 export type FindingByLocale = {
   cvssv3: string;
   detail: Detail;
@@ -409,4 +410,8 @@ export const getVulnByLanguage = async (
 
     throw error;
   }
+};
+
+export const generateReport = (auditId: string, window: Window): void => {
+  window.open(`${API_URL}audits/${auditId}/generate`, '_blank');
 };

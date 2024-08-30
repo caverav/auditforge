@@ -16,6 +16,7 @@ import type { Audit } from '../../services/audits';
 import {
   createAudit,
   fetchUsername,
+  generateReport,
   getAudits,
   getLanguages,
   getTypes,
@@ -81,6 +82,10 @@ export const Audits = () => {
     {
       label: 'Edit',
       onClick: (item: TableData) => navigate(`/audits/${item.id}/general`),
+    },
+    {
+      label: 'Download',
+      onClick: (item: TableData) => generateReport(item.id, window),
     },
     { label: 'Delete', onClick: () => void 0 }, // TODO: Implement delete
   ];
