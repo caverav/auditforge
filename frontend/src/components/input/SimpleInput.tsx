@@ -54,7 +54,7 @@ const SimpleInput: React.FC<SimpleInputProps> = ({
             onChange(e.target.value)
           }
           onFocus={() => setIsFocused(true)}
-          placeholder={placeholder + (requiredField && !label ? ' (*)' : '')}
+          placeholder={placeholder}
           required={requiredField}
           type={type}
           value={value}
@@ -62,6 +62,11 @@ const SimpleInput: React.FC<SimpleInputProps> = ({
         {!isFocused && requiredAlert && value === '' ? (
           <span className="absolute right-3 top-0 mt-2 ml-2 text-red-500">
             <ExclamationCircleIcon className="size-5" />
+          </span>
+        ) : null}
+        {!isFocused && requiredField && !requiredAlert && value === '' ? (
+          <span className="absolute right-3 top-0 mt-2 ml-2 text-red-500 text-lg">
+            *
           </span>
         ) : null}
       </div>
