@@ -35,7 +35,8 @@ const SimpleInput: React.FC<SimpleInputProps> = ({
           className="text-sm font-medium leading-6 text-gray-300"
           htmlFor={id}
         >
-          {label + (requiredField ? ' (*)' : '')}
+          {label + ' '}
+          {requiredField ? <span className="text-red-500 text-lg">*</span> : ''}
         </label>
       ) : null}
       <div className="relative mt-2 rounded-md shadow-sm">
