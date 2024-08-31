@@ -1,14 +1,17 @@
-import { ChangeEvent } from 'react';
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
+import { ChangeEvent, useState } from 'react';
 
 type SimpleInputProps = {
   label?: string;
   id: string;
   name: string;
-  type: 'text' | 'number';
+  type: 'text' | 'number' | 'password';
   placeholder: string;
   value: string;
   onChange: (value: string) => void;
   disabled?: boolean;
+  requiredAlert?: boolean;
+  requiredField?: boolean;
 };
 
 const SimpleInput: React.FC<SimpleInputProps> = ({
@@ -20,30 +23,52 @@ const SimpleInput: React.FC<SimpleInputProps> = ({
   value,
   onChange,
   disabled = false,
+  requiredAlert = false,
+  requiredField = false,
 }) => {
+  const [isFocused, setIsFocused] = useState(false);
+
   return (
     <div>
       {label ? (
         <label
-          className="block text-sm font-medium leading-6 text-gray-300"
+          className="text-sm font-medium leading-6 text-gray-300"
           htmlFor={id}
         >
-          {label}
+          {label + ' '}
+          {requiredField ? <span className="text-red-500 text-lg">*</span> : ''}
         </label>
       ) : null}
-      <div className="mt-2 rounded-md shadow-sm">
+      <div className="relative mt-2 rounded-md shadow-sm">
         <input
-          className="block w-full rounded-md border-0 py-1.5 pl-7 pr-7 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          className={`bg-gray-800 block w-full rounded-md py-1.5 p-2 placeholder:text-gray-400 sm:text-sm sm:leading-6 ${
+            requiredAlert && value === '' && !isFocused
+              ? 'ring-1 ring-red-500'
+              : ''
+          }`}
           disabled={disabled}
           id={id}
           name={name}
+          onBlur={() => setIsFocused(false)}
           onChange={(e: ChangeEvent<HTMLInputElement>) =>
             onChange(e.target.value)
           }
+          onFocus={() => setIsFocused(true)}
           placeholder={placeholder}
+          required={requiredField}
           type={type}
           value={value}
         />
+        {!isFocused && requiredAlert && value === '' ? (
+          <span className="absolute right-3 top-0 mt-2 ml-2 text-red-500">
+            <ExclamationCircleIcon className="size-5" />
+          </span>
+        ) : null}
+        {!isFocused && requiredField && !requiredAlert && value === '' ? (
+          <span className="absolute right-3 top-0 mt-2 ml-2 text-red-500 text-lg">
+            *
+          </span>
+        ) : null}
       </div>
     </div>
   );

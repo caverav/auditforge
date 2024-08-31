@@ -3,7 +3,9 @@ import {
   Bars3BottomRightIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
+  FingerPrintIcon,
   PencilSquareIcon,
+  PlusCircleIcon,
   TrashIcon,
 } from '@heroicons/react/24/outline';
 import React, { useEffect, useState } from 'react';
@@ -43,6 +45,9 @@ type TableProps = {
 
 const mapActionLabelToIcon = (label: string) => {
   switch (label) {
+    case 'Add':
+      return <PlusCircleIcon className="size-6" />;
+
     case 'Edit':
       return <PencilSquareIcon className="size-6" />;
 
@@ -51,6 +56,9 @@ const mapActionLabelToIcon = (label: string) => {
 
     case 'Download':
       return <ArrowDownTrayIcon className="size-6" />;
+
+    case 'FindAudit':
+      return <FingerPrintIcon className="size-6" />;
 
     default:
       return label;
