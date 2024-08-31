@@ -1,10 +1,10 @@
 import { Cvss3P1 } from 'ae-cvss-calculator';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import MetricGroup from './MetricGroup';
 
 type CVSSProp = {
-  setCvssVector: React.Dispatch<React.SetStateAction<string>>;
+  handleCvssChange: (value: string) => void;
 };
 
 const generateCVSSVector = (
@@ -66,7 +66,7 @@ const generateCVSSVector = (
   return vectorString;
 };
 
-const CVSSCalculator: React.FC<CVSSProp> = ({ setCvssVector }) => {
+const CVSSCalculator: React.FC<CVSSProp> = ({ handleCvssChange }) => {
   const [AV, setAV] = useState('');
   const [AC, setAC] = useState('');
   const [PR, setPR] = useState('');
@@ -76,24 +76,15 @@ const CVSSCalculator: React.FC<CVSSProp> = ({ setCvssVector }) => {
   const [I, setI] = useState('');
   const [A, setA] = useState('');
 
-  const calculateCVSS = () => {
+  const [currentScore, setCurrentScote] = useState<number>(0);
+  //const [cvssVectorValue, setCvssVectorValue] = useState<string>('');
+
+  useEffect(() => {
     const cvssVector = generateCVSSVector(AV, AC, PR, UI, S, C, I, A);
-    setCvssVector(cvssVector);
+    handleCvssChange(cvssVector);
     const cvss3 = new Cvss3P1(cvssVector);
-
-    /*
-    Por si se desea ocupar o modificar, el objeto cvss3 retorna
-
-    { base: 10, impact: 10, 
-        exploitability: 10, temporal: undefined,
-        environmental: undefined, modifiedImpact: undefined, 
-        overall: 10, 
-        vector: "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:C/C:H/I:L/A:H" }
-    
-    */
-
-    return cvss3.calculateExactOverallScore();
-  };
+    setCurrentScote(cvss3.calculateExactOverallScore());
+  }, [A, AC, AV, C, I, PR, S, UI, handleCvssChange]);
 
   return (
     <div className="max-w-4xl mx-auto p-6 bg-slate-700 border border-gray-200 rounded-lg">
@@ -155,7 +146,7 @@ const CVSSCalculator: React.FC<CVSSProp> = ({ setCvssVector }) => {
         </div>
       </div>
       <div className="mt-8 text-center">
-        <h3 className="text-2xl font-bold">Base Score: {calculateCVSS()}</h3>
+        <h3 className="text-2xl font-bold">Base Score: {currentScore}</h3>
       </div>
     </div>
   );
