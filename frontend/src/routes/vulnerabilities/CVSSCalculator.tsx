@@ -5,6 +5,7 @@ import MetricGroup from './components/MetricGroup';
 
 type CVSSProp = {
   handleCvssChange: (value: string) => void;
+  cvssStringInitial?: string;
 };
 
 const generateCVSSVector = (
@@ -56,17 +57,20 @@ const generateCVSSVector = (
 
   Object.entries(cvssComponents).forEach(([key, value], index) => {
     if (value) {
-      vectorString += `${componentMapping[key]}:${valueMapping[value]}`;
-      if (index < Object.keys(cvssComponents).length - 1) {
+      if (index > 0) {
         vectorString += '/';
       }
+      vectorString += `${componentMapping[key]}:${valueMapping[value]}`;
     }
   });
 
   return vectorString;
 };
 
-const CVSSCalculator: React.FC<CVSSProp> = ({ handleCvssChange }) => {
+const CVSSCalculator: React.FC<CVSSProp> = ({
+  cvssStringInitial,
+  handleCvssChange,
+}) => {
   const [AV, setAV] = useState('');
   const [AC, setAC] = useState('');
   const [PR, setPR] = useState('');
@@ -76,15 +80,83 @@ const CVSSCalculator: React.FC<CVSSProp> = ({ handleCvssChange }) => {
   const [I, setI] = useState('');
   const [A, setA] = useState('');
 
-  const [currentScore, setCurrentScote] = useState<number>(0);
-  //const [cvssVectorValue, setCvssVectorValue] = useState<string>('');
+  const [changed, setChanged] = useState(false);
+  const expectedLength = 44;
+
+  const parseCVSSVector = (vector: string) => {
+    const valueMappings: Record<string, Record<string, string>> = {
+      AV: { N: 'Network', A: 'Adjacent Network', L: 'Local', P: 'Physical' },
+      AC: { H: 'High', L: 'Low' },
+      PR: { N: 'None', L: 'Low', H: 'High' },
+      UI: { N: 'None', R: 'Required' },
+      S: { U: 'Unchanged', C: 'Changed' },
+      C: { H: 'High', L: 'Low', N: 'None' },
+      I: { H: 'High', L: 'Low', N: 'None' },
+      A: { H: 'High', L: 'Low', N: 'None' },
+    };
+
+    const parts = vector.split('/').slice(1);
+    parts.forEach(part => {
+      const [key, value] = part.split(':');
+      const mappedValue = valueMappings[key][value] || '';
+      switch (key) {
+        case 'AV':
+          setAV(mappedValue);
+          break;
+
+        case 'AC':
+          setAC(mappedValue);
+          break;
+
+        case 'PR':
+          setPR(mappedValue);
+          break;
+
+        case 'UI':
+          setUI(mappedValue);
+          break;
+
+        case 'S':
+          setS(mappedValue);
+          break;
+
+        case 'C':
+          setC(mappedValue);
+          break;
+
+        case 'I':
+          setI(mappedValue);
+          break;
+
+        case 'A':
+          setA(mappedValue);
+          break;
+
+        default:
+          break;
+      }
+    });
+    setChanged(true);
+  };
+
+  const [currentScore, setCurrentScore] = useState<number>(0);
 
   useEffect(() => {
-    const cvssVector = generateCVSSVector(AV, AC, PR, UI, S, C, I, A);
-    handleCvssChange(cvssVector);
-    const cvss3 = new Cvss3P1(cvssVector);
-    setCurrentScote(cvss3.calculateExactOverallScore());
-  }, [A, AC, AV, C, I, PR, S, UI, handleCvssChange]);
+    if (cvssStringInitial) {
+      parseCVSSVector(cvssStringInitial);
+    } else {
+      setChanged(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (changed) {
+      const cvssVector = generateCVSSVector(AV, AC, PR, UI, S, C, I, A);
+      handleCvssChange(cvssVector);
+      const cvss3 = new Cvss3P1(cvssVector);
+      setCurrentScore(cvss3.calculateExactOverallScore());
+    }
+  }, [AV, AC, PR, UI, S, C, I, A, changed, handleCvssChange]);
 
   return (
     <div className="w-full p-6 bg-slate-700 border border-gray-200 rounded-lg">
