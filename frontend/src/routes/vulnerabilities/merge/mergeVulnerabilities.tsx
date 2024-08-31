@@ -3,10 +3,10 @@ import { t } from 'i18next';
 import { useCallback, useEffect, useState } from 'react';
 import { toast, Toaster } from 'sonner';
 
-import DefaultRadioGroup from '../../components/button/DefaultRadioGroup';
-import PrimaryButton from '../../components/button/PrimaryButton';
-import SelectDropdown from '../../components/dropdown/SelectDropdown';
-import { mergeVulnerability } from '../../services/vulnerabilities';
+import DefaultRadioGroup from '../../../components/button/DefaultRadioGroup';
+import PrimaryButton from '../../../components/button/PrimaryButton';
+import SelectDropdown from '../../../components/dropdown/SelectDropdown';
+import { mergeVulnerability } from '../../../services/vulnerabilities';
 
 type Details = {
   locale: string;
@@ -152,7 +152,6 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({
   };
 
   const onSubmitMerge = async () => {
-
     if (selectedRadioLeft !== '' && selectedRadioRight !== '') {
       try {
         const [leftId] = selectedRadioLeft.split('.');

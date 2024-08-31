@@ -15,10 +15,10 @@ import {
   getTypes,
   getVulnerabilities,
 } from '../../services/vulnerabilities';
-import AddVulnerability from './addVulnerability';
+import AddVulnerability from './add/addVulnerability';
 import VulnerabilityButtons from './components/vulnerabilityButtons';
-import EditVulnerability from './editVulnerability';
-import MergeVulnerabilities from './mergeVulnerabilities';
+import EditVulnerability from './edit/editVulnerability';
+import MergeVulnerabilities from './merge/mergeVulnerabilities';
 
 type Details = {
   locale: string;
