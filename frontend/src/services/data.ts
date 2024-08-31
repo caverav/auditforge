@@ -51,23 +51,23 @@ type NewTemplate = {
   file: string;
 };
 
+const networkErrorMsg = 'Network response was not ok';
+
 export const getRoles = async (): Promise<any> => {
   try {
     const response = await fetch(`${API_URL}data/roles`, {
       credentials: 'include',
     }); // Incluir token
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error(networkErrorMsg);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error(error);
+
     throw error;
   }
 };
-
-const networkErrorMsg = 'Network response was not ok';
 
 export const getCollaborators = async (): Promise<{
   status: string;
@@ -106,7 +106,8 @@ export const createCollaborator = async (
     }
     return await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error(error);
+
     throw error;
   }
 };
@@ -125,12 +126,10 @@ export const updateCollaborator = async (
     });
 
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error(networkErrorMsg);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
     console.error(error);
 
     throw error;
@@ -175,7 +174,8 @@ export const createCompany = async (
     }
     return await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error(error);
+
     throw error;
   }
 };
@@ -192,12 +192,12 @@ export const updateCompany = async (company: NewCompany): Promise<any> => {
     });
 
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error(networkErrorMsg);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error(error);
+
     throw error;
   }
 };
@@ -211,12 +211,10 @@ export const deleteCompany = async (companyId: string): Promise<any> => {
     });
 
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error(networkErrorMsg);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
     console.error(error);
 
     throw error;
@@ -261,7 +259,8 @@ export const createClient = async (
     }
     return await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error(error);
+
     throw error;
   }
 };
@@ -278,12 +277,12 @@ export const updateClient = async (company: NewClient): Promise<any> => {
     });
 
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error(networkErrorMsg);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error(error);
+
     throw error;
   }
 };
@@ -297,12 +296,10 @@ export const deleteClient = async (clientId: string): Promise<any> => {
     });
 
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error(networkErrorMsg);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
     console.error(error);
 
     throw error;
@@ -347,7 +344,8 @@ export const createTemplate = async (
     }
     return await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error(error);
+
     throw error;
   }
 };
@@ -364,12 +362,12 @@ export const updateTemplate = async (template: NewTemplate): Promise<any> => {
     });
 
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error(networkErrorMsg);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error(error);
+
     throw error;
   }
 };
@@ -383,12 +381,12 @@ export const deleteTemplate = async (templateId: string): Promise<any> => {
     });
 
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error(networkErrorMsg);
     }
-    const data = await response.json();
-    return data;
+    return await response.json();
   } catch (error) {
-    console.error('Error fetching data:', error);
+    console.error(error);
+
     throw error;
   }
 };
@@ -399,13 +397,11 @@ export const downloadTemplate = async (templateId: string): Promise<any> => {
       credentials: 'include',
     });
     if (!response.ok) {
-      throw new Error('Network response was not ok');
+      throw new Error(networkErrorMsg);
     }
-    const blob = await response.blob();
-    return blob;
+    return await response.blob();
   } catch (error) {
     console.error('Error fetching file:', error);
-    console.error(error);
 
     throw error;
   }
