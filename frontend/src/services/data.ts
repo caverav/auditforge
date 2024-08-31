@@ -53,7 +53,10 @@ type NewTemplate = {
 
 const networkErrorMsg = 'Network response was not ok';
 
-export const getRoles = async (): Promise<any> => {
+export const getRoles = async (): Promise<{
+  status: string;
+  datas: string[];
+}> => {
   try {
     const response = await fetch(`${API_URL}data/roles`, {
       credentials: 'include',
@@ -114,7 +117,7 @@ export const createCollaborator = async (
 
 export const updateCollaborator = async (
   collaborator: NewCollaborator,
-): Promise<any> => {
+): Promise<{ status: string; datas: string }> => {
   try {
     const { _id, ...collaboratorWithoutId } = collaborator;
 
@@ -180,7 +183,9 @@ export const createCompany = async (
   }
 };
 
-export const updateCompany = async (company: NewCompany): Promise<any> => {
+export const updateCompany = async (
+  company: NewCompany,
+): Promise<{ status: string; datas: string }> => {
   try {
     const { _id, ...companyWithoutId } = company;
 
@@ -202,7 +207,9 @@ export const updateCompany = async (company: NewCompany): Promise<any> => {
   }
 };
 
-export const deleteCompany = async (companyId: string): Promise<any> => {
+export const deleteCompany = async (
+  companyId: string,
+): Promise<{ status: string; datas: string }> => {
   try {
     const response = await fetch(`${API_URL}companies/${companyId}`, {
       method: 'DELETE',
@@ -265,7 +272,9 @@ export const createClient = async (
   }
 };
 
-export const updateClient = async (company: NewClient): Promise<any> => {
+export const updateClient = async (
+  company: NewClient,
+): Promise<{ status: string; datas: string }> => {
   try {
     const { _id, ...clientWithoutId } = company;
 
@@ -287,7 +296,9 @@ export const updateClient = async (company: NewClient): Promise<any> => {
   }
 };
 
-export const deleteClient = async (clientId: string): Promise<any> => {
+export const deleteClient = async (
+  clientId: string,
+): Promise<{ status: string; datas: string }> => {
   try {
     const response = await fetch(`${API_URL}clients/${clientId}`, {
       method: 'DELETE',
@@ -350,7 +361,9 @@ export const createTemplate = async (
   }
 };
 
-export const updateTemplate = async (template: NewTemplate): Promise<any> => {
+export const updateTemplate = async (
+  template: NewTemplate,
+): Promise<{ status: string; datas: string }> => {
   try {
     const { _id, ...TemplateWithoutId } = template;
 
@@ -372,7 +385,9 @@ export const updateTemplate = async (template: NewTemplate): Promise<any> => {
   }
 };
 
-export const deleteTemplate = async (templateId: string): Promise<any> => {
+export const deleteTemplate = async (
+  templateId: string,
+): Promise<{ status: string; datas: string }> => {
   try {
     const response = await fetch(`${API_URL}templates/${templateId}`, {
       method: 'DELETE',
@@ -391,7 +406,7 @@ export const deleteTemplate = async (templateId: string): Promise<any> => {
   }
 };
 
-export const downloadTemplate = async (templateId: string): Promise<any> => {
+export const downloadTemplate = async (templateId: string): Promise<Blob> => {
   try {
     const response = await fetch(`${API_URL}templates/download/${templateId}`, {
       credentials: 'include',
