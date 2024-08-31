@@ -1,7 +1,7 @@
 import { Cvss3P1 } from 'ae-cvss-calculator';
 import React, { useEffect, useState } from 'react';
 
-import MetricGroup from './components/MetricGroup';
+import MetricGroup from './MetricGroup';
 
 type CVSSProp = {
   handleCvssChange: (value: string) => void;
