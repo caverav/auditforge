@@ -87,7 +87,7 @@ const CVSSCalculator: React.FC<CVSSProp> = ({ handleCvssChange }) => {
   }, [A, AC, AV, C, I, PR, S, UI, handleCvssChange]);
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-slate-700 border border-gray-200 rounded-lg">
+    <div className="w-full p-6 bg-slate-700 border border-gray-200 rounded-lg">
       <h2 className="text-xl font-semibold text-center mb-8">
         CVSS v3.1 Base Score
       </h2>
