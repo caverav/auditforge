@@ -54,7 +54,7 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({
               'min-h-[2.3rem]',
             )}
           >
-            <span className="truncate">
+            <div>
               <ListboxSelectedOption
                 options={items.map(item => (
                   <ListboxOption
@@ -70,7 +70,7 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({
                 ))}
                 placeholder={placeholder}
               />
-            </span>
+            </div>
             <ChevronDownIcon
               aria-hidden="true"
               className="size-4 fill-white/60 mr-1"
