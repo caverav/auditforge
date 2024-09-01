@@ -1,14 +1,13 @@
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
+import Card from "../../components/card/Card";
+import { useEffect, useState } from "react";
+import { createCollaborator, getCollaborators } from "../../services/data";
+import PrimaryButton from "../../components/button/PrimaryButton";
+import Modal from "../../components/modal/Modal";
+import SimpleInput from "../../components/input/SimpleInput";
+import SelectDropdown from "../../components/dropdown/SelectDropdown";
 
-import PrimaryButton from '../../components/button/PrimaryButton';
-import Card from '../../components/card/Card';
-import SelectDropdown from '../../components/dropdown/SelectDropdown';
-import SimpleInput from '../../components/input/SimpleInput';
-import Modal from '../../components/modal/Modal';
-import { createCollaborator, getCollaborators } from '../../services/data';
-
-type NewCollaborator = {
+interface NewCollaborator {
   email: string;
   firstname: string;
   lastname: string;
@@ -17,13 +16,13 @@ type NewCollaborator = {
   role: string;
   totpenabled: boolean;
   username: string;
-};
+}
 
 // Estos roles deberían venir del backend.
 const rolesOptions = [
-  { id: 1, value: 'user' },
-  { id: 2, value: 'admin' },
-  { id: 3, value: 'report' },
+  { id: 1, value: "user" },
+  { id: 2, value: "admin" },
+  { id: 3, value: "report" },
 ];
 
 export const Collaborators: React.FC = () => {
@@ -34,14 +33,14 @@ export const Collaborators: React.FC = () => {
 
   const [newCollaborator, setNewCollaborator] =
     useState<NewCollaborator | null>({
-      email: '',
-      firstname: '',
-      lastname: '',
-      password: '',
-      phone: '',
+      email: "",
+      firstname: "",
+      lastname: "",
+      password: "",
+      phone: "",
       role: selectedRole.value,
       totpenabled: false,
-      username: '',
+      username: "",
     });
 
   const [collaborators, setCollaborators] = useState<any[]>([]);
@@ -57,7 +56,7 @@ export const Collaborators: React.FC = () => {
         setCollaborators(data);
         setLoading(false);
       } catch (err) {
-        setError('Error fetching collaborators');
+        setError("Error fetching collaborators");
         setLoading(false);
       }
     };
@@ -74,15 +73,15 @@ export const Collaborators: React.FC = () => {
     try {
       await createCollaborator(newCollaborator!);
     } catch (error) {
-      setError('Error creating collaborator');
-      console.error('Error:', error);
+      setError("Error creating collaborator");
+      console.error("Error:", error);
     }
     setNewCollaborator(null);
     setIsOpenAddCollabModal(!isOpenAddCollabModal);
   };
 
   const handleInputChange = (name: string, value: string) => {
-    setNewCollaborator(prevState => ({
+    setNewCollaborator((prevState) => ({
       ...prevState!,
       [name]: value,
     }));
@@ -90,85 +89,85 @@ export const Collaborators: React.FC = () => {
 
   return (
     <>
-      <Card title={t('collaborators')}>
+      <Card title={t("collaborators")}>
         <>
           <PrimaryButton
             onClick={() => setIsOpenAddCollabModal(!isOpenAddCollabModal)}
           >
-            {t('addCollaborator')}
+            {t("addCollaborator")}
           </PrimaryButton>
           <div>tarjetaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
-          <div>{loading ? 'cargandooo' : JSON.stringify(collaborators)}</div>
+          <div>{loading ? "cargandooo" : JSON.stringify(collaborators)}</div>
         </>
       </Card>
       <Modal
-        cancelText={t('btn.cancel')}
-        isOpen={isOpenAddCollabModal}
+        title={t("addCollaborator")}
         onCancel={handleCancelAddCollab}
         onSubmit={handleSubmitAddCollab}
-        submitText={t('btn.create')}
-        title={t('addCollaborator')}
+        cancelText={t("btn.cancel")}
+        submitText={t("btn.create")}
+        isOpen={isOpenAddCollabModal}
       >
         <>
           <SimpleInput
-            id="username"
-            label={t('username')}
-            name="username"
-            onChange={value => handleInputChange('username', value)}
-            placeholder={t('username')}
-            type="text"
-            value={newCollaborator?.username || ''}
+            label={t("username")}
+            id={"username"}
+            name={"username"}
+            type={"text"}
+            placeholder={t("username")}
+            value={newCollaborator?.username || ""}
+            onChange={(value) => handleInputChange("username", value)}
           />
           <SimpleInput
-            id="firstname"
-            label={t('firstname')}
-            name="firstname"
-            onChange={value => handleInputChange('firstname', value)}
-            placeholder={t('firstname')}
-            type="text"
-            value={newCollaborator?.firstname || ''}
+            label={t("firstname")}
+            id={"firstname"}
+            name={"firstname"}
+            type={"text"}
+            placeholder={t("firstname")}
+            value={newCollaborator?.firstname || ""}
+            onChange={(value) => handleInputChange("firstname", value)}
           />
           <SimpleInput
-            id="lastname"
-            label={t('lastname')}
-            name="lastname"
-            onChange={value => handleInputChange('lastname', value)}
-            placeholder={t('lastname')}
-            type="text"
-            value={newCollaborator?.lastname || ''}
+            label={t("lastname")}
+            id={"lastname"}
+            name={"lastname"}
+            type={"text"}
+            placeholder={t("lastname")}
+            value={newCollaborator?.lastname || ""}
+            onChange={(value) => handleInputChange("lastname", value)}
           />
           <SimpleInput
-            id="password"
-            label={t('password')}
-            name="password"
-            onChange={value => handleInputChange('password', value)}
-            placeholder={t('password')}
-            type="text"
-            value={newCollaborator?.password || ''}
+            label={t("password")}
+            id={"password"}
+            name={"password"}
+            type={"text"}
+            placeholder={t("password")}
+            value={newCollaborator?.password || ""}
+            onChange={(value) => handleInputChange("password", value)}
           />
           <SimpleInput
-            id="phone"
-            label={t('phone')}
-            name="phone"
-            onChange={value => handleInputChange('phone', value)}
-            placeholder={t('phone')}
-            type="text"
-            value={newCollaborator?.phone || ''}
+            label={t("phone")}
+            id={"phone"}
+            name={"phone"}
+            type={"text"}
+            placeholder={t("phone")}
+            value={newCollaborator?.phone || ""}
+            onChange={(value) => handleInputChange("phone", value)}
           />
           <SelectDropdown
             items={roles}
-            onChange={setSelectedRole}
+            title={t("role")}
             selected={selectedRole}
-            title={t('role')}
+            onChange={setSelectedRole}
           />
           <SimpleInput
-            id="email"
-            label={t('email')}
-            name="email"
-            onChange={value => handleInputChange('email', value)}
-            placeholder={t('email')}
-            type="text"
-            value={newCollaborator?.email || ''}
+            label={t("email")}
+            id={"email"}
+            name={"email"}
+            type={"text"}
+            placeholder={t("email")}
+            value={newCollaborator?.email || ""}
+            onChange={(value) => handleInputChange("email", value)}
           />
         </>
       </Modal>

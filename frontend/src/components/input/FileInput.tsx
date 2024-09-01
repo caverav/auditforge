@@ -1,13 +1,17 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useState } from "react";
 
-type FileInputProps = {
+interface FileInputProps {
   id: string;
   name: string;
   onFileSelect: (file: { name: string; content: string }) => void;
-};
+}
 
-const FileInput: React.FC<FileInputProps> = ({ id, name, onFileSelect }) => {
-  const [fileName, setFileName] = useState<string>('');
+const FileInput: React.FC<FileInputProps> = ({
+  id,
+  name,
+  onFileSelect,
+}) => {
+  const [fileName, setFileName] = useState<string>("");
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -38,19 +42,19 @@ const FileInput: React.FC<FileInputProps> = ({ id, name, onFileSelect }) => {
     <div>
       <div className="relative mt-2 rounded-md shadow-sm">
         <input
-          accept=".doc,.docx,.docm,.ppt,.pptx"
-          className="block w-full rounded-md border-0 py-1.5 pl-7 pr-7 text-white-900 placeholder:text-gray-400 sm:text-sm sm:leading-6"
           id={id}
           name={name}
-          onChange={handleFileChange}
           type="file"
+          accept=".doc,.docx,.docm,.ppt,.pptx"
+          onChange={handleFileChange}
+          className="block w-full rounded-md border-0 py-1.5 pl-7 pr-7 text-white-900 placeholder:text-gray-400 sm:text-sm sm:leading-6"
         />
       </div>
-      {fileName ? (
+      {fileName && (
         <div className="mt-4 text-center">
           <p className="text-sm text-gray-400">{fileName}</p>
         </div>
-      ) : null}
+      )}
     </div>
   );
 };

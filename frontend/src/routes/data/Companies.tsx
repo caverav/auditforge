@@ -1,26 +1,25 @@
-import { useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
+import Card from "../../components/card/Card";
+import { useEffect, useState } from "react";
+import { getCompanies, createCompany } from "../../services/data";
+import PrimaryButton from "../../components/button/PrimaryButton";
+import Modal from "../../components/modal/Modal";
+import SimpleInput from "../../components/input/SimpleInput";
+import ImageInput from "../../components/input/ImageInput";
 
-import PrimaryButton from '../../components/button/PrimaryButton';
-import Card from '../../components/card/Card';
-import ImageInput from '../../components/input/ImageInput';
-import SimpleInput from '../../components/input/SimpleInput';
-import Modal from '../../components/modal/Modal';
-import { createCompany, getCompanies } from '../../services/data';
-
-type NewCompany = {
+interface NewCompany {
   name: string;
   shortname: string;
   logo: string;
-};
+}
 
 export const Companies: React.FC = () => {
   const { t } = useTranslation();
 
   const [newCompany, setNewCompany] = useState<NewCompany | null>({
-    name: '',
-    shortname: '',
-    logo: '',
+    name: "",
+    shortname: "",
+    logo: "",
   });
 
   const [companies, setCompanies] = useState<any[]>([]);
@@ -36,7 +35,7 @@ export const Companies: React.FC = () => {
         setCompanies(data);
         setLoading(false);
       } catch (err) {
-        setError('Error fetching company');
+        setError("Error fetching company");
         setLoading(false);
       }
     };
@@ -53,22 +52,22 @@ export const Companies: React.FC = () => {
     try {
       await createCompany(newCompany!);
     } catch (error) {
-      setError('Error creating company');
-      console.error('Error:', error);
+      setError("Error creating company");
+      console.error("Error:", error);
     }
     setNewCompany(null);
     setIsOpenAddCollabModal(!isOpenAddCollabModal);
   };
 
   const handleInputChange = (name: string, value: string) => {
-    setNewCompany(prevState => ({
+    setNewCompany((prevState) => ({
       ...prevState!,
       [name]: value,
     }));
   };
 
   const handleImageSelect = (base64String: string) => {
-    setNewCompany(prevState => ({
+    setNewCompany((prevState) => ({
       ...prevState!,
       logo: base64String,
     }));
@@ -76,48 +75,48 @@ export const Companies: React.FC = () => {
 
   return (
     <>
-      <Card title={t('companies')}>
+      <Card title={t("companies")}>
         <>
           <PrimaryButton
             onClick={() => setIsOpenAddCollabModal(!isOpenAddCollabModal)}
           >
-            {t('addCompany')}
+            {t("addCompany")}
           </PrimaryButton>
           <div>tarjetaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
-          <div>{loading ? 'cargandooo' : JSON.stringify(companies)}</div>
+          <div>{loading ? "cargandooo" : JSON.stringify(companies)}</div>
         </>
       </Card>
       <Modal
-        cancelText={t('btn.cancel')}
-        isOpen={isOpenAddCollabModal}
+        title={t("addCompany")}
         onCancel={handleCancelAddCollab}
         onSubmit={handleSubmitAddCollab}
-        submitText={t('btn.create')}
-        title={t('addCompany')}
+        cancelText={t("btn.cancel")}
+        submitText={t("btn.create")}
+        isOpen={isOpenAddCollabModal}
       >
         <>
           <SimpleInput
-            id="name"
-            label={t('name')}
-            name="name"
-            onChange={value => handleInputChange('name', value)}
-            placeholder={t('name')}
-            type="text"
-            value={newCompany?.name || ''}
+            label={t("name")}
+            id={"name"}
+            name={"name"}
+            type={"text"}
+            placeholder={t("name")}
+            value={newCompany?.name || ""}
+            onChange={(value) => handleInputChange("name", value)}
           />
           <SimpleInput
-            id="shortname"
-            label={t('shortName')}
-            name="shortname"
-            onChange={value => handleInputChange('shortname', value)}
-            placeholder={t('shortName')}
-            type="text"
-            value={newCompany?.shortname || ''}
+            label={t("shortName")}
+            id={"shortname"}
+            name={"shortname"}
+            type={"text"}
+            placeholder={t("shortName")}
+            value={newCompany?.shortname || ""}
+            onChange={(value) => handleInputChange("shortname", value)}
           />
           <ImageInput
-            id="logo"
-            label={t('logo')}
-            name="logo"
+            label={t("logo")}
+            id={"logo"}
+            name={"logo"}
             onImageSelect={handleImageSelect}
           />
         </>

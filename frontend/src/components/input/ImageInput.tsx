@@ -1,11 +1,11 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useState } from "react";
 
-type ImageInputProps = {
+interface ImageInputProps {
   label: string;
   id: string;
   name: string;
   onImageSelect: (image: string) => void;
-};
+}
 
 const ImageInput: React.FC<ImageInputProps> = ({
   label,
@@ -31,30 +31,30 @@ const ImageInput: React.FC<ImageInputProps> = ({
   return (
     <div>
       <label
-        className="block text-sm font-medium leading-6 text-gray-300"
         htmlFor={id}
+        className="block text-sm font-medium leading-6 text-gray-300"
       >
         {label}
       </label>
       <div className="relative mt-2 rounded-md shadow-sm">
         <input
-          accept="image/*"
-          className="block w-full rounded-md border-0 py-1.5 pl-7 pr-7 text-white-900 placeholder:text-gray-400 sm:text-sm sm:leading-6"
           id={id}
           name={name}
-          onChange={handleImageChange}
           type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="block w-full rounded-md border-0 py-1.5 pl-7 pr-7 text-white-900 placeholder:text-gray-400 sm:text-sm sm:leading-6"
         />
       </div>
-      {imagePreview ? (
+      {imagePreview && (
         <div className="mt-4 flex justify-center">
           <img
+            src={imagePreview}
             alt="Image Preview"
             className="w-40 h-auto rounded-md shadow-md"
-            src={imagePreview}
           />
         </div>
-      ) : null}
+      )}
     </div>
   );
 };
