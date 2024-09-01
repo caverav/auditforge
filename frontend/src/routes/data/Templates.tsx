@@ -1,36 +1,37 @@
-import { useTranslation } from "react-i18next";
-import Card from "../../components/card/Card";
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
+
+import PrimaryButton from '../../components/button/PrimaryButton';
+import Card from '../../components/card/Card';
+import FileInput from '../../components/input/FileInput';
+import SimpleInput from '../../components/input/SimpleInput';
+import Modal from '../../components/modal/Modal';
+import UITable from '../../components/table/UITable';
+import { useSortableTable } from '../../hooks/useSortableTable';
+import { useTableFiltering } from '../../hooks/useTableFiltering';
 import {
   createTemplate,
   deleteTemplate,
   downloadTemplate,
   getTemplates,
   updateTemplate,
-} from "../../services/data";
-import PrimaryButton from "../../components/button/PrimaryButton";
-import Modal from "../../components/modal/Modal";
-import SimpleInput from "../../components/input/SimpleInput";
-import FileInput from "../../components/input/FileInput";
-import UITable from "../../components/table/UITable";
-import { useSortableTable } from "../../hooks/useSortableTable";
-import { useTableFiltering } from "../../hooks/useTableFiltering";
-import { toast } from "sonner";
+} from '../../services/data';
 
-interface NewTemplate {
+type NewTemplate = {
   id?: string;
   name: string;
   ext: string;
   file: string;
-}
+};
 
 export const Templates: React.FC = () => {
   const { t } = useTranslation();
 
   const [newTemplate, setNewTemplate] = useState<NewTemplate | null>({
-    name: "",
-    ext: "",
-    file: "",
+    name: '',
+    ext: '',
+    file: '',
   });
 
   const [templates, setTemplates] = useState<any[]>([]);
@@ -38,7 +39,7 @@ export const Templates: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const [selectedTemplate, setSelectedTemplate] = useState<TableData | null>(
-    null
+    null,
   );
 
   const fetchTemplates = async () => {
@@ -48,7 +49,7 @@ export const Templates: React.FC = () => {
       setTableData(data.datas);
       setLoading(false);
     } catch (err) {
-      setError("Error fetching company");
+      setError('Error fetching company');
       setLoading(false);
     }
   };
@@ -58,10 +59,10 @@ export const Templates: React.FC = () => {
   }, []);
 
   const columns = [
-    { header: t("name"), accessor: "name", sortable: true, filterable: true },
+    { header: t('name'), accessor: 'name', sortable: true, filterable: true },
     {
-      header: t("extension"),
-      accessor: "ext",
+      header: t('extension'),
+      accessor: 'ext',
       sortable: true,
       filterable: true,
     },
@@ -76,7 +77,7 @@ export const Templates: React.FC = () => {
   const keyExtractor = (item: any) => item._id;
 
   const handleEditTemplateButton = (template: TableData) => {
-    setNewTemplate((prevState) => ({
+    setNewTemplate(prevState => ({
       ...prevState!,
       _id: template._id,
     }));
@@ -89,7 +90,7 @@ export const Templates: React.FC = () => {
 
       const url = window.URL.createObjectURL(blob);
 
-      const link = document.createElement("a");
+      const link = document.createElement('a');
       link.href = url;
 
       link.download = `${template.name}.${template.ext}`;
@@ -98,7 +99,7 @@ export const Templates: React.FC = () => {
       window.URL.revokeObjectURL(url);
       link.remove();
     } catch (error) {
-      setError("Error downloading template");
+      setError('Error downloading template');
     }
   };
 
@@ -109,28 +110,28 @@ export const Templates: React.FC = () => {
 
   const rowActions = [
     {
-      label: "Edit",
+      label: 'Edit',
       onClick: (item: TableData) => handleEditTemplateButton(item),
     },
     {
-      label: "Download",
+      label: 'Download',
       onClick: (item: TableData) => handleDownloadTemplateButton(item),
     },
     {
-      label: "Delete",
+      label: 'Delete',
       onClick: (item: TableData) => handleDeleteTemplateButton(item),
     },
   ];
 
   const [tableData, handleSorting, setTableData] = useSortableTable<TableData>(
     templates,
-    columns
+    columns,
   );
 
   const [filters, handleFilterChange] = useTableFiltering<TableData>(
     templates,
     columns,
-    setTableData
+    setTableData,
   );
 
   const [isOpenAddTemplateModal, setIsOpenAddTemplateModal] = useState(false);
@@ -146,10 +147,10 @@ export const Templates: React.FC = () => {
   const handleSubmitAddTemplate = async () => {
     try {
       await createTemplate(newTemplate!);
-      toast.success(t("msg.templateCreatedOk"));
+      toast.success(t('msg.templateCreatedOk'));
     } catch (error) {
-      setError("Error creating company");
-      console.error("Error:", error);
+      setError('Error creating company');
+      console.error('Error:', error);
     }
     setNewTemplate(null);
     setIsOpenAddTemplateModal(!isOpenAddTemplateModal);
@@ -164,10 +165,10 @@ export const Templates: React.FC = () => {
   const handleSubmitEditTemplate = async () => {
     try {
       await updateTemplate(newTemplate!);
-      toast.success(t("msg.templateUpdatedOk"));
+      toast.success(t('msg.templateUpdatedOk'));
     } catch (error) {
-      setError("Error updating template");
-      console.error("Error:", error);
+      setError('Error updating template');
+      console.error('Error:', error);
     }
     setNewTemplate(null);
     setIsOpenEditTemplateModal(!isOpenEditTemplateModal);
@@ -182,10 +183,10 @@ export const Templates: React.FC = () => {
     if (selectedTemplate?._id) {
       try {
         await deleteTemplate(selectedTemplate._id);
-        toast.success(t("msg.templateDeletedOk"));
+        toast.success(t('msg.templateDeletedOk'));
       } catch (error) {
-        setError("Error deleting template");
-        console.error("Error:", error);
+        setError('Error deleting template');
+        console.error('Error:', error);
       }
       setSelectedTemplate(null);
       setIsOpenDeleteTemplateModal(!isOpenDeleteTemplateModal);
@@ -194,110 +195,110 @@ export const Templates: React.FC = () => {
   };
 
   const handleInputChange = (name: string, value: string) => {
-    setNewTemplate((prevState) => ({
+    setNewTemplate(prevState => ({
       ...prevState!,
       [name]: value,
     }));
   };
 
   const handleFileSelect = (ext: string, content: string) => {
-    setNewTemplate((prevState) => ({
+    setNewTemplate(prevState => ({
       ...prevState!,
-      ext: ext,
+      ext,
       file: content,
     }));
   };
 
   return (
     <>
-      <Card title={t("templates")}>
+      <Card title={t('templates')}>
         <>
           <div className="flex justify-end mb-2 mr-2">
             <PrimaryButton
               onClick={() => setIsOpenAddTemplateModal(!isOpenAddTemplateModal)}
             >
-              {t("createTemplate")}
+              {t('createTemplate')}
             </PrimaryButton>
           </div>
           <UITable
             columns={columns}
             data={tableData}
-            keyExtractor={keyExtractor}
-            onSort={handleSorting}
+            emptyState={<div>{t('err.noMatchingRecords')}</div>}
             filters={filters}
+            keyExtractor={keyExtractor}
             onFilter={handleFilterChange}
+            onSort={handleSorting}
             rowActions={rowActions}
-            emptyState={<div>{t("err.noMatchingRecords")}</div>}
           />
         </>
       </Card>
       <Modal
-        title={t("createTemplate")}
+        cancelText={t('btn.cancel')}
+        isOpen={isOpenAddTemplateModal}
         onCancel={handleCancelAddTemplate}
         onSubmit={handleSubmitAddTemplate}
-        cancelText={t("btn.cancel")}
-        submitText={t("btn.create")}
-        isOpen={isOpenAddTemplateModal}
+        submitText={t('btn.create')}
+        title={t('createTemplate')}
       >
         <>
           <SimpleInput
-            label={t("name")}
             id="name"
+            label={t('name')}
             name="name"
+            onChange={value => handleInputChange('name', value)}
+            placeholder={t('name')}
             type="text"
-            placeholder={t("name")}
-            value={newTemplate?.name || ""}
-            onChange={(value) => handleInputChange("name", value)}
+            value={newTemplate?.name || ''}
           />
           <FileInput
             id="template"
             name="template"
-            onFileSelect={(file) =>
-              handleFileSelect(file.name.split(".").pop() || "", file.content)
+            onFileSelect={file =>
+              handleFileSelect(file.name.split('.').pop() || '', file.content)
             }
           />
         </>
       </Modal>
       <Modal
-        title={t("editTemplate")}
+        cancelText={t('btn.cancel')}
+        isOpen={isOpenEditTemplateModal}
         onCancel={handleCancelEditTemplate}
         onSubmit={handleSubmitEditTemplate}
-        cancelText={t("btn.cancel")}
-        submitText={t("btn.update")}
-        isOpen={isOpenEditTemplateModal}
+        submitText={t('btn.update')}
+        title={t('editTemplate')}
       >
         <>
           <SimpleInput
-            label={t("name")}
             id="name"
+            label={t('name')}
             name="name"
+            onChange={value => handleInputChange('name', value)}
+            placeholder={t('name')}
             type="text"
-            placeholder={t("name")}
-            value={newTemplate?.name || ""}
-            onChange={(value) => handleInputChange("name", value)}
+            value={newTemplate?.name || ''}
           />
           <FileInput
             id="template"
             name="template"
-            onFileSelect={(file) =>
-              handleFileSelect(file.name.split(".").pop() || "", file.content)
+            onFileSelect={file =>
+              handleFileSelect(file.name.split('.').pop() || '', file.content)
             }
           />
         </>
       </Modal>
       <Modal
-        title={t("msg.confirmSuppression")}
+        cancelText={t('btn.cancel')}
+        isOpen={isOpenDeleteTemplateModal}
         onCancel={handleCancelDeleteTemplate}
         onSubmit={handleSubmitDeleteTemplate}
-        cancelText={t("btn.cancel")}
-        submitText={t("btn.confirm")}
-        isOpen={isOpenDeleteTemplateModal}
+        submitText={t('btn.confirm')}
+        title={t('msg.confirmSuppression')}
       >
         <p>
-          {t("template") +
+          {t('template') +
             ` <<${selectedTemplate?.name}>> ` +
-            t("msg.deleteNotice") +
-            "!"}
+            t('msg.deleteNotice') +
+            '!'}
         </p>
       </Modal>
     </>

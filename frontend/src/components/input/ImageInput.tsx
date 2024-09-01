@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState, useEffect } from "react";
+import React, { ChangeEvent, useEffect, useState } from 'react';
 
 type ImageInputProps = {
   label: string;
@@ -6,7 +6,7 @@ type ImageInputProps = {
   name: string;
   onImageSelect: (image: string) => void;
   initialImage?: string; // Optional prop to set the initial image
-}
+};
 
 const ImageInput: React.FC<ImageInputProps> = ({
   label,
@@ -16,7 +16,7 @@ const ImageInput: React.FC<ImageInputProps> = ({
   initialImage,
 }) => {
   const [imagePreview, setImagePreview] = useState<string | null>(
-    initialImage || null
+    initialImage || null,
   );
 
   useEffect(() => {
@@ -41,30 +41,30 @@ const ImageInput: React.FC<ImageInputProps> = ({
   return (
     <div>
       <label
-        htmlFor={id}
         className="block text-sm font-medium leading-6 text-gray-300"
+        htmlFor={id}
       >
         {label}
       </label>
       <div className="relative mt-2 rounded-md shadow-sm">
         <input
+          accept="image/*"
+          className="block w-full rounded-md border-0 py-1.5 pl-7 pr-7 text-white-900 placeholder:text-gray-400 sm:text-sm sm:leading-6"
           id={id}
           name={name}
-          type="file"
-          accept="image/*"
           onChange={handleImageChange}
-          className="block w-full rounded-md border-0 py-1.5 pl-7 pr-7 text-white-900 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+          type="file"
         />
       </div>
-      {imagePreview && (
+      {imagePreview ? (
         <div className="mt-4 flex justify-center">
           <img
-            src={imagePreview}
             alt="Image Preview"
             className="w-40 h-auto rounded-md shadow-md"
+            src={imagePreview}
           />
         </div>
-      )}
+      ) : null}
     </div>
   );
 };

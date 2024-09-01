@@ -1,35 +1,36 @@
-import { useTranslation } from "react-i18next";
-import Card from "../../components/card/Card";
-import { useEffect, useState } from "react";
-import {
-  getCompanies,
-  createCompany,
-  updateCompany,
-  deleteCompany,
-} from "../../services/data";
-import PrimaryButton from "../../components/button/PrimaryButton";
-import Modal from "../../components/modal/Modal";
-import SimpleInput from "../../components/input/SimpleInput";
-import ImageInput from "../../components/input/ImageInput";
-import UITable from "../../components/table/UITable";
-import { useSortableTable } from "../../hooks/useSortableTable";
-import { useTableFiltering } from "../../hooks/useTableFiltering";
-import { toast } from "sonner";
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 
-interface NewCompany {
+import PrimaryButton from '../../components/button/PrimaryButton';
+import Card from '../../components/card/Card';
+import ImageInput from '../../components/input/ImageInput';
+import SimpleInput from '../../components/input/SimpleInput';
+import Modal from '../../components/modal/Modal';
+import UITable from '../../components/table/UITable';
+import { useSortableTable } from '../../hooks/useSortableTable';
+import { useTableFiltering } from '../../hooks/useTableFiltering';
+import {
+  createCompany,
+  deleteCompany,
+  getCompanies,
+  updateCompany,
+} from '../../services/data';
+
+type NewCompany = {
   _id?: string;
   name: string;
   shortName: string;
   logo: string;
-}
+};
 
 export const Companies: React.FC = () => {
   const { t } = useTranslation();
 
   const [newCompany, setNewCompany] = useState<NewCompany | null>({
-    name: "",
-    shortName: "",
-    logo: "",
+    name: '',
+    shortName: '',
+    logo: '',
   });
 
   const [companies, setCompanies] = useState<any[]>([]);
@@ -37,7 +38,7 @@ export const Companies: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
 
   const [selectedCompany, setSelectedCompany] = useState<TableData | null>(
-    null
+    null,
   );
 
   const fetchCompanies = async () => {
@@ -47,7 +48,7 @@ export const Companies: React.FC = () => {
       setTableData(data.datas);
       setLoading(false);
     } catch (err) {
-      setError("Error fetching company");
+      setError('Error fetching company');
       setLoading(false);
     }
   };
@@ -57,17 +58,17 @@ export const Companies: React.FC = () => {
   }, []);
 
   const columns = [
-    { header: t("name"), accessor: "name", sortable: true, filterable: true },
-    { header: t("shortName"), accessor: "shortName", sortable: true },
+    { header: t('name'), accessor: 'name', sortable: true, filterable: true },
+    { header: t('shortName'), accessor: 'shortName', sortable: true },
     {
-      header: t("logo"),
-      accessor: "logo",
+      header: t('logo'),
+      accessor: 'logo',
       sortable: false,
       render: (logo: string) => (
         <img
-          src={`${logo}`}
           alt="Company Logo"
-          style={{ width: "50px", height: "50px", objectFit: "contain" }}
+          src={`${logo}`}
+          style={{ width: '50px', height: '50px', objectFit: 'contain' }}
         />
       ),
     },
@@ -99,24 +100,24 @@ export const Companies: React.FC = () => {
 
   const rowActions = [
     {
-      label: "Edit",
+      label: 'Edit',
       onClick: (item: TableData) => handleEditCompanyButton(item),
     },
     {
-      label: "Delete",
+      label: 'Delete',
       onClick: (item: TableData) => handleDeleteCompanyButton(item),
     },
   ];
 
   const [tableData, handleSorting, setTableData] = useSortableTable<TableData>(
     companies,
-    columns
+    columns,
   );
 
   const [filters, handleFilterChange] = useTableFiltering<TableData>(
     companies,
     columns,
-    setTableData
+    setTableData,
   );
 
   const [isOpenAddCompaniesModal, setIsOpenAddCompaniesModal] = useState(false);
@@ -133,10 +134,10 @@ export const Companies: React.FC = () => {
   const handleSubmitAddCompanies = async () => {
     try {
       await createCompany(newCompany!);
-      toast.success(t("msg.companyCreatedOk"));
+      toast.success(t('msg.companyCreatedOk'));
     } catch (error) {
-      setError("Error creating company");
-      console.error("Error:", error);
+      setError('Error creating company');
+      console.error('Error:', error);
     }
     setNewCompany(null);
     setIsOpenAddCompaniesModal(!isOpenAddCompaniesModal);
@@ -151,10 +152,10 @@ export const Companies: React.FC = () => {
   const handleSubmitEditCompanies = async () => {
     try {
       await updateCompany(newCompany!);
-      toast.success(t("msg.companyUpdatedOk"));
+      toast.success(t('msg.companyUpdatedOk'));
     } catch (error) {
-      setError("Error updating company");
-      console.error("Error:", error);
+      setError('Error updating company');
+      console.error('Error:', error);
     }
     setNewCompany(null);
     setIsOpenEditCompaniesModal(!isOpenEditCompaniesModal);
@@ -169,10 +170,10 @@ export const Companies: React.FC = () => {
     if (selectedCompany?._id) {
       try {
         await deleteCompany(selectedCompany._id);
-        toast.success(t("msg.companyDeletedOk"));
+        toast.success(t('msg.companyDeletedOk'));
       } catch (error) {
-        setError("Error deleting company");
-        console.error("Error:", error);
+        setError('Error deleting company');
+        console.error('Error:', error);
       }
       setSelectedCompany(null);
       setIsOpenDeleteCompanyModal(!isOpenDeleteCompanyModal);
@@ -181,14 +182,14 @@ export const Companies: React.FC = () => {
   };
 
   const handleInputChange = (name: string, value: string) => {
-    setNewCompany((prevState) => ({
+    setNewCompany(prevState => ({
       ...prevState!,
       [name]: value,
     }));
   };
 
   const handleImageSelect = (base64String: string) => {
-    setNewCompany((prevState) => ({
+    setNewCompany(prevState => ({
       ...prevState!,
       logo: base64String,
     }));
@@ -196,7 +197,7 @@ export const Companies: React.FC = () => {
 
   return (
     <>
-      <Card title={t("companies")}>
+      <Card title={t('companies')}>
         <>
           <div className="flex justify-end mb-2 mr-2">
             <PrimaryButton
@@ -204,105 +205,105 @@ export const Companies: React.FC = () => {
                 setIsOpenAddCompaniesModal(!isOpenAddCompaniesModal)
               }
             >
-              {t("addCompany")}
+              {t('addCompany')}
             </PrimaryButton>
           </div>
           <UITable
             columns={columns}
             data={tableData}
-            keyExtractor={keyExtractor}
-            onSort={handleSorting}
+            emptyState={<div>{t('err.noMatchingRecords')}</div>}
             filters={filters}
+            keyExtractor={keyExtractor}
             onFilter={handleFilterChange}
+            onSort={handleSorting}
             rowActions={rowActions}
-            emptyState={<div>{t("err.noMatchingRecords")}</div>}
           />
         </>
       </Card>
       <Modal
-        title={t("addCompany")}
+        cancelText={t('btn.cancel')}
+        isOpen={isOpenAddCompaniesModal}
         onCancel={handleCancelAddCompanies}
         onSubmit={handleSubmitAddCompanies}
-        cancelText={t("btn.cancel")}
-        submitText={t("btn.create")}
-        isOpen={isOpenAddCompaniesModal}
+        submitText={t('btn.create')}
+        title={t('addCompany')}
       >
         <>
           <SimpleInput
-            label={t("name")}
             id="name"
+            label={t('name')}
             name="name"
+            onChange={value => handleInputChange('name', value)}
+            placeholder={t('name')}
             type="text"
-            placeholder={t("name")}
-            value={newCompany?.name || ""}
-            onChange={(value) => handleInputChange("name", value)}
+            value={newCompany?.name || ''}
           />
           <SimpleInput
-            label={t("shortName")}
             id="shortname"
+            label={t('shortName')}
             name="shortname"
+            onChange={value => handleInputChange('shortName', value)}
+            placeholder={t('shortName')}
             type="text"
-            placeholder={t("shortName")}
-            value={newCompany?.shortName || ""}
-            onChange={(value) => handleInputChange("shortName", value)}
+            value={newCompany?.shortName || ''}
           />
           <ImageInput
-            label={t("logo")}
             id="logo"
+            label={t('logo')}
             name="logo"
             onImageSelect={handleImageSelect}
           />
         </>
       </Modal>
       <Modal
-        title={t("editCompany")}
+        cancelText={t('btn.cancel')}
+        isOpen={isOpenEditCompaniesModal}
         onCancel={handleCancelEditCompanies}
         onSubmit={handleSubmitEditCompanies}
-        cancelText={t("btn.cancel")}
-        submitText={t("btn.update")}
-        isOpen={isOpenEditCompaniesModal}
+        submitText={t('btn.update')}
+        title={t('editCompany')}
       >
         <>
           <SimpleInput
-            label={t("name")}
             id="name"
+            label={t('name')}
             name="name"
+            onChange={value => handleInputChange('name', value)}
+            placeholder={t('name')}
             type="text"
-            placeholder={t("name")}
-            value={newCompany?.name || ""}
-            onChange={(value) => handleInputChange("name", value)}
+            value={newCompany?.name || ''}
           />
           <SimpleInput
-            label={t("shortName")}
             id="shortname"
+            label={t('shortName')}
             name="shortname"
+            onChange={value => handleInputChange('shortName', value)}
+            placeholder={t('shortName')}
             type="text"
-            placeholder={t("shortName")}
-            value={newCompany?.shortName || ""}
-            onChange={(value) => handleInputChange("shortName", value)}
+            value={newCompany?.shortName || ''}
           />
           <ImageInput
-            label={t("logo")}
             id="logo"
+            initialImage={newCompany?.logo || ''}
+            label={t('logo')}
             name="logo"
             onImageSelect={handleImageSelect}
-            initialImage={newCompany?.logo || ""}
           />
         </>
       </Modal>
       <Modal
-        title={t("msg.confirmSuppression")}
+        cancelText={t('btn.cancel')}
+        isOpen={isOpenDeleteCompanyModal}
         onCancel={handleCancelDeleteCompany}
         onSubmit={handleSubmitDeleteCompany}
-        cancelText={t("btn.cancel")}
-        submitText={t("btn.confirm")}
-        isOpen={isOpenDeleteCompanyModal}
+        submitText={t('btn.confirm')}
+        title={t('msg.confirmSuppression')}
       >
         <p>
-          {t("company") +
+          {t('company') +
             ` <<${selectedCompany?.name}>> ` +
-            t("msg.deleteNotice") +
-            "!"}
+            t('msg.deleteNotice') +
+            '!'}
         </p>
       </Modal>
     </>

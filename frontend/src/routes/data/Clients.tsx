@@ -1,23 +1,24 @@
-import { useTranslation } from "react-i18next";
-import Card from "../../components/card/Card";
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
+
+import PrimaryButton from '../../components/button/PrimaryButton';
+import Card from '../../components/card/Card';
+import SelectDropdown from '../../components/dropdown/SelectDropdown';
+import SimpleInput from '../../components/input/SimpleInput';
+import Modal from '../../components/modal/Modal';
+import UITable from '../../components/table/UITable';
+import { useSortableTable } from '../../hooks/useSortableTable';
+import { useTableFiltering } from '../../hooks/useTableFiltering';
 import {
   createClient,
+  deleteClient,
   getClients,
   getCompanies,
   updateClient,
-  deleteClient,
-} from "../../services/data";
-import PrimaryButton from "../../components/button/PrimaryButton";
-import Modal from "../../components/modal/Modal";
-import SimpleInput from "../../components/input/SimpleInput";
-import SelectDropdown from "../../components/dropdown/SelectDropdown";
-import { useSortableTable } from "../../hooks/useSortableTable";
-import { useTableFiltering } from "../../hooks/useTableFiltering";
-import UITable from "../../components/table/UITable";
-import { toast } from "sonner";
+} from '../../services/data';
 
-interface NewClient {
+type NewClient = {
   _id?: string;
   company: Company | null;
   firstname: string;
@@ -26,23 +27,23 @@ interface NewClient {
   title: string;
   phone: string;
   cell: string;
-}
+};
 
-interface Company {
+type Company = {
   _id?: string;
   name: string;
   shortName: string;
   logo: string;
-}
+};
 
-interface ListItem {
+type ListItem = {
   id: number;
   _id?: string;
   name?: string;
   shortName?: string;
   logo?: string;
   value: string;
-}
+};
 
 export const Clients: React.FC = () => {
   const { t } = useTranslation();
@@ -52,18 +53,18 @@ export const Clients: React.FC = () => {
 
   const [selectedCompany, setSelectedCompany] = useState<ListItem>({
     id: 0,
-    _id: "",
-    value: "",
+    _id: '',
+    value: '',
   });
 
   const [newClient, setNewClient] = useState<NewClient | null>({
     company: null,
-    firstname: "",
-    lastname: "",
-    email: "",
-    title: "",
-    phone: "",
-    cell: "",
+    firstname: '',
+    lastname: '',
+    email: '',
+    title: '',
+    phone: '',
+    cell: '',
   });
 
   const [clients, setClients] = useState<any[]>([]);
@@ -79,7 +80,7 @@ export const Clients: React.FC = () => {
       setTableData(data.datas);
       setLoading(false);
     } catch (err) {
-      setError("Error fetching clients");
+      setError('Error fetching clients');
       setLoading(false);
     }
   };
@@ -89,7 +90,7 @@ export const Clients: React.FC = () => {
       const data: { datas: Company[] } = await getCompanies();
       const filteredData = data.datas.map((item, index) => ({
         id: index + 1,
-        _id: item._id || "",
+        _id: item._id || '',
         value: item.name,
       }));
       setCompanies(filteredData);
@@ -97,7 +98,7 @@ export const Clients: React.FC = () => {
       setSelectedCompany(filteredData[0]);
       setLoading(false);
     } catch (err) {
-      setError("Error fetching company");
+      setError('Error fetching company');
       setLoading(false);
     }
   };
@@ -109,23 +110,23 @@ export const Clients: React.FC = () => {
 
   const columns = [
     {
-      header: t("firstname"),
-      accessor: "firstname",
+      header: t('firstname'),
+      accessor: 'firstname',
       sortable: true,
       filterable: true,
     },
     {
-      header: t("lastname"),
-      accessor: "lastname",
+      header: t('lastname'),
+      accessor: 'lastname',
       sortable: true,
       filterable: true,
     },
-    { header: t("email"), accessor: "email", sortable: true, filterable: true },
+    { header: t('email'), accessor: 'email', sortable: true, filterable: true },
     {
-      header: t("company"),
-      accessor: "company",
+      header: t('company'),
+      accessor: 'company',
       sortable: true,
-      render: (data: any) => data?.name ?? "-",
+      render: (data: any) => data?.name ?? '-',
     },
   ];
 
@@ -144,7 +145,7 @@ export const Clients: React.FC = () => {
 
   const handleEditClientButton = (client: TableData) => {
     const matchingCompany = apiCompanies.find(
-      (company) => company.name === client.company
+      company => company.name === client.company,
     );
 
     setNewClient({
@@ -174,24 +175,24 @@ export const Clients: React.FC = () => {
 
   const rowActions = [
     {
-      label: "Edit",
+      label: 'Edit',
       onClick: (item: TableData) => handleEditClientButton(item),
     },
     {
-      label: "Delete",
+      label: 'Delete',
       onClick: (item: TableData) => handleDeleteClientButton(item),
     },
   ];
 
   const [tableData, handleSorting, setTableData] = useSortableTable<TableData>(
     clients,
-    columns
+    columns,
   );
 
   const [filters, handleFilterChange] = useTableFiltering<TableData>(
     clients,
     columns,
-    setTableData
+    setTableData,
   );
 
   const [isOpenAddClientModal, setIsOpenAddClientModal] = useState(false);
@@ -204,15 +205,17 @@ export const Clients: React.FC = () => {
   };
 
   const handleSubmitAddClient = async () => {
-    if (!newClient || !selectedCompany) return;
+    if (!newClient || !selectedCompany) {
+      return;
+    }
 
     try {
       const matchingCompany = apiCompanies.find(
-        (company) => company._id === selectedCompany._id
+        company => company._id === selectedCompany._id,
       );
 
       if (!matchingCompany) {
-        setError("Selected company not found");
+        setError('Selected company not found');
         return;
       }
 
@@ -226,10 +229,10 @@ export const Clients: React.FC = () => {
         },
       };
       await createClient(clientToCreate);
-      toast.success(t("msg.clientCreatedOk"));
+      toast.success(t('msg.clientCreatedOk'));
     } catch (error) {
-      setError("Error creating client");
-      console.error("Error:", error);
+      setError('Error creating client');
+      console.error('Error:', error);
     }
     setNewClient(null);
     setIsOpenAddClientModal(!isOpenAddClientModal);
@@ -242,15 +245,17 @@ export const Clients: React.FC = () => {
   };
 
   const handleSubmitEditClient = async () => {
-    if (!newClient || !selectedCompany) return;
+    if (!newClient || !selectedCompany) {
+      return;
+    }
 
     try {
       const matchingCompany = apiCompanies.find(
-        (company) => company._id === selectedCompany._id
+        company => company._id === selectedCompany._id,
       );
 
       if (!matchingCompany) {
-        setError("Selected company not found");
+        setError('Selected company not found');
         return;
       }
 
@@ -265,10 +270,10 @@ export const Clients: React.FC = () => {
       };
 
       await updateClient(clientToUpdate);
-      toast.success(t("msg.clientUpdatedOk"));
+      toast.success(t('msg.clientUpdatedOk'));
     } catch (error) {
-      setError("Error updating client");
-      console.error("Error:", error);
+      setError('Error updating client');
+      console.error('Error:', error);
     }
     setNewClient(null);
     setIsOpenEditClientModal(!isOpenEditClientModal);
@@ -283,10 +288,10 @@ export const Clients: React.FC = () => {
     if (selectedClient?._id) {
       try {
         await deleteClient(selectedClient._id);
-        toast.success(t("msg.clientDeletedOk"));
+        toast.success(t('msg.clientDeletedOk'));
       } catch (error) {
-        setError("Error deleting client");
-        console.error("Error:", error);
+        setError('Error deleting client');
+        console.error('Error:', error);
       }
       setSelectedClient(null);
       setIsOpenDeleteClientModal(!isOpenDeleteClientModal);
@@ -295,7 +300,7 @@ export const Clients: React.FC = () => {
   };
 
   const handleInputChange = (name: string, value: string) => {
-    setNewClient((prevState) => ({
+    setNewClient(prevState => ({
       ...prevState!,
       [name]: value,
     }));
@@ -303,197 +308,197 @@ export const Clients: React.FC = () => {
 
   const handleCompanyChange = (company: ListItem) => {
     setSelectedCompany(company);
-    setNewClient((prevState) => ({
+    setNewClient(prevState => ({
       ...prevState!,
       company: {
         id: company.id,
         _id: company._id,
-        name: company.name || "",
-        shortName: company.shortName || "",
-        logo: company.logo || "",
+        name: company.name || '',
+        shortName: company.shortName || '',
+        logo: company.logo || '',
       } as Company,
     }));
   };
 
   return (
     <>
-      <Card title={t("clients")}>
+      <Card title={t('clients')}>
         <>
           <div className="flex justify-end mb-2 mr-2">
             <PrimaryButton
               onClick={() => setIsOpenAddClientModal(!isOpenAddClientModal)}
             >
-              {t("addClient")}
+              {t('addClient')}
             </PrimaryButton>
           </div>
           <UITable
             columns={columns}
             data={tableData}
-            keyExtractor={keyExtractor}
-            onSort={handleSorting}
+            emptyState={<div>{t('err.noMatchingRecords')}</div>}
             filters={filters}
+            keyExtractor={keyExtractor}
             onFilter={handleFilterChange}
+            onSort={handleSorting}
             rowActions={rowActions}
-            emptyState={<div>{t("err.noMatchingRecords")}</div>}
           />
         </>
       </Card>
       <Modal
-        title={t("addClient")}
+        cancelText={t('btn.cancel')}
+        isOpen={isOpenAddClientModal}
         onCancel={handleCancelAddClient}
         onSubmit={handleSubmitAddClient}
-        cancelText={t("btn.cancel")}
-        submitText={t("btn.create")}
-        isOpen={isOpenAddClientModal}
+        submitText={t('btn.create')}
+        title={t('addClient')}
       >
         <>
           <SelectDropdown
             items={companies}
-            title={t("company")}
-            selected={selectedCompany}
             onChange={handleCompanyChange}
+            selected={selectedCompany}
+            title={t('company')}
           />
           <SimpleInput
-            label={t("firstname")}
             id="firstname"
+            label={t('firstname')}
             name="firstname"
+            onChange={value => handleInputChange('firstname', value)}
+            placeholder={t('firstname')}
             type="text"
-            placeholder={t("firstname")}
-            value={newClient?.firstname || ""}
-            onChange={(value) => handleInputChange("firstname", value)}
+            value={newClient?.firstname || ''}
           />
           <SimpleInput
-            label={t("lastname")}
             id="lastname"
+            label={t('lastname')}
             name="lastname"
+            onChange={value => handleInputChange('lastname', value)}
+            placeholder={t('lastname')}
             type="text"
-            placeholder={t("lastname")}
-            value={newClient?.lastname || ""}
-            onChange={(value) => handleInputChange("lastname", value)}
+            value={newClient?.lastname || ''}
           />
           <SimpleInput
-            label={t("email")}
             id="email"
+            label={t('email')}
             name="email"
+            onChange={value => handleInputChange('email', value)}
+            placeholder={t('email')}
             type="text"
-            placeholder={t("email")}
-            value={newClient?.email || ""}
-            onChange={(value) => handleInputChange("email", value)}
+            value={newClient?.email || ''}
           />
           <SimpleInput
-            label={t("title")}
             id="title"
+            label={t('title')}
             name="title"
+            onChange={value => handleInputChange('title', value)}
+            placeholder={t('title')}
             type="text"
-            placeholder={t("title")}
-            value={newClient?.title || ""}
-            onChange={(value) => handleInputChange("title", value)}
+            value={newClient?.title || ''}
           />
           <SimpleInput
-            label={t("phone")}
             id="phone"
+            label={t('phone')}
             name="phone"
+            onChange={value => handleInputChange('phone', value)}
+            placeholder={t('phone')}
             type="text"
-            placeholder={t("phone")}
-            value={newClient?.phone || ""}
-            onChange={(value) => handleInputChange("phone", value)}
+            value={newClient?.phone || ''}
           />
           <SimpleInput
-            label={t("cell")}
             id="cell"
+            label={t('cell')}
             name="cell"
+            onChange={value => handleInputChange('cell', value)}
+            placeholder={t('cell')}
             type="text"
-            placeholder={t("cell")}
-            value={newClient?.cell || ""}
-            onChange={(value) => handleInputChange("cell", value)}
+            value={newClient?.cell || ''}
           />
         </>
       </Modal>
       <Modal
-        title={t("editClient")}
+        cancelText={t('btn.cancel')}
+        isOpen={isOpenEditClientModal}
         onCancel={handleCancelEditClient}
         onSubmit={handleSubmitEditClient}
-        cancelText={t("btn.cancel")}
-        submitText={t("btn.update")}
-        isOpen={isOpenEditClientModal}
+        submitText={t('btn.update')}
+        title={t('editClient')}
       >
         <>
           <SelectDropdown
             items={companies}
-            title={t("company")}
-            selected={selectedCompany}
             onChange={handleCompanyChange}
+            selected={selectedCompany}
+            title={t('company')}
           />
           <SimpleInput
-            label={t("firstname")}
             id="firstname"
+            label={t('firstname')}
             name="firstname"
+            onChange={value => handleInputChange('firstname', value)}
+            placeholder={t('firstname')}
             type="text"
-            placeholder={t("firstname")}
-            value={newClient?.firstname || ""}
-            onChange={(value) => handleInputChange("firstname", value)}
+            value={newClient?.firstname || ''}
           />
           <SimpleInput
-            label={t("lastname")}
             id="lastname"
+            label={t('lastname')}
             name="lastname"
+            onChange={value => handleInputChange('lastname', value)}
+            placeholder={t('lastname')}
             type="text"
-            placeholder={t("lastname")}
-            value={newClient?.lastname || ""}
-            onChange={(value) => handleInputChange("lastname", value)}
+            value={newClient?.lastname || ''}
           />
           <SimpleInput
-            label={t("email")}
             id="email"
+            label={t('email')}
             name="email"
+            onChange={value => handleInputChange('email', value)}
+            placeholder={t('email')}
             type="text"
-            placeholder={t("email")}
-            value={newClient?.email || ""}
-            onChange={(value) => handleInputChange("email", value)}
+            value={newClient?.email || ''}
           />
           <SimpleInput
-            label={t("title")}
             id="title"
+            label={t('title')}
             name="title"
+            onChange={value => handleInputChange('title', value)}
+            placeholder={t('title')}
             type="text"
-            placeholder={t("title")}
-            value={newClient?.title || ""}
-            onChange={(value) => handleInputChange("title", value)}
+            value={newClient?.title || ''}
           />
           <SimpleInput
-            label={t("phone")}
             id="phone"
+            label={t('phone')}
             name="phone"
+            onChange={value => handleInputChange('phone', value)}
+            placeholder={t('phone')}
             type="text"
-            placeholder={t("phone")}
-            value={newClient?.phone || ""}
-            onChange={(value) => handleInputChange("phone", value)}
+            value={newClient?.phone || ''}
           />
           <SimpleInput
-            label={t("cell")}
             id="cell"
+            label={t('cell')}
             name="cell"
+            onChange={value => handleInputChange('cell', value)}
+            placeholder={t('cell')}
             type="text"
-            placeholder={t("cell")}
-            value={newClient?.cell || ""}
-            onChange={(value) => handleInputChange("cell", value)}
+            value={newClient?.cell || ''}
           />
         </>
       </Modal>
       <Modal
-        title={t("msg.confirmSuppression")}
+        cancelText={t('btn.cancel')}
+        isOpen={isOpenDeleteClientModal}
         onCancel={handleCancelDeleteClient}
         onSubmit={handleSubmitDeleteClient}
-        cancelText={t("btn.cancel")}
-        submitText={t("btn.confirm")}
-        isOpen={isOpenDeleteClientModal}
+        submitText={t('btn.confirm')}
+        title={t('msg.confirmSuppression')}
       >
         <p>
-          {t("client") +
+          {t('client') +
             ` <<${selectedClient?.firstname} ` +
             `${selectedClient?.lastname}>> ` +
-            t("msg.deleteNotice") +
-            "!"}
+            t('msg.deleteNotice') +
+            '!'}
         </p>
       </Modal>
     </>
