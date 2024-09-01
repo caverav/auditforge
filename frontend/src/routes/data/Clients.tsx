@@ -363,6 +363,7 @@ export const Clients: React.FC = () => {
         </>
       </Card>
       <Modal
+        // eslint-disable-next-line sonarjs/no-duplicate-string
         cancelText={t('btn.cancel')}
         isOpen={isOpenAddClientModal}
         onCancel={handleCancelAddClient}

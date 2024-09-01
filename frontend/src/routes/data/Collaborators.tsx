@@ -344,7 +344,7 @@ export const Collaborators: React.FC = () => {
             name="password"
             onChange={value => handleInputChange('password', value)}
             placeholder={t('password')}
-            type="text"
+            type="password"
             value={newCollaborator?.password || ''}
           />
         </>
@@ -415,7 +415,7 @@ export const Collaborators: React.FC = () => {
             name="password"
             onChange={value => handleInputChange('password', value)}
             placeholder={t('password')}
-            type="text"
+            type="password"
             value={newCollaborator?.password || ''}
           />
           <div className="flex items-center mt-2">
