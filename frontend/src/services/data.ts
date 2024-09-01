@@ -33,7 +33,7 @@ type NewCompany = {
   logo: string;
 };
 
-type NewClient = {
+export type NewClient = {
   _id?: string;
   firstname: string;
   lastname: string;
@@ -42,6 +42,17 @@ type NewClient = {
   phone: string;
   cell: string;
   company: NewCompany | null;
+};
+
+export type Client = {
+  _id: string;
+  company: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  title: string;
+  phone: string;
+  cell: string;
 };
 
 type NewTemplate = {
@@ -230,7 +241,7 @@ export const deleteCompany = async (
 
 export const getClients = async (): Promise<{
   status: string;
-  datas: NewClient[];
+  datas: Client[];
 }> => {
   try {
     const response = await fetch(`${API_URL}clients`, {
@@ -273,16 +284,16 @@ export const createClient = async (
 };
 
 export const updateClient = async (
-  company: NewClient,
+  client: NewClient,
 ): Promise<{ status: string; datas: string }> => {
-  try {
-    const { _id, ...clientWithoutId } = company;
+  const { _id, ...clientWhitoutId } = client;
 
+  try {
     const response = await fetch(`${API_URL}clients/${_id}`, {
       method: 'PUT',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(clientWithoutId),
+      body: JSON.stringify(clientWhitoutId),
     });
 
     if (!response.ok) {

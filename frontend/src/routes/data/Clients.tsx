@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
@@ -11,34 +11,14 @@ import UITable from '../../components/table/UITable';
 import { useSortableTable } from '../../hooks/useSortableTable';
 import { useTableFiltering } from '../../hooks/useTableFiltering';
 import {
+  Client,
   createClient,
   deleteClient,
   getClients,
   getCompanies,
+  NewClient,
   updateClient,
 } from '../../services/data';
-
-type NewClient = {
-  _id?: string;
-  company: Company | null;
-  firstname: string;
-  lastname: string;
-  email: string;
-  title: string;
-  phone: string;
-  cell: string;
-};
-
-type Client = {
-  _id: string;
-  company: string;
-  firstname: string;
-  lastname: string;
-  email: string;
-  title: string;
-  phone: string;
-  cell: string;
-};
 
 type Company = {
   _id?: string;
@@ -126,7 +106,7 @@ export const Clients: React.FC = () => {
   const [isOpenEditClientModal, setIsOpenEditClientModal] = useState(false);
   const [isOpenDeleteClientModal, setIsOpenDeleteClientModal] = useState(false);
 
-  const fetchClients = async () => {
+  const fetchClients = useCallback(async () => {
     try {
       const data = await getClients();
       setClients(data.datas);
@@ -136,7 +116,7 @@ export const Clients: React.FC = () => {
       setError('Error fetching clients');
       setLoading(false);
     }
-  };
+  }, [setTableData]);
 
   const fetchCompanies = async () => {
     try {
@@ -157,11 +137,11 @@ export const Clients: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchClients();
-    fetchCompanies();
-  }, []);
+    void fetchClients();
+    void fetchCompanies();
+  }, [fetchClients]);
 
-  const keyExtractor = (item: any) => item._id;
+  const keyExtractor = (item: TableData) => item._id;
 
   const handleEditClientButton = (client: TableData) => {
     const matchingCompany = apiCompanies.find(
@@ -206,7 +186,7 @@ export const Clients: React.FC = () => {
 
   const [filters, handleFilterChange] = useTableFiltering<TableData>(
     clients,
-    columns,
+    columns, // error en useSortableTable o UITable
     setTableData,
   );
 
@@ -255,7 +235,7 @@ export const Clients: React.FC = () => {
     }
     setNewClient(null);
     setIsOpenAddClientModal(!isOpenAddClientModal);
-    fetchClients();
+    void fetchClients();
   };
 
   const handleCancelEditClient = () => {
@@ -304,7 +284,7 @@ export const Clients: React.FC = () => {
     }
     setNewClient(null);
     setIsOpenEditClientModal(!isOpenEditClientModal);
-    fetchClients();
+    void fetchClients();
   };
 
   const handleCancelDeleteClient = () => {
@@ -322,29 +302,41 @@ export const Clients: React.FC = () => {
       }
       setSelectedClient(null);
       setIsOpenDeleteClientModal(!isOpenDeleteClientModal);
-      fetchClients();
+      void fetchClients();
     }
   };
 
   const handleInputChange = (name: string, value: string) => {
-    setNewClient(prevState => ({
-      ...prevState!,
-      [name]: value,
-    }));
+    setNewClient(prevState => {
+      if (!prevState) {
+        return null;
+      } else {
+        return {
+          ...prevState,
+          [name]: value,
+        };
+      }
+    });
   };
 
   const handleCompanyChange = (company: ListItem) => {
     setSelectedCompany(company);
-    setNewClient(prevState => ({
-      ...prevState!,
-      company: {
-        id: company.id,
-        _id: company._id,
-        name: company.name ?? '',
-        shortName: company.shortName ?? '',
-        logo: company.logo ?? '',
-      } as Company,
-    }));
+    setNewClient(prevState => {
+      if (!prevState) {
+        return null;
+      } else {
+        return {
+          ...prevState,
+          company: {
+            id: company.id,
+            _id: company._id,
+            name: company.name ?? '',
+            shortName: company.shortName ?? '',
+            logo: company.logo ?? '',
+          },
+        };
+      }
+    });
   };
 
   return (
@@ -359,7 +351,7 @@ export const Clients: React.FC = () => {
             </PrimaryButton>
           </div>
           <UITable
-            columns={columns}
+            columns={columns} // error en useSortableTable o UITable
             data={tableData}
             emptyState={<div>{t('err.noMatchingRecords')}</div>}
             filters={filters}
