@@ -1,13 +1,20 @@
-import { useTranslation } from "react-i18next";
-import Card from "../../components/card/Card";
-import { useEffect, useState } from "react";
-import { createClient, createCollaborator, getClients, getCollaborators, getCompanies } from "../../services/data";
-import PrimaryButton from "../../components/button/PrimaryButton";
-import Modal from "../../components/modal/Modal";
-import SimpleInput from "../../components/input/SimpleInput";
-import SelectDropdown from "../../components/dropdown/SelectDropdown";
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-interface NewClient {
+import PrimaryButton from '../../components/button/PrimaryButton';
+import Card from '../../components/card/Card';
+import SelectDropdown from '../../components/dropdown/SelectDropdown';
+import SimpleInput from '../../components/input/SimpleInput';
+import Modal from '../../components/modal/Modal';
+import {
+  createClient,
+  createCollaborator,
+  getClients,
+  getCollaborators,
+  getCompanies,
+} from '../../services/data';
+
+type NewClient = {
   company: string;
   firstname: string;
   lastname: string;
@@ -15,13 +22,13 @@ interface NewClient {
   title: string;
   phone: string;
   cell: string;
-}
+};
 
 // Las compañias deben obtenerse desde el backend
 const companiesOptions = [
-  { id: 1, value: "ntg" },
-  { id: 2, value: "ibox" },
-  { id: 3, value: "pwndoc" },
+  { id: 1, value: 'ntg' },
+  { id: 2, value: 'ibox' },
+  { id: 3, value: 'pwndoc' },
 ];
 
 export const Clients: React.FC = () => {
@@ -30,16 +37,15 @@ export const Clients: React.FC = () => {
   const [companies, setCompanies] = useState(companiesOptions);
   const [selectedCompany, setSelectedCompany] = useState(companies[0]);
 
-  const [newClient, setNewClient] =
-    useState<NewClient | null>({
-      company: "",
-      firstname: "",
-      lastname: "",
-      email: "",
-      title: "",
-      phone: "",
-      cell: "",
-    });
+  const [newClient, setNewClient] = useState<NewClient | null>({
+    company: '',
+    firstname: '',
+    lastname: '',
+    email: '',
+    title: '',
+    phone: '',
+    cell: '',
+  });
 
   const [clients, setClients] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -54,11 +60,11 @@ export const Clients: React.FC = () => {
         setClients(data);
         setLoading(false);
       } catch (err) {
-        setError("Error fetching clients");
+        setError('Error fetching clients');
         setLoading(false);
       }
     };
-   
+
     fetchClients();
   }, []);
 
@@ -71,15 +77,15 @@ export const Clients: React.FC = () => {
     try {
       await createClient(newClient!);
     } catch (error) {
-      setError("Error creating client");
-      console.error("Error:", error);
+      setError('Error creating client');
+      console.error('Error:', error);
     }
     setNewClient(null);
     setIsOpenAddCollabModal(!isOpenAddCollabModal);
   };
 
   const handleInputChange = (name: string, value: string) => {
-    setNewClient((prevState) => ({
+    setNewClient(prevState => ({
       ...prevState!,
       [name]: value,
     }));
@@ -87,85 +93,85 @@ export const Clients: React.FC = () => {
 
   return (
     <>
-      <Card title={t("clients")}>
+      <Card title={t('clients')}>
         <>
           <PrimaryButton
             onClick={() => setIsOpenAddCollabModal(!isOpenAddCollabModal)}
           >
-            {t("addClient")}
+            {t('addClient')}
           </PrimaryButton>
           <div>tarjetaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
-          <div>{loading ? "cargandooo" : JSON.stringify(clients)}</div>
+          <div>{loading ? 'cargandooo' : JSON.stringify(clients)}</div>
         </>
       </Card>
       <Modal
-        title={t("addClient")}
+        cancelText={t('btn.cancel')}
+        isOpen={isOpenAddCollabModal}
         onCancel={handleCancelAddCollab}
         onSubmit={handleSubmitAddCollab}
-        cancelText={t("btn.cancel")}
-        submitText={t("btn.create")}
-        isOpen={isOpenAddCollabModal}
+        submitText={t('btn.create')}
+        title={t('addClient')}
       >
         <>
           <SelectDropdown
             items={companies}
-            title={t("company")}
-            selected={selectedCompany}
             onChange={setSelectedCompany}
+            selected={selectedCompany}
+            title={t('company')}
           />
           <SimpleInput
-            label={t("firstname")}
-            id={"firstname"}
-            name={"firstname"}
-            type={"text"}
-            placeholder={t("firstname")}
-            value={newClient?.firstname || ""}
-            onChange={(value) => handleInputChange("firstname", value)}
+            id="firstname"
+            label={t('firstname')}
+            name="firstname"
+            onChange={value => handleInputChange('firstname', value)}
+            placeholder={t('firstname')}
+            type="text"
+            value={newClient?.firstname || ''}
           />
           <SimpleInput
-            label={t("lastname")}
-            id={"lastname"}
-            name={"lastname"}
-            type={"text"}
-            placeholder={t("lastname")}
-            value={newClient?.lastname || ""}
-            onChange={(value) => handleInputChange("lastname", value)}
+            id="lastname"
+            label={t('lastname')}
+            name="lastname"
+            onChange={value => handleInputChange('lastname', value)}
+            placeholder={t('lastname')}
+            type="text"
+            value={newClient?.lastname || ''}
           />
           <SimpleInput
-            label={t("email")}
-            id={"email"}
-            name={"email"}
-            type={"text"}
-            placeholder={t("email")}
-            value={newClient?.email || ""}
-            onChange={(value) => handleInputChange("email", value)}
+            id="email"
+            label={t('email')}
+            name="email"
+            onChange={value => handleInputChange('email', value)}
+            placeholder={t('email')}
+            type="text"
+            value={newClient?.email || ''}
           />
           <SimpleInput
-            label={t("title")}
-            id={"title"}
-            name={"title"}
-            type={"text"}
-            placeholder={t("title")}
-            value={newClient?.title || ""}
-            onChange={(value) => handleInputChange("title", value)}
+            id="title"
+            label={t('title')}
+            name="title"
+            onChange={value => handleInputChange('title', value)}
+            placeholder={t('title')}
+            type="text"
+            value={newClient?.title || ''}
           />
           <SimpleInput
-            label={t("phone")}
-            id={"phone"}
-            name={"phone"}
-            type={"text"}
-            placeholder={t("phone")}
-            value={newClient?.phone || ""}
-            onChange={(value) => handleInputChange("phone", value)}
+            id="phone"
+            label={t('phone')}
+            name="phone"
+            onChange={value => handleInputChange('phone', value)}
+            placeholder={t('phone')}
+            type="text"
+            value={newClient?.phone || ''}
           />
           <SimpleInput
-            label={t("cell")}
-            id={"cell"}
-            name={"cell"}
-            type={"text"}
-            placeholder={t("cell")}
-            value={newClient?.cell || ""}
-            onChange={(value) => handleInputChange("cell", value)}
+            id="cell"
+            label={t('cell')}
+            name="cell"
+            onChange={value => handleInputChange('cell', value)}
+            placeholder={t('cell')}
+            type="text"
+            value={newClient?.cell || ''}
           />
         </>
       </Modal>

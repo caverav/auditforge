@@ -1,26 +1,26 @@
-import { useTranslation } from "react-i18next";
-import Card from "../../components/card/Card";
-import { useEffect, useState } from "react";
-import { createTemplates, getTemplates } from "../../services/data";
-import PrimaryButton from "../../components/button/PrimaryButton";
-import Modal from "../../components/modal/Modal";
-import SimpleInput from "../../components/input/SimpleInput";
-import FileInput from "../../components/input/FileInput";
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
-interface NewTemplate {
+import PrimaryButton from '../../components/button/PrimaryButton';
+import Card from '../../components/card/Card';
+import FileInput from '../../components/input/FileInput';
+import SimpleInput from '../../components/input/SimpleInput';
+import Modal from '../../components/modal/Modal';
+import { createTemplates, getTemplates } from '../../services/data';
+
+type NewTemplate = {
   name: string;
   ext: string;
   file: string;
-}
+};
 
 export const Templates: React.FC = () => {
   const { t } = useTranslation();
 
-  const [newTemplate, setNewTemplate] =
-  useState<NewTemplate | null>({
-    name: "",
-    ext: "",
-    file: "",
+  const [newTemplate, setNewTemplate] = useState<NewTemplate | null>({
+    name: '',
+    ext: '',
+    file: '',
   });
 
   const [templates, setTemplates] = useState<any[]>([]);
@@ -36,7 +36,7 @@ export const Templates: React.FC = () => {
         setTemplates(data);
         setLoading(false);
       } catch (err) {
-        setError("Error fetching company");
+        setError('Error fetching company');
         setLoading(false);
       }
     };
@@ -53,63 +53,65 @@ export const Templates: React.FC = () => {
     try {
       await createTemplates(newTemplate!);
     } catch (error) {
-      setError("Error creating company");
-      console.error("Error:", error);
+      setError('Error creating company');
+      console.error('Error:', error);
     }
     setNewTemplate(null);
     setIsOpenAddCollabModal(!isOpenAddCollabModal);
   };
 
   const handleInputChange = (name: string, value: string) => {
-    setNewTemplate((prevState) => ({
+    setNewTemplate(prevState => ({
       ...prevState!,
       [name]: value,
     }));
   };
 
   const handleFileSelect = (ext: string, content: string) => {
-    setNewTemplate((prevState) => ({
+    setNewTemplate(prevState => ({
       ...prevState!,
-      ext: ext,
-      file: content, 
+      ext,
+      file: content,
     }));
   };
 
   return (
     <>
-      <Card title={t("templates")}>
+      <Card title={t('templates')}>
         <>
           <PrimaryButton
             onClick={() => setIsOpenAddCollabModal(!isOpenAddCollabModal)}
           >
-            {t("createTemplate")}
+            {t('createTemplate')}
           </PrimaryButton>
           <div>tarjetaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
-          <div>{loading ? "cargandooo" : JSON.stringify(templates)}</div>
+          <div>{loading ? 'cargandooo' : JSON.stringify(templates)}</div>
         </>
       </Card>
       <Modal
-        title={t("createTemplate")}
+        cancelText={t('btn.cancel')}
+        isOpen={isOpenAddCollabModal}
         onCancel={handleCancelAddCollab}
         onSubmit={handleSubmitAddCollab}
-        cancelText={t("btn.cancel")}
-        submitText={t("btn.create")}
-        isOpen={isOpenAddCollabModal}
+        submitText={t('btn.create')}
+        title={t('createTemplate')}
       >
         <>
           <SimpleInput
-            label={t("name")}
-            id={"name"}
-            name={"name"}
-            type={"text"}
-            placeholder={t("name")}
-            value={newTemplate?.name || ""}
-            onChange={(value) => handleInputChange("name", value)}
+            id="name"
+            label={t('name')}
+            name="name"
+            onChange={value => handleInputChange('name', value)}
+            placeholder={t('name')}
+            type="text"
+            value={newTemplate?.name || ''}
           />
           <FileInput
-            id={"template"}
-            name={"template"}
-            onFileSelect={(file) => handleFileSelect(file.name.split('.').pop() || "", file.content)}
+            id="template"
+            name="template"
+            onFileSelect={file =>
+              handleFileSelect(file.name.split('.').pop() || '', file.content)
+            }
           />
         </>
       </Modal>
