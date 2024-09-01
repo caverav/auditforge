@@ -14,6 +14,7 @@ type RadioGroupProps = {
   options: RadioOption[];
   value: string;
   onChange: (value: string) => void;
+  isDisabled?: boolean;
 };
 
 const DefaultRadioGroup = ({
@@ -21,6 +22,7 @@ const DefaultRadioGroup = ({
   options,
   value,
   onChange,
+  isDisabled = false,
 }: RadioGroupProps) => {
   const handleRadioGroupChange = (
     event: React.ChangeEvent<HTMLInputElement>,
@@ -30,20 +32,22 @@ const DefaultRadioGroup = ({
 
   return (
     <div>
-      {options.map(option => (
-        <div className="mb-3" key={option.id}>
-          <Radio
-            checked={value === option.value}
-            disabled={option.disabled}
-            id={option.id}
-            key={option.id}
-            label={option.label}
-            name={name}
-            onChange={handleRadioGroupChange}
-            value={option.value}
-          />
-        </div>
-      ))}
+      {!isDisabled
+        ? options.map(option => (
+            <div className="mb-3" key={option.id}>
+              <Radio
+                checked={value === option.value}
+                disabled={option.disabled}
+                id={option.id}
+                key={option.id}
+                label={option.label}
+                name={name}
+                onChange={handleRadioGroupChange}
+                value={option.value}
+              />
+            </div>
+          ))
+        : null}
     </div>
   );
 };
