@@ -335,6 +335,7 @@ export const Vulnerabilities = () => {
             {isOpenAddVuln ? (
               <AddVulnerability
                 categoryVuln={selectedCategoryAddVuln}
+                currentLang={currentLanguage}
                 handleOnSuccess={handleSuccessToast}
                 handlerIsOpen={setIsOpenAddVuln}
                 isOpen={isOpenAddVuln}
