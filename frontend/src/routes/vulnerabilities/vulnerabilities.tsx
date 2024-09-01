@@ -261,7 +261,7 @@ export const Vulnerabilities = () => {
   const confirmDeleteVulnerability = async () => {
     try {
       const response = await deleteVulnerability(itemDelete!._id);
-      if (response) {
+      if (response.status === 'success') {
         handleSuccessToast(t('msg.vulnerabilityDeletedOk'));
       }
     } catch (error) {

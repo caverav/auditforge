@@ -164,7 +164,7 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({
           },
         };
         const response = await mergeVulnerability(mergeObject);
-        if (response) {
+        if (response.status === 'success') {
           handleOnSuccess(t('msg.vulnerabilityMergeOk'));
         }
       } catch (error) {
