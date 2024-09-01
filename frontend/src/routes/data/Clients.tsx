@@ -29,11 +29,33 @@ type NewClient = {
   cell: string;
 };
 
+type Client = {
+  _id: string;
+  company: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+  title: string;
+  phone: string;
+  cell: string;
+};
+
 type Company = {
   _id?: string;
   name: string;
   shortName: string;
   logo: string;
+};
+
+type TableData = {
+  _id: string;
+  email: string;
+  lastname: string;
+  firstname: string;
+  phone: string;
+  cell: string;
+  title: string;
+  company: string;
 };
 
 type ListItem = {
@@ -47,6 +69,28 @@ type ListItem = {
 
 export const Clients: React.FC = () => {
   const { t } = useTranslation();
+
+  const columns = [
+    {
+      header: t('firstname'),
+      accessor: 'firstname',
+      sortable: true,
+      filterable: true,
+    },
+    {
+      header: t('lastname'),
+      accessor: 'lastname',
+      sortable: true,
+      filterable: true,
+    },
+    { header: t('email'), accessor: 'email', sortable: true, filterable: true },
+    {
+      header: t('company'),
+      accessor: 'company',
+      sortable: true,
+      render: (data: any) => data?.name ?? '-',
+    },
+  ];
 
   const [companies, setCompanies] = useState<ListItem[]>([]);
   const [apiCompanies, setApiCompanies] = useState<Company[]>([]);
@@ -67,11 +111,20 @@ export const Clients: React.FC = () => {
     cell: '',
   });
 
-  const [clients, setClients] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [clients, setClients] = useState<Client[]>([]);
+  const [_loading, setLoading] = useState<boolean>(true);
+  const [_error, setError] = useState<string | null>(null);
 
   const [selectedClient, setSelectedClient] = useState<TableData | null>(null);
+
+  const [tableData, handleSorting, setTableData] = useSortableTable<TableData>(
+    clients,
+    columns,
+  );
+
+  const [isOpenAddClientModal, setIsOpenAddClientModal] = useState(false);
+  const [isOpenEditClientModal, setIsOpenEditClientModal] = useState(false);
+  const [isOpenDeleteClientModal, setIsOpenDeleteClientModal] = useState(false);
 
   const fetchClients = async () => {
     try {
@@ -107,39 +160,6 @@ export const Clients: React.FC = () => {
     fetchClients();
     fetchCompanies();
   }, []);
-
-  const columns = [
-    {
-      header: t('firstname'),
-      accessor: 'firstname',
-      sortable: true,
-      filterable: true,
-    },
-    {
-      header: t('lastname'),
-      accessor: 'lastname',
-      sortable: true,
-      filterable: true,
-    },
-    { header: t('email'), accessor: 'email', sortable: true, filterable: true },
-    {
-      header: t('company'),
-      accessor: 'company',
-      sortable: true,
-      render: (data: any) => data?.name ?? '-',
-    },
-  ];
-
-  type TableData = {
-    _id: string;
-    email: string;
-    lastname: string;
-    firstname: string;
-    phone: string;
-    cell: string;
-    title: string;
-    company: string;
-  };
 
   const keyExtractor = (item: any) => item._id;
 
@@ -184,20 +204,11 @@ export const Clients: React.FC = () => {
     },
   ];
 
-  const [tableData, handleSorting, setTableData] = useSortableTable<TableData>(
-    clients,
-    columns,
-  );
-
   const [filters, handleFilterChange] = useTableFiltering<TableData>(
     clients,
     columns,
     setTableData,
   );
-
-  const [isOpenAddClientModal, setIsOpenAddClientModal] = useState(false);
-  const [isOpenEditClientModal, setIsOpenEditClientModal] = useState(false);
-  const [isOpenDeleteClientModal, setIsOpenDeleteClientModal] = useState(false);
 
   const handleCancelAddClient = () => {
     setNewClient(null);
@@ -205,7 +216,15 @@ export const Clients: React.FC = () => {
   };
 
   const handleSubmitAddClient = async () => {
-    if (!newClient || !selectedCompany) {
+    if (!newClient) {
+      return;
+    }
+
+    if (
+      selectedCompany.id === 0 &&
+      selectedCompany.value === '' &&
+      selectedCompany._id === ''
+    ) {
       return;
     }
 
@@ -245,7 +264,15 @@ export const Clients: React.FC = () => {
   };
 
   const handleSubmitEditClient = async () => {
-    if (!newClient || !selectedCompany) {
+    if (!newClient) {
+      return;
+    }
+
+    if (
+      selectedCompany.id === 0 &&
+      selectedCompany.value === '' &&
+      selectedCompany._id === ''
+    ) {
       return;
     }
 
@@ -309,7 +336,7 @@ export const Clients: React.FC = () => {
   const handleCompanyChange = (company: ListItem) => {
     setSelectedCompany(company);
     setNewClient(prevState => ({
-      ...prevState!,
+      ...prevState,
       company: {
         id: company.id,
         _id: company._id,
