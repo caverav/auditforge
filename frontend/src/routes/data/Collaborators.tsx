@@ -1,13 +1,25 @@
-import { useTranslation } from "react-i18next";
-import Card from "../../components/card/Card";
-import { useEffect, useState } from "react";
-import { createCollaborator, getCollaborators } from "../../services/data";
-import PrimaryButton from "../../components/button/PrimaryButton";
-import Modal from "../../components/modal/Modal";
-import SimpleInput from "../../components/input/SimpleInput";
-import SelectDropdown from "../../components/dropdown/SelectDropdown";
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 
-interface NewCollaborator {
+import PrimaryButton from '../../components/button/PrimaryButton';
+import Card from '../../components/card/Card';
+import SelectDropdown from '../../components/dropdown/SelectDropdown';
+import SimpleInput from '../../components/input/SimpleInput';
+import Modal from '../../components/modal/Modal';
+import PrimarySwitch from '../../components/switch/PrimarySwitch';
+import UITable from '../../components/table/UITable';
+import { useSortableTable } from '../../hooks/useSortableTable';
+import { useTableFiltering } from '../../hooks/useTableFiltering';
+import {
+  createCollaborator,
+  getCollaborators,
+  getRoles,
+  updateCollaborator,
+} from '../../services/data';
+
+type NewCollaborator = {
+  _id?: string;
   email: string;
   firstname: string;
   lastname: string;
@@ -16,53 +28,170 @@ interface NewCollaborator {
   role: string;
   totpenabled: boolean;
   username: string;
-}
+  enabled?: boolean;
+};
 
-// Estos roles deberían venir del backend.
-const rolesOptions = [
-  { id: 1, value: "user" },
-  { id: 2, value: "admin" },
-  { id: 3, value: "report" },
-];
+type RoleOption = {
+  id: number;
+  value: string;
+};
 
 export const Collaborators: React.FC = () => {
   const { t } = useTranslation();
 
-  const [roles, setRoles] = useState(rolesOptions);
-  const [selectedRole, setSelectedRole] = useState(roles[0]);
+  const [roles, setRoles] = useState<RoleOption[]>([]);
+  const [selectedRole, setSelectedRole] = useState<RoleOption | null>(null);
 
   const [newCollaborator, setNewCollaborator] =
-    useState<NewCollaborator | null>({
-      email: "",
-      firstname: "",
-      lastname: "",
-      password: "",
-      phone: "",
-      role: selectedRole.value,
-      totpenabled: false,
-      username: "",
-    });
+    useState<NewCollaborator | null>(
+      selectedRole
+        ? {
+            email: '',
+            firstname: '',
+            lastname: '',
+            password: '',
+            phone: '',
+            role: selectedRole.value,
+            totpenabled: false,
+            username: '',
+          }
+        : null,
+    );
 
   const [collaborators, setCollaborators] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const [isOpenAddCollabModal, setIsOpenAddCollabModal] = useState(false);
+  const fetchCollaborators = async () => {
+    try {
+      const data = await getCollaborators();
+      setCollaborators(data.datas);
+
+      const filteredData = data.datas.filter(
+        (item: TableData) => item.enabled === enabledFilter,
+      );
+
+      setTableData(filteredData);
+      setLoading(false);
+    } catch (err) {
+      setError('Error fetching collaborators');
+      setLoading(false);
+    }
+  };
+
+  const fetchRoles = async () => {
+    try {
+      const data = await getRoles();
+      const rolesOptions: RoleOption[] = data.datas.map(
+        (role: string, index: number) => ({
+          id: index + 1,
+          value: role,
+        }),
+      );
+      setRoles(rolesOptions);
+      setSelectedRole(rolesOptions[0]);
+      setLoading(false);
+    } catch (err) {
+      setError('Error fetching roles');
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchCollaborators = async () => {
-      try {
-        const data = await getCollaborators();
-        setCollaborators(data);
-        setLoading(false);
-      } catch (err) {
-        setError("Error fetching collaborators");
-        setLoading(false);
-      }
-    };
-
     fetchCollaborators();
+    fetchRoles();
   }, []);
+
+  const columns = [
+    {
+      header: t('username'),
+      accessor: 'username',
+      sortable: true,
+      filterable: true,
+    },
+    {
+      header: t('firstname'),
+      accessor: 'firstname',
+      sortable: true,
+      filterable: true,
+    },
+    {
+      header: t('lastname'),
+      accessor: 'lastname',
+      sortable: true,
+      filterable: true,
+    },
+    { header: t('email'), accessor: 'email', sortable: true, filterable: true },
+    { header: t('role'), accessor: 'role', sortable: true, filterable: true },
+  ];
+
+  type TableData = {
+    _id?: string;
+    email: string;
+    firstname: string;
+    lastname: string;
+    password: string;
+    phone: string;
+    role: string;
+    totpenabled: boolean;
+    username: string;
+    enabled?: boolean;
+  };
+
+  const keyExtractor = (item: any) => item._id;
+
+  const handleEditCompanyButton = (collaborator: TableData) => {
+    const role = roles.find(r => r.value === collaborator.role) || null;
+    setSelectedRole(role);
+
+    setNewCollaborator({
+      ...collaborator,
+      enabled: collaborator.enabled ?? false,
+    });
+    setIsOpenEditCollabModal(!isOpenEditCollabModal);
+  };
+
+  const rowActions = [
+    {
+      label: 'Edit',
+      onClick: (item: TableData) => handleEditCompanyButton(item),
+    },
+  ];
+
+  const [enabledFilter, setEnabledFilter] = useState<boolean>(true);
+
+  const [tableData, handleSorting, setTableData] = useSortableTable<TableData>(
+    collaborators,
+    columns,
+  );
+
+  const [filters, handleFilterChange] = useTableFiltering<TableData>(
+    collaborators,
+    columns,
+    setTableData,
+  );
+
+  useEffect(() => {
+    const newFilteredData = collaborators.filter(item => {
+      const matchesEnabled = item.enabled === enabledFilter;
+      return (
+        matchesEnabled &&
+        columns.every(column => {
+          const filterValue = filters[column.accessor];
+          if (!filterValue) {
+            return true;
+          }
+          return String(item[column.accessor as keyof TableData])
+            .toLowerCase()
+            .includes(filterValue.toLowerCase());
+        })
+      );
+    });
+    setTableData(newFilteredData ?? []);
+  }, [filters, enabledFilter]);
+
+  const [isOpenAddCollabModal, setIsOpenAddCollabModal] = useState(false);
+  const [isOpenEditCollabModal, setIsOpenEditCollabModal] = useState(false);
 
   const handleCancelAddCollab = () => {
     setNewCollaborator(null);
@@ -72,103 +201,240 @@ export const Collaborators: React.FC = () => {
   const handleSubmitAddCollab = async () => {
     try {
       await createCollaborator(newCollaborator!);
+      toast.success(t('msg.collaboratorCreatedOk'));
     } catch (error) {
-      setError("Error creating collaborator");
-      console.error("Error:", error);
+      setError('Error creating collaborator');
+      console.error('Error:', error);
     }
     setNewCollaborator(null);
     setIsOpenAddCollabModal(!isOpenAddCollabModal);
+    fetchCollaborators();
+  };
+
+  const handleCancelEditCollab = () => {
+    setNewCollaborator(null);
+    setIsOpenEditCollabModal(!isOpenEditCollabModal);
+  };
+
+  const handleSubmitEditCollab = async () => {
+    try {
+      await updateCollaborator(newCollaborator!);
+      toast.success(t('msg.collaboratorUpdatedOk'));
+    } catch (error) {
+      setError('Error updating collaborator');
+      console.error('Error:', error);
+    }
+    setNewCollaborator(null);
+    setIsOpenEditCollabModal(!isOpenEditCollabModal);
+    fetchCollaborators();
   };
 
   const handleInputChange = (name: string, value: string) => {
-    setNewCollaborator((prevState) => ({
+    setNewCollaborator(prevState => ({
       ...prevState!,
       [name]: value,
     }));
   };
 
+  const handleRoleChange = (role: RoleOption) => {
+    setSelectedRole(role);
+    setNewCollaborator(prevState => ({
+      ...prevState!,
+      role: role.value,
+    }));
+  };
+
   return (
     <>
-      <Card title={t("collaborators")}>
+      <Card title={t('collaborators')}>
         <>
-          <PrimaryButton
-            onClick={() => setIsOpenAddCollabModal(!isOpenAddCollabModal)}
-          >
-            {t("addCollaborator")}
-          </PrimaryButton>
-          <div>tarjetaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa</div>
-          <div>{loading ? "cargandooo" : JSON.stringify(collaborators)}</div>
+          <div className="flex justify-between mb-2 mr-2">
+            <div className="flex items-center ml-2">
+              <PrimarySwitch
+                enabled={enabledFilter}
+                onChange={() => setEnabledFilter(!enabledFilter)}
+              />
+              <span className="ml-2">
+                {enabledFilter
+                  ? t('btn.accountsEnabled')
+                  : t('btn.accountsDisabled')}
+              </span>
+            </div>
+            <PrimaryButton
+              onClick={() => setIsOpenAddCollabModal(!isOpenAddCollabModal)}
+            >
+              {t('addCollaborator')}
+            </PrimaryButton>
+          </div>
+          <UITable
+            columns={columns}
+            data={tableData}
+            emptyState={<div>{t('err.noMatchingRecords')}</div>}
+            filters={filters}
+            keyExtractor={keyExtractor}
+            onFilter={handleFilterChange}
+            onSort={handleSorting}
+            rowActions={rowActions}
+          />
         </>
       </Card>
       <Modal
-        title={t("addCollaborator")}
+        cancelText={t('btn.cancel')}
+        isOpen={isOpenAddCollabModal}
         onCancel={handleCancelAddCollab}
         onSubmit={handleSubmitAddCollab}
-        cancelText={t("btn.cancel")}
-        submitText={t("btn.create")}
-        isOpen={isOpenAddCollabModal}
+        submitText={t('btn.create')}
+        title={t('addCollaborator')}
       >
         <>
           <SimpleInput
-            label={t("username")}
-            id={"username"}
-            name={"username"}
-            type={"text"}
-            placeholder={t("username")}
-            value={newCollaborator?.username || ""}
-            onChange={(value) => handleInputChange("username", value)}
+            id="username"
+            label={t('username')}
+            name="username"
+            onChange={value => handleInputChange('username', value)}
+            placeholder={t('username')}
+            type="text"
+            value={newCollaborator?.username || ''}
           />
           <SimpleInput
-            label={t("firstname")}
-            id={"firstname"}
-            name={"firstname"}
-            type={"text"}
-            placeholder={t("firstname")}
-            value={newCollaborator?.firstname || ""}
-            onChange={(value) => handleInputChange("firstname", value)}
+            id="firstname"
+            label={t('firstname')}
+            name="firstname"
+            onChange={value => handleInputChange('firstname', value)}
+            placeholder={t('firstname')}
+            type="text"
+            value={newCollaborator?.firstname || ''}
           />
           <SimpleInput
-            label={t("lastname")}
-            id={"lastname"}
-            name={"lastname"}
-            type={"text"}
-            placeholder={t("lastname")}
-            value={newCollaborator?.lastname || ""}
-            onChange={(value) => handleInputChange("lastname", value)}
+            id="lastname"
+            label={t('lastname')}
+            name="lastname"
+            onChange={value => handleInputChange('lastname', value)}
+            placeholder={t('lastname')}
+            type="text"
+            value={newCollaborator?.lastname || ''}
           />
           <SimpleInput
-            label={t("password")}
-            id={"password"}
-            name={"password"}
-            type={"text"}
-            placeholder={t("password")}
-            value={newCollaborator?.password || ""}
-            onChange={(value) => handleInputChange("password", value)}
+            id="email"
+            label={t('email')}
+            name="email"
+            onChange={value => handleInputChange('email', value)}
+            placeholder={t('email')}
+            type="text"
+            value={newCollaborator?.email || ''}
           />
           <SimpleInput
-            label={t("phone")}
-            id={"phone"}
-            name={"phone"}
-            type={"text"}
-            placeholder={t("phone")}
-            value={newCollaborator?.phone || ""}
-            onChange={(value) => handleInputChange("phone", value)}
+            id="phone"
+            label={t('phone')}
+            name="phone"
+            onChange={value => handleInputChange('phone', value)}
+            placeholder={t('phone')}
+            type="text"
+            value={newCollaborator?.phone || ''}
           />
           <SelectDropdown
             items={roles}
-            title={t("role")}
+            onChange={handleRoleChange}
             selected={selectedRole}
-            onChange={setSelectedRole}
+            title={t('role')}
           />
           <SimpleInput
-            label={t("email")}
-            id={"email"}
-            name={"email"}
-            type={"text"}
-            placeholder={t("email")}
-            value={newCollaborator?.email || ""}
-            onChange={(value) => handleInputChange("email", value)}
+            id="password"
+            label={t('password')}
+            name="password"
+            onChange={value => handleInputChange('password', value)}
+            placeholder={t('password')}
+            type="password"
+            value={newCollaborator?.password || ''}
           />
+        </>
+      </Modal>
+      <Modal
+        cancelText={t('btn.cancel')}
+        isOpen={isOpenEditCollabModal}
+        onCancel={handleCancelEditCollab}
+        onSubmit={handleSubmitEditCollab}
+        submitText={t('btn.update')}
+        title={t('editCollaborator')}
+      >
+        <>
+          <SimpleInput
+            id="username"
+            label={t('username')}
+            name="username"
+            onChange={value => handleInputChange('username', value)}
+            placeholder={t('username')}
+            type="text"
+            value={newCollaborator?.username || ''}
+          />
+          <SimpleInput
+            id="firstname"
+            label={t('firstname')}
+            name="firstname"
+            onChange={value => handleInputChange('firstname', value)}
+            placeholder={t('firstname')}
+            type="text"
+            value={newCollaborator?.firstname || ''}
+          />
+          <SimpleInput
+            id="lastname"
+            label={t('lastname')}
+            name="lastname"
+            onChange={value => handleInputChange('lastname', value)}
+            placeholder={t('lastname')}
+            type="text"
+            value={newCollaborator?.lastname || ''}
+          />
+          <SimpleInput
+            id="email"
+            label={t('email')}
+            name="email"
+            onChange={value => handleInputChange('email', value)}
+            placeholder={t('email')}
+            type="text"
+            value={newCollaborator?.email || ''}
+          />
+          <SimpleInput
+            id="phone"
+            label={t('phone')}
+            name="phone"
+            onChange={value => handleInputChange('phone', value)}
+            placeholder={t('phone')}
+            type="text"
+            value={newCollaborator?.phone || ''}
+          />
+          <SelectDropdown
+            items={roles}
+            onChange={handleRoleChange}
+            selected={selectedRole}
+            title={t('role')}
+          />
+          <SimpleInput
+            id="password"
+            label={t('password')}
+            name="password"
+            onChange={value => handleInputChange('password', value)}
+            placeholder={t('password')}
+            type="password"
+            value={newCollaborator?.password || ''}
+          />
+          <div className="flex items-center mt-2">
+            <PrimarySwitch
+              enabled={!!newCollaborator?.enabled}
+              onChange={() =>
+                setNewCollaborator(prevState =>
+                  prevState
+                    ? { ...prevState, enabled: !prevState.enabled }
+                    : null,
+                )
+              }
+            />
+            <span className="ml-2">
+              {newCollaborator?.enabled
+                ? t('btn.accountEnabled')
+                : t('btn.accountDisabled')}
+            </span>
+          </div>
         </>
       </Modal>
     </>
