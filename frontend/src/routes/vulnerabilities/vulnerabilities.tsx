@@ -312,7 +312,7 @@ export const Vulnerabilities = () => {
   );
 
   return (
-    <div className="p-4">
+    <div className="max-w-screen-2xl mx-auto my-6">
       {openModalDeleteVuln ? (
         <div className="fixed z-10">
           <Modal
