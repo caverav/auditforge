@@ -39,7 +39,7 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({
 }) => {
   return (
     <Field aria-required={requiredField}>
-      <Label className="block text-sm font-medium leading-6 text-gray-300">
+      <Label className="block text-sm font-medium leading-6 mb-2 text-gray-300">
         {title + ' '}
         {requiredField ? <span className="text-red-500 text-lg">*</span> : ''}
       </Label>
@@ -54,21 +54,23 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({
               'min-h-[2.3rem]',
             )}
           >
-            <ListboxSelectedOption
-              options={items.map(item => (
-                <ListboxOption
-                  className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-white/10"
-                  key={item.value}
-                  value={item}
-                >
-                  <CheckIcon className="invisible size-4 fill-white group-data-[selected]:visible" />
-                  <div className="text-sm/6 text-white">
-                    {item.label ? item.label : item.value}
-                  </div>
-                </ListboxOption>
-              ))}
-              placeholder={placeholder}
-            />
+            <span className="truncate">
+              <ListboxSelectedOption
+                options={items.map(item => (
+                  <ListboxOption
+                    className="group flex cursor-default items-center gap-2 rounded-lg px-3 select-none data-[focus]:bg-white/10"
+                    key={item.value}
+                    value={item}
+                  >
+                    <CheckIcon className="invisible size-4 fill-white group-data-[selected]:visible" />
+                    <div className="text-sm/6 text-white">
+                      {item.label ? item.label : item.value}
+                    </div>
+                  </ListboxOption>
+                ))}
+                placeholder={placeholder}
+              />
+            </span>
             <ChevronDownIcon
               aria-hidden="true"
               className="size-4 fill-white/60 mr-1"
