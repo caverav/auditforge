@@ -2,6 +2,7 @@ import { t } from 'i18next';
 import { useCallback, useEffect, useState } from 'react';
 import { toast, Toaster } from 'sonner';
 
+import DropdownButton from '../../components/button/DropdownButton';
 import Card from '../../components/card/Card';
 import SelectDropdown from '../../components/dropdown/SelectDropdown';
 import Modal from '../../components/modal/Modal';
@@ -75,6 +76,8 @@ type ListItemCategory = {
   value: string;
   label?: string;
   isNull?: boolean;
+  hrEnabled?: boolean;
+  onClick: (item: ListItem) => void;
 };
 
 type TableData = {
@@ -192,10 +195,24 @@ export const Vulnerabilities = () => {
           id: index + 1,
           value: item.name,
           label: item.name,
+          onClick: (item2: ListItem) => {
+            setSelectedCategoryAddVuln(item2);
+            openAddVulnSlidingPage();
+          },
         }),
       );
       setCategoriesList([
-        { id: 0, label: t('noCategory'), value: '', isNull: true },
+        {
+          id: 0,
+          label: t('noCategory'),
+          value: '',
+          isNull: true,
+          hrEnabled: true,
+          onClick: (item2: ListItem) => {
+            setSelectedCategoryAddVuln(item2);
+            openAddVulnSlidingPage();
+          },
+        },
         ...categoryNames,
       ]);
     } catch (err) {
@@ -369,7 +386,7 @@ export const Vulnerabilities = () => {
                 ) : null}
               </div>
               <VulnerabilityButtons
-                openAddVulnSlidingPage={openAddVulnSlidingPage}
+                categoriesList={categoriesList}
                 setOpenMerge={setIsOpenMerge}
               />
             </div>
