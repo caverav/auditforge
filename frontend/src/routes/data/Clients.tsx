@@ -88,7 +88,7 @@ export const Clients: React.FC = () => {
       header: t('company'),
       accessor: 'company',
       sortable: true,
-      render: (data: any) => data?.name ?? '-',
+      render: (data?: { name: string }) => data?.name ?? '-',
     },
   ];
 
@@ -119,7 +119,7 @@ export const Clients: React.FC = () => {
 
   const [tableData, handleSorting, setTableData] = useSortableTable<TableData>(
     clients,
-    columns,
+    columns, // error en useSortableTable o UITable
   );
 
   const [isOpenAddClientModal, setIsOpenAddClientModal] = useState(false);
@@ -143,7 +143,7 @@ export const Clients: React.FC = () => {
       const data: { datas: Company[] } = await getCompanies();
       const filteredData = data.datas.map((item, index) => ({
         id: index + 1,
-        _id: item._id || '',
+        _id: item._id ?? '',
         value: item.name,
       }));
       setCompanies(filteredData);
@@ -336,13 +336,13 @@ export const Clients: React.FC = () => {
   const handleCompanyChange = (company: ListItem) => {
     setSelectedCompany(company);
     setNewClient(prevState => ({
-      ...prevState,
+      ...prevState!,
       company: {
         id: company.id,
         _id: company._id,
-        name: company.name || '',
-        shortName: company.shortName || '',
-        logo: company.logo || '',
+        name: company.name ?? '',
+        shortName: company.shortName ?? '',
+        logo: company.logo ?? '',
       } as Company,
     }));
   };
@@ -392,7 +392,7 @@ export const Clients: React.FC = () => {
             onChange={value => handleInputChange('firstname', value)}
             placeholder={t('firstname')}
             type="text"
-            value={newClient?.firstname || ''}
+            value={newClient?.firstname ?? ''}
           />
           <SimpleInput
             id="lastname"
@@ -401,7 +401,7 @@ export const Clients: React.FC = () => {
             onChange={value => handleInputChange('lastname', value)}
             placeholder={t('lastname')}
             type="text"
-            value={newClient?.lastname || ''}
+            value={newClient?.lastname ?? ''}
           />
           <SimpleInput
             id="email"
@@ -410,7 +410,7 @@ export const Clients: React.FC = () => {
             onChange={value => handleInputChange('email', value)}
             placeholder={t('email')}
             type="text"
-            value={newClient?.email || ''}
+            value={newClient?.email ?? ''}
           />
           <SimpleInput
             id="title"
@@ -419,7 +419,7 @@ export const Clients: React.FC = () => {
             onChange={value => handleInputChange('title', value)}
             placeholder={t('title')}
             type="text"
-            value={newClient?.title || ''}
+            value={newClient?.title ?? ''}
           />
           <SimpleInput
             id="phone"
@@ -428,7 +428,7 @@ export const Clients: React.FC = () => {
             onChange={value => handleInputChange('phone', value)}
             placeholder={t('phone')}
             type="text"
-            value={newClient?.phone || ''}
+            value={newClient?.phone ?? ''}
           />
           <SimpleInput
             id="cell"
@@ -437,7 +437,7 @@ export const Clients: React.FC = () => {
             onChange={value => handleInputChange('cell', value)}
             placeholder={t('cell')}
             type="text"
-            value={newClient?.cell || ''}
+            value={newClient?.cell ?? ''}
           />
         </>
       </Modal>
@@ -463,7 +463,7 @@ export const Clients: React.FC = () => {
             onChange={value => handleInputChange('firstname', value)}
             placeholder={t('firstname')}
             type="text"
-            value={newClient?.firstname || ''}
+            value={newClient?.firstname ?? ''}
           />
           <SimpleInput
             id="lastname"
@@ -472,7 +472,7 @@ export const Clients: React.FC = () => {
             onChange={value => handleInputChange('lastname', value)}
             placeholder={t('lastname')}
             type="text"
-            value={newClient?.lastname || ''}
+            value={newClient?.lastname ?? ''}
           />
           <SimpleInput
             id="email"
@@ -481,7 +481,7 @@ export const Clients: React.FC = () => {
             onChange={value => handleInputChange('email', value)}
             placeholder={t('email')}
             type="text"
-            value={newClient?.email || ''}
+            value={newClient?.email ?? ''}
           />
           <SimpleInput
             id="title"
@@ -490,7 +490,7 @@ export const Clients: React.FC = () => {
             onChange={value => handleInputChange('title', value)}
             placeholder={t('title')}
             type="text"
-            value={newClient?.title || ''}
+            value={newClient?.title ?? ''}
           />
           <SimpleInput
             id="phone"
@@ -499,7 +499,7 @@ export const Clients: React.FC = () => {
             onChange={value => handleInputChange('phone', value)}
             placeholder={t('phone')}
             type="text"
-            value={newClient?.phone || ''}
+            value={newClient?.phone ?? ''}
           />
           <SimpleInput
             id="cell"
@@ -508,7 +508,7 @@ export const Clients: React.FC = () => {
             onChange={value => handleInputChange('cell', value)}
             placeholder={t('cell')}
             type="text"
-            value={newClient?.cell || ''}
+            value={newClient?.cell ?? ''}
           />
         </>
       </Modal>
