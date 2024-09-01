@@ -187,7 +187,7 @@ export const Vulnerabilities = () => {
     }
   };
 
-  const fetchCategories = async () => {
+  const fetchCategories = useCallback(async () => {
     try {
       const dataCategory = await getCategories();
       const categoryNames = dataCategory.datas.map(
@@ -218,14 +218,14 @@ export const Vulnerabilities = () => {
     } catch (err) {
       setError(true);
     }
-  };
+  }, []);
 
   useEffect(() => {
     void fetchVulnerabilities();
     void fetchLanguages();
     void fetchTypes();
     void fetchCategories();
-  }, [fetchVulnerabilities]);
+  }, [fetchCategories, fetchVulnerabilities]);
   //
 
   //// Workaround para dropdown de filtrado, al parecer funciona bien btw
