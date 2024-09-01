@@ -3,6 +3,9 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useParams } from 'react-router-dom';
 
+import DropdownButton, {
+  ListItem,
+} from '../../../components/button/DropdownButton';
 import AuditSidebar from '../../../components/navbar/AuditSidebar';
 import { Finding, getAuditById } from '../../../services/audits';
 
@@ -66,6 +69,49 @@ export const AuditRoot = () => {
     { id: 2, name: 'massi', online: false },
   ];
 
+  const fileTypes: ListItem[] = [
+    {
+      id: 1,
+      value: 'docx',
+      label: 'docx',
+      onClick: () =>
+        window.open(
+          `https://localhost:8443/api/audits/${auditId}/generate`,
+          '_blank',
+        ),
+    },
+    {
+      id: 2,
+      value: 'pdf',
+      label: 'pdf',
+      onClick: () =>
+        window.open(
+          `https://localhost:8443/api/audits/${auditId}/generate/pdf`,
+          '_blank',
+        ),
+    },
+    {
+      id: 3,
+      value: 'json',
+      label: 'json',
+      onClick: () =>
+        window.open(
+          `https://localhost:8443/api/audits/${auditId}/generate/json`,
+          '_blank',
+        ),
+    },
+    {
+      id: 4,
+      value: 'csv',
+      label: 'csv',
+      onClick: () =>
+        window.open(
+          `https://localhost:8443/api/audits/${auditId}/generate/csv`,
+          '_blank',
+        ),
+    },
+  ];
+
   return (
     <div className="flex overflow-hidden">
       <AuditSidebar
@@ -86,6 +132,7 @@ export const AuditRoot = () => {
       <div className="flex-1 ml-64 overflow-auto">
         <Outlet />
       </div>
+      <DropdownButton items={fileTypes} placeholder="Export as" />
     </div>
   );
 };
