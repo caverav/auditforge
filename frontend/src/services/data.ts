@@ -33,6 +33,13 @@ type NewCompany = {
   logo: string;
 };
 
+type Company = {
+  _id: string;
+  name: string;
+  shortName: string;
+  logo: string;
+};
+
 export type NewClient = {
   _id?: string;
   firstname: string;
@@ -152,7 +159,7 @@ export const updateCollaborator = async (
 
 export const getCompanies = async (): Promise<{
   status: string;
-  datas: NewCompany[];
+  datas: Company[];
 }> => {
   try {
     const response = await fetch(`${API_URL}companies`, {

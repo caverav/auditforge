@@ -35,8 +35,8 @@ export const Templates: React.FC = () => {
   });
 
   const [templates, setTemplates] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [_loading, setLoading] = useState<boolean>(true);
+  const [_error, setError] = useState<string | null>(null);
 
   const [selectedTemplate, setSelectedTemplate] = useState<TableData | null>(
     null,

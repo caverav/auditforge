@@ -59,8 +59,8 @@ export const Collaborators: React.FC = () => {
     );
 
   const [collaborators, setCollaborators] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [_loading, setLoading] = useState<boolean>(true);
+  const [_error, setError] = useState<string | null>(null);
 
   const fetchCollaborators = async () => {
     try {
