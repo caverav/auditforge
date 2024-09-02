@@ -66,17 +66,17 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({
 }) => {
   const [selectedLanguageLeft, setSelectedLanguageLeft] =
     useState<ListItem | null>(null);
-  const [currentRadioOptionsLeft, setCurrentRadioOptionsLeft] =
-    useState<RadioOption[]>();
+  const [currentRadioOptionsLeft, setCurrentRadioOptionsLeft] = useState<
+    RadioOption[]
+  >([]);
   const [selectedRadioLeft, setSelectedRadioLeft] = useState('');
-  const [isLeftEnabled, setIsLeftEnabled] = useState<boolean>(false);
 
   const [selectedLanguageRight, setSelectedLanguageRight] =
     useState<ListItem | null>(null);
-  const [currentRadioOptionsRight, setCurrentRadioOptionsRight] =
-    useState<RadioOption[]>();
+  const [currentRadioOptionsRight, setCurrentRadioOptionsRight] = useState<
+    RadioOption[]
+  >([]);
   const [selectedRadioRight, setSelectedRadioRight] = useState('');
-  const [isRightEnabled, setIsRightEnabled] = useState<boolean>(false);
 
   const [error, setError] = useState<string | null>(null);
 
@@ -111,7 +111,6 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({
         label: item.title ?? '',
       }));
 
-    setIsLeftEnabled(leftOptions.length > 0);
     setCurrentRadioOptionsLeft(leftOptions);
   }, [allDetails, selectedLanguageLeft?.value, selectedLanguageRight?.value]);
 
@@ -134,7 +133,6 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({
         label: item.title ?? '',
       }));
 
-    setIsRightEnabled(rightOptions.length > 0);
     setCurrentRadioOptionsRight(rightOptions);
   }, [allDetails, selectedLanguageLeft?.value, selectedLanguageRight?.value]);
 
@@ -180,76 +178,70 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({
   };
 
   return (
-    <div>
+    <div
+      className={`fixed inset-0 flex justify-center items-center transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
+    >
       <div
-        className={`fixed inset-0 flex justify-center items-center transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0'}`}
-      >
-        <div
-          aria-hidden="true"
-          className="fixed inset-0 bg-black bg-opacity-50"
-          onClick={() => handlerIsOpen(false)}
-        />
-        <Toaster />
-        <div className="relative bg-gray-700 p-2 rounded-lg shadow-lg w-3/5 h-1/2 flex flex-col">
-          <div className="mx-3 mt-2 flex items-center justify-between">
-            <span className="text-xl text-white font-bold p-1">
-              {t('mergeVulnerabilities')}
-            </span>
-            <button
-              className="bg-transparent text-white rounded"
-              onClick={() => handlerIsOpen(false)}
-              type="button"
-            >
-              <XMarkIcon className="h-6 w-6" />
-            </button>
-          </div>
-          <hr className="h-1 mx-3 mb-1 bg-gray-600 border-0 rounded" />
-          <div className="flex justify-between space-x-4 mx-3 flex-1 overflow-auto ">
-            <div className="w-1/2 overflow-auto mt-2">
-              <SelectDropdown
-                items={languages}
-                onChange={value => handlerLeftChange(value)}
-                placeholder={t('languageAddFromRight')}
-                selected={selectedLanguageLeft}
-                title=""
+        aria-hidden="true"
+        className="fixed inset-0 bg-black bg-opacity-50"
+        onClick={() => handlerIsOpen(false)}
+      />
+      <Toaster />
+      <div className="relative bg-gray-700 p-2 rounded-lg shadow-lg w-3/5 h-1/2 flex flex-col">
+        <div className="mx-3 mt-2 flex items-center justify-between">
+          <span className="text-xl text-white font-bold p-1">
+            {t('mergeVulnerabilities')}
+          </span>
+          <button
+            className="bg-transparent text-white rounded"
+            onClick={() => handlerIsOpen(false)}
+            type="button"
+          >
+            <XMarkIcon className="h-6 w-6" />
+          </button>
+        </div>
+        <hr className="h-1 mx-3 mb-1 bg-gray-600 border-0 rounded" />
+        <div className="flex justify-between space-x-4 mx-3 flex-1 overflow-auto ">
+          <div className="w-1/2 overflow-auto mt-2">
+            <SelectDropdown
+              items={languages}
+              onChange={value => handlerLeftChange(value)}
+              placeholder={t('languageAddFromRight')}
+              selected={selectedLanguageLeft}
+              title=""
+            />
+            <div className="pl-1 mt-5">
+              <DefaultRadioGroup
+                name="left"
+                onChange={setSelectedRadioLeft}
+                options={currentRadioOptionsLeft}
+                value={selectedRadioLeft}
               />
-              <div className="pl-1 mt-5">
-                {isLeftEnabled ? (
-                  <DefaultRadioGroup
-                    name="left"
-                    onChange={setSelectedRadioLeft}
-                    options={currentRadioOptionsLeft!}
-                    value={selectedRadioLeft}
-                  />
-                ) : null}
-              </div>
-            </div>
-            <div className="w-0.5 h-full bg-gray-600" />
-            <div className="w-1/2 overflow-auto mt-2">
-              <SelectDropdown
-                items={languages}
-                onChange={value => handlerRightChange(value)}
-                placeholder={t('languageMoveToLeft')}
-                selected={selectedLanguageRight}
-                title=""
-              />
-              <div className="pl-1 mt-5">
-                {isRightEnabled ? (
-                  <DefaultRadioGroup
-                    name="right"
-                    onChange={setSelectedRadioRight}
-                    options={currentRadioOptionsRight!}
-                    value={selectedRadioRight}
-                  />
-                ) : null}
-              </div>
             </div>
           </div>
-          <div className="flex justify-center pt-2 border-t-gray-600 border-t-2">
-            <PrimaryButton onClick={onSubmitMerge}>
-              <span>{t('merge')}</span>
-            </PrimaryButton>
+          <div className="w-0.5 h-full bg-gray-600" />
+          <div className="w-1/2 overflow-auto mt-2">
+            <SelectDropdown
+              items={languages}
+              onChange={value => handlerRightChange(value)}
+              placeholder={t('languageMoveToLeft')}
+              selected={selectedLanguageRight}
+              title=""
+            />
+            <div className="pl-1 mt-5">
+              <DefaultRadioGroup
+                name="right"
+                onChange={setSelectedRadioRight}
+                options={currentRadioOptionsRight}
+                value={selectedRadioRight}
+              />
+            </div>
           </div>
+        </div>
+        <div className="flex justify-center pt-2 border-t-gray-600 border-t-2">
+          <PrimaryButton onClick={onSubmitMerge}>
+            <span>{t('merge')}</span>
+          </PrimaryButton>
         </div>
       </div>
     </div>
