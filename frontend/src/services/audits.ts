@@ -1,5 +1,3 @@
-import { NavigateFunction } from 'react-router-dom';
-
 const API_URL = 'https://localhost:8443/api/';
 
 const networkError = new Error('Network response was not ok');
@@ -73,6 +71,10 @@ export type AuditById = {
     | {
         _id: string;
         name: string;
+        createdAt: string;
+        updatedAt: string;
+        __v: number;
+        shortname: string;
       }
     | undefined;
   collaborators: {
@@ -81,8 +83,12 @@ export type AuditById = {
   }[];
   date: string;
   creator: {
-    username: string;
     _id: string;
+    username: string;
+    firstname: string;
+    lastname: string;
+    role: string;
+    email: string;
   };
   state: string;
   type: string;
@@ -129,6 +135,50 @@ export type NewAudit = {
   type: string;
 };
 
+export type UpdateAudit = {
+  _id: string;
+  auditType: string;
+  client?: {
+    _id: string;
+    company: {
+      _id: string;
+      name: string;
+    };
+    email: string;
+    firstname: string;
+    lastname: string;
+  };
+  collaborators: {
+    _id: string;
+    firstname: string;
+    lastname: string;
+    username: string;
+  }[];
+  company: {
+    __v: number;
+    _id: string;
+    createdAt: string;
+    name: string;
+    shortName: string;
+    updatedAt: string;
+  };
+  creator: {
+    _id: string;
+    firstname: string;
+    lastname: string;
+    username: string;
+  };
+  customFields: string[];
+  date: string;
+  date_end: string;
+  date_start: string;
+  language: string;
+  name: string;
+  reviewers: string[];
+  scope: string[];
+  template: string;
+};
+
 export type Type = {
   name: string;
   templates: {
@@ -169,10 +219,13 @@ export type User = {
 
 export type Client = {
   _id: string;
-  name: string;
   email: string;
+  company: {
+    name: string;
+  };
+  lastname: string;
+  firstname: string;
   phone: string;
-  cell: string;
   title: string;
 };
 
@@ -185,6 +238,31 @@ export const createAudit = async (
   try {
     const response = await fetch(`${API_URL}audits`, {
       method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(audit),
+    });
+    if (!response.ok) {
+      throw networkError;
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const updateAudit = async (
+  auditId: string,
+  audit: UpdateAudit,
+): Promise<{
+  status: string;
+  datas: { message: string; audit: Audit };
+}> => {
+  try {
+    const response = await fetch(`${API_URL}audits/${auditId}/general`, {
+      method: 'PUT',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(audit),

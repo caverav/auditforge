@@ -4,14 +4,18 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import DayPicker from '../../../../components/button/DayPicker';
+import MultiSelectDropdown from '../../../../components/dropdown/MultiSelectDropdown';
 import SelectDropdown from '../../../../components/dropdown/SelectDropdown';
 import SimpleInput from '../../../../components/input/SimpleInput';
 import TextArea from '../../../../components/text/TextArea';
+import TopMenu from '../../../../components/topmenu/Topmenu';
 import type {
+  AuditById,
   Client,
   Company,
   Language,
   Template,
+  UpdateAudit,
   User as Collaborator,
 } from '../../../../services/audits';
 import {
@@ -21,6 +25,7 @@ import {
   getCompanies,
   getLanguages,
   getTemplates,
+  updateAudit,
 } from '../../../../services/audits';
 import { GeneralDivWrapper } from './GeneralDivWrapper';
 
@@ -32,28 +37,38 @@ type ListItem = {
 
 export const General = () => {
   const { auditId } = useParams();
+  const [dataAudit, setDataAudit] = useState<AuditById>();
 
   const [nameAudit, setNameAudit] = useState<string>('');
+  const [auditType, setAuditType] = useState<string>('');
 
-  const [languages, setLanguages] = useState<ListItem[]>([]);
+  const [languages, setLanguages] = useState<Language[]>([]);
+  const [languageOptions, setLanguageOptions] = useState<ListItem[]>([]);
   const [currentLanguage, setCurrentLanguage] = useState<ListItem | null>(null);
   const [loadingLanguages, setLoadingLanguages] = useState<boolean>(true);
 
-  const [templates, setTemplates] = useState<ListItem[]>([]);
+  const [templates, setTemplates] = useState<Template[]>([]);
+  const [templateOptions, setTemplateOptions] = useState<ListItem[]>([]);
   const [currentTemplate, setCurrentTemplate] = useState<ListItem | null>(null);
   const [loadingTemplates, setLoadingTemplates] = useState<boolean>(true);
 
-  const [companies, setCompanies] = useState<ListItem[]>([]);
+  const [companies, setCompanies] = useState<Company[]>([]);
+  const [companyOptions, setCompanyOptions] = useState<ListItem[]>([]);
   const [currentCompany, setCurrentCompany] = useState<ListItem | null>(null);
   const [loadingCompanies, setLoadingCompanies] = useState<boolean>(false);
 
-  const [clients, setClients] = useState<ListItem[]>([]);
+  const [clients, setClients] = useState<Client[]>([]);
+  const [clientOptions, setClientOptions] = useState<ListItem[]>([]);
   const [currentClient, setCurrentClient] = useState<ListItem | null>(null);
   const [loadingClients, setLoadingClients] = useState<boolean>(false);
 
-  const [collaborators, setCollaborators] = useState<ListItem[]>([]);
-  const [currentCollaborators, setCurrentCollaborators] =
-    useState<ListItem | null>(null);
+  const [collaborators, setCollaborators] = useState<Collaborator[]>([]);
+  const [collaboratorOptions, setCollaboratorOptions] = useState<ListItem[]>(
+    [],
+  );
+  const [currentCollaborators, setCurrentCollaborators] = useState<ListItem[]>(
+    [],
+  );
   const [loadingCollaborators, setLoadingCollaborators] =
     useState<boolean>(true);
 
@@ -66,60 +81,64 @@ export const General = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const dataLanguage = await getLanguages();
-        const languagesName = dataLanguage.datas.map(
+        const dataLanguages = await getLanguages();
+        setLanguages(dataLanguages.datas);
+        const languageNames = dataLanguages.datas.map(
           (item: Language, index: number): ListItem => ({
             id: index,
             value: item.locale,
             label: item.language,
           }),
         );
-        setLanguages(languagesName);
+        setLanguageOptions(languageNames);
         setLoadingLanguages(false);
 
         const dataTemplates = await getTemplates();
-        const templatesName = dataTemplates.datas.map(
-          (item: Template, index: number) => ({
+        setTemplates(dataTemplates.datas);
+        const templateNames = dataTemplates.datas.map(
+          (item: Template, index: number): ListItem => ({
             id: index,
             value: item.name,
             label: item.name,
           }),
         );
-
-        setTemplates(templatesName);
+        setTemplateOptions(templateNames);
         setLoadingTemplates(false);
 
-        const dataCompany = await getCompanies();
-        const companiesName = dataCompany.datas.map(
+        const dataCompanies = await getCompanies();
+        setCompanies(dataCompanies.datas);
+        const companyNames = dataCompanies.datas.map(
           (item: Company, index: number): ListItem => ({
             id: index,
-            value: item.name,
+            value: item._id,
             label: item.name,
           }),
         );
-        setCompanies(companiesName);
+        setCompanyOptions(companyNames);
         setLoadingCompanies(false);
 
         const dataClients = await getClients();
-        const clientsName = dataClients.datas.map(
+        setClients(dataClients.datas);
+        const clientNames = dataClients.datas.map(
           (item: Client, index: number): ListItem => ({
             id: index,
             value: item._id,
             label: item.email,
           }),
         );
-        setClients(clientsName);
+        setClientOptions(clientNames);
         setLoadingClients(false);
 
         const dataCollaborators = await getCollaborators();
-        const collaboratorsName = dataCollaborators.datas.map(
+        setCollaborators(dataCollaborators.datas);
+        const collaboratorNames = dataCollaborators.datas.map(
           (item: Collaborator, index: number): ListItem => ({
             id: index,
             value: `${item._id}`,
             label: `${item.firstname} ${item.lastname}`,
           }),
         );
-        setCollaborators(collaboratorsName);
+        setCollaboratorOptions(collaboratorNames);
         setLoadingCollaborators(false);
       } catch (err) {
         setLoadingLanguages(false);
@@ -136,32 +155,35 @@ export const General = () => {
 
       try {
         const dataAudit = await getAuditById(auditId);
+        setDataAudit(dataAudit.datas);
+
         setNameAudit(dataAudit.datas.name);
+        setAuditType(dataAudit.datas.auditType);
 
         const selectedLanguage =
-          languages.find(item => item.value === dataAudit.datas.language) ??
-          null;
+          languageOptions.find(
+            item => item.value === dataAudit.datas.language,
+          ) ?? null;
         setCurrentLanguage(selectedLanguage);
 
-        const selectedTemplate = templates.find(
+        const selectedTemplate = templateOptions.find(
           item => item.value === dataAudit.datas.template.name,
         );
         setCurrentTemplate(selectedTemplate ?? null);
 
-        const selectedCompany = companies.find(
-          item => item.value === dataAudit.datas.company?.name,
+        const selectedCompany = companyOptions.find(
+          item => item.value === dataAudit.datas.company?._id,
         );
         setCurrentCompany(selectedCompany ?? null);
 
-        const selectedClient = clients.find(
+        const selectedClient = clientOptions.find(
           item => item.value === dataAudit.datas.client?._id,
         );
         setCurrentClient(selectedClient ?? null);
 
-        const selectedCollaborator =
-          collaborators.find(
-            item => item.value === dataAudit.datas.creator._id,
-          ) ?? null;
+        const selectedCollaborator = collaboratorOptions.filter(
+          item => item.value === dataAudit.datas.creator._id,
+        );
         setCurrentCollaborators(selectedCollaborator);
 
         setStartDate(dayjs(dataAudit.datas.date_start));
@@ -175,18 +197,129 @@ export const General = () => {
     };
     if (
       auditId &&
-      languages.length > 0 &&
-      templates.length > 0 &&
-      companies.length > 0 &&
-      clients.length > 0 &&
-      collaborators.length > 0
+      languageOptions.length > 0 &&
+      templateOptions.length > 0 &&
+      companyOptions.length > 0 &&
+      clientOptions.length > 0 &&
+      collaboratorOptions.length > 0
     ) {
       fetchAuditData().catch(console.error);
     }
-  }, [auditId, languages, templates, companies, clients, collaborators]);
+  }, [
+    auditId,
+    languageOptions,
+    templateOptions,
+    companyOptions,
+    clientOptions,
+    collaboratorOptions,
+  ]);
+
+  const handleSaveButton = async () => {
+    if (!auditId) {
+      console.error('No audit ID available');
+      return;
+    }
+
+    const clientData = clients.find(
+      clients => clients._id === currentClient?.value,
+    );
+
+    const collaboratorData = collaborators.find(
+      collaborator => collaborator._id === currentCollaborators.find(),
+    );
+
+    const companyData = companies.find(
+      company => company._id === currentCompany?.value,
+    );
+
+    const templateData = templates.find(
+      template => template.name === currentTemplate?.value,
+    );
+
+    const updatedAudit: UpdateAudit = {
+      _id: auditId,
+      auditType,
+      name: nameAudit,
+      language: currentLanguage?.value ?? '',
+      client: clientData
+        ? {
+            _id: clientData._id,
+            company: {
+              _id: currentCompany?.value ?? '',
+              name: clientData.company.name,
+            },
+            email: clientData.email,
+            firstname: clientData.firstname,
+            lastname: clientData.lastname,
+          }
+        : {
+            _id: '',
+            company: { _id: '', name: '' },
+            email: '',
+            firstname: '',
+            lastname: '',
+          },
+      collaborators: collaboratorData
+        ? [
+            {
+              _id: collaboratorData._id,
+              firstname: collaboratorData.firstname,
+              lastname: collaboratorData.lastname,
+              username: collaboratorData.username,
+            },
+          ]
+        : [
+            {
+              _id: '',
+              firstname: '',
+              lastname: '',
+              username: '',
+            },
+          ],
+      company: companyData
+        ? {
+            __v: 0,
+            _id: companyData._id,
+            createdAt: dataAudit?.company?.createdAt ?? '',
+            name: companyData.name,
+            shortName: companyData.shortName,
+            updatedAt: dataAudit?.company?.updatedAt ?? '',
+          }
+        : {
+            __v: 0,
+            _id: '',
+            name: '',
+            shortName: '',
+          },
+      creator: {
+        _id: dataAudit?.creator._id ?? '',
+        firstname: dataAudit?.creator.firstname ?? '',
+        lastname: dataAudit?.creator.lastname ?? '',
+        username: dataAudit?.creator.username ?? '',
+      },
+      customFields: [],
+      date: reportingDate ? reportingDate.toISOString() : '',
+      date_end: endDate ? endDate.toISOString() : '',
+      date_start: startDate ? startDate.toISOString() : '',
+      reviewers: [],
+      scope: scope.split('\n'),
+      template: templateData?._id ?? '',
+    };
+
+    try {
+      await updateAudit(auditId, updatedAudit);
+    } catch (error) {
+      console.error('Error updating audit:', error);
+    }
+  };
 
   return (
     <GeneralDivWrapper>
+      <TopMenu
+        auditName={nameAudit}
+        auditType={auditType}
+        onSave={handleSaveButton}
+      />
       <div className="flex flex-col">
         <SimpleInput
           id="name"
@@ -203,7 +336,7 @@ export const General = () => {
         <div className="w-1/2">
           {!loadingLanguages ? (
             <SelectDropdown
-              items={languages}
+              items={languageOptions}
               onChange={setCurrentLanguage}
               selected={currentLanguage}
               title={t('language')}
@@ -213,7 +346,7 @@ export const General = () => {
         <div className="w-1/2">
           {!loadingTemplates ? (
             <SelectDropdown
-              items={templates}
+              items={templateOptions}
               onChange={setCurrentTemplate}
               selected={currentTemplate}
               title={t('template')}
@@ -226,7 +359,7 @@ export const General = () => {
         <div className="w-1/2">
           {!loadingCompanies ? (
             <SelectDropdown
-              items={companies}
+              items={companyOptions}
               onChange={setCurrentCompany}
               selected={currentCompany}
               title={t('company')}
@@ -236,7 +369,7 @@ export const General = () => {
         <div className="w-1/2">
           {!loadingClients ? (
             <SelectDropdown
-              items={clients}
+              items={clientOptions}
               onChange={setCurrentClient}
               selected={currentClient}
               title={t('client')}
@@ -247,8 +380,8 @@ export const General = () => {
 
       <div className="flex flex-col">
         {!loadingCollaborators ? (
-          <SelectDropdown
-            items={collaborators}
+          <MultiSelectDropdown
+            items={collaboratorOptions}
             onChange={setCurrentCollaborators}
             selected={currentCollaborators}
             title={t('collaborators')}
