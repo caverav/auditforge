@@ -75,11 +75,44 @@ const useAuth = () => {
     }
   };
 
+  const register = async (
+    username: string,
+    firstname: string,
+    lastname: string,
+    password: string,
+  ) => {
+    const data = JSON.stringify({
+      username,
+      firstname,
+      lastname,
+      password,
+      role: 'admin',
+    });
+
+    try {
+      const response = await fetch('/api/users/init', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: data,
+      });
+      const responseData = await response.json();
+      if (responseData.status === 'success') {
+        navigate('/login', { replace: true });
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   return {
     isAuthenticated,
     login,
     logout,
     checktoken,
+    register,
   };
 };
 
