@@ -1,9 +1,10 @@
-import { PencilSquareIcon } from "@heroicons/react/24/outline";
-import React, { ReactElement } from "react";
-import PrimaryButton from "../button/PrimaryButton";
-import { t } from "i18next";
+import { PencilSquareIcon } from '@heroicons/react/24/outline';
+import { t } from 'i18next';
+import React, { ReactElement } from 'react';
 
-interface EditCardProps {
+import PrimaryButton from '../button/PrimaryButton';
+
+type EditCardProps = {
   title: string;
   editTitle: string;
   children: ReactElement;
@@ -11,7 +12,7 @@ interface EditCardProps {
   onClickEdit: () => void;
   onClickSave: () => void;
   onClickCancel: () => void;
-}
+};
 
 const EditCard: React.FC<EditCardProps> = ({
   title,
@@ -38,17 +39,17 @@ const EditCard: React.FC<EditCardProps> = ({
       </div>
       <hr className="h-1 mx-4 bg-gray-600 border-0 rounded" />
       <div className="p-2">{children}</div>
-      {isEditing && (
+      {isEditing ? (
         <div>
           <hr className="h-1 mx-4 bg-gray-600 border-0 rounded" />
           <div className="flex items-end space-x-4 m-4">
             <PrimaryButton color="gray" onClick={onClickCancel}>
-              {t("btn.cancel")}
+              {t('btn.cancel')}
             </PrimaryButton>
-            <PrimaryButton onClick={onClickSave}>{t("btn.save")}</PrimaryButton>
+            <PrimaryButton onClick={onClickSave}>{t('btn.save')}</PrimaryButton>
           </div>
         </div>
-      )}
+      ) : null}
     </div>
   );
 };
