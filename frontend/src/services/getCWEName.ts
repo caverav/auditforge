@@ -1,4 +1,4 @@
-import jsonData from '../../public/desc_cwe_en_es.json';
+import jsonData from '../files/desc_cwe_en_es.json';
 
 type CWEData = {
   'CWE-ID': string;
@@ -8,9 +8,8 @@ type CWEData = {
 
 const GetCWENameByLanguage = (language: string, cweIdToFind: string) => {
   const cweObject: CWEData[] = JSON.parse(jsonData);
-  const cweDataList: CWEData[] = cweObject.map(item => item);
 
-  const foundCWE = cweDataList.find(item => item['CWE-ID'] === cweIdToFind);
+  const foundCWE = cweObject.find(item => item['CWE-ID'] === cweIdToFind);
 
   let traduccion: string;
 
