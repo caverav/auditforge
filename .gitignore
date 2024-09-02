@@ -26,3 +26,7 @@ app-settings.json
 
 # Version managers
 .tool-versions
+
+
+# modelo
+cwe-api/modelo-cwe
