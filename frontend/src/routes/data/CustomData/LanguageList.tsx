@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from "react";
-import DraggableList from "../../../components/table/DraggableTable";
-import SimpleInput from "../../../components/input/SimpleInput";
-import PrimaryButton from "../../../components/button/PrimaryButton";
-import { Bars2Icon } from "@heroicons/react/24/outline";
+import { Bars2Icon } from '@heroicons/react/24/outline';
+import React, { useEffect, useState } from 'react';
 
-interface LanguageItem {
+import PrimaryButton from '../../../components/button/PrimaryButton';
+import SimpleInput from '../../../components/input/SimpleInput';
+import DraggableList from '../../../components/table/DraggableTable';
+
+type LanguageItem = {
   language: string;
   locale: string;
-}
+};
 
-interface LanguageListProps {
+type LanguageListProps = {
   data: LanguageItem[];
   isDisabled: boolean;
   onUpdateList: (data: LanguageItem[]) => void;
-}
+};
 
 /**
  * Este componente renderea el contenido de EditCard
@@ -41,36 +42,36 @@ const LanguageList: React.FC<LanguageListProps> = ({
    */
   const renderRow = (row: LanguageItem) => (
     <div
-      className={`grid grid-cols-1 md:grid-cols-${isDisabled ? "2" : "4"} place-items-center`}
+      className={`grid grid-cols-1 md:grid-cols-${isDisabled ? '2' : '4'} place-items-center`}
     >
-      {!isDisabled && (
+      {!isDisabled ? (
         <div>
           <Bars2Icon className="size-4" />
         </div>
-      )}
+      ) : null}
       <div className="pr-2">
         <SimpleInput
+          disabled={isDisabled}
+          id="language"
+          name="language"
+          onChange={e => handleInputChange(row.language, 'language', e)}
+          placeholder="language"
           type="text"
           value={row.language}
-          name="language"
-          placeholder="language"
-          id="language"
-          onChange={(e) => handleInputChange(row.language, "language", e)}
-          disabled={isDisabled}
         />
       </div>
       <div className="pr-2">
         <SimpleInput
+          disabled={isDisabled}
+          id="locale"
+          name="locale"
+          onChange={e => handleInputChange(row.locale, 'locale', e)}
+          placeholder="locale"
           type="text"
           value={row.locale}
-          name="locale"
-          placeholder="locale"
-          id="locale"
-          onChange={(e) => handleInputChange(row.locale, "locale", e)}
-          disabled={isDisabled}
         />
       </div>
-      {!isDisabled && (
+      {!isDisabled ? (
         <div>
           <PrimaryButton
             color="red"
@@ -79,24 +80,24 @@ const LanguageList: React.FC<LanguageListProps> = ({
             X
           </PrimaryButton>
         </div>
-      )}
+      ) : null}
     </div>
   );
 
   const handleInputChange = (
     id: string,
     field: keyof LanguageItem,
-    value: string | boolean
+    value: string | boolean,
   ) => {
-    setRows((prevRows) =>
-      prevRows.map((row) =>
-        row.language === id ? { ...row, [field]: value } : row
-      )
+    setRows(prevRows =>
+      prevRows.map(row =>
+        row.language === id ? { ...row, [field]: value } : row,
+      ),
     );
   };
 
   const handleRemoveRow = (id: string) => {
-    setRows(rows.filter((row) => row.language !== id));
+    setRows(rows.filter(row => row.language !== id));
   };
 
   /**
@@ -119,10 +120,10 @@ const LanguageList: React.FC<LanguageListProps> = ({
   return (
     <div>
       <DraggableList
+        isDisabled={isDisabled}
         items={rows}
         onOrderChange={setRows}
         renderItem={renderRow}
-        isDisabled={isDisabled}
       />
     </div>
   );

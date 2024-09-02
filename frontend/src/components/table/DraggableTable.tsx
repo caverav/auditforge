@@ -1,12 +1,12 @@
-import React from "react";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
+import React from 'react';
 
-interface DraggableListProps<T> {
+type DraggableListProps<T> = {
   items: T[];
   onOrderChange: (items: T[]) => void;
   renderItem: (item: T, index: number) => React.ReactNode;
   isDisabled: boolean;
-}
+};
 
 /**
  * Implementa la lógica del drag and drop.
@@ -21,7 +21,9 @@ const DraggableList = <T extends { id: string }>({
   isDisabled = false,
 }: DraggableListProps<T>) => {
   const handleDragEnd = (result: any) => {
-    if (!result.destination) return;
+    if (!result.destination) {
+      return;
+    }
 
     const updatedItems = Array.from(items);
     const [movedItem] = updatedItems.splice(result.source.index, 1);
@@ -33,22 +35,22 @@ const DraggableList = <T extends { id: string }>({
   return (
     <DragDropContext onDragEnd={handleDragEnd}>
       <Droppable droppableId="droppable">
-        {(provided) => (
+        {provided => (
           <div {...provided.droppableProps} ref={provided.innerRef}>
             {items.map((item, index) => (
               <Draggable
-                key={item.id}
                 draggableId={item.id}
                 index={index}
                 isDragDisabled={isDisabled}
+                key={item.id}
               >
-                {(provided) => (
+                {provided => (
                   <div
                     ref={provided.innerRef}
                     {...provided.draggableProps}
                     {...provided.dragHandleProps}
                     style={{
-                      marginBottom: "8px",
+                      marginBottom: '8px',
                       ...provided.draggableProps.style,
                     }}
                   >

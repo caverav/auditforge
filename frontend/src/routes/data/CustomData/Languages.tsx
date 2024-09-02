@@ -1,20 +1,21 @@
-import { useTranslation } from "react-i18next";
-import PrimaryButton from "../../../components/button/PrimaryButton";
-import EditCard from "../../../components/card/EditCard";
-import SimpleInput from "../../../components/input/SimpleInput";
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
+
+import PrimaryButton from '../../../components/button/PrimaryButton';
+import EditCard from '../../../components/card/EditCard';
+import SimpleInput from '../../../components/input/SimpleInput';
 import {
   createLanguage,
   getLanguages,
   updateLanguages,
-} from "../../../services/data";
-import LanguageList from "./LanguageList";
-import { toast } from "sonner";
+} from '../../../services/data';
+import LanguageList from './LanguageList';
 
 export const Languages: React.FC = () => {
   const { t } = useTranslation();
-  const [newLanguage, setNewLanguage] = useState("");
-  const [newLocale, setNewLocale] = useState("");
+  const [newLanguage, setNewLanguage] = useState('');
+  const [newLocale, setNewLocale] = useState('');
 
   const [languages, setLanguages] = useState<
     { language: string; locale: string }[]
@@ -31,7 +32,7 @@ export const Languages: React.FC = () => {
       console.log(data.datas);
       setLoading(false);
     } catch (err) {
-      setError("Error fetching company");
+      setError('Error fetching company');
       setLoading(false);
     }
   };
@@ -44,15 +45,15 @@ export const Languages: React.FC = () => {
     try {
       await createLanguage({ language: newLanguage, locale: newLocale });
     } catch (error) {
-      setError("Error creating language");
-      toast.error(t("err.errorCreatingLang"));
-      setNewLanguage("");
-      setNewLocale("");
+      setError('Error creating language');
+      toast.error(t('err.errorCreatingLang'));
+      setNewLanguage('');
+      setNewLocale('');
       return;
     }
-    toast.success(t("msg.languageCreatedOk"));
-    setNewLanguage("");
-    setNewLocale("");
+    toast.success(t('msg.languageCreatedOk'));
+    setNewLanguage('');
+    setNewLocale('');
     fetchLanguages();
   };
 
@@ -65,7 +66,7 @@ export const Languages: React.FC = () => {
   >([]);
 
   const handleUpdateLanguageList = (
-    data: { language: string; locale: string }[]
+    data: { language: string; locale: string }[],
   ) => {
     setNewLanguageList(data);
   };
@@ -74,8 +75,8 @@ export const Languages: React.FC = () => {
     try {
       await updateLanguages(newLanguageList);
     } catch (error) {
-      setError("Error updating languages");
-      console.error("Error:", error);
+      setError('Error updating languages');
+      console.error('Error:', error);
       return;
     }
     setIsEditing(false);
@@ -86,46 +87,44 @@ export const Languages: React.FC = () => {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <SimpleInput
-          label={t("language")}
-          id={t("language")}
-          name={t("language")}
-          type="text"
-          placeholder={t("language")}
-          value={newLanguage}
+          id={t('language')}
+          label={t('language')}
+          name={t('language')}
           onChange={setNewLanguage}
+          placeholder={t('language')}
+          type="text"
+          value={newLanguage}
         />
         <SimpleInput
-          label={t("locale")}
-          id={t("locale")}
-          name={t("locale")}
-          type="text"
-          placeholder={t("locale")}
-          value={newLocale}
+          id={t('locale')}
+          label={t('locale')}
+          name={t('locale')}
           onChange={setNewLocale}
+          placeholder={t('locale')}
+          type="text"
+          value={newLocale}
         />
         <div>
           <PrimaryButton onClick={handleAddLanguage}>+</PrimaryButton>
         </div>
       </div>
       <EditCard
-        title={t("listOfLanguages")}
-        isEditing={isEditing}
         editTitle="edit"
+        isEditing={isEditing}
+        onClickCancel={() => setIsEditing(false)}
         onClickEdit={() => setIsEditing(true)}
         onClickSave={onClickSave}
-        onClickCancel={() => setIsEditing(false)}
+        title={t('listOfLanguages')}
       >
         <>
           {loading ? (
-            t("loading")
+            t('loading')
           ) : (
-            <>
-              <LanguageList
-                data={languages}
-                isDisabled={!isEditing}
-                onUpdateList={handleUpdateLanguageList}
-              />
-            </>
+            <LanguageList
+              data={languages}
+              isDisabled={!isEditing}
+              onUpdateList={handleUpdateLanguageList}
+            />
           )}
         </>
       </EditCard>

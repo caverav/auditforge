@@ -1,28 +1,29 @@
-import { useEffect, useState } from "react";
-import DefaultRadioGroup from "../../../components/button/DefaultRadioGroup";
-import SelectDropdown from "../../../components/dropdown/SelectDropdown";
-import SimpleInput from "../../../components/input/SimpleInput";
+import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import CheckboxButton from '../../../components/button/CheckboxButton';
+import DefaultRadioGroup from '../../../components/button/DefaultRadioGroup';
+import PrimaryButton from '../../../components/button/PrimaryButton';
+import SelectDropdown from '../../../components/dropdown/SelectDropdown';
+import SimpleInput from '../../../components/input/SimpleInput';
 import {
   createAuditType,
   getCustomSections,
   getLanguages,
   getTemplates,
   NewAuditType,
-} from "../../../services/data";
-import { useTranslation } from "react-i18next";
-import PrimaryButton from "../../../components/button/PrimaryButton";
-import CheckboxButton from "../../../components/button/CheckboxButton";
+} from '../../../services/data';
 
-interface Language {
+type Language = {
   language: string;
   locale: string;
-}
+};
 
-interface Template {
+type Template = {
   name: string;
   ext: string;
   _id: string;
-}
+};
 
 export const NewAuditTypeForm: React.FC = () => {
   const { t } = useTranslation();
@@ -35,17 +36,18 @@ export const NewAuditTypeForm: React.FC = () => {
   const [loadingSections, setLoadingSections] = useState(false);
   const [loadingLanguages, setLoadingLanguages] = useState(false);
 
-  const [error, setError] = useState("");
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchTemplates = async () => {
       setLoadingTemplates(true);
+
       try {
         const data = await getTemplates();
         setTemplateData(data.datas);
         setLoadingTemplates(false);
       } catch (err) {
-        setError("Error fetching templates");
+        setError('Error fetching templates');
         console.log(error);
         setLoadingTemplates(false);
       }
@@ -57,12 +59,13 @@ export const NewAuditTypeForm: React.FC = () => {
   useEffect(() => {
     const fetchSections = async () => {
       setLoadingSections(true);
+
       try {
         const data = await getCustomSections();
         setCustomSectionsData(data.datas);
         setLoadingSections(false);
       } catch (err) {
-        setError("Error fetching sections");
+        setError('Error fetching sections');
         console.log(error);
         setLoadingSections(false);
       }
@@ -74,12 +77,13 @@ export const NewAuditTypeForm: React.FC = () => {
   useEffect(() => {
     const fetchLanguages = async () => {
       setLoadingTemplates(true);
+
       try {
         const data = await getLanguages();
         setLanguageData(data.datas);
         setLoadingLanguages(false);
       } catch (err) {
-        setError("Error fetching languages");
+        setError('Error fetching languages');
         console.log(error);
         setLoadingLanguages(false);
       }
@@ -89,15 +93,15 @@ export const NewAuditTypeForm: React.FC = () => {
   }, []);
 
   const [newAuditType, setNewAuditType] = useState<NewAuditType>({
-    name: "",
+    name: '',
     hidden: [],
     sections: [],
-    stage: "default",
+    stage: 'default',
     templates: [],
   });
 
   const handleInputChange = (name: string, value: string | {}) => {
-    setNewAuditType((prevState) => ({
+    setNewAuditType(prevState => ({
       ...prevState!,
       [name]: value,
     }));
@@ -115,7 +119,7 @@ export const NewAuditTypeForm: React.FC = () => {
         id: index,
         label: template.name,
         value: template._id,
-      }))
+      })),
     );
   }, [templateData]);
 
@@ -134,28 +138,28 @@ export const NewAuditTypeForm: React.FC = () => {
       value: string;
       label?: string;
     },
-    locale: string
+    locale: string,
   ) => {
-    setLangTemplates((prevTemplates) => {
+    setLangTemplates(prevTemplates => {
       const templateExists = prevTemplates.some(
-        (template) => template.locale === locale
+        template => template.locale === locale,
       );
 
       if (templateExists) {
         // Actualiza el elemento existente
-        return prevTemplates.map((template) =>
+        return prevTemplates.map(template =>
           template.locale === locale
             ? {
                 ...template,
                 value: item.value,
                 label: item.label!,
-                locale: locale,
+                locale,
               }
-            : template
+            : template,
         );
       } else {
         const newTemplate = {
-          locale: locale,
+          locale,
           id: item.id,
           label: item.label!,
           value: item.value,
@@ -171,12 +175,12 @@ export const NewAuditTypeForm: React.FC = () => {
    */
   useEffect(() => {
     handleInputChange(
-      "templates",
-      langTemplates.map((lang) => ({
+      'templates',
+      langTemplates.map(lang => ({
         name: lang.label,
         locale: lang.locale,
         template: lang.value,
-      }))
+      })),
     );
   }, [langTemplates]);
 
@@ -184,15 +188,15 @@ export const NewAuditTypeForm: React.FC = () => {
     try {
       await createAuditType(newAuditType);
     } catch (error) {
-      setError("Error creating audit type");
-      console.error("Error:", error);
+      setError('Error creating audit type');
+      console.error('Error:', error);
       return;
     }
     setNewAuditType({
-      name: "",
+      name: '',
       hidden: [],
       sections: [],
-      stage: "default",
+      stage: 'default',
       templates: [],
     });
     setLangTemplates([]);
@@ -208,78 +212,76 @@ export const NewAuditTypeForm: React.FC = () => {
   });
 
   useEffect(() => {
-    let newHidden = [];
+    const newHidden = [];
     if (builtInSec.networkScan) {
-      newHidden.push("network");
+      newHidden.push('network');
     }
     if (builtInSec.findings) {
-      newHidden.push("findings");
+      newHidden.push('findings');
     }
-    handleInputChange("hidden", newHidden);
+    handleInputChange('hidden', newHidden);
   }, [builtInSec]);
 
   return (
-    <>
-      <div>
-        <div className="text-lg">{t("auditPhase")}</div>
-        <DefaultRadioGroup
-          name="stage"
-          options={[
-            { id: "1", label: t("default"), value: "default" },
-            { id: "2", label: t("retest"), value: "retest" },
-            { id: "3", label: t("multi"), value: "multi" },
-          ]}
-          value={newAuditType.stage}
-          onChange={(e) => handleInputChange("stage", e)}
+    <div>
+      <div className="text-lg">{t('auditPhase')}</div>
+      <DefaultRadioGroup
+        name="stage"
+        onChange={e => handleInputChange('stage', e)}
+        options={[
+          { id: '1', label: t('default'), value: 'default' },
+          { id: '2', label: t('retest'), value: 'retest' },
+          { id: '3', label: t('multi'), value: 'multi' },
+        ]}
+        value={newAuditType.stage}
+      />
+      <SimpleInput
+        id="name"
+        name="name"
+        onChange={e => handleInputChange('name', e)}
+        placeholder={t('name')}
+        type="text"
+        value={newAuditType.name}
+      />
+      {languageData.map(lang => (
+        <SelectDropdown
+          items={templateDropdownItems}
+          key={lang.language}
+          onChange={item => onChangeTemplate(item, lang.locale)}
+          selected={
+            langTemplates.find(item => item.locale === lang.locale)! ?? null
+          }
+          title={`${lang.language} ${t('template')}`}
         />
-        <SimpleInput
-          type="text"
-          value={newAuditType.name}
-          name="name"
-          placeholder={t("name")}
-          id="name"
-          onChange={(e) => handleInputChange("name", e)}
-        />
-        {languageData.map((lang) => (
-          <SelectDropdown
-            key={lang.language}
-            items={templateDropdownItems}
-            selected={
-              langTemplates.find((item) => item.locale === lang.locale)! ?? null
+      ))}
+      {newAuditType.stage === 'default' ? (
+        <div>
+          {t('hideBuiltInSections')}
+          <CheckboxButton
+            checked={builtInSec.networkScan}
+            onChange={() =>
+              setBuiltInSec({
+                ...builtInSec,
+                networkScan: !builtInSec.networkScan,
+              })
             }
-            title={`${lang.language} ${t("template")}`}
-            onChange={(item) => onChangeTemplate(item, lang.locale)}
+            text={t('networkScan')}
           />
-        ))}
-        {newAuditType.stage === "default" && (
-          <div>
-            {t("hideBuiltInSections")}
-            <CheckboxButton
-              text={t("networkScan")}
-              checked={builtInSec.networkScan}
-              onChange={() =>
-                setBuiltInSec({
-                  ...builtInSec,
-                  networkScan: !builtInSec.networkScan,
-                })
-              }
-            />
-            <CheckboxButton
-              text={t("findings")}
-              checked={builtInSec.findings}
-              onChange={() =>
-                setBuiltInSec({
-                  ...builtInSec,
-                  findings: !builtInSec.findings,
-                })
-              }
-            />
-          </div>
-        )}
-        <PrimaryButton onClick={() => handleSubmitAuditType()}>
-          {t("btn.create")}
-        </PrimaryButton>
-      </div>
-    </>
+          <CheckboxButton
+            checked={builtInSec.findings}
+            onChange={() =>
+              setBuiltInSec({
+                ...builtInSec,
+                findings: !builtInSec.findings,
+              })
+            }
+            text={t('findings')}
+          />
+        </div>
+      ) : null}
+      <PrimaryButton onClick={() => handleSubmitAuditType()}>
+        {t('btn.create')}
+      </PrimaryButton>
+    </div>
   );
 };
