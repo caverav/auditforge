@@ -260,7 +260,7 @@ export const Vulnerabilities = () => {
 
   const confirmDeleteVulnerability = async () => {
     try {
-      const response = await deleteVulnerability(itemDelete!._id);
+      const response = await deleteVulnerability(itemDelete?._id ?? '');
       if (response.status === 'success') {
         handleSuccessToast(t('msg.vulnerabilityDeletedOk'));
       }
@@ -346,10 +346,10 @@ export const Vulnerabilities = () => {
             ) : null}
           </div>
           <div className="fixed z-10">
-            {isOpenEditVuln ? (
+            {isOpenEditVuln && editVuln ? (
               <EditVulnerability
                 categories={categoriesList}
-                currentVuln={editVuln!}
+                currentVuln={editVuln}
                 handleOnSuccess={handleSuccessToast}
                 handlerIsOpen={setIsOpenEditVuln}
                 isOpen={isOpenEditVuln}
