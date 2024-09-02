@@ -166,7 +166,7 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({
           handleOnSuccess(t('msg.vulnerabilityMergeOk'));
         }
       } catch (error) {
-        setError('Error creating vulnerability');
+        setError('Error merging vulnerability');
         console.error('Error:', error);
         toast.error('Error merging vulnerabilities');
         return;

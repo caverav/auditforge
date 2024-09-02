@@ -95,8 +95,7 @@ export const Vulnerabilities = () => {
   );
   const [tableInfo, setTableInfo] = useState<TableData[]>([]);
 
-  const [error, setError] = useState<boolean>(false);
-  const [errorText, setErrorText] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>('');
 
   const [languagesList, setLanguagesList] = useState<ListItem[]>([]);
   const [currentLanguage, setCurrentLanguage] = useState<ListItem | null>(null);
@@ -151,8 +150,9 @@ export const Vulnerabilities = () => {
       );
       setTableData(vulnDataTable);
       setTableInfo(vulnDataTable);
-    } catch (err) {
-      setError(true);
+    } catch (error) {
+      setError('Error fetching vulnerabilities');
+      console.error('Error:', error);
     }
   }, [setTableData]);
 
@@ -169,8 +169,9 @@ export const Vulnerabilities = () => {
       setLanguagesList(languageNames);
       setCurrentLanguage(languageNames[0]);
       setLoadingLanguage(false);
-    } catch (err) {
-      setError(true);
+    } catch (error) {
+      setError('Error fetching Languages');
+      console.error('Error:', error);
     }
   };
 
@@ -184,8 +185,9 @@ export const Vulnerabilities = () => {
         locale: item.locale,
       }));
       setTypesList([...typeNames]);
-    } catch (err) {
-      setError(true);
+    } catch (error) {
+      setError('Error fetching Types');
+      console.error('Error:', error);
     }
   };
 
@@ -217,8 +219,9 @@ export const Vulnerabilities = () => {
         },
         ...categoryNames,
       ]);
-    } catch (err) {
-      setError(true);
+    } catch (error) {
+      setError('Error fetching Categories');
+      console.error('Error:', error);
     }
   }, []);
 
@@ -265,7 +268,7 @@ export const Vulnerabilities = () => {
         handleSuccessToast(t('msg.vulnerabilityDeletedOk'));
       }
     } catch (error) {
-      setErrorText('Error creating vulnerability');
+      setError('Error deleting vulnerability');
       console.error('Error:', error);
     }
     setOpenModalDeleteVuln(false);
