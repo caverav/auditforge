@@ -13,9 +13,9 @@ const GetCWENameByLanguage = (language: string, cweIdToFind: string) => {
 
   let traduccion: string;
 
-  if (foundCWE && language === 'es') {
+  if (foundCWE && language.toLowerCase().includes('es')) {
     traduccion = foundCWE.esp_name;
-  } else if (foundCWE && language === 'en') {
+  } else if (foundCWE) {
     traduccion = foundCWE.en_name;
   } else {
     traduccion = 'N/A';
