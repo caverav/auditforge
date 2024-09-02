@@ -11,7 +11,7 @@ services:
     network_mode: host
 
   backend-test:
-    image: yeln4ts/auditforge:backend-test
+    image: auditforge:backend-test
     build:
       context: .
       dockerfile: Dockerfile.test
