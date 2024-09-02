@@ -74,7 +74,7 @@ type CWEData = {
   result: [
     {
       label: string;
-      core: string;
+      score: number;
     },
   ];
 };
