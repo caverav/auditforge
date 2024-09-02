@@ -42,7 +42,7 @@ export const General = () => {
   const [nameAudit, setNameAudit] = useState<string>('');
   const [auditType, setAuditType] = useState<string>('');
 
-  const [languages, setLanguages] = useState<Language[]>([]);
+  const [, setLanguages] = useState<Language[]>([]);
   const [languageOptions, setLanguageOptions] = useState<ListItem[]>([]);
   const [currentLanguage, setCurrentLanguage] = useState<ListItem | null>(null);
   const [loadingLanguages, setLoadingLanguages] = useState<boolean>(true);
@@ -76,7 +76,11 @@ export const General = () => {
   const [endDate, setEndDate] = useState<Dayjs | null>(null);
   const [reportingDate, setReportingDate] = useState<Dayjs | null>(null);
 
-  const [scope, setScope] = useState<string | string[]>('');
+  const [scope, setScope] = useState<string[]>([]);
+
+  const changeScope = (value: string) => {
+    setScope(value.split('\n'));
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -181,16 +185,20 @@ export const General = () => {
         );
         setCurrentClient(selectedClient ?? null);
 
-        const selectedCollaborator = collaboratorOptions.filter(
-          item => item.value === dataAudit.datas.creator._id,
+        const selectedCollaborators = dataAudit.datas.collaborators.map(
+          (item: Collaborator, index: number): ListItem => ({
+            id: index,
+            value: item._id,
+            label: `${item.firstname} ${item.lastname}`,
+          }),
         );
-        setCurrentCollaborators(selectedCollaborator);
+        setCurrentCollaborators(selectedCollaborators);
 
         setStartDate(dayjs(dataAudit.datas.date_start));
         setEndDate(dayjs(dataAudit.datas.date_end));
         setReportingDate(dayjs(dataAudit.datas.date));
 
-        setScope(dataAudit.datas.scope.map(item => item.name).join('\n'));
+        setScope(dataAudit.datas.scope.map(item => item.name));
       } catch (error) {
         console.error('Error fetching audit data:', error);
       }
@@ -224,10 +232,9 @@ export const General = () => {
       clients => clients._id === currentClient?.value,
     );
 
-    const collaboratorData = collaborators.find(
-      collaborator => collaborator._id === currentCollaborators.find(),
+    const collaboratorsData = collaborators.filter(collaborator =>
+      currentCollaborators.find(item => item.value === collaborator._id),
     );
-
     const companyData = companies.find(
       company => company._id === currentCompany?.value,
     );
@@ -259,23 +266,12 @@ export const General = () => {
             firstname: '',
             lastname: '',
           },
-      collaborators: collaboratorData
-        ? [
-            {
-              _id: collaboratorData._id,
-              firstname: collaboratorData.firstname,
-              lastname: collaboratorData.lastname,
-              username: collaboratorData.username,
-            },
-          ]
-        : [
-            {
-              _id: '',
-              firstname: '',
-              lastname: '',
-              username: '',
-            },
-          ],
+      collaborators: collaboratorsData.map(collaborator => ({
+        _id: collaborator._id,
+        firstname: collaborator.firstname,
+        lastname: collaborator.lastname,
+        username: collaborator.username,
+      })),
       company: companyData
         ? {
             __v: 0,
@@ -290,6 +286,8 @@ export const General = () => {
             _id: '',
             name: '',
             shortName: '',
+            createdAt: '',
+            updatedAt: '',
           },
       creator: {
         _id: dataAudit?.creator._id ?? '',
@@ -302,7 +300,7 @@ export const General = () => {
       date_end: endDate ? endDate.toISOString() : '',
       date_start: startDate ? startDate.toISOString() : '',
       reviewers: [],
-      scope: scope.split('\n'),
+      scope,
       template: templateData?._id ?? '',
     };
 
@@ -418,10 +416,10 @@ export const General = () => {
           id="references"
           label={t('auditScope')}
           name="references"
-          onChange={setScope}
+          onChange={changeScope}
           placeholder=""
           rows={4}
-          value={scope}
+          value={scope.join('\n')}
         />
       </div>
     </GeneralDivWrapper>

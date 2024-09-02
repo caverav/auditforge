@@ -77,10 +77,7 @@ export type AuditById = {
         shortname: string;
       }
     | undefined;
-  collaborators: {
-    _id: string;
-    username: string;
-  }[];
+  collaborators: User[];
   date: string;
   creator: {
     _id: string;
