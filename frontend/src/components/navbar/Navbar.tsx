@@ -3,13 +3,21 @@ import {
   DisclosureButton,
   DisclosurePanel,
 } from '@headlessui/react';
-import { Bars3Icon, CogIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import {
+  ArrowRightStartOnRectangleIcon,
+  Bars3Icon,
+  CogIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline';
 import { useTranslation } from 'react-i18next';
 import { Link, useLocation } from 'react-router-dom';
+
+import useAuth from '../../hooks/useAuth';
 
 const classNames = (...classes: string[]) => classes.filter(Boolean).join(' ');
 
 const Navbar = (): JSX.Element => {
+  const { logout } = useAuth();
   const { t } = useTranslation();
   const navigationOptions = [
     { name: t('nav.audits'), href: '/audits', current: true },
@@ -86,7 +94,20 @@ const Navbar = (): JSX.Element => {
               <CogIcon aria-hidden="true" className="h-8 w-auto" />
             </Link>
 
-            {/* Profile dropdown */}
+            {/* logout button */}
+            <Link
+              className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white ml-2"
+              onClick={logout}
+              title={t('logout')}
+              to="/login"
+            >
+              <span className="absolute -inset-1.5" />
+              <span className="sr-only">{t('logout')}</span>
+              <ArrowRightStartOnRectangleIcon
+                aria-hidden="true"
+                className="h-8 w-auto"
+              />
+            </Link>
           </div>
         </div>
       </div>
