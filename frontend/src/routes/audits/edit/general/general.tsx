@@ -222,73 +222,83 @@ export const General = () => {
     collaboratorOptions,
   ]);
 
+  const getClientData = () => {
+    if (!currentClient) {
+      return undefined;
+    }
+    const clientData = clients.find(
+      client => client._id === currentClient.value,
+    );
+    return clientData
+      ? {
+          _id: clientData._id,
+          company: {
+            _id: currentCompany?.value ?? '',
+            name: clientData.company.name,
+          },
+          email: clientData.email,
+          firstname: clientData.firstname,
+          lastname: clientData.lastname,
+        }
+      : {
+          _id: '',
+          company: { _id: '', name: '' },
+          email: '',
+          firstname: '',
+          lastname: '',
+        };
+  };
+
+  const getCollaboratorsData = () => {
+    return collaborators
+      .filter(collaborator =>
+        currentCollaborators.some(item => item.value === collaborator._id),
+      )
+      .map(collaborator => ({
+        _id: collaborator._id,
+        firstname: collaborator.firstname,
+        lastname: collaborator.lastname,
+        username: collaborator.username,
+      }));
+  };
+
+  const getCompanyData = () => {
+    const companyData = companies.find(
+      company => company._id === currentCompany?.value,
+    );
+    return companyData
+      ? {
+          __v: 0,
+          _id: companyData._id,
+          createdAt: dataAudit?.company?.createdAt ?? '',
+          name: companyData.name,
+          shortName: companyData.shortName,
+          updatedAt: dataAudit?.company?.updatedAt ?? '',
+        }
+      : {
+          __v: 0,
+          _id: '',
+          name: '',
+          shortName: '',
+          createdAt: '',
+          updatedAt: '',
+        };
+  };
+
   const handleSaveButton = async () => {
     if (!auditId) {
       console.error('No audit ID available');
       return;
     }
 
-    const clientData = clients.find(
-      clients => clients._id === currentClient?.value,
-    );
-
-    const collaboratorsData = collaborators.filter(collaborator =>
-      currentCollaborators.find(item => item.value === collaborator._id),
-    );
-    const companyData = companies.find(
-      company => company._id === currentCompany?.value,
-    );
-
-    const templateData = templates.find(
-      template => template.name === currentTemplate?.value,
-    );
-
     const updatedAudit: UpdateAudit = {
       _id: auditId,
       auditType,
       name: nameAudit,
       language: currentLanguage?.value ?? '',
-      client: clientData
-        ? {
-            _id: clientData._id,
-            company: {
-              _id: currentCompany?.value ?? '',
-              name: clientData.company.name,
-            },
-            email: clientData.email,
-            firstname: clientData.firstname,
-            lastname: clientData.lastname,
-          }
-        : {
-            _id: '',
-            company: { _id: '', name: '' },
-            email: '',
-            firstname: '',
-            lastname: '',
-          },
-      collaborators: collaboratorsData.map(collaborator => ({
-        _id: collaborator._id,
-        firstname: collaborator.firstname,
-        lastname: collaborator.lastname,
-        username: collaborator.username,
-      })),
-      company: companyData
-        ? {
-            __v: 0,
-            _id: companyData._id,
-            createdAt: dataAudit?.company?.createdAt ?? '',
-            name: companyData.name,
-            shortName: companyData.shortName,
-            updatedAt: dataAudit?.company?.updatedAt ?? '',
-          }
-        : {
-            __v: 0,
-            _id: '',
-            name: '',
-            shortName: '',
-            createdAt: '',
-            updatedAt: '',
-          },
+      client: getClientData(),
+      collaborators: getCollaboratorsData(),
+      company: getCompanyData(),
       creator: {
         _id: dataAudit?.creator._id ?? '',
         firstname: dataAudit?.creator.firstname ?? '',
@@ -301,7 +311,9 @@ export const General = () => {
       date_start: startDate ? startDate.toISOString() : '',
       reviewers: [],
       scope,
-      template: templateData?._id ?? '',
+      template:
+        templates.find(template => template.name === currentTemplate?.value)
+          ?._id ?? '',
     };
 
     try {
