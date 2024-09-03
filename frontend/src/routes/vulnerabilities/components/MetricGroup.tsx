@@ -2,9 +2,14 @@ import React from 'react';
 
 import MetricButton from './MetricButton';
 
+type Option = {
+  label: string;
+  value: string;
+};
+
 type MetricGroupProps = {
   label: string;
-  options: string[];
+  options: Option[];
   selectedOption: string;
   onSelect: (option: string) => void;
 };
@@ -21,10 +26,10 @@ const MetricGroup: React.FC<MetricGroupProps> = ({
       <div className="flex flex-wrap gap-2">
         {options.map(option => (
           <MetricButton
-            key={option}
-            label={option}
-            onClick={() => onSelect(option)}
-            selected={selectedOption === option}
+            key={option.value}
+            label={option.label}
+            onClick={() => onSelect(option.value)}
+            selected={selectedOption === option.value}
           />
         ))}
       </div>

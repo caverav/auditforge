@@ -83,6 +83,34 @@ const CVSSCalculator: React.FC<CVSSProp> = ({
 
   const [changed, setChanged] = useState(false);
 
+  const noneLowHighOptions = [
+    { label: t('cvss.none'), value: 'None' },
+    { label: t('cvss.low'), value: 'Low' },
+    { label: t('cvss.high'), value: 'High' },
+  ];
+
+  const avOptions = [
+    { label: t('cvss.network'), value: 'Network' },
+    { label: t('cvss.adjacentNetwork'), value: 'Adjacent Network' },
+    { label: t('cvss.local'), value: 'Local' },
+    { label: t('cvss.physical'), value: 'Physical' },
+  ];
+
+  const acOptions = [
+    { label: t('cvss.low'), value: 'Low' },
+    { label: t('cvss.high'), value: 'High' },
+  ];
+
+  const uiOptions = [
+    { label: t('cvss.none'), value: 'None' },
+    { label: t('cvss.required'), value: 'Required' },
+  ];
+
+  const scopeOptions = [
+    { label: t('cvss.unchanged'), value: 'Unchanged' },
+    { label: t('cvss.changed'), value: 'Changed' },
+  ];
+
   const parseCVSSVector = (vector: string) => {
     const valueMappings: Record<string, Record<string, string>> = {
       AV: { N: 'Network', A: 'Adjacent Network', L: 'Local', P: 'Physical' },
@@ -153,6 +181,7 @@ const CVSSCalculator: React.FC<CVSSProp> = ({
   useEffect(() => {
     if (changed) {
       const cvssVector = generateCVSSVector(AV, AC, PR, UI, S, C, I, A);
+      console.log(cvssVector);
       handleCvssChange(cvssVector);
       const cvss3 = new Cvss3P1(cvssVector);
       setCurrentScore(cvss3.calculateExactOverallScore());
@@ -169,25 +198,25 @@ const CVSSCalculator: React.FC<CVSSProp> = ({
           <MetricGroup
             label={t('cvss.attackVector')}
             onSelect={setAV}
-            options={['Network', 'Adjacent Network', 'Local', 'Physical']}
+            options={avOptions}
             selectedOption={AV}
           />
           <MetricGroup
             label={t('cvss.attackComplexity')}
             onSelect={setAC}
-            options={['Low', 'High']}
+            options={acOptions}
             selectedOption={AC}
           />
           <MetricGroup
             label={t('cvss.privilegesRequired')}
             onSelect={setPR}
-            options={['None', 'Low', 'High']}
+            options={noneLowHighOptions}
             selectedOption={PR}
           />
           <MetricGroup
             label={t('cvss.userInteraction')}
             onSelect={setUI}
-            options={['None', 'Required']}
+            options={uiOptions}
             selectedOption={UI}
           />
         </div>
@@ -195,25 +224,25 @@ const CVSSCalculator: React.FC<CVSSProp> = ({
           <MetricGroup
             label={t('cvss.scope')}
             onSelect={setS}
-            options={['Unchanged', 'Changed']}
+            options={scopeOptions}
             selectedOption={S}
           />
           <MetricGroup
             label={t('cvss.confidentialityImpact')}
             onSelect={setC}
-            options={['None', 'Low', 'High']}
+            options={noneLowHighOptions}
             selectedOption={C}
           />
           <MetricGroup
             label={t('cvss.integrityImpact')}
             onSelect={setI}
-            options={['None', 'Low', 'High']}
+            options={noneLowHighOptions}
             selectedOption={I}
           />
           <MetricGroup
             label={t('cvss.availabilityImpact')}
             onSelect={setA}
-            options={['None', 'Low', 'High']}
+            options={noneLowHighOptions}
             selectedOption={A}
           />
         </div>
