@@ -25,6 +25,7 @@ const TopMenu: React.FC<TopMenuProps> = ({
         <button
           className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-500"
           onClick={onSave}
+          type="button"
         >
           Save
         </button>
