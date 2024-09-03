@@ -167,7 +167,10 @@ const CVSSCalculator: React.FC<CVSSProp> = ({
     setChanged(true);
   };
 
-  const [currentScore, setCurrentScore] = useState<number>(0);
+  const [currentScore, setCurrentScore] = useState<number>();
+  const [currentSeverity, setCurrentSeverity] = useState<string>(
+    t('cvss.infoWhenNoScore'),
+  );
 
   useEffect(() => {
     if (cvssStringInitial) {
@@ -181,10 +184,21 @@ const CVSSCalculator: React.FC<CVSSProp> = ({
   useEffect(() => {
     if (changed) {
       const cvssVector = generateCVSSVector(AV, AC, PR, UI, S, C, I, A);
-      console.log(cvssVector);
       handleCvssChange(cvssVector);
-      const cvss3 = new Cvss3P1(cvssVector);
-      setCurrentScore(cvss3.calculateExactOverallScore());
+      if (cvssVector.length === 44) {
+        const cvss3 = new Cvss3P1(cvssVector);
+        const score = cvss3.calculateExactOverallScore();
+        if (score < 4) {
+          setCurrentSeverity('Low');
+        } else if (score < 7) {
+          setCurrentSeverity('Medium');
+        } else if (score < 9) {
+          setCurrentSeverity('High');
+        } else {
+          setCurrentSeverity('Critical');
+        }
+        setCurrentScore(cvss3.calculateExactOverallScore());
+      }
     }
   }, [AV, AC, PR, UI, S, C, I, A, changed, handleCvssChange]);
 
@@ -248,7 +262,11 @@ const CVSSCalculator: React.FC<CVSSProp> = ({
         </div>
       </div>
       <div className="mt-8 text-center">
-        <h3 className="text-2xl font-bold">Base Score: {currentScore}</h3>
+        <h3 className="text-2xl font-bold">
+          {currentScore
+            ? 'Base Score: ' + currentScore + ' ' + currentSeverity
+            : currentSeverity}
+        </h3>
       </div>
     </div>
   );
