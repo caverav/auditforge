@@ -1,4 +1,5 @@
 import { Cvss3P1 } from 'ae-cvss-calculator';
+import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
 
 import MetricGroup from './MetricGroup';
@@ -146,6 +147,7 @@ const CVSSCalculator: React.FC<CVSSProp> = ({
     } else {
       setChanged(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -160,30 +162,30 @@ const CVSSCalculator: React.FC<CVSSProp> = ({
   return (
     <div className="w-full p-6 bg-slate-700 border border-gray-200 rounded-lg">
       <h2 className="text-xl font-semibold text-center mb-8">
-        CVSS v3.1 Base Score
+        {t('cvss.title')}
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
           <MetricGroup
-            label="Attack Vector"
+            label={t('cvss.attackVector')}
             onSelect={setAV}
             options={['Network', 'Adjacent Network', 'Local', 'Physical']}
             selectedOption={AV}
           />
           <MetricGroup
-            label="Attack Complexity"
+            label={t('cvss.attackComplexity')}
             onSelect={setAC}
             options={['Low', 'High']}
             selectedOption={AC}
           />
           <MetricGroup
-            label="Privileges Required"
+            label={t('cvss.privilegesRequired')}
             onSelect={setPR}
             options={['None', 'Low', 'High']}
             selectedOption={PR}
           />
           <MetricGroup
-            label="User Interaction"
+            label={t('cvss.userInteraction')}
             onSelect={setUI}
             options={['None', 'Required']}
             selectedOption={UI}
@@ -191,25 +193,25 @@ const CVSSCalculator: React.FC<CVSSProp> = ({
         </div>
         <div>
           <MetricGroup
-            label="Scope"
+            label={t('cvss.scope')}
             onSelect={setS}
             options={['Unchanged', 'Changed']}
             selectedOption={S}
           />
           <MetricGroup
-            label="Confidentiality Impact"
+            label={t('cvss.confidentialityImpact')}
             onSelect={setC}
             options={['None', 'Low', 'High']}
             selectedOption={C}
           />
           <MetricGroup
-            label="Integrity Impact"
+            label={t('cvss.integrityImpact')}
             onSelect={setI}
             options={['None', 'Low', 'High']}
             selectedOption={I}
           />
           <MetricGroup
-            label="Availability Impact"
+            label={t('cvss.availabilityImpact')}
             onSelect={setA}
             options={['None', 'Low', 'High']}
             selectedOption={A}
