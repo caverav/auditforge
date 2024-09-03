@@ -94,8 +94,6 @@ export const Vulnerabilities = () => {
   );
   const [tableInfo, setTableInfo] = useState<TableData[]>([]);
 
-  const [error, setError] = useState<string | null>('');
-
   const [languagesList, setLanguagesList] = useState<ListItem[]>([]);
   const [currentLanguage, setCurrentLanguage] = useState<ListItem | null>(null);
   const [loadingLanguage, setLoadingLanguage] = useState<boolean>(true);
@@ -150,7 +148,6 @@ export const Vulnerabilities = () => {
       setTableData(vulnDataTable);
       setTableInfo(vulnDataTable);
     } catch (error) {
-      setError('Error fetching vulnerabilities');
       console.error('Error:', error);
     }
   }, [setTableData]);
@@ -169,7 +166,6 @@ export const Vulnerabilities = () => {
       setCurrentLanguage(languageNames[0]);
       setLoadingLanguage(false);
     } catch (error) {
-      setError('Error fetching Languages');
       console.error('Error:', error);
     }
   };
@@ -185,7 +181,6 @@ export const Vulnerabilities = () => {
       }));
       setTypesList([...typeNames]);
     } catch (error) {
-      setError('Error fetching Types');
       console.error('Error:', error);
     }
   };
@@ -219,7 +214,6 @@ export const Vulnerabilities = () => {
         ...categoryNames,
       ]);
     } catch (error) {
-      setError('Error fetching Categories');
       console.error('Error:', error);
     }
   }, []);
@@ -267,7 +261,7 @@ export const Vulnerabilities = () => {
         handleSuccessToast(t('msg.vulnerabilityDeletedOk'));
       }
     } catch (error) {
-      setError('Error deleting vulnerability');
+      toast.error('Failed to delete the vulnerability');
       console.error('Error:', error);
     }
     setOpenModalDeleteVuln(false);

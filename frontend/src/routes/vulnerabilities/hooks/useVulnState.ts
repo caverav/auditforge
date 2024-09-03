@@ -51,7 +51,6 @@ export const useVulnState = ({
   types,
 }: UseVulnStateProps) => {
   const [openModal, setOpenModal] = useState(false);
-  const [error, setError] = useState<string | null>(null);
   const [changed, setChanged] = useState<boolean>(false);
 
   const [categorySelected, setCategorySelected] =
@@ -88,8 +87,6 @@ export const useVulnState = ({
   return {
     openModal,
     setOpenModal,
-    error,
-    setError,
     changed,
     setChanged,
     categorySelected,

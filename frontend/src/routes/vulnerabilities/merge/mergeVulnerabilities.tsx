@@ -78,8 +78,6 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({
   >([]);
   const [selectedRadioRight, setSelectedRadioRight] = useState('');
 
-  const [error, setError] = useState<string | null>(null);
-
   const [allDetails] = useState(
     vulnerabilities.flatMap(vuln =>
       vuln.details.map(detail => ({
@@ -166,7 +164,6 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({
           handleOnSuccess(t('msg.vulnerabilityMergeOk'));
         }
       } catch (error) {
-        setError('Error merging vulnerability');
         console.error('Error:', error);
         toast.error('Error merging vulnerabilities');
         return;
