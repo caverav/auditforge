@@ -140,9 +140,7 @@ export const Vulnerabilities = () => {
           _id: item._id,
           title: item.details[0].title ?? '',
           category: item.category ?? t('noCategory'),
-          type: item.details[0].vulnType
-            ? item.details[0].vulnType
-            : t('undefined'),
+          type: item.details[0].vulnType ?? t('undefined'),
         }),
       );
       setTableData(vulnDataTable);
