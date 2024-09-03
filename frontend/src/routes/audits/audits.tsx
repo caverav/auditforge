@@ -107,30 +107,30 @@ export const Audits = () => {
   const columns: Column[] = [
     { header: 'Name', accessor: 'Name', sortable: true, filterable: true },
     {
-      header: 'AuditType',
+      header: t('auditType'),
       accessor: 'AuditType',
       sortable: true,
       filterable: true,
     },
     {
-      header: 'Language',
+      header: t('language'),
       accessor: 'Language',
       sortable: true,
       filterable: true,
     },
     {
-      header: 'Company',
+      header: t('company'),
       accessor: 'Company',
       sortable: true,
       filterable: true,
     },
     {
-      header: 'Participants',
+      header: t('participants'),
       accessor: 'Participants',
       sortable: true,
       filterable: true,
     },
-    { header: 'Date', accessor: 'Date', sortable: true, filterable: true },
+    { header: t('date'), accessor: 'Date', sortable: true, filterable: true },
   ];
   const [filteredData, setFilteredData] = useState<TableData[]>([]);
 
@@ -271,7 +271,7 @@ export const Audits = () => {
             label={t('name')}
             name="name"
             onChange={setNameAudit}
-            placeholder="Search"
+            placeholder={t('name')}
             type="text"
             value={nameAudit}
           />
