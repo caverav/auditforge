@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { toast, Toaster } from 'sonner';
 
 import Card from '../../components/card/Card';
-import SelectDropdown from '../../components/dropdown/SelectDropdown';
 import Modal from '../../components/modal/Modal';
 import UITable from '../../components/table/UITable';
 import { useSortableTable } from '../../hooks/useSortableTable';
@@ -384,20 +383,13 @@ export const Vulnerabilities = () => {
             onSort={handleSorting}
             rowActions={rowActions}
           >
-            <div className="flex items-center mb-4">
-              <div className="">
-                {!loadingLanguage ? (
-                  <SelectDropdown
-                    items={languagesList}
-                    onChange={setCurrentLanguage}
-                    placeholder="Language"
-                    selected={currentLanguage}
-                    title={t('languages')}
-                  />
-                ) : null}
-              </div>
+            <div className="mb-4 w-full">
               <VulnerabilityButtons
                 categoriesList={categoriesList}
+                currentLanguage={currentLanguage}
+                languagesList={languagesList}
+                loadingLanguage={loadingLanguage}
+                setCurrentLanguage={setCurrentLanguage}
                 setOpenMerge={setIsOpenMerge}
               />
             </div>
