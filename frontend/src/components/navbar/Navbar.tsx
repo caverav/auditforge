@@ -95,11 +95,11 @@ const Navbar = (): JSX.Element => {
             </Link>
 
             {/* logout button */}
-            <Link
+            <button
               className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white ml-2"
               onClick={logout}
               title={t('logout')}
-              to="/login"
+              type="button"
             >
               <span className="absolute -inset-1.5" />
               <span className="sr-only">{t('logout')}</span>
@@ -107,7 +107,7 @@ const Navbar = (): JSX.Element => {
                 aria-hidden="true"
                 className="h-8 w-auto"
               />
-            </Link>
+            </button>
           </div>
         </div>
       </div>
