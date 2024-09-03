@@ -81,7 +81,6 @@ const CVSSCalculator: React.FC<CVSSProp> = ({
   const [A, setA] = useState('');
 
   const [changed, setChanged] = useState(false);
-  const expectedLength = 44;
 
   const parseCVSSVector = (vector: string) => {
     const valueMappings: Record<string, Record<string, string>> = {
