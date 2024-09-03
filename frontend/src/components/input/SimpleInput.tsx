@@ -39,7 +39,7 @@ const SimpleInput: React.FC<SimpleInputProps> = ({
           {requiredField ? <span className="text-red-500 text-lg">*</span> : ''}
         </label>
       ) : null}
-      <div className="relative mt-2 rounded-md shadow-sm">
+      <div className="relative z-10 mt-2 rounded-md shadow-sm">
         <input
           className={`bg-gray-800 block w-full rounded-md py-1.5 p-2 placeholder:text-gray-400 sm:text-sm sm:leading-6 ${
             requiredAlert && value === '' && !isFocused
