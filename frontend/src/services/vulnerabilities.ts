@@ -215,7 +215,13 @@ export const updateVulnerability = async (
       },
     );
     if (!response.ok) {
-      throw networkError;
+      const errorText = await response.text();
+      const errorData = JSON.parse(errorText).datas;
+      if (errorData === 'Vulnerability title already exists') {
+        throw new Error(errorData);
+      } else {
+        throw networkError;
+      }
     }
     return await response.json();
   } catch (error) {
