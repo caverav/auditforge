@@ -1,13 +1,25 @@
 import React, { ChangeEvent, useState } from 'react';
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 
 type FileInputProps = {
   id: string;
   name: string;
   onFileSelect: (file: { name: string; content: string }) => void;
+  requiredField?: boolean;
+  requiredAlert?: boolean;
+  label?: string;
 };
 
-const FileInput: React.FC<FileInputProps> = ({ id, name, onFileSelect }) => {
+const FileInput: React.FC<FileInputProps> = ({
+  id,
+  name,
+  onFileSelect,
+  requiredField = false,
+  requiredAlert = false,
+  label,
+}) => {
   const [fileName, setFileName] = useState<string>('');
+  const [isFocused, setIsFocused] = useState(false);
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -21,6 +33,8 @@ const FileInput: React.FC<FileInputProps> = ({ id, name, onFileSelect }) => {
         onFileSelect({ name: file.name, content: base64String });
       };
       reader.readAsArrayBuffer(file);
+    } else {
+      setFileName('');
     }
   };
 
@@ -36,15 +50,29 @@ const FileInput: React.FC<FileInputProps> = ({ id, name, onFileSelect }) => {
 
   return (
     <div>
+      {label ? (
+        <label className="text-sm font-medium leading-6 text-gray-300" htmlFor={id}>
+          {label} {requiredField && <span className="text-red-500 text-lg">*</span>}
+        </label>
+      ) : null}
       <div className="relative mt-2 rounded-md shadow-sm">
         <input
           accept=".doc,.docx,.docm,.ppt,.pptx"
-          className="block w-full rounded-md border-0 py-1.5 pl-7 pr-7 text-white-900 placeholder:text-gray-400 sm:text-sm sm:leading-6"
+          className={`block w-full rounded-md border-0 py-1.5 pl-7 pr-7 text-white-900 placeholder:text-gray-400 sm:text-sm sm:leading-6 ${
+            requiredAlert && !fileName && !isFocused ? 'ring-1 ring-red-500' : ''
+          }`}
           id={id}
           name={name}
           onChange={handleFileChange}
+          onFocus={() => setIsFocused(true)}
+          onBlur={() => setIsFocused(false)}
           type="file"
         />
+        {!isFocused && requiredAlert && !fileName ? (
+          <span className="absolute right-3 top-0 mt-2 ml-2 text-red-500">
+            <ExclamationCircleIcon className="size-5" />
+          </span>
+        ) : null}
       </div>
       {fileName ? (
         <div className="mt-4 text-center">

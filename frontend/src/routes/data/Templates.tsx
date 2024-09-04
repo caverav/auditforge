@@ -38,6 +38,12 @@ export const Templates: React.FC = () => {
   const [_loading, setLoading] = useState<boolean>(true);
   const [_error, setError] = useState<string | null>(null);
 
+  const [addModalNameRequiredAlert, setAddModalFirstnameRequiredAlert] =
+    useState<boolean>(false);
+
+  const [addModalFileRequiredAlert, setAddModalFileRequiredAlert] =
+    useState<boolean>(false);
+
   const [selectedTemplate, setSelectedTemplate] = useState<TableData | null>(
     null,
   );
@@ -124,18 +130,24 @@ export const Templates: React.FC = () => {
   const handleCancelAddTemplate = () => {
     setNewTemplate(null);
     setIsOpenAddTemplateModal(!isOpenAddTemplateModal);
+    setAddModalFirstnameRequiredAlert(false);
+    setAddModalFileRequiredAlert(false);
   };
 
   const handleSubmitAddTemplate = async () => {
     try {
       await createTemplate(newTemplate!);
       toast.success(t('msg.templateCreatedOk'));
+      setIsOpenAddTemplateModal(!isOpenAddTemplateModal);
     } catch (error) {
-      setError('Error creating company');
+      setAddModalFirstnameRequiredAlert(true);
+      setAddModalFileRequiredAlert(true);
+
+      setError('Error creating template');
       console.error('Error:', error);
     }
+
     setNewTemplate(null);
-    setIsOpenAddTemplateModal(!isOpenAddTemplateModal);
     fetchTemplates();
   };
 
@@ -231,6 +243,8 @@ export const Templates: React.FC = () => {
             placeholder={t('name')}
             type="text"
             value={newTemplate?.name || ''}
+            requiredField={true}
+            requiredAlert={addModalNameRequiredAlert}
           />
           <FileInput
             id="template"
@@ -238,6 +252,9 @@ export const Templates: React.FC = () => {
             onFileSelect={file =>
               handleFileSelect(file.name.split('.').pop() || '', file.content)
             }
+            requiredField={true}
+            requiredAlert={addModalFileRequiredAlert}
+            label="File"
           />
         </>
       </Modal>

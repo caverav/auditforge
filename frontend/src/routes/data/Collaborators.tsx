@@ -42,6 +42,17 @@ export const Collaborators: React.FC = () => {
   const [roles, setRoles] = useState<RoleOption[]>([]);
   const [selectedRole, setSelectedRole] = useState<RoleOption | null>(null);
 
+  const [addModalUsernameRequiredAlert, setAddModalUsernameRequiredAlert] =
+    useState<boolean>(false);
+  const [addModalFirstnameRequiredAlert, setAddModalFirstnameRequiredAlert] =
+    useState<boolean>(false);
+  const [addModalLastnameRequiredAlert, setAddModalLastnameRequiredAlert] =
+    useState<boolean>(false);
+  const [addModalRoleRequiredAlert, setAddModalRoleRequiredAlert] =
+    useState<boolean>(false);
+  const [addModalPasswordRequiredAlert, setAddModalPasswordRequiredAlert] =
+    useState<boolean>(false);
+
   const [newCollaborator, setNewCollaborator] =
     useState<NewCollaborator | null>(
       selectedRole
@@ -196,18 +207,28 @@ export const Collaborators: React.FC = () => {
   const handleCancelAddCollab = () => {
     setNewCollaborator(null);
     setIsOpenAddCollabModal(!isOpenAddCollabModal);
+    setAddModalUsernameRequiredAlert(false);
+    setAddModalFirstnameRequiredAlert(false);
+    setAddModalLastnameRequiredAlert(false);
+    setAddModalRoleRequiredAlert(false);
+    setAddModalPasswordRequiredAlert(false);
   };
 
   const handleSubmitAddCollab = async () => {
     try {
       await createCollaborator(newCollaborator!);
       toast.success(t('msg.collaboratorCreatedOk'));
+      setIsOpenAddCollabModal(!isOpenAddCollabModal);
     } catch (error) {
+      setAddModalUsernameRequiredAlert(true);
+      setAddModalFirstnameRequiredAlert(true);
+      setAddModalLastnameRequiredAlert(true);
+      setAddModalRoleRequiredAlert(true);
+      setAddModalPasswordRequiredAlert(true);
       setError('Error creating collaborator');
       console.error('Error:', error);
     }
     setNewCollaborator(null);
-    setIsOpenAddCollabModal(!isOpenAddCollabModal);
     fetchCollaborators();
   };
 
@@ -295,6 +316,8 @@ export const Collaborators: React.FC = () => {
             placeholder={t('username')}
             type="text"
             value={newCollaborator?.username || ''}
+            requiredField={true}
+            requiredAlert={addModalUsernameRequiredAlert}
           />
           <SimpleInput
             id="firstname"
@@ -304,6 +327,8 @@ export const Collaborators: React.FC = () => {
             placeholder={t('firstname')}
             type="text"
             value={newCollaborator?.firstname || ''}
+            requiredField={true}
+            requiredAlert={addModalFirstnameRequiredAlert}
           />
           <SimpleInput
             id="lastname"
@@ -313,6 +338,8 @@ export const Collaborators: React.FC = () => {
             placeholder={t('lastname')}
             type="text"
             value={newCollaborator?.lastname || ''}
+            requiredField={true}
+            requiredAlert={addModalLastnameRequiredAlert}
           />
           <SimpleInput
             id="email"
@@ -337,6 +364,8 @@ export const Collaborators: React.FC = () => {
             onChange={handleRoleChange}
             selected={selectedRole}
             title={t('role')}
+            requiredField={true}
+            requiredAlert={addModalRoleRequiredAlert}
           />
           <SimpleInput
             id="password"
@@ -346,6 +375,8 @@ export const Collaborators: React.FC = () => {
             placeholder={t('password')}
             type="password"
             value={newCollaborator?.password || ''}
+            requiredField={true}
+            requiredAlert={addModalPasswordRequiredAlert}
           />
         </>
       </Modal>

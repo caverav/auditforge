@@ -37,6 +37,9 @@ export const Companies: React.FC = () => {
   const [_loading, setLoading] = useState<boolean>(true);
   const [_error, setError] = useState<string | null>(null);
 
+  const [addModalNameRequiredAlert, setAddModalNameRequiredAlert] =
+    useState<boolean>(false);
+
   const [selectedCompany, setSelectedCompany] = useState<TableData | null>(
     null,
   );
@@ -64,13 +67,16 @@ export const Companies: React.FC = () => {
       header: t('logo'),
       accessor: 'logo',
       sortable: false,
-      render: (logo: string) => (
-        <img
-          alt="Company Logo"
-          src={`${logo}`}
-          style={{ width: '50px', height: '50px', objectFit: 'contain' }}
-        />
-      ),
+      render: (logo: string) =>
+        logo ? (
+          <img
+            alt="Company Logo"
+            src={`${logo}`}
+            style={{ width: '50px', height: '50px', objectFit: 'contain' }}
+          />
+        ) : (
+          <></>
+        ),
     },
   ];
 
@@ -129,18 +135,20 @@ export const Companies: React.FC = () => {
   const handleCancelAddCompanies = () => {
     setNewCompany(null);
     setIsOpenAddCompaniesModal(!isOpenAddCompaniesModal);
+    setAddModalNameRequiredAlert(false);
   };
 
   const handleSubmitAddCompanies = async () => {
     try {
       await createCompany(newCompany!);
       toast.success(t('msg.companyCreatedOk'));
+      setIsOpenAddCompaniesModal(!isOpenAddCompaniesModal);
     } catch (error) {
+      setAddModalNameRequiredAlert(true);
       setError('Error creating company');
       console.error('Error:', error);
     }
     setNewCompany(null);
-    setIsOpenAddCompaniesModal(!isOpenAddCompaniesModal);
     fetchCompanies();
   };
 
@@ -237,6 +245,8 @@ export const Companies: React.FC = () => {
             placeholder={t('name')}
             type="text"
             value={newCompany?.name || ''}
+            requiredField={true}
+            requiredAlert={addModalNameRequiredAlert}
           />
           <SimpleInput
             id="shortname"
@@ -272,6 +282,7 @@ export const Companies: React.FC = () => {
             placeholder={t('name')}
             type="text"
             value={newCompany?.name || ''}
+            requiredField={true}
           />
           <SimpleInput
             id="shortname"

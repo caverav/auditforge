@@ -76,6 +76,13 @@ export const Clients: React.FC = () => {
   const [companies, setCompanies] = useState<ListItem[]>([]);
   const [apiCompanies, setApiCompanies] = useState<Company[]>([]);
 
+  const [addModalFirstnameRequiredAlert, setAddModalFirstnameRequiredAlert] =
+    useState<boolean>(false);
+  const [addModalLastnameRequiredAlert, setAddModalLastnameRequiredAlert] =
+    useState<boolean>(false);
+  const [addModalEmailRequiredAlert, setAddModalEmailRequiredAlert] =
+    useState<boolean>(false);
+
   const [selectedCompany, setSelectedCompany] = useState<ListItem>({
     id: 0,
     _id: '',
@@ -194,6 +201,9 @@ export const Clients: React.FC = () => {
   const handleCancelAddClient = () => {
     setNewClient(null);
     setIsOpenAddClientModal(!isOpenAddClientModal);
+    setAddModalFirstnameRequiredAlert(false);
+    setAddModalLastnameRequiredAlert(false);
+    setAddModalEmailRequiredAlert(false);
   };
 
   const handleSubmitAddClient = async () => {
@@ -230,12 +240,15 @@ export const Clients: React.FC = () => {
       };
       await createClient(clientToCreate);
       toast.success(t('msg.clientCreatedOk'));
+      setIsOpenAddClientModal(!isOpenAddClientModal);
     } catch (error) {
+      setAddModalFirstnameRequiredAlert(true);
+      setAddModalLastnameRequiredAlert(true);
+      setAddModalEmailRequiredAlert(true);
       setError('Error creating client');
       console.error('Error:', error);
     }
     setNewClient(null);
-    setIsOpenAddClientModal(!isOpenAddClientModal);
     void fetchClients();
   };
 
@@ -387,6 +400,8 @@ export const Clients: React.FC = () => {
             placeholder={t('firstname')}
             type="text"
             value={newClient?.firstname ?? ''}
+            requiredField={true}
+            requiredAlert={addModalFirstnameRequiredAlert}
           />
           <SimpleInput
             id="lastname"
@@ -396,6 +411,8 @@ export const Clients: React.FC = () => {
             placeholder={t('lastname')}
             type="text"
             value={newClient?.lastname ?? ''}
+            requiredField={true}
+            requiredAlert={addModalLastnameRequiredAlert}
           />
           <SimpleInput
             id="email"
@@ -405,6 +422,8 @@ export const Clients: React.FC = () => {
             placeholder={t('email')}
             type="text"
             value={newClient?.email ?? ''}
+            requiredField={true}
+            requiredAlert={addModalEmailRequiredAlert}
           />
           <SimpleInput
             id="title"
