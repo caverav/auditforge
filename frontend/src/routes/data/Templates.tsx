@@ -84,25 +84,6 @@ export const Templates: React.FC = () => {
     setIsOpenEditTemplateModal(true);
   };
 
-  const handleDownloadTemplateButton = async (template: TableData) => {
-    try {
-      const blob = await downloadTemplate(template._id);
-
-      const url = window.URL.createObjectURL(blob);
-
-      const link = document.createElement('a');
-      link.href = url;
-
-      link.download = `${template.name}.${template.ext}`;
-      document.body.appendChild(link);
-      link.click();
-      window.URL.revokeObjectURL(url);
-      link.remove();
-    } catch (error) {
-      setError('Error downloading template');
-    }
-  };
-
   const handleDeleteTemplateButton = async (template: TableData) => {
     setSelectedTemplate(template);
     setIsOpenDeleteTemplateModal(!isOpenDeleteTemplateModal);
@@ -115,7 +96,7 @@ export const Templates: React.FC = () => {
     },
     {
       label: 'Download',
-      onClick: (item: TableData) => handleDownloadTemplateButton(item),
+      onClick: (item: TableData) => downloadTemplate(item._id, window),
     },
     {
       label: 'Delete',

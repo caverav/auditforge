@@ -424,18 +424,6 @@ export const deleteTemplate = async (
   }
 };
 
-export const downloadTemplate = async (templateId: string): Promise<Blob> => {
-  try {
-    const response = await fetch(`${API_URL}templates/download/${templateId}`, {
-      credentials: 'include',
-    });
-    if (!response.ok) {
-      throw new Error(networkErrorMsg);
-    }
-    return await response.blob();
-  } catch (error) {
-    console.error('Error fetching file:', error);
-
-    throw error;
-  }
+export const downloadTemplate = (templateId: string, window: Window): void => {
+    window.open(`${API_URL}templates/download/${templateId}`, '_blank')
 };
