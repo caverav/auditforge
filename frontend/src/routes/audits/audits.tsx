@@ -298,7 +298,7 @@ export const Audits = () => {
         <UITable
           columns={columns}
           data={tableData}
-          emptyState={t('noAudits')}
+          emptyState={t('noMatchingRecords')}
           filters={filters}
           keyExtractor={item => item._id}
           onFilter={handleFilterChange}
