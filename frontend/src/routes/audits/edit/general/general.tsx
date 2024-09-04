@@ -218,10 +218,15 @@ export const General = () => {
           ) ?? null;
         setCurrentLanguage(selectedLanguage);
 
-        const selectedTemplate = templateOptions.find(
-          item => item.value === dataAudit.datas.template.name,
-        );
-        setCurrentTemplate(selectedTemplate ?? null);
+        if (!('template' in dataAudit.datas)) {
+          setCurrentTemplate(null);
+        } else {
+          const selectedTemplate =
+            templateOptions.find(
+              item => item.value === dataAudit.datas.template.name,
+            ) ?? null;
+          setCurrentTemplate(selectedTemplate ?? null);
+        }
 
         const selectedCompany = companyOptions.find(
           item => item.value === dataAudit.datas.company?._id,
