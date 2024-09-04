@@ -315,7 +315,7 @@ export const Audits = () => {
           data={tableData}
           emptyState={t('err.noMatchingRecords')}
           filters={filters}
-          keyExtractor={item => item._id}
+          keyExtractor={item => item.id}
           onFilter={handleFilterChange}
           onSort={handleSorting}
           rowActions={rowActions}
