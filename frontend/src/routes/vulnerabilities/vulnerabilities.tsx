@@ -325,7 +325,7 @@ export const Vulnerabilities = () => {
       <Toaster />
       <Card title={t('nav.vulnerabilities')}>
         <>
-          <div className="fixed z-10">
+          <div className="fixed z-20">
             {isOpenAddVuln ? (
               <AddVulnerability
                 categoryVuln={selectedCategoryAddVuln}
@@ -339,7 +339,7 @@ export const Vulnerabilities = () => {
               />
             ) : null}
           </div>
-          <div className="fixed z-10">
+          <div className="fixed z-20">
             {isOpenEditVuln && editVuln ? (
               <EditVulnerability
                 categories={categoriesList}
@@ -353,7 +353,7 @@ export const Vulnerabilities = () => {
               />
             ) : null}
           </div>
-          <div className="fixed z-10">
+          <div className="fixed z-20">
             {isOpenMerge ? (
               <MergeVulnerabilities
                 handleOnSuccess={handleSuccessToast}
