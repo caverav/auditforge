@@ -163,6 +163,44 @@ export const General = () => {
   }, []);
 
   useEffect(() => {
+    // filter the clients list by company
+    if (currentCompany) {
+      setClientOptions(
+        clients
+          .filter(client => client.company.name === currentCompany.label)
+          .map(
+            (client: Client, index: number): ListItem => ({
+              id: index,
+              value: client._id,
+              label: client.email,
+            }),
+          ),
+      );
+    } else {
+      // fetch all clients if no compan
+      getClients()
+        .then(res => {
+          setClients(res.datas);
+        })
+        .catch(console.error);
+    }
+  }, [clients, currentCompany]);
+
+  useEffect(() => {
+    // automatically select the company if client is selected
+    if (currentClient && !currentCompany) {
+      setCurrentCompany(
+        companyOptions.find(
+          company =>
+            company.label ===
+            clients.filter(client => client._id === currentClient.value)[0]
+              .company.name,
+        ) ?? null,
+      );
+    }
+  }, [clients, companyOptions, currentClient, currentCompany]);
+
+  useEffect(() => {
     const fetchAuditData = async () => {
       if (!auditId) {
         return;
@@ -224,14 +262,9 @@ export const General = () => {
     ) {
       fetchAuditData().catch(console.error);
     }
-  }, [
-    auditId,
-    languageOptions,
-    templateOptions,
-    companyOptions,
-    clientOptions,
-    collaboratorOptions,
-  ]);
+    // Se deshabilita porque no se debe volver a ejecutar cuando se actualizan las opciones, debido a filtrado por compañía de cliente
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auditId, collaboratorOptions]);
 
   const getClientData = () => {
     if (!currentClient) {
