@@ -1,6 +1,7 @@
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import DefaultRadioGroup from '../../components/button/DefaultRadioGroup';
 import PrimaryButton from '../../components/button/PrimaryButton';
@@ -73,8 +74,6 @@ export const Audits = () => {
   const [isOpenNewAuditModal, setIsOpenNewAuditModal] = useState(false);
 
   const [selectedValue, setSelectedValue] = useState('');
-
-  const [, setError] = useState<string | null>(null);
 
   const [nameAudit, setNameAudit] = useState<string>('');
 
@@ -220,9 +219,25 @@ export const Audits = () => {
         auditType: currentAuditType.value,
         language: currentLanguage.value,
         type: selectedValue,
+      }).catch(error => {
+        toast.error(error.message);
       });
+      const dataAudits = await getAudits().then(res => {
+        return res.datas.map((audit: Audit) => ({
+          id: audit._id,
+          Name: audit.name,
+          AuditType: audit.auditType,
+          Language: audit.language,
+          Company: audit.company?.name ?? '',
+          Participants: audit.collaborators
+            .map(user => user.username)
+            .join(', '),
+          Date: audit.createdAt,
+        }));
+      });
+      setTableData(dataAudits);
+      setFilteredData(dataAudits);
     } catch (error) {
-      setError('Error creating audit');
       console.error('Error:', error);
     }
     setIsOpenNewAuditModal(!isOpenNewAuditModal);

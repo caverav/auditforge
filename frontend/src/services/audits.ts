@@ -230,7 +230,7 @@ export const createAudit = async (
   audit: NewAudit,
 ): Promise<{
   status: string;
-  datas: { message: string; audit: Audit };
+  datas: { message: string; audit: Audit } | string;
 }> => {
   try {
     const response = await fetch(`${API_URL}audits`, {
@@ -240,7 +240,9 @@ export const createAudit = async (
       body: JSON.stringify(audit),
     });
     if (!response.ok) {
-      throw networkError;
+      const errorResponse = await response.json();
+
+      throw new Error(errorResponse.datas);
     }
     return await response.json();
   } catch (error) {
