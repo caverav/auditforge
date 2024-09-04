@@ -132,7 +132,9 @@ export const AuditRoot = () => {
       <div className="flex-1 ml-64 overflow-auto">
         <Outlet />
       </div>
-      <DropdownButton items={fileTypes} placeholder="Export as" />
+      <div className="m-2">
+        <DropdownButton items={fileTypes} placeholder="Export as" />
+      </div>
     </div>
   );
 };
