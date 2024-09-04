@@ -100,7 +100,7 @@ export const Audits = () => {
   const [loadingLanguage, setLoadingLanguage] = useState<boolean>(true);
 
   const columns: Column[] = [
-    { header: 'Name', accessor: 'Name', sortable: true, filterable: true },
+    { header: t('name'), accessor: 'Name', sortable: true, filterable: true },
     {
       header: t('auditType'),
       accessor: 'AuditType',
