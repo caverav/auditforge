@@ -40,6 +40,16 @@ services:
     networks:
       - backend
 
+  auditforge-cwe-api:
+    build: ./cwe_api
+    image: auditforge-cwe-api
+    container_name: auditforge-cwe-api
+    restart: always
+    ports:
+      - 8000:8000
+    networks:
+      - backend
+
 volumes:
   mongo-data:
 
