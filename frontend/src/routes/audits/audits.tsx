@@ -307,7 +307,7 @@ export const Audits = () => {
               items={languages}
               onChange={setCurrentLanguage}
               selected={currentLanguage}
-              title={t('languages')}
+              title={t('language')}
             />
           ) : null}
         </Modal>
