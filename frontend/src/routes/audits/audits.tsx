@@ -187,7 +187,7 @@ export const Audits = () => {
             Participants: audit.collaborators
               .map(user => user.username)
               .join(', '),
-            Date: audit.createdAt,
+            Date: new Date(audit.createdAt).toLocaleString(),
           }));
         });
 
