@@ -119,7 +119,11 @@ export const General = () => {
             label: item.name,
           }),
         );
-        setCompanyOptions(companyNames);
+        setCompanyOptions(
+          companyNames.length > 0
+            ? companyNames
+            : [{ id: 0, value: '', label: t('unavailable') }],
+        );
         setLoadingCompanies(false);
 
         const dataClients = await getClients();
@@ -131,7 +135,11 @@ export const General = () => {
             label: item.email,
           }),
         );
-        setClientOptions(clientNames);
+        setClientOptions(
+          clientNames.length > 0
+            ? clientNames
+            : [{ id: 0, value: '', label: t('unavailable') }],
+        );
         setLoadingClients(false);
 
         const dataCollaborators = await getCollaborators();
