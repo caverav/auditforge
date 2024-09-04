@@ -2,7 +2,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/16/solid';
 import clsx from 'clsx';
 
-type ListItem = {
+export type ListItem = {
   id: number;
   value: string;
   label?: string;
