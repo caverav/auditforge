@@ -222,6 +222,10 @@ export const Audits = () => {
       }).catch(error => {
         toast.error(error.message);
       });
+      setCurrentAuditType(null);
+      setCurrentLanguage(null);
+      setSelectedValue('');
+      setNameAudit('');
       const dataAudits = await getAudits().then(res => {
         return res.datas.map((audit: Audit) => ({
           id: audit._id,
