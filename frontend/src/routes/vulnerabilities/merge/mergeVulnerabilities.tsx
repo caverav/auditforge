@@ -165,11 +165,11 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({
         }
       } catch (error) {
         console.error('Error:', error);
-        toast.error('Error merging vulnerabilities');
+        toast.error(t('err.failedMergeVulnerabilities'));
         return;
       }
     } else {
-      toast.error('Both vulnerabilities must be selected');
+      toast.error(t('err.mergeNoVulnerabilitiesSelected'));
       return;
     }
 

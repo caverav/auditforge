@@ -259,7 +259,7 @@ export const Vulnerabilities = () => {
         handleSuccessToast(t('msg.vulnerabilityDeletedOk'));
       }
     } catch (error) {
-      toast.error('Failed to delete the vulnerability');
+      toast.error(t('err.failedDeleteVulnerability'));
       console.error('Error:', error);
     }
     setOpenModalDeleteVuln(false);
