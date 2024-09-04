@@ -2,6 +2,7 @@ import dayjs, { Dayjs } from 'dayjs';
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import DayPicker from '../../../../components/button/DayPicker';
 import MultiSelectDropdown from '../../../../components/dropdown/MultiSelectDropdown';
@@ -320,8 +321,9 @@ export const General = () => {
 
     try {
       await updateAudit(auditId, updatedAudit);
+      toast.success(t('Audit updated successfully'));
     } catch (error) {
-      console.error('Error updating audit:', error);
+      toast.error(t('Error updating audit'));
     }
   };
 
