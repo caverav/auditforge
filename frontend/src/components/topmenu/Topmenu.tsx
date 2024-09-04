@@ -17,7 +17,9 @@ const TopMenu: React.FC<TopMenuProps> = ({
     <div className="flex justify-between items-center bg-gray-900 p-4 shadow-md">
       <div className="flex items-center space-x-4">
         <h1 className="text-xl font-semibold text-white">{auditName}</h1>
-        <span className="text-gray-400">({auditType})</span>
+        {auditType ? (
+          <span className="text-gray-400">({auditType})</span>
+        ) : null}
       </div>
 
       <div className="flex items-center space-x-4">
