@@ -126,7 +126,7 @@ export const Add = () => {
         <UITable
           columns={columns}
           data={tableData}
-          emptyState={t('noMatchingRecords')}
+          emptyState={t('err.noMatchingRecords')}
           filters={filters}
           keyExtractor={item => item._id}
           onFilter={handleFilterChange}
