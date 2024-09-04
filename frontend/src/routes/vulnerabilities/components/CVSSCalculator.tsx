@@ -2,7 +2,8 @@ import { Cvss3P1 } from 'ae-cvss-calculator';
 import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
 
-import MetricGroup from './MetricGroup';
+import MetricGroup from './metricGroup';
+import ScoreBox from './scoreBox';
 
 type CVSSProp = {
   handleCvssChange: (value: string) => void;
@@ -203,10 +204,15 @@ const CVSSCalculator: React.FC<CVSSProp> = ({
   }, [AV, AC, PR, UI, S, C, I, A, changed, handleCvssChange]);
 
   return (
-    <div className="w-full p-6 bg-slate-700 border border-gray-200 rounded-lg">
+    <div className="relative w-full p-6 bg-slate-700 border border-gray-200 rounded-lg">
+      
+      <ScoreBox score={currentScore}/>
+
       <h2 className="text-xl font-semibold text-center mb-8">
         {t('cvss.title')}
       </h2>
+      
+      
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
           <MetricGroup
@@ -260,13 +266,6 @@ const CVSSCalculator: React.FC<CVSSProp> = ({
             selectedOption={A}
           />
         </div>
-      </div>
-      <div className="mt-8 text-center">
-        <h3 className="text-2xl font-bold">
-          {currentScore
-            ? 'Base Score: ' + currentScore + ' ' + currentSeverity
-            : currentSeverity}
-        </h3>
       </div>
     </div>
   );

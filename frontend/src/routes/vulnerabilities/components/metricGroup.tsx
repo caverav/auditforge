@@ -1,6 +1,6 @@
 import React from 'react';
 
-import MetricButton from './MetricButton';
+import MetricButton from './metricButton';
 
 type Option = {
   label: string;
