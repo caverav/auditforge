@@ -91,17 +91,13 @@ export const Audits = () => {
   ];
 
   const [auditType, setAuditType] = useState<ListItem[]>([]);
-  const [currentAuditType, setCurrentAuditType] = useState<ListItem>({
-    id: 0,
-    value: '',
-  });
+  const [currentAuditType, setCurrentAuditType] = useState<ListItem | null>(
+    null,
+  );
   const [loadingAuditType, setLoadingAuditType] = useState<boolean>(false);
 
   const [languages, setLanguages] = useState<ListItem[]>([]);
-  const [currentLanguage, setCurrentLanguage] = useState<ListItem>({
-    id: 0,
-    value: '',
-  });
+  const [currentLanguage, setCurrentLanguage] = useState<ListItem | null>(null);
   const [loadingLanguage, setLoadingLanguage] = useState<boolean>(true);
 
   const columns: Column[] = [
@@ -206,10 +202,18 @@ export const Audits = () => {
   }, [currentAuditType, setTableData]);
 
   const handleCancelNewAudit = () => {
+    setCurrentAuditType(null);
+    setCurrentLanguage(null);
+    setSelectedValue('');
+    setNameAudit('');
     setIsOpenNewAuditModal(!isOpenNewAuditModal);
   };
 
   const handleSubmitNewAudit = async () => {
+    if (!currentAuditType || !currentLanguage) {
+      return; // TODO: Show error
+    }
+
     try {
       await createAudit({
         name: nameAudit,
