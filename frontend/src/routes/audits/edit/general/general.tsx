@@ -51,16 +51,15 @@ export const General = () => {
   const [templateOptions, setTemplateOptions] = useState<ListItem[]>([]);
   const [currentTemplate, setCurrentTemplate] = useState<ListItem | null>(null);
   const [loadingTemplates, setLoadingTemplates] = useState<boolean>(true);
-
   const [companies, setCompanies] = useState<Company[]>([]);
   const [companyOptions, setCompanyOptions] = useState<ListItem[]>([]);
   const [currentCompany, setCurrentCompany] = useState<ListItem | null>(null);
-  const [loadingCompanies, setLoadingCompanies] = useState<boolean>(false);
+  const [loadingCompanies, setLoadingCompanies] = useState<boolean>(true);
 
   const [clients, setClients] = useState<Client[]>([]);
   const [clientOptions, setClientOptions] = useState<ListItem[]>([]);
   const [currentClient, setCurrentClient] = useState<ListItem | null>(null);
-  const [loadingClients, setLoadingClients] = useState<boolean>(false);
+  const [loadingClients, setLoadingClients] = useState<boolean>(true);
 
   const [collaborators, setCollaborators] = useState<Collaborator[]>([]);
   const [collaboratorOptions, setCollaboratorOptions] = useState<ListItem[]>(
@@ -82,6 +81,7 @@ export const General = () => {
     setScope(value.split('\n'));
   };
 
+  const [loading, setLoading] = useState<boolean>(true);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -144,8 +144,10 @@ export const General = () => {
         );
         setCollaboratorOptions(collaboratorNames);
         setLoadingCollaborators(false);
+        setLoadingCollaborators(false);
+        setLoading(false);
       } catch (err) {
-        setLoadingLanguages(false);
+        setLoading(false);
       }
     };
     fetchData().catch(console.error);
@@ -325,115 +327,143 @@ export const General = () => {
 
   return (
     <GeneralDivWrapper>
-      <TopMenu
-        auditName={nameAudit}
-        auditType={auditType}
-        onSave={handleSaveButton}
-      />
-      <div className="flex flex-col">
-        <SimpleInput
-          id="name"
-          label={t('name')}
-          name="name"
-          onChange={setNameAudit}
-          placeholder="Search"
-          type="text"
-          value={nameAudit}
-        />
-      </div>
-
-      <div className="flex space-x-6">
-        <div className="w-1/2">
-          {!loadingLanguages ? (
-            <SelectDropdown
-              items={languageOptions}
-              onChange={setCurrentLanguage}
-              selected={currentLanguage}
-              title={t('language')}
+      {loading ? (
+        <div className="flex justify-center items-center h-screen">
+          <div className="loader" />
+          <svg
+            className="animate-spin -ml-1 mr-3 h-10 w-10 text-white"
+            fill="none"
+            viewBox="0 0 24 24"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <circle
+              className="opacity-25"
+              cx="12"
+              cy="12"
+              r="10"
+              stroke="currentColor"
+              strokeWidth="4"
             />
-          ) : null}
-        </div>
-        <div className="w-1/2">
-          {!loadingTemplates ? (
-            <SelectDropdown
-              items={templateOptions}
-              onChange={setCurrentTemplate}
-              selected={currentTemplate}
-              title={t('template')}
+            <path
+              className="opacity-75"
+              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+              fill="currentColor"
             />
-          ) : null}
+          </svg>
         </div>
-      </div>
-
-      <div className="flex space-x-6">
-        <div className="w-1/2">
-          {!loadingCompanies ? (
-            <SelectDropdown
-              items={companyOptions}
-              onChange={setCurrentCompany}
-              selected={currentCompany}
-              title={t('company')}
+      ) : (
+        <>
+          <TopMenu
+            auditName={nameAudit}
+            auditType={auditType}
+            onSave={handleSaveButton}
+          />
+          <div className="flex flex-col">
+            <SimpleInput
+              id="name"
+              label={t('name')}
+              name="name"
+              onChange={setNameAudit}
+              placeholder="Search"
+              type="text"
+              value={nameAudit}
             />
-          ) : null}
-        </div>
-        <div className="w-1/2">
-          {!loadingClients ? (
-            <SelectDropdown
-              items={clientOptions}
-              onChange={setCurrentClient}
-              selected={currentClient}
-              title={t('client')}
+          </div>
+
+          <div className="flex space-x-6">
+            <div className="w-1/2">
+              {!loadingLanguages ? (
+                <SelectDropdown
+                  items={languageOptions}
+                  onChange={setCurrentLanguage}
+                  selected={currentLanguage}
+                  title={t('language')}
+                />
+              ) : null}
+            </div>
+            <div className="w-1/2">
+              {!loadingTemplates ? (
+                <SelectDropdown
+                  items={templateOptions}
+                  onChange={setCurrentTemplate}
+                  selected={currentTemplate}
+                  title={t('template')}
+                />
+              ) : null}
+            </div>
+          </div>
+
+          <div className="flex space-x-6">
+            <div className="w-1/2">
+              {!loadingCompanies ? (
+                <SelectDropdown
+                  items={companyOptions}
+                  onChange={setCurrentCompany}
+                  selected={currentCompany}
+                  title={t('company')}
+                />
+              ) : null}
+            </div>
+            <div className="w-1/2">
+              {!loadingClients ? (
+                <SelectDropdown
+                  items={clientOptions}
+                  onChange={setCurrentClient}
+                  selected={currentClient}
+                  title={t('client')}
+                />
+              ) : null}
+            </div>
+          </div>
+
+          <div className="flex flex-col">
+            {!loadingCollaborators ? (
+              <MultiSelectDropdown
+                items={collaboratorOptions}
+                onChange={setCurrentCollaborators}
+                selected={currentCollaborators}
+                title={t('collaborators')}
+              />
+            ) : null}
+          </div>
+
+          <div className="flex space-x-6">
+            <div className="w-1/3">
+              <DayPicker
+                label={t('startDate')}
+                onChange={setStartDate}
+                selectedDay={startDate}
+              />
+            </div>
+            <div className="w-1/3">
+              <DayPicker
+                label={t('endDate')}
+                onChange={setEndDate}
+                selectedDay={endDate}
+              />
+            </div>
+            <div className="w-1/3">
+              <DayPicker
+                label={t('reportingDate')}
+                onChange={setReportingDate}
+                selectedDay={reportingDate}
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col">
+            <TextArea
+              id="references"
+              label={t('auditScope')}
+              name="references"
+              onChange={changeScope}
+              placeholder=""
+              rows={4}
+              value={scope.join('\n')}
             />
-          ) : null}
-        </div>
-      </div>
-
-      <div className="flex flex-col">
-        {!loadingCollaborators ? (
-          <MultiSelectDropdown
-            items={collaboratorOptions}
-            onChange={setCurrentCollaborators}
-            selected={currentCollaborators}
-            title={t('collaborators')}
-          />
-        ) : null}
-      </div>
-
-      <div className="flex space-x-6">
-        <div className="w-1/3">
-          <DayPicker
-            label={t('startDate')}
-            onChange={setStartDate}
-            selectedDay={startDate}
-          />
-        </div>
-        <div className="w-1/3">
-          <DayPicker
-            label={t('endDate')}
-            onChange={setEndDate}
-            selectedDay={endDate}
-          />
-        </div>
-        <div className="w-1/3">
-          <DayPicker
-            label={t('reportingDate')}
-            onChange={setReportingDate}
-            selectedDay={reportingDate}
-          />
-        </div>
-      </div>
-
-      <div className="flex flex-col">
-        <TextArea
-          id="references"
-          label={t('auditScope')}
-          name="references"
-          onChange={changeScope}
-          placeholder=""
-          rows={4}
-          value={scope.join('\n')}
-        />
-      </div>
+          </div>
+        </>
+      )}
     </GeneralDivWrapper>
   );
 };
