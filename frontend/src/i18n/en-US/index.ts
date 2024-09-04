@@ -129,7 +129,7 @@ export default {
     wrongContactingBackend: 'Something went wrong contacting backend',
     highlightWarningTitle: 'Highlighted Text still present !',
     noAuditTypeForThisStage: 'No Assessments. Create an Audit Type first',
-    recommendationSuboptimal: 'The recommendation suboptimal',
+    recommendationSuboptimal: 'The recommendation is suboptimal',
   },
   err: {
     notDefinedLanguage: 'Not defined for this language',
