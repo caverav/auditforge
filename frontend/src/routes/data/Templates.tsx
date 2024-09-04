@@ -80,6 +80,7 @@ export const Templates: React.FC = () => {
     setNewTemplate(prevState => ({
       ...prevState!,
       _id: template._id,
+      name: template.name,
     }));
     setIsOpenEditTemplateModal(true);
   };
@@ -254,7 +255,7 @@ export const Templates: React.FC = () => {
             label={t('name')}
             name="name"
             onChange={value => handleInputChange('name', value)}
-            placeholder={t('name')}
+            placeholder={newTemplate?.name || t('name')}
             type="text"
             value={newTemplate?.name || ''}
           />
