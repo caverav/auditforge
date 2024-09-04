@@ -129,6 +129,7 @@ export default {
     wrongContactingBackend: 'Something went wrong contacting backend',
     highlightWarningTitle: 'Highlighted Text still present !',
     noAuditTypeForThisStage: 'No Assessments. Create an Audit Type first',
+    recommendationSuboptimal: 'The recommendation is suboptimal',
   },
   err: {
     notDefinedLanguage: 'Not defined for this language',
@@ -140,10 +141,19 @@ export default {
     importingSettingsError: 'Error importing settings',
     errorWhileParsingJsonContent: 'Error while parsing JSON content: {0}',
     titleRequired: 'Title required',
+    descriptionRequired: 'Description required',
     expiredToken: 'Expired token',
     invalidToken: 'Invalid token',
     invalidCredentials: 'Invalid credentials',
     noMatchingRecords: 'No matching records found',
+    failedDeleteVulnerability: 'Failed to delete the vulnerability',
+    failedCWERecommendation:
+      'An error occurred during the recommendation process',
+    vulnerabilityTitleAlreadyExists: 'Vulnerability title already exists',
+    failedCreateVulnerability: 'Error creating vulnerability',
+    failedUpdateVulnerability: 'Error updating vulnerability',
+    failedMergeVulnerabilities: 'Error merging vulnerabilities',
+    mergeNoVulnerabilitiesSelected: 'Both vulnerabilities must be selected',
   },
   cvss: {
     title: 'CVSS v3.1 Base Score',
