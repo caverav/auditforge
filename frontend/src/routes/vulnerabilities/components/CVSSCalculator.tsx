@@ -168,10 +168,8 @@ const CVSSCalculator: React.FC<CVSSProp> = ({
     setChanged(true);
   };
 
-  const [currentScore, setCurrentScore] = useState<number>();
-  const [currentSeverity, setCurrentSeverity] = useState<string>(
-    t('cvss.infoWhenNoScore'),
-  );
+  const [currentScore, setCurrentScore] = useState<number>(0);
+  const [isComplete, setIsComplete] = useState<boolean>(false);
 
   useEffect(() => {
     if (cvssStringInitial) {
@@ -188,16 +186,7 @@ const CVSSCalculator: React.FC<CVSSProp> = ({
       handleCvssChange(cvssVector);
       if (cvssVector.length === 44) {
         const cvss3 = new Cvss3P1(cvssVector);
-        const score = cvss3.calculateExactOverallScore();
-        if (score < 4) {
-          setCurrentSeverity('Low');
-        } else if (score < 7) {
-          setCurrentSeverity('Medium');
-        } else if (score < 9) {
-          setCurrentSeverity('High');
-        } else {
-          setCurrentSeverity('Critical');
-        }
+        setIsComplete(true);
         setCurrentScore(cvss3.calculateExactOverallScore());
       }
     }
@@ -205,14 +194,10 @@ const CVSSCalculator: React.FC<CVSSProp> = ({
 
   return (
     <div className="relative w-full p-6 bg-slate-700 border border-gray-200 rounded-lg">
-      
-      <ScoreBox score={currentScore}/>
-
+      <ScoreBox isComplete={isComplete} score={currentScore} />
       <h2 className="text-xl font-semibold text-center mb-8">
         {t('cvss.title')}
       </h2>
-      
-      
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div>
           <MetricGroup

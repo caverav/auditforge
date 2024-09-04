@@ -1,30 +1,37 @@
+import { t } from 'i18next';
 import React from 'react';
 
-interface ScoreBoxProps {
-  score: number | undefined;
-}
+type ScoreBoxProps = {
+  score: number;
+  isComplete: boolean;
+};
 
-const ScoreBox: React.FC<ScoreBoxProps> = ({ score }) => {
+const ScoreBox: React.FC<ScoreBoxProps> = ({ score, isComplete }) => {
   // Determine the background color based on the rating
-  let bgColor = '';
-  let rating = '';
-  if ((score && score < 4) || score === 0) {
+  let rating: string;
+  let bgColor: string;
+  if (!isComplete) {
+    rating = t('cvss.infoWhenNoScore');
+    bgColor = 'bg-gray-500';
+  } else if (score < 4) {
+    rating = 'Low';
     bgColor = 'bg-yellow-500';
-    rating = 'Low'
-  } else if (score && score < 7) {
-    bgColor = 'bg-orange-500'; 
-    rating = 'Medium'
-  } else if (score){
-    bgColor = 'bg-red-500'; 
-    rating = 'High'
-  } else if (score){
-    bgColor = 'bg-gray';
-    rating = '???'
+  } else if (score < 7) {
+    rating = 'Medium';
+    bgColor = 'bg-orange-500';
+  } else if (score < 9) {
+    rating = 'High';
+    bgColor = 'bg-red-500';
+  } else {
+    rating = 'Critical';
+    bgColor = 'bg-red-700';
   }
 
   return (
-    <div className={`absolute top-0 right-0 m-4 rounded-md p-4 text-white font-bold text-center ${bgColor}`}>
-      <div className="text-2xl">{score}</div>
+    <div
+      className={`absolute top-0 w-24 right-0 m-4 rounded-md py-4 text-white font-bold text-center ${bgColor}`}
+    >
+      <div className="text-2xl">{isComplete ? score : null}</div>
       <div className="text-sm">{rating}</div>
     </div>
   );
