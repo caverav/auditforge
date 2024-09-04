@@ -1,0 +1,33 @@
+{
+  "dev": {
+    "port": 5252,
+    "host": "",
+    "database": {
+      "name": "auditforge",
+      "server": "mongo-auditforge-dev",
+      "port": "27017"
+    },
+    "jwtSecret": "1a039133523dfca9cd5d0ac385c16f0f061558a96dc57384854ef90ed53e86dd",
+    "jwtRefreshSecret": "95b0c96984c301d94b41c3d2306fd041a001c58516eb5a23f83044822f42e558"
+  },
+  "prod": {
+    "port": 4242,
+    "host": "",
+    "database": {
+      "name": "auditforge",
+      "server": "mongo-auditforge",
+      "port": "27017"
+    },
+    "jwtSecret": "8565a16daedc531581393a08812af3c9043e702069216c54bd51c6613bcf9811",
+    "jwtRefreshSecret": "54f27d78990b5f4537702dbf97d9d746c7cb8172f070a1212933c877e8fc98a8"
+  },
+  "test": {
+    "port": 6262,
+    "host": "",
+    "database": {
+      "name": "auditforge",
+      "server": "127.0.0.1",
+      "port": "27017"
+    }
+  }
+}
