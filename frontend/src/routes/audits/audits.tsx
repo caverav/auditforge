@@ -179,11 +179,7 @@ export const Audits = () => {
             value: item.name,
           }),
         );
-        if (typeNames.length > 0) {
-          setAuditType([currentAuditType, ...typeNames]);
-        } else {
-          setAuditType([currentAuditType]);
-        }
+        setAuditType(typeNames);
         setLoadingAuditType(false);
 
         const dataAudits = await getAudits().then(res => {
