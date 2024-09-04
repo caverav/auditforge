@@ -163,7 +163,6 @@ export const General = () => {
   }, []);
 
   useEffect(() => {
-    // filter the clients list by company
     if (currentCompany) {
       setClientOptions(
         clients
@@ -177,17 +176,17 @@ export const General = () => {
           ),
       );
     } else {
-      // fetch all clients if no compan
       getClients()
         .then(res => {
           setClients(res.datas);
         })
         .catch(console.error);
     }
-  }, [clients, currentCompany]);
+    // Se deshabilita porque no se debe volver a ejecutar cuando se actualizan los clientes, a fin de no crear un loop
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentCompany]);
 
   useEffect(() => {
-    // automatically select the company if client is selected
     if (currentClient && !currentCompany) {
       setCurrentCompany(
         companyOptions.find(
