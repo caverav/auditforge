@@ -179,7 +179,7 @@ export const Audits = () => {
     {
       label: 'Delete',
       onClick: (item: TableData) => deleteRegisterConfirmation(item),
-    }, // TODO: Implement delete
+    },
   ];
 
   useEffect(() => {
