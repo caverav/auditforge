@@ -13,13 +13,19 @@ import { fetchUsername } from '../../services/audits';
 export const Profile = () => {
   const [role, setRole] = useState<string | null>(null);
 
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<{
+    username: string;
+    firstname: string;
+    lastname: string;
+    email: string;
+    phone: string;
+    newPassword?: string;
+    confirmPassword?: string;
+    currentPassword?: string;
+  }>({
     username: '',
     firstname: '',
     lastname: '',
-    newPassword: '',
-    confirmPassword: '',
-    currentPassword: '',
     email: '',
     phone: '',
   });
@@ -32,9 +38,6 @@ export const Profile = () => {
           username: user.datas.username,
           firstname: user.datas.firstname,
           lastname: user.datas.lastname,
-          newPassword: '',
-          confirmPassword: '',
-          currentPassword: '',
           email: user.datas.email ?? '',
           phone: user.datas.phone ?? '',
         });
@@ -50,7 +53,18 @@ export const Profile = () => {
         'Content-Type': 'application/json',
       },
       credentials: 'include',
-      body: JSON.stringify(formData),
+      body: JSON.stringify({
+        ...formData,
+        ...(formData.newPassword === '' && {
+          newPassword: formData.newPassword,
+        }),
+        ...(formData.confirmPassword === '' && {
+          confirmPassword: formData.confirmPassword,
+        }),
+        ...(formData.currentPassword === '' && {
+          currentPassword: formData.currentPassword,
+        }),
+      }),
     })
       .then(res => {
         if (res.ok) {
