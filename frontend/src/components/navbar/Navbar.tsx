@@ -7,6 +7,7 @@ import {
   ArrowRightStartOnRectangleIcon,
   Bars3Icon,
   CogIcon,
+  UserCircleIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline';
 import { useTranslation } from 'react-i18next';
@@ -93,10 +94,22 @@ const Navbar = (): JSX.Element => {
               <span className="sr-only">{t('settings')}</span>
               <CogIcon aria-hidden="true" className="h-8 w-auto" />
             </Link>
-
-            {/* logout button */}
+            <Link
+              className={classNames(
+                '/profile' === location.pathname
+                  ? 'bg-gray-900'
+                  : 'text-gray-400 hover:bg-gray-700',
+                'relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white mx-2',
+              )}
+              title={t('profile')}
+              to="/profile"
+            >
+              <span className="absolute -inset-1.5" />
+              <span className="sr-only">{t('profile')}</span>
+              <UserCircleIcon aria-hidden="true" className="h-8 w-auto" />
+            </Link>
             <button
-              className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white ml-2"
+              className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white"
               onClick={logout}
               title={t('logout')}
               type="button"

@@ -212,6 +212,16 @@ export type User = {
   role: string;
   totpEnabled: boolean;
   enabled: boolean;
+  email?: string;
+  phone?: string;
+};
+
+export type UserById = {
+  username: string;
+  password: string;
+  firstname: string;
+  lastname: string;
+  role: string;
 };
 
 export type Client = {
