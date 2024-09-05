@@ -153,7 +153,7 @@ export const Profile = () => {
               }}
               placeholder="New Password"
               type="password"
-              value={formData.newPassword}
+              value={formData.newPassword ?? ''}
             />
             <SimpleInput
               id="confirmPassword"
@@ -163,7 +163,7 @@ export const Profile = () => {
               }}
               placeholder="Confirm Password"
               type="password"
-              value={formData.confirmPassword}
+              value={formData.confirmPassword ?? ''}
             />
           </div>
           <SimpleInput
@@ -174,7 +174,7 @@ export const Profile = () => {
             }}
             placeholder="Current Password"
             type="password"
-            value={formData.currentPassword}
+            value={formData.currentPassword ?? ''}
           />
           <Button
             className="w-full bg-blue-600 hover:bg-blue-700"
