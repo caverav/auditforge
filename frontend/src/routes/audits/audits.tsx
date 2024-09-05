@@ -288,7 +288,7 @@ export const Audits = () => {
           disablehr={true}
           isOpen={isOpenModalDeleteAudit}
           onCancel={() => setIsOpenModalDeleteAudit(false)}
-          onSubmit={confirmDeleteVulnerability}
+          onSubmit={confirmDeleteAudit}
           submitText={t('btn.confirm')}
           title={t('msg.confirmSuppression')}
         >
