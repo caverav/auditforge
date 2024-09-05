@@ -148,7 +148,7 @@ export const Audits = () => {
     setFilteredData(dataAudits);
   }, [setTableData, setFilteredData]);
 
-  const confirmDeleteVulnerability = async () => {
+  const confirmDeleteAudit = async () => {
     try {
       const response = await deleteAudit(itemDelete?.id ?? '');
       if (response.status === 'success') {
