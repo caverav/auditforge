@@ -191,7 +191,7 @@ export const Audits = () => {
         );
       })
       .catch(console.error);
-    // Desactivado porque realmente no se debe gatillar el efecto cada vez que cambia handleFilterChange a travÃ©s del useTableFiltering
+    // Desactivado porque realmente no se debe gatillar el efecto cada vez que cambia handleFilterChange a través del useTableFiltering
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [myAudits]);
 
