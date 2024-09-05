@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 
@@ -16,6 +16,7 @@ import { useTableFiltering } from '../../hooks/useTableFiltering';
 import type { Audit } from '../../services/audits';
 import {
   createAudit,
+  deleteAudit,
   fetchUsername,
   generateReport,
   getAudits,
@@ -77,18 +78,6 @@ export const Audits = () => {
 
   const [nameAudit, setNameAudit] = useState<string>('');
 
-  const rowActions: RowAction[] = [
-    {
-      label: 'Edit',
-      onClick: (item: TableData) => navigate(`/audits/${item.id}/general`),
-    },
-    {
-      label: 'Download',
-      onClick: (item: TableData) => generateReport(item.id, window),
-    },
-    { label: 'Delete', onClick: () => void 0 }, // TODO: Implement delete
-  ];
-
   const [auditType, setAuditType] = useState<ListItem[]>([]);
   const [currentAuditType, setCurrentAuditType] = useState<ListItem | null>(
     null,
@@ -98,6 +87,9 @@ export const Audits = () => {
   const [languages, setLanguages] = useState<ListItem[]>([]);
   const [currentLanguage, setCurrentLanguage] = useState<ListItem | null>(null);
   const [loadingLanguage, setLoadingLanguage] = useState<boolean>(true);
+
+  const [isOpenModalDeleteAudit, setIsOpenModalDeleteAudit] = useState(false);
+  const [itemDelete, setItemDelete] = useState<TableData>();
 
   const columns: Column[] = [
     { header: t('name'), accessor: 'Name', sortable: true, filterable: true },
@@ -140,6 +132,56 @@ export const Audits = () => {
     setTableData,
   );
 
+  const fetchAndUpdateData = useCallback(async () => {
+    const dataAudits = await getAudits().then(res => {
+      return res.datas.map((audit: Audit) => ({
+        id: audit._id,
+        Name: audit.name,
+        AuditType: audit.auditType,
+        Language: audit.language,
+        Company: audit.company?.name ?? '',
+        Participants: audit.collaborators.map(user => user.username).join(', '),
+        Date: new Date(audit.createdAt).toLocaleString(),
+      }));
+    });
+    setTableData(dataAudits);
+    setFilteredData(dataAudits);
+  }, [setTableData, setFilteredData]);
+
+  const confirmDeleteVulnerability = async () => {
+    try {
+      const response = await deleteAudit(itemDelete?.id ?? '');
+      if (response.status === 'success') {
+        toast.success('Audit deleted successfully');
+        void fetchAndUpdateData();
+      }
+    } catch (error) {
+      toast.error(t('err.failedDeleteVulnerability'));
+      console.error('Error:', error);
+    }
+    setIsOpenModalDeleteAudit(false);
+  };
+
+  const deleteRegisterConfirmation = (item: TableData) => {
+    setItemDelete(item);
+    setIsOpenModalDeleteAudit(true);
+  };
+
+  const rowActions: RowAction[] = [
+    {
+      label: 'Edit',
+      onClick: (item: TableData) => navigate(`/audits/${item.id}/general`),
+    },
+    {
+      label: 'Download',
+      onClick: (item: TableData) => generateReport(item.id, window),
+    },
+    {
+      label: 'Delete',
+      onClick: (item: TableData) => deleteRegisterConfirmation(item),
+    }, // TODO: Implement delete
+  ];
+
   useEffect(() => {
     fetchUsername()
       .then(username => {
@@ -149,7 +191,7 @@ export const Audits = () => {
         );
       })
       .catch(console.error);
-    // Desactivado porque realmente no se debe gatillar el efecto cada vez que cambia handleFilterChange a través del useTableFiltering
+    // Desactivado porque realmente no se debe gatillar el efecto cada vez que cambia handleFilterChange a travÃ©s del useTableFiltering
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [myAudits]);
 
@@ -177,28 +219,13 @@ export const Audits = () => {
         setAuditType(typeNames);
         setLoadingAuditType(false);
 
-        const dataAudits = await getAudits().then(res => {
-          return res.datas.map((audit: Audit) => ({
-            id: audit._id,
-            Name: audit.name,
-            AuditType: audit.auditType,
-            Language: audit.language,
-            Company: audit.company?.name ?? '',
-            Participants: audit.collaborators
-              .map(user => user.username)
-              .join(', '),
-            Date: new Date(audit.createdAt).toLocaleString(),
-          }));
-        });
-
-        setTableData(dataAudits);
-        setFilteredData(dataAudits);
+        void fetchAndUpdateData();
       } catch (err) {
         setLoadingLanguage(false);
       }
     };
     fetchData().catch(console.error);
-  }, [currentAuditType, setTableData]);
+  }, [currentAuditType, fetchAndUpdateData]);
 
   const handleCancelNewAudit = () => {
     setCurrentAuditType(null);
@@ -226,21 +253,7 @@ export const Audits = () => {
       setCurrentLanguage(null);
       setSelectedValue('');
       setNameAudit('');
-      const dataAudits = await getAudits().then(res => {
-        return res.datas.map((audit: Audit) => ({
-          id: audit._id,
-          Name: audit.name,
-          AuditType: audit.auditType,
-          Language: audit.language,
-          Company: audit.company?.name ?? '',
-          Participants: audit.collaborators
-            .map(user => user.username)
-            .join(', '),
-          Date: audit.createdAt,
-        }));
-      });
-      setTableData(dataAudits);
-      setFilteredData(dataAudits);
+      void fetchAndUpdateData();
     } catch (error) {
       console.error('Error:', error);
     }
@@ -270,7 +283,17 @@ export const Audits = () => {
             </PrimaryButton>
           </div>
         </div>
-
+        <Modal
+          cancelText={t('btn.cancel')}
+          disablehr={true}
+          isOpen={isOpenModalDeleteAudit}
+          onCancel={() => setIsOpenModalDeleteAudit(false)}
+          onSubmit={confirmDeleteVulnerability}
+          submitText={t('btn.confirm')}
+          title={t('msg.confirmSuppression')}
+        >
+          <span className="ml-3">{'Audit ' + t('msg.deleteNotice')}</span>
+        </Modal>
         <Modal
           cancelText={t('btn.cancel')}
           isOpen={isOpenNewAuditModal}
