@@ -99,7 +99,7 @@ const Navbar = (): JSX.Element => {
                 '/profile' === location.pathname
                   ? 'bg-gray-900'
                   : 'text-gray-400 hover:bg-gray-700',
-                'relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white',
+                'relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white mx-2',
               )}
               title={t('profile')}
               to="/profile"
