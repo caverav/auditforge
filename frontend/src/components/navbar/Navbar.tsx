@@ -109,7 +109,7 @@ const Navbar = (): JSX.Element => {
               <UserCircleIcon aria-hidden="true" className="h-8 w-auto" />
             </Link>
             <button
-              className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white ml-2"
+              className="relative rounded-full bg-gray-800 p-1 text-gray-400 hover:text-white"
               onClick={logout}
               title={t('logout')}
               type="button"
