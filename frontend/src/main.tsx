@@ -12,7 +12,15 @@ import {
 import AuthProvider from './components/AuthProvider';
 import { ErrorPage } from './error-page';
 import { checktoken } from './hooks/useAuth';
-import { Audits, Data, Login, Root, Settings, Vulnerabilities } from './routes';
+import {
+  Audits,
+  Data,
+  Login,
+  Profile,
+  Root,
+  Settings,
+  Vulnerabilities,
+} from './routes';
 import { Add, AuditRoot, Edit, General, Network } from './routes/audits';
 import {
   Clients,
@@ -101,6 +109,10 @@ const router = createBrowserRouter([
       {
         path: '/settings',
         element: <Settings />,
+      },
+      {
+        path: '/profile',
+        element: <Profile />,
       },
     ],
   },
