@@ -1,14 +1,14 @@
-var mongoose = require("mongoose");
+var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
-var bcrypt = require("bcrypt");
-var jwt = require("jsonwebtoken");
+var bcrypt = require('bcrypt');
+var jwt = require('jsonwebtoken');
 
-var auth = require("../lib/auth.js");
-const { generateUUID } = require("../lib/utils.js");
-var _ = require("lodash");
+var auth = require('../lib/auth.js');
+const { generateUUID } = require('../lib/utils.js');
+var _ = require('lodash');
 
-var QRCode = require("qrcode");
-var OTPAuth = require("otpauth");
+var QRCode = require('qrcode');
+var OTPAuth = require('otpauth');
 
 var UserSchema = new Schema(
   {
@@ -18,9 +18,9 @@ var UserSchema = new Schema(
     lastname: { type: String, required: true },
     email: { type: String, required: false },
     phone: { type: String, required: false },
-    role: { type: String, default: "user" },
+    role: { type: String, default: 'user' },
     totpEnabled: { type: Boolean, default: false },
-    totpSecret: { type: String, default: "" },
+    totpSecret: { type: String, default: '' },
     enabled: { type: Boolean, default: true },
     refreshTokens: [
       { _id: false, sessionId: String, userAgent: String, token: String },
@@ -30,20 +30,20 @@ var UserSchema = new Schema(
 );
 
 var totpConfig = {
-  issuer: "AuditForge",
-  label: "",
-  algorithm: "SHA1",
+  issuer: 'AuditForge',
+  label: '',
+  algorithm: 'SHA1',
   digits: 6,
   period: 30,
-  secret: "",
+  secret: '',
 };
 
 //check TOTP token
 var checkTotpToken = function (token, secret) {
-  if (!token) throw { fn: "BadParameters", message: "TOTP token required" };
+  if (!token) throw { fn: 'BadParameters', message: 'TOTP token required' };
   if (token.length !== 6)
-    throw { fn: "BadParameters", message: "Invalid TOTP token length" };
-  if (!secret) throw { fn: "BadParameters", message: "TOTP secret required" };
+    throw { fn: 'BadParameters', message: 'Invalid TOTP token length' };
+  if (!secret) throw { fn: 'BadParameters', message: 'TOTP secret required' };
 
   let newConfig = totpConfig;
   newConfig.secret = secret;
@@ -54,9 +54,9 @@ var checkTotpToken = function (token, secret) {
   });
   //The token is valid in 2 windows in the past and the future, current window is 0.
   if (delta === null) {
-    throw { fn: "Unauthorized", message: "Wrong TOTP token." };
+    throw { fn: 'Unauthorized', message: 'Wrong TOTP token.' };
   } else if (delta < -2 || delta > 2) {
-    throw { fn: "Unauthorized", message: "TOTP token out of window." };
+    throw { fn: 'Unauthorized', message: 'TOTP token out of window.' };
   }
   return true;
 };
@@ -77,7 +77,7 @@ UserSchema.statics.create = function (user) {
       })
       .catch(function (err) {
         if (err.code === 11000)
-          reject({ fn: "BadParameters", message: "Username already exists" });
+          reject({ fn: 'BadParameters', message: 'Username already exists' });
         else reject(err);
       });
   });
@@ -88,7 +88,7 @@ UserSchema.statics.getAll = function () {
   return new Promise((resolve, reject) => {
     var query = this.find();
     query.select(
-      "username firstname lastname email phone role totpEnabled enabled",
+      'username firstname lastname email phone role totpEnabled enabled',
     );
     query
       .exec()
@@ -106,13 +106,13 @@ UserSchema.statics.getByUsername = function (username) {
   return new Promise((resolve, reject) => {
     var query = this.findOne({ username: username });
     query.select(
-      "username firstname lastname email phone role totpEnabled enabled",
+      'username firstname lastname email phone role totpEnabled enabled',
     );
     query
       .exec()
       .then(function (row) {
         if (row) resolve(row);
-        else throw { fn: "NotFound", message: "User not found" };
+        else throw { fn: 'NotFound', message: 'User not found' };
       })
       .catch(function (err) {
         reject(err);
@@ -128,7 +128,7 @@ UserSchema.statics.updateProfile = function (username, user) {
     query
       .exec()
       .then(function (row) {
-        if (!row) throw { fn: "NotFound", message: "User not found" };
+        if (!row) throw { fn: 'NotFound', message: 'User not found' };
         else if (bcrypt.compareSync(user.password, row.password)) {
           if (user.username) row.username = user.username;
           if (user.firstname) row.firstname = user.firstname;
@@ -137,7 +137,7 @@ UserSchema.statics.updateProfile = function (username, user) {
           if (!_.isNil(user.phone)) row.phone = user.phone;
           if (user.newPassword)
             row.password = bcrypt.hashSync(user.newPassword, 10);
-          if (typeof user.totpEnabled == "boolean")
+          if (typeof user.totpEnabled == 'boolean')
             row.totpEnabled = user.totpEnabled;
 
           payload.id = row._id;
@@ -151,17 +151,17 @@ UserSchema.statics.updateProfile = function (username, user) {
 
           return row.save();
         } else
-          throw { fn: "Unauthorized", message: "Current password is invalid" };
+          throw { fn: 'Unauthorized', message: 'Current password is invalid' };
       })
       .then(function () {
         var token = jwt.sign(payload, auth.jwtSecret, {
-          expiresIn: "15 minutes",
+          expiresIn: '15 minutes',
         });
         resolve({ token: `JWT ${token}` });
       })
       .catch(function (err) {
         if (err.code === 11000)
-          reject({ fn: "BadParameters", message: "Username already exists" });
+          reject({ fn: 'BadParameters', message: 'Username already exists' });
         else reject(err);
       });
   });
@@ -175,12 +175,12 @@ UserSchema.statics.updateUser = function (userId, user) {
     query
       .exec()
       .then(function (row) {
-        if (row) resolve("User updated successfully");
-        else reject({ fn: "NotFound", message: "User not found" });
+        if (row) resolve('User updated successfully');
+        else reject({ fn: 'NotFound', message: 'User not found' });
       })
       .catch(function (err) {
         if (err.code === 11000)
-          reject({ fn: "BadParameters", message: "Username already exists" });
+          reject({ fn: 'BadParameters', message: 'Username already exists' });
         else reject(err);
       });
   });
@@ -189,31 +189,31 @@ UserSchema.statics.updateUser = function (userId, user) {
 // Update refreshtoken
 UserSchema.statics.updateRefreshToken = function (refreshToken, userAgent) {
   return new Promise((resolve, reject) => {
-    var token = "";
-    var newRefreshToken = "";
+    var token = '';
+    var newRefreshToken = '';
     try {
       var decoded = jwt.verify(refreshToken, auth.jwtRefreshSecret);
       var userId = decoded.userId;
       var sessionId = decoded.sessionId;
       var expiration = decoded.exp;
     } catch (err) {
-      if (err.name === "TokenExpiredError")
-        throw { fn: "Unauthorized", message: "Expired refreshToken" };
-      else throw { fn: "Unauthorized", message: "Invalid refreshToken" };
+      if (err.name === 'TokenExpiredError')
+        throw { fn: 'Unauthorized', message: 'Expired refreshToken' };
+      else throw { fn: 'Unauthorized', message: 'Invalid refreshToken' };
     }
     var query = this.findById(userId);
     query
       .exec()
-      .then((row) => {
+      .then(row => {
         if (row && row.enabled !== false) {
           // Check session exist and sessionId not null (if null then it is a login)
           if (sessionId !== null) {
             var sessionExist = row.refreshTokens.findIndex(
-              (e) => e.sessionId === sessionId && e.token === refreshToken,
+              e => e.sessionId === sessionId && e.token === refreshToken,
             );
             if (sessionExist === -1)
               // Not found
-              throw { fn: "Unauthorized", message: "Session not found" };
+              throw { fn: 'Unauthorized', message: 'Session not found' };
           }
 
           // Generate new token
@@ -228,11 +228,11 @@ UserSchema.statics.updateRefreshToken = function (refreshToken, userAgent) {
           payload.roles = auth.acl.getRoles(payload.role);
 
           token = jwt.sign(payload, auth.jwtSecret, {
-            expiresIn: "15 minutes",
+            expiresIn: '15 minutes',
           });
 
           // Remove expired sessions
-          row.refreshTokens = row.refreshTokens.filter((e) => {
+          row.refreshTokens = row.refreshTokens.filter(e => {
             try {
               var decoded = jwt.verify(e.token, auth.jwtRefreshSecret);
             } catch (err) {
@@ -242,7 +242,7 @@ UserSchema.statics.updateRefreshToken = function (refreshToken, userAgent) {
           });
           // Update or add new refresh token
           var foundIndex = row.refreshTokens.findIndex(
-            (e) => e.sessionId === sessionId,
+            e => e.sessionId === sessionId,
           );
           if (foundIndex === -1) {
             // Not found
@@ -250,7 +250,7 @@ UserSchema.statics.updateRefreshToken = function (refreshToken, userAgent) {
             newRefreshToken = jwt.sign(
               { sessionId: sessionId, userId: userId },
               auth.jwtRefreshSecret,
-              { expiresIn: "7 days" },
+              { expiresIn: '7 days' },
             );
             row.refreshTokens.push({
               sessionId: sessionId,
@@ -266,15 +266,15 @@ UserSchema.statics.updateRefreshToken = function (refreshToken, userAgent) {
           }
           return row.save();
         } else if (row) {
-          reject({ fn: "Unauthorized", message: "Account disabled" });
-        } else reject({ fn: "NotFound", message: "Session not found" });
+          reject({ fn: 'Unauthorized', message: 'Account disabled' });
+        } else reject({ fn: 'NotFound', message: 'Session not found' });
       })
       .then(() => {
         resolve({ token: token, refreshToken: newRefreshToken });
       })
-      .catch((err) => {
+      .catch(err => {
         if (err.code === 11000)
-          reject({ fn: "BadParameters", message: "Username already exists" });
+          reject({ fn: 'BadParameters', message: 'Username already exists' });
         else reject(err);
       });
   });
@@ -286,20 +286,20 @@ UserSchema.statics.removeSession = function (userId, sessionId) {
     var query = this.findById(userId);
     query
       .exec()
-      .then((row) => {
+      .then(row => {
         if (row) {
           row.refreshTokens = row.refreshTokens.filter(
-            (e) => e.sessionId !== sessionId,
+            e => e.sessionId !== sessionId,
           );
           return row.save();
-        } else reject({ fn: "NotFound", message: "User not found" });
+        } else reject({ fn: 'NotFound', message: 'User not found' });
       })
       .then(() => {
-        resolve("Session removed successfully");
+        resolve('Session removed successfully');
       })
-      .catch((err) => {
+      .catch(err => {
         if (err.code === 11000)
-          reject({ fn: "BadParameters", message: "Username already exists" });
+          reject({ fn: 'BadParameters', message: 'Username already exists' });
         else reject(err);
       });
   });
@@ -336,9 +336,9 @@ UserSchema.statics.setupTotp = function (token, secret, username) {
     query
       .exec()
       .then(function (row) {
-        if (!row) throw { errmsg: "User not found" };
+        if (!row) throw { errmsg: 'User not found' };
         else if (row.totpEnabled === true)
-          throw { errmsg: "TOTP already enabled by this user" };
+          throw { errmsg: 'TOTP already enabled by this user' };
         else {
           row.totpEnabled = true;
           row.totpSecret = secret;
@@ -361,18 +361,18 @@ UserSchema.statics.cancelTotp = function (token, username) {
     query
       .exec()
       .then(function (row) {
-        if (!row) throw { errmsg: "User not found" };
+        if (!row) throw { errmsg: 'User not found' };
         else if (row.totpEnabled !== true)
-          throw { errmsg: "TOTP is not enabled yet" };
+          throw { errmsg: 'TOTP is not enabled yet' };
         else {
           checkTotpToken(token, row.totpSecret);
           row.totpEnabled = false;
-          row.totpSecret = "";
+          row.totpSecret = '';
           return row.save();
         }
       })
       .then(function () {
-        resolve({ msg: "TOTP is canceled." });
+        resolve({ msg: 'TOTP is canceled.' });
       })
       .catch(function (err) {
         reject(err);
@@ -393,13 +393,13 @@ UserSchema.methods.getToken = function (userAgent) {
       .exec()
       .then(function (row) {
         if (row && row.enabled === false)
-          throw { fn: "Unauthorized", message: "Authentication Failed." };
+          throw { fn: 'Unauthorized', message: 'Authentication Failed.' };
 
         if (row && bcrypt.compareSync(user.password, row.password)) {
           if (row.totpEnabled && user.totpToken)
             checkTotpToken(user.totpToken, row.totpSecret);
           else if (row.totpEnabled)
-            throw { fn: "BadParameters", message: "Missing TOTP token" };
+            throw { fn: 'BadParameters', message: 'Missing TOTP token' };
           var refreshToken = jwt.sign(
             { sessionId: null, userId: row._id },
             auth.jwtRefreshSecret,
@@ -409,15 +409,15 @@ UserSchema.methods.getToken = function (userAgent) {
           if (!row) {
             // We compare two random strings to generate delay
             var randomHash =
-              "$2b$10$" +
-              [...Array(53)].map(() => Math.random().toString(36)[2]).join("");
+              '$2b$10$' +
+              [...Array(53)].map(() => Math.random().toString(36)[2]).join('');
             bcrypt.compareSync(user.password, randomHash);
           }
 
-          throw { fn: "Unauthorized", message: "Authentication Failed." };
+          throw { fn: 'Unauthorized', message: 'Authentication Failed.' };
         }
       })
-      .then((row) => {
+      .then(row => {
         resolve({ token: row.token, refreshToken: row.refreshToken });
       })
       .catch(function (err) {
@@ -426,5 +426,5 @@ UserSchema.methods.getToken = function (userAgent) {
   });
 };
 
-var User = mongoose.model("User", UserSchema);
+var User = mongoose.model('User', UserSchema);
 module.exports = User;
