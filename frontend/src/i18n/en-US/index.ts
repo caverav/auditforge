@@ -130,6 +130,8 @@ export default {
     highlightWarningTitle: 'Highlighted Text still present !',
     noAuditTypeForThisStage: 'No Assessments. Create an Audit Type first',
     recommendationSuboptimal: 'The recommendation is suboptimal',
+    auditDeletedOk: 'Audit deleted successfully',
+    auditDeleteNotice: 'Audit will be permanently deleted',
   },
   err: {
     notDefinedLanguage: 'Not defined for this language',

@@ -152,7 +152,7 @@ export const Audits = () => {
     try {
       const response = await deleteAudit(itemDelete?.id ?? '');
       if (response.status === 'success') {
-        toast.success('Audit deleted successfully');
+        toast.success(t('msg.auditDeletedOk'));
         void fetchAndUpdateData();
       }
     } catch (error) {
@@ -292,7 +292,7 @@ export const Audits = () => {
           submitText={t('btn.confirm')}
           title={t('msg.confirmSuppression')}
         >
-          <span className="ml-3">{'Audit ' + t('msg.deleteNotice')}</span>
+          <span className="ml-3">{t('msg.auditDeleteNotice')}</span>
         </Modal>
         <Modal
           cancelText={t('btn.cancel')}
