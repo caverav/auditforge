@@ -8,10 +8,10 @@ const endpointsFiles = [];
 
 var files = fs.readdirSync(routesFolder);
 files.forEach(file => {
-    let fileStat = fs.statSync(routesFolder + '/' + file).isDirectory();
-    if(!fileStat) {
-        endpointsFiles.push(routesFolder + '/' + file);
-    }
+  let fileStat = fs.statSync(routesFolder + '/' + file).isDirectory();
+  if (!fileStat) {
+    endpointsFiles.push(routesFolder + '/' + file);
+  }
 });
 
 swaggerAutogen(outputFile, endpointsFiles);

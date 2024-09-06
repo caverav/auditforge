@@ -1,8 +1,6 @@
 {
-    "report": {
-        "inherits": ["user"],
-        "allows": [
-            "audits:read-all"
-        ]
-    }
+  "report": {
+    "inherits": ["user"],
+    "allows": ["audits:read-all"]
+  }
 }
