@@ -9,7 +9,8 @@
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "lint:fix": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0 --fix",
     "format": "prettier --write .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "prepare": "cd .. && husky frontend/.husky"
   },
   "dependencies": {
     "@emotion/react": "^11.10.6",
@@ -60,6 +61,8 @@
     "eslint-plugin-react-refresh": "^0.4.11",
     "eslint-plugin-simple-import-sort": "^12.1.1",
     "eslint-plugin-sonarjs": "^0.25.1",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.2.10",
     "postcss": "^8.4.39",
     "prettier": "^3.3.3",
     "prettier-plugin-packagejson": "^2.5.2",
