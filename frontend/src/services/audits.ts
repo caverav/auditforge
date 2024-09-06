@@ -502,3 +502,22 @@ export const getVulnByLanguage = async (
 export const generateReport = (auditId: string, window: Window): void => {
   window.open(`${API_URL}audits/${auditId}/generate`, '_blank');
 };
+
+export const deleteAudit = async (
+  id: string,
+): Promise<{ status: string; datas: string }> => {
+  try {
+    const response = await fetch(`${API_URL}audits/${id}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    });
+    if (!response.ok) {
+      throw networkError;
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
