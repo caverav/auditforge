@@ -435,7 +435,14 @@ export const getCollaborators = async (): Promise<{
     if (!response.ok) {
       throw networkError;
     }
-    return await response.json();
+    const data = await response
+      .json()
+      .then(data => data.datas.filter((user: User) => user.enabled))
+      .catch(console.error);
+    return {
+      status: 'success',
+      datas: data,
+    };
   } catch (error) {
     console.error(error);
 
