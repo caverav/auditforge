@@ -156,7 +156,7 @@ export const Audits = () => {
         void fetchAndUpdateData();
       }
     } catch (error) {
-      toast.error(t('err.failedDeleteVulnerability'));
+      toast.error(t('err.failedDeleteAudit'));
       console.error('Error:', error);
     }
     setIsOpenModalDeleteAudit(false);
