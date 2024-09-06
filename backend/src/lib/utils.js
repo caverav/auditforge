@@ -1,54 +1,58 @@
 // Filename whitelist validation for template creation
 function validFilename(filename) {
-    const regex = /^[\p{Letter}\p{Mark}0-9 \[\]'()_-]+$/iu;
-    
-    return (regex.test(filename));
+  const regex = /^[\p{Letter}\p{Mark}0-9 \[\]'()_-]+$/iu;
+
+  return regex.test(filename);
 }
 exports.validFilename = validFilename;
 
 // Escape XML special entities when using {@RawXML} in template generation
 function escapeXMLEntities(input) {
-    var XML_CHAR_MAP = { '<': '&lt;', '>': '&gt;', '&': '&amp;'};
-    var standardEncode = input.replace(/[<>&]/g, function (ch) { return XML_CHAR_MAP[ch]; });
-    return standardEncode;
+  var XML_CHAR_MAP = { '<': '&lt;', '>': '&gt;', '&': '&amp;' };
+  var standardEncode = input.replace(/[<>&]/g, function (ch) {
+    return XML_CHAR_MAP[ch];
+  });
+  return standardEncode;
 }
 exports.escapeXMLEntities = escapeXMLEntities;
 
 // Convert number to 3 digits format if under 100
 function lPad(number) {
-    if (number <= 99) { number = ("00" + number).slice(-3); }
-    return `${number}`;
+  if (number <= 99) {
+    number = ('00' + number).slice(-3);
+  }
+  return `${number}`;
 }
 exports.lPad = lPad;
 
 function escapeRegex(regex) {
-    return regex.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')
+  return regex.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
 }
-exports.escapeRegex = escapeRegex
+exports.escapeRegex = escapeRegex;
 
 function generateUUID() {
-    return require('crypto').randomBytes(32).toString('hex')
+  return require('crypto').randomBytes(32).toString('hex');
 }
-exports.generateUUID = generateUUID
+exports.generateUUID = generateUUID;
 
 var getObjectPaths = (obj, prefix = '') =>
   Object.keys(obj).reduce((res, el) => {
-    if( Array.isArray(obj[el]) ) {
+    if (Array.isArray(obj[el])) {
       return [...res, prefix + el];
-    } else if( typeof obj[el] === 'object' && obj[el] !== null ) {
+    } else if (typeof obj[el] === 'object' && obj[el] !== null) {
       return [...res, ...getObjectPaths(obj[el], prefix + el + '.')];
     }
     return [...res, prefix + el];
-  }, [])
-exports.getObjectPaths = getObjectPaths
+  }, []);
+exports.getObjectPaths = getObjectPaths;
 
 function getSockets(io, room) {
-  var result = []
-  io.sockets.sockets.forEach((data) => {
+  var result = [];
+  io.sockets.sockets.forEach(data => {
     if (data.rooms.has(room)) {
-      result.push(data)
+      result.push(data);
     }
-  })
-  return result
+  });
+  return result;
 }
-exports.getSockets = getSockets
+exports.getSockets = getSockets;

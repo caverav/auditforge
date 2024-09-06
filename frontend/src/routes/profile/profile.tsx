@@ -173,6 +173,7 @@ export const Profile = () => {
               setFormData(prev => ({ ...prev, currentPassword: value }));
             }}
             placeholder="Current Password"
+            requiredField
             type="password"
             value={formData.currentPassword ?? ''}
           />
