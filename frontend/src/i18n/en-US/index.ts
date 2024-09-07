@@ -130,6 +130,8 @@ export default {
     highlightWarningTitle: 'Highlighted Text still present !',
     noAuditTypeForThisStage: 'No Assessments. Create an Audit Type first',
     recommendationSuboptimal: 'The recommendation is suboptimal',
+    auditDeletedOk: 'Audit deleted successfully',
+    auditDeleteNotice: 'Audit will be permanently deleted',
   },
   err: {
     notDefinedLanguage: 'Not defined for this language',
@@ -154,6 +156,7 @@ export default {
     failedUpdateVulnerability: 'Error updating vulnerability',
     failedMergeVulnerabilities: 'Error merging vulnerabilities',
     mergeNoVulnerabilitiesSelected: 'Both vulnerabilities must be selected',
+    failedDeleteAudit: 'Failed to delete the audit',
   },
   cvss: {
     title: 'CVSS v3.1 Base Score',
