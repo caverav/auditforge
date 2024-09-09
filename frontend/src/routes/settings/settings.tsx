@@ -1,11 +1,9 @@
-import { CheckCircleIcon, NoSymbolIcon } from '@heroicons/react/24/outline';
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import Card from '../../components/card/Card';
 import SelectDropdown from '../../components/dropdown/SelectDropdown';
-import PrimarySwitch from '../../components/switch/PrimarySwitch';
 
 const languageOptions = [
   {
@@ -26,12 +24,7 @@ const languageOptions = [
   },
 ];
 
-// QUITAR ESTO
-
 export const Settings = () => {
-  const [enabled, setEnabled] = useState(false);
-  const [selected, setSelected] = useState({ id: 1, value: 'Tom Cook' });
-
   // <---------------------
   // Lógica de selector de idiomas. TODO: Moverlo a componente
 
@@ -56,7 +49,7 @@ export const Settings = () => {
   // --------------------->
 
   return (
-    <div className="w-2/3 mt-8 mx-auto">
+    <div className="p-4 md:w-2/3 md:mt-8 mx-auto">
       <Card title={t('generalSettings')}>
         <div className="px-2">
           <h2>{t('changeDisplayLanguage')}</h2>
