@@ -71,39 +71,6 @@ export const Settings = () => {
           </div>
         </div>
       </Card>
-      <Card title={t('generalSettings')}>
-        <div className="px-2">
-          <h2>Titulo de ejemplo</h2>
-          <div className="mt-2 mx-2">
-            <p>
-              Parrafo de ejemplo. Esta card contiene dos componentes: Primary
-              Switch, que es un switch génerico, y un menú selector tipo
-              dropdown. Sirve de ejemplo sobre su funcionamiento.
-            </p>
-          </div>
-          <div className="mt-2 mx-2">
-            <PrimarySwitch enabled={enabled} onChange={setEnabled} />
-            {enabled ? (
-              <CheckCircleIcon className="top-8 right-8 size-12" />
-            ) : (
-              <NoSymbolIcon className="top-8 right-8 size-12" />
-            )}
-            <SelectDropdown
-              items={[
-                { id: 1, value: 'Tom Cook' },
-                { id: 2, value: 'Wade Cooper' },
-                { id: 3, value: 'Tanya Fox' },
-                { id: 4, value: 'Arlene Mccoy' },
-                { id: 5, value: 'Devon Webb' },
-              ]}
-              onChange={setSelected}
-              selected={selected}
-              title="Título selector"
-            />
-          </div>
-          <p>Persona seleccionada: {selected.value}</p>
-        </div>
-      </Card>
     </div>
   );
 };
