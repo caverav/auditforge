@@ -107,7 +107,7 @@ ClientSchema.statics.update = (clientId, client, company) => {
 // Delete client
 ClientSchema.statics.delete = clientId => {
   return new Promise((resolve, reject) => {
-    var query = Client.findOneAndRemove({ _id: clientId });
+    var query = Client.findOneAndDelete({ _id: clientId });
     query
       .exec()
       .then(rows => {
