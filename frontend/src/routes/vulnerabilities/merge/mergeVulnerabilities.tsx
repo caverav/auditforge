@@ -201,8 +201,8 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({
           </button>
         </div>
         <hr className="h-1 mx-3 mb-1 bg-gray-600 border-0 rounded" />
-        <div className="flex justify-between space-x-4 mx-3 flex-1 overflow-auto ">
-          <div className="w-1/2 overflow-auto mt-2">
+        <div className="flex justify-between space-x-4 mx-3 flex-1 overflow-hidden">
+          <div className="w-1/2 mt-2">
             <SelectDropdown
               items={languages}
               onChange={value => handlerLeftChange(value)}
@@ -210,7 +210,7 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({
               selected={selectedLanguageLeft}
               title=""
             />
-            <div className="pl-1 mt-5">
+            <div className="pl-1 mt-3 overflow-auto h-full pb-14">
               <DefaultRadioGroup
                 name="left"
                 onChange={setSelectedRadioLeft}
@@ -220,7 +220,7 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({
             </div>
           </div>
           <div className="w-0.5 h-full bg-gray-600" />
-          <div className="w-1/2 overflow-auto mt-2">
+          <div className="w-1/2 mt-2">
             <SelectDropdown
               items={languages}
               onChange={value => handlerRightChange(value)}
@@ -228,7 +228,7 @@ const MergeVulnerabilities: React.FC<MergeVulnProps> = ({
               selected={selectedLanguageRight}
               title=""
             />
-            <div className="pl-1 mt-5">
+            <div className="pl-1 mt-3 overflow-auto h-full pb-14">
               <DefaultRadioGroup
                 name="right"
                 onChange={setSelectedRadioRight}
