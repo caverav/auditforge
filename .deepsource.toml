@@ -3,6 +3,7 @@ xclude_patterns = [
   "dist/**",  
   "**/node_modules/",  
   "js/**/*.min.js"  
+  "./backend"
 ]
 
 [[analyzers]]
@@ -15,7 +16,6 @@ plugins = ["react"]
 skip_doc_coverage = ["class-expression", "method-definition"]
 dependency_file_paths = [
   "./frontend/",
-  "./backend/",
   "./"
 ]
 dialect = "typescript"
