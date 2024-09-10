@@ -133,7 +133,7 @@ export const AuditRoot = () => {
         <Outlet />
       </div>
       <div className="m-2">
-        <DropdownButton items={fileTypes} placeholder="Export as" />
+        <DropdownButton items={fileTypes} placeholder={t('export')} />
       </div>
     </div>
   );

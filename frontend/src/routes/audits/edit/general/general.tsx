@@ -366,9 +366,9 @@ export const General = () => {
 
     try {
       await updateAudit(auditId, updatedAudit);
-      toast.success(t('Audit updated successfully'));
+      toast.success(t('auditUpdatedOk'));
     } catch (error) {
-      toast.error(t('Error updating audit'));
+      toast.error(t('failedUpdateAudit'));
     }
   };
 
@@ -411,7 +411,7 @@ export const General = () => {
               label={t('name')}
               name="name"
               onChange={setNameAudit}
-              placeholder="Search"
+              placeholder={t('search')}
               type="text"
               value={nameAudit}
             />

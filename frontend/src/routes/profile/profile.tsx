@@ -68,9 +68,9 @@ export const Profile = () => {
     })
       .then(res => {
         if (res.ok) {
-          toast.success('User updated successfully');
+          toast.success(t('msg.profileUpdateOk'));
         } else {
-          toast.error('Error updating user');
+          toast.error(t('failedUpdateProfile'));
         }
       })
       .catch(console.error);

@@ -1,3 +1,5 @@
+import { t } from 'i18next';
+
 import useAuth from '../hooks/useAuth';
 
 const getValue = (id: string): string => {
@@ -26,31 +28,31 @@ export const Register = () => {
           <input
             className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded mt-4"
             id="username"
-            placeholder="username"
+            placeholder={t('username')}
             type="text"
           />
           <input
             className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded"
             id="firstname"
-            placeholder="First Name"
+            placeholder={t('firstname')}
             type="text"
           />
           <input
             className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded mt-4"
             id="lastname"
-            placeholder="Last Name"
+            placeholder={t('lastname')}
             type="text"
           />
           <input
             className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded mt-4"
             id="password"
-            placeholder="Password"
+            placeholder={t('password')}
             type="password"
           />
           <input
             className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded mt-4"
             id="password"
-            placeholder="Confirm Password"
+            placeholder={t('confirmPassword')}
             type="password"
           />
 
