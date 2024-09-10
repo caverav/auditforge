@@ -3,7 +3,7 @@ xclude_patterns = [
   "dist/**",  
   "**/node_modules/",  
   "js/**/*.min.js",
-  "./backend"
+  "backend/**/*"
 ]
 
 [[analyzers]]
@@ -22,4 +22,4 @@ dialect = "typescript"
 
 [[transformers]]  
 name = "prettier"  
-enabled = true
+enabled = false
