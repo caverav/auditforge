@@ -64,9 +64,9 @@ export const useVulnState = ({
 
   const [selectedType, setSelectedType] = useState<ListItem | null>(
     currentVuln.details[0].vulnType
-      ? (types.find(
+      ? types.find(
           typeIter => typeIter.value === currentVuln.details[0].vulnType,
-        ) ?? null)
+        ) ?? null
       : null,
   );
 
