@@ -2,7 +2,7 @@ version = 1
 xclude_patterns = [  
   "dist/**",  
   "**/node_modules/",  
-  "js/**/*.min.js"  
+  "js/**/*.min.js",
   "./backend"
 ]
 
