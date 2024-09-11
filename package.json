@@ -8,8 +8,8 @@
   },
   "lint-staged": {
     "frontend/**/*.{ts,tsx,html}": [
-      "prettier --config frontend/.prettierrc --write",
-      "eslint -c frontend/.eslintrc.cjs"
+      "npx prettier --config frontend/.prettierrc --write",
+      "npx eslint -c frontend/.eslintrc.cjs"
     ]
   },
   "dependencies": {
