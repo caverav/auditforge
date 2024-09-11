@@ -132,6 +132,10 @@ export default {
     recommendationSuboptimal: 'The recommendation is suboptimal',
     auditDeletedOk: 'Audit deleted successfully',
     auditDeleteNotice: 'Audit will be permanently deleted',
+    clientEmailError: 'Client email already exists',
+    collaboratorUsernameError: 'Collaborator username already exists',
+    companyNameError: 'Company name already exists',
+    templateNameError: 'Template name already exists',
   },
   err: {
     notDefinedLanguage: 'Not defined for this language',
