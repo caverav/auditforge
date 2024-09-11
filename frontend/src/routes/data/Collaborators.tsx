@@ -214,17 +214,54 @@ export const Collaborators: React.FC = () => {
     setAddModalPasswordRequiredAlert(false);
   };
 
+  const validatePassword = (password: string): boolean => {
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    return passwordRegex.test(password);
+  };
+
   const handleSubmitAddCollab = async () => {
+    const updatedCollaborator: NewCollaborator = {
+      ...newCollaborator!,
+      role: selectedRole?.value!,
+    };
+
+    let isValid = true;
+
+    if (!updatedCollaborator.username) {
+      setAddModalUsernameRequiredAlert(true);
+      isValid = false;
+    }
+
+    if (!updatedCollaborator.firstname) {
+      setAddModalFirstnameRequiredAlert(true);
+      isValid = false;
+    }
+
+    if (!updatedCollaborator.lastname) {
+      setAddModalLastnameRequiredAlert(true);
+      isValid = false;
+    }
+
+    if (!updatedCollaborator.password) {
+      setAddModalPasswordRequiredAlert(true);
+      isValid = false;
+    }
+
+    if (!isValid) {
+      toast.error(t('msg.fieldRequired'));
+      return;
+    }
+
+    if (!validatePassword(updatedCollaborator.password)) {
+      toast.error(t('msg.passwordComplexity'));
+      return;
+    }
     try {
-      await createCollaborator(newCollaborator!);
+      await createCollaborator(updatedCollaborator!);
       toast.success(t('msg.collaboratorCreatedOk'));
       setIsOpenAddCollabModal(!isOpenAddCollabModal);
     } catch (error) {
-      setAddModalUsernameRequiredAlert(true);
-      setAddModalFirstnameRequiredAlert(true);
-      setAddModalLastnameRequiredAlert(true);
-      setAddModalRoleRequiredAlert(true);
-      setAddModalPasswordRequiredAlert(true);
+      toast.error(t('msg.collaboratorUsernameError'));
       setError('Error creating collaborator');
       console.error('Error:', error);
     }
@@ -238,6 +275,17 @@ export const Collaborators: React.FC = () => {
   };
 
   const handleSubmitEditCollab = async () => {
+    if (!newCollaborator) {
+      return;
+    }
+
+    if (
+      newCollaborator.password &&
+      !validatePassword(newCollaborator.password)
+    ) {
+      toast.error(t('msg.passwordComplexity'));
+      return;
+    }
     try {
       await updateCollaborator(newCollaborator!);
       toast.success(t('msg.collaboratorUpdatedOk'));

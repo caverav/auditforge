@@ -199,7 +199,15 @@ export const Clients: React.FC = () => {
   );
 
   const handleCancelAddClient = () => {
-    setNewClient(null);
+    setNewClient({
+      company: null,
+      firstname: '',
+      lastname: '',
+      email: '',
+      title: '',
+      phone: '',
+      cell: '',
+    });
     setIsOpenAddClientModal(!isOpenAddClientModal);
     setAddModalFirstnameRequiredAlert(false);
     setAddModalLastnameRequiredAlert(false);
@@ -219,6 +227,27 @@ export const Clients: React.FC = () => {
       return;
     }
 
+    let isValid = true;
+
+    if (!newClient?.firstname) {
+      setAddModalFirstnameRequiredAlert(true);
+      isValid = false;
+    }
+
+    if (!newClient?.lastname) {
+      setAddModalLastnameRequiredAlert(true);
+      isValid = false;
+    }
+
+    if (!newClient?.email) {
+      setAddModalEmailRequiredAlert(true);
+      isValid = false;
+    }
+
+    if (!isValid) {
+      toast.error(t('msg.fieldRequired'));
+      return;
+    }
     try {
       const matchingCompany = apiCompanies.find(
         company => company._id === selectedCompany._id,
@@ -238,17 +267,25 @@ export const Clients: React.FC = () => {
           logo: matchingCompany.logo,
         },
       };
+
       await createClient(clientToCreate);
       toast.success(t('msg.clientCreatedOk'));
       setIsOpenAddClientModal(!isOpenAddClientModal);
     } catch (error) {
-      setAddModalFirstnameRequiredAlert(true);
-      setAddModalLastnameRequiredAlert(true);
-      setAddModalEmailRequiredAlert(true);
+      toast.error(t('msg.clientEmailError'));
       setError('Error creating client');
       console.error('Error:', error);
     }
-    setNewClient(null);
+
+    setNewClient({
+      company: null,
+      firstname: '',
+      lastname: '',
+      email: '',
+      title: '',
+      phone: '',
+      cell: '',
+    });
     void fetchClients();
   };
 

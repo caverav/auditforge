@@ -135,14 +135,28 @@ export const Templates: React.FC = () => {
   };
 
   const handleSubmitAddTemplate = async () => {
+    let isValid = true;
+
+    if (!newTemplate?.name) {
+      setAddModalFirstnameRequiredAlert(true);
+      isValid = false;
+    }
+
+    if (!newTemplate?.file) {
+      setAddModalFileRequiredAlert(true);
+      isValid = false;
+    }
+
+    if (!isValid) {
+      toast.error(t('msg.fieldRequired'));
+      return;
+    }
     try {
       await createTemplate(newTemplate!);
       toast.success(t('msg.templateCreatedOk'));
       setIsOpenAddTemplateModal(!isOpenAddTemplateModal);
     } catch (error) {
-      setAddModalFirstnameRequiredAlert(true);
-      setAddModalFileRequiredAlert(true);
-
+      toast.error(t('msg.templateNameError'));
       setError('Error creating template');
       console.error('Error:', error);
     }

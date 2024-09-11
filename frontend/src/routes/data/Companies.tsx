@@ -139,15 +139,27 @@ export const Companies: React.FC = () => {
   };
 
   const handleSubmitAddCompanies = async () => {
+    let isValid = true;
+
+    if (!newCompany?.name) {
+      setAddModalNameRequiredAlert(true);
+      isValid = false;
+    }
+
+    if (!isValid) {
+      toast.error(t('msg.fieldRequired'));
+      return;
+    }
     try {
       await createCompany(newCompany!);
       toast.success(t('msg.companyCreatedOk'));
       setIsOpenAddCompaniesModal(!isOpenAddCompaniesModal);
     } catch (error) {
-      setAddModalNameRequiredAlert(true);
+      toast.error(t('msg.companyNameError'));
       setError('Error creating company');
       console.error('Error:', error);
     }
+
     setNewCompany(null);
     fetchCompanies();
   };
