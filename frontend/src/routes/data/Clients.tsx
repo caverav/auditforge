@@ -271,12 +271,25 @@ export const Clients: React.FC = () => {
       await createClient(clientToCreate);
       toast.success(t('msg.clientCreatedOk'));
       setIsOpenAddClientModal(!isOpenAddClientModal);
+
+      setNewClient({
+        company: null,
+        firstname: '',
+        lastname: '',
+        email: '',
+        title: '',
+        phone: '',
+        cell: '',
+      });
+      void fetchClients();
     } catch (error) {
       toast.error(t('msg.clientEmailError'));
       setError('Error creating client');
       console.error('Error:', error);
     }
+  };
 
+  const handleCancelEditClient = () => {
     setNewClient({
       company: null,
       firstname: '',
@@ -286,11 +299,6 @@ export const Clients: React.FC = () => {
       phone: '',
       cell: '',
     });
-    void fetchClients();
-  };
-
-  const handleCancelEditClient = () => {
-    setNewClient(null);
     setIsOpenEditClientModal(!isOpenEditClientModal);
   };
 
@@ -329,13 +337,23 @@ export const Clients: React.FC = () => {
 
       await updateClient(clientToUpdate);
       toast.success(t('msg.clientUpdatedOk'));
+      setIsOpenEditClientModal(!isOpenEditClientModal);
+
+      setNewClient({
+        company: null,
+        firstname: '',
+        lastname: '',
+        email: '',
+        title: '',
+        phone: '',
+        cell: '',
+      });
+      void fetchClients();
     } catch (error) {
+      toast.error(t('msg.clientEmailError'));
       setError('Error updating client');
       console.error('Error:', error);
     }
-    setNewClient(null);
-    setIsOpenEditClientModal(!isOpenEditClientModal);
-    void fetchClients();
   };
 
   const handleCancelDeleteClient = () => {

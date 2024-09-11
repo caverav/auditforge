@@ -155,14 +155,14 @@ export const Templates: React.FC = () => {
       await createTemplate(newTemplate!);
       toast.success(t('msg.templateCreatedOk'));
       setIsOpenAddTemplateModal(!isOpenAddTemplateModal);
+
+      setNewTemplate(null);
+      fetchTemplates();
     } catch (error) {
       toast.error(t('msg.templateNameError'));
       setError('Error creating template');
       console.error('Error:', error);
     }
-
-    setNewTemplate(null);
-    fetchTemplates();
   };
 
   const handleCancelEditTemplate = () => {
@@ -174,13 +174,15 @@ export const Templates: React.FC = () => {
     try {
       await updateTemplate(newTemplate!);
       toast.success(t('msg.templateUpdatedOk'));
+      setIsOpenEditTemplateModal(!isOpenEditTemplateModal);
+
+      setNewTemplate(null);
+      fetchTemplates();
     } catch (error) {
+      toast.error(t('msg.templateNameError'));
       setError('Error updating template');
       console.error('Error:', error);
     }
-    setNewTemplate(null);
-    setIsOpenEditTemplateModal(!isOpenEditTemplateModal);
-    fetchTemplates();
   };
 
   const handleCancelDeleteTemplate = () => {

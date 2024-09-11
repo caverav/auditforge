@@ -260,13 +260,14 @@ export const Collaborators: React.FC = () => {
       await createCollaborator(updatedCollaborator!);
       toast.success(t('msg.collaboratorCreatedOk'));
       setIsOpenAddCollabModal(!isOpenAddCollabModal);
+
+      setNewCollaborator(null);
+      fetchCollaborators();
     } catch (error) {
       toast.error(t('msg.collaboratorUsernameError'));
       setError('Error creating collaborator');
       console.error('Error:', error);
     }
-    setNewCollaborator(null);
-    fetchCollaborators();
   };
 
   const handleCancelEditCollab = () => {
@@ -289,13 +290,15 @@ export const Collaborators: React.FC = () => {
     try {
       await updateCollaborator(newCollaborator!);
       toast.success(t('msg.collaboratorUpdatedOk'));
+      setIsOpenEditCollabModal(!isOpenEditCollabModal);
+
+      setNewCollaborator(null);
+      fetchCollaborators();
     } catch (error) {
+      toast.error(t('msg.collaboratorUsernameError'));
       setError('Error updating collaborator');
       console.error('Error:', error);
     }
-    setNewCollaborator(null);
-    setIsOpenEditCollabModal(!isOpenEditCollabModal);
-    fetchCollaborators();
   };
 
   const handleInputChange = (name: string, value: string) => {
