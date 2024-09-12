@@ -14,7 +14,7 @@ i18n
   .use(LanguageDetector)
   .use(initReactI18next)
   .init({
-    lng: 'en-US',
+    lng: localStorage.getItem('system_language') ?? 'en-US',
     resources: translations,
     fallbackLng: 'en-US',
     interpolation: {
