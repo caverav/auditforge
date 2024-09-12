@@ -215,7 +215,7 @@ export const Collaborators: React.FC = () => {
   };
 
   const validatePassword = (password: string): boolean => {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+    const passwordRegex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/;
     return passwordRegex.test(password);
   };
 
