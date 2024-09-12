@@ -310,7 +310,7 @@ export const Vulnerabilities = () => {
       <div className="fixed z-20">
         <Modal
           cancelText={t('btn.stay')}
-          disablehr={true}
+          disablehr
           isOpen={openModalDeleteVuln}
           onCancel={() => setOpenModalDeleteVuln(false)}
           onSubmit={confirmDeleteVulnerability}
