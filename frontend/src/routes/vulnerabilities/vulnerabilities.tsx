@@ -307,21 +307,19 @@ export const Vulnerabilities = () => {
 
   return (
     <div className="max-w-screen-2xl mx-auto my-6">
-      {openModalDeleteVuln ? (
-        <div className="fixed z-10">
-          <Modal
-            cancelText={t('btn.stay')}
-            disablehr={true}
-            isOpen={openModalDeleteVuln}
-            onCancel={() => setOpenModalDeleteVuln(false)}
-            onSubmit={confirmDeleteVulnerability}
-            submitText={t('btn.confirm')}
-            title={t('msg.confirmSuppression')}
-          >
-            <span className="ml-3">{t('msg.vulnerabilityWillBeDeleted')}</span>
-          </Modal>
-        </div>
-      ) : null}
+      <div className="fixed z-20">
+        <Modal
+          cancelText={t('btn.stay')}
+          disablehr
+          isOpen={openModalDeleteVuln}
+          onCancel={() => setOpenModalDeleteVuln(false)}
+          onSubmit={confirmDeleteVulnerability}
+          submitText={t('btn.confirm')}
+          title={t('msg.confirmSuppression')}
+        >
+          <span className="ml-3">{t('msg.vulnerabilityWillBeDeleted')}</span>
+        </Modal>
+      </div>
       <Toaster />
       <Card title={t('nav.vulnerabilities')}>
         <>
