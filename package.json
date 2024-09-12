@@ -7,17 +7,26 @@
     "prepare": "husky"
   },
   "lint-staged": {
-    "frontend/**/*.ts": [
-      "prettier --write",
-      "eslint"
-    ],
-    "frontend/**/*.tsx": [
-      "prettier --write",
-      "eslint"
-    ],
-    "frontend/**/*.html": [
-      "eslint",
-      "prettier --write"
+    "frontend/**/*.{ts,tsx,html}": [
+      "npx prettier --config frontend/.prettierrc --write",
+      "npx eslint -c frontend/.eslintrc.cjs"
     ]
+  },
+  "dependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-airbnb-typescript": "^18.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsx-a11y": "^6.9.0",
+    "eslint-plugin-no-secrets": "^1.0.2",
+    "eslint-plugin-prefer-arrow-functions": "^3.4.1",
+    "eslint-plugin-prettier": "^5.2.1",
+    "eslint-plugin-react": "^7.35.0",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-react-refresh": "^0.4.11",
+    "eslint-plugin-simple-import-sort": "^12.1.1",
+    "eslint-plugin-sonarjs": "^0.25.1",
+    "prettier": "^3.3.3"
   }
 }

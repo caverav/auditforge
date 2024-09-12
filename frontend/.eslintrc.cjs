@@ -97,7 +97,7 @@ module.exports = {
     'object-shorthand': 'warn',
     // Disable console.log to encourage more explicit logging
     'no-console': [
-      'warn',
+      'error',
       {
         allow: [
           'warn',
