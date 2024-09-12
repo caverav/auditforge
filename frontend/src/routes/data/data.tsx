@@ -15,11 +15,7 @@ export const Data = () => {
   ];
   return (
     <div className="flex overflow-hidden">
-      <Sidebar
-        defaultItem={sidebarList[0]}
-        items={sidebarList}
-        title={t('handleCustomData')}
-      />
+      <Sidebar items={sidebarList} title={t('handleCustomData')} />
       <div className="flex-1 overflow-auto p-8">
         <Outlet />
       </div>
