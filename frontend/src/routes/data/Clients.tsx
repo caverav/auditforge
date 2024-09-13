@@ -466,7 +466,7 @@ export const Clients: React.FC = () => {
             placeholder={t('lastname')}
             type="text"
             value={newClient?.lastname ?? ''}
-            requiredField={true}
+            requiredField
             requiredAlert={addModalLastnameRequiredAlert}
           />
           <SimpleInput
