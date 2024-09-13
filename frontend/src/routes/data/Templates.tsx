@@ -35,8 +35,8 @@ export const Templates: React.FC = () => {
   });
 
   const [templates, setTemplates] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [_loading, setLoading] = useState<boolean>(true);
+  const [_error, setError] = useState<string | null>(null);
 
   const [selectedTemplate, setSelectedTemplate] = useState<TableData | null>(
     null,
@@ -80,27 +80,9 @@ export const Templates: React.FC = () => {
     setNewTemplate(prevState => ({
       ...prevState!,
       _id: template._id,
+      name: template.name,
     }));
     setIsOpenEditTemplateModal(true);
-  };
-
-  const handleDownloadTemplateButton = async (template: TableData) => {
-    try {
-      const blob = await downloadTemplate(template._id);
-
-      const url = window.URL.createObjectURL(blob);
-
-      const link = document.createElement('a');
-      link.href = url;
-
-      link.download = `${template.name}.${template.ext}`;
-      document.body.appendChild(link);
-      link.click();
-      window.URL.revokeObjectURL(url);
-      link.remove();
-    } catch (error) {
-      setError('Error downloading template');
-    }
   };
 
   const handleDeleteTemplateButton = async (template: TableData) => {
@@ -115,7 +97,7 @@ export const Templates: React.FC = () => {
     },
     {
       label: 'Download',
-      onClick: (item: TableData) => handleDownloadTemplateButton(item),
+      onClick: (item: TableData) => downloadTemplate(item._id, window),
     },
     {
       label: 'Delete',
@@ -273,7 +255,7 @@ export const Templates: React.FC = () => {
             label={t('name')}
             name="name"
             onChange={value => handleInputChange('name', value)}
-            placeholder={t('name')}
+            placeholder={newTemplate?.name || t('name')}
             type="text"
             value={newTemplate?.name || ''}
           />

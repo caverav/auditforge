@@ -7,14 +7,8 @@ yarn-debug.log*
 yarn-error.log*
 mongo-data*
 .quasar
-report-templates
-custom-generator.js
-
-# Configuration files
-config.json
-report.json
-roles.json
-app-settings.json
+.venv
+package-lock.json
 
 # Editor directories and files
 .idea
@@ -23,6 +17,12 @@ app-settings.json
 *.ntvs*
 *.njsproj
 *.sln
+.dccache
+.sourcery.yaml
 
 # Version managers
 .tool-versions
+
+
+# modelo
+cwe-api/modelo-cwe

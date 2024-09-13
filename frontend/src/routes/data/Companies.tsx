@@ -34,8 +34,8 @@ export const Companies: React.FC = () => {
   });
 
   const [companies, setCompanies] = useState<any[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const [_loading, setLoading] = useState<boolean>(true);
+  const [_error, setError] = useState<string | null>(null);
 
   const [selectedCompany, setSelectedCompany] = useState<TableData | null>(
     null,

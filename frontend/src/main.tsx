@@ -12,7 +12,16 @@ import {
 import AuthProvider from './components/AuthProvider';
 import { ErrorPage } from './error-page';
 import { checktoken } from './hooks/useAuth';
-import { Audits, Data, Login, Root, Settings, Vulnerabilities } from './routes';
+import {
+  Audits,
+  Data,
+  Login,
+  Profile,
+  Root,
+  Settings,
+  Vulnerabilities,
+} from './routes';
+import { Add, AuditRoot, Edit, General, Network } from './routes/audits';
 import {
   Clients,
   Collaborators,
@@ -21,6 +30,7 @@ import {
   ImportExport,
   Templates,
 } from './routes/data';
+import { Register } from './routes/register';
 
 const router = createBrowserRouter([
   {
@@ -35,6 +45,28 @@ const router = createBrowserRouter([
       {
         path: '/audits',
         element: <Audits />,
+      },
+      {
+        path: '/audits/:auditId',
+        element: <AuditRoot />,
+        children: [
+          {
+            path: 'general',
+            element: <General />,
+          },
+          {
+            path: 'network',
+            element: <Network />,
+          },
+          {
+            path: 'findings/add',
+            element: <Add />,
+          },
+          {
+            path: 'findings/:findingId',
+            element: <Edit />,
+          },
+        ],
       },
       {
         path: '/vulnerabilities',
@@ -78,11 +110,19 @@ const router = createBrowserRouter([
         path: '/settings',
         element: <Settings />,
       },
+      {
+        path: '/profile',
+        element: <Profile />,
+      },
     ],
   },
   {
     path: '/login',
     element: <Login />,
+  },
+  {
+    path: '/register',
+    element: <Register />,
   },
 ]);
 

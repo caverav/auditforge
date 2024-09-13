@@ -68,7 +68,8 @@ export const Clients: React.FC = () => {
       header: t('company'),
       accessor: 'company',
       sortable: true,
-      render: (data?: { name: string }) => data?.name ?? '-',
+      render: (data?: { name: string }) =>
+        data?.name ? <span>{data.name}</span> : <span>-</span>,
     },
   ];
 

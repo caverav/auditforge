@@ -36,21 +36,18 @@ export const useSortableTable = <T,>(data: T[], columns: Column[]) => {
   const handleSorting = (column: string, direction: 'asc' | 'desc') => {
     if (column && accesors.includes(column)) {
       const sorted = [...tableData].sort((a, b) => {
-        if (a[column as keyof T] === null) {
-          return 1;
-        }
-        if (b[column as keyof T] === null) {
-          return -1;
-        }
-        if (a[column as keyof T] === null && b[column as keyof T] === null) {
-          return 0;
-        }
+        const aValue = a[column as keyof T];
+        const bValue = b[column as keyof T];
+
+        const aString =
+          aValue !== null && aValue !== undefined ? String(aValue) : '';
+        const bString =
+          bValue !== null && bValue !== undefined ? String(bValue) : '';
+
         return (
-          a[column as keyof T]
-            .toString()
-            .localeCompare(b[column as keyof T].toString(), 'en', {
-              numeric: true,
-            }) * (direction === 'asc' ? 1 : -1)
+          aString.localeCompare(bString, 'en', {
+            numeric: true,
+          }) * (direction === 'asc' ? 1 : -1)
         );
       });
 
