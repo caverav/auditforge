@@ -1,11 +1,12 @@
 import { ChevronLeft, ChevronRight, Menu } from 'lucide-react';
-import { useState } from 'react';
+import { ReactElement, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 type SidebarItem = {
   name: string;
   value: string;
   id: number;
+  icon?: ReactElement;
 };
 
 type SidebarProps = {
@@ -46,14 +47,14 @@ export const Sidebar = ({ title, items }: SidebarProps) => {
                   } transition-colors`}
                   to={`/data/${item.value}`}
                 >
-                  {isOpen ? (
-                    item.name
-                  ) : (
-                    <span className="tooltip group">
-                      {item.name.charAt(0).toUpperCase()}
-                      <span className="tooltiptext">{item.name}</span>
-                    </span>
-                  )}
+                  {isOpen
+                    ? item.name
+                    : (item.icon ?? (
+                        <span className="tooltip group">
+                          {item.name.charAt(0).toUpperCase()}
+                          <span className="tooltiptext">{item.name}</span>
+                        </span>
+                      ))}
                 </Link>
               </li>
             ))}
