@@ -258,7 +258,7 @@ export const Companies: React.FC = () => {
             placeholder={t('name')}
             type="text"
             value={newCompany?.name || ''}
-            requiredField={true}
+            requiredField
             requiredAlert={addModalNameRequiredAlert}
           />
           <SimpleInput
