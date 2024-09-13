@@ -426,7 +426,7 @@ export const Collaborators: React.FC = () => {
             placeholder={t('password')}
             type="password"
             value={newCollaborator?.password || ''}
-            requiredField={true}
+            requiredField
             requiredAlert={addModalPasswordRequiredAlert}
           />
         </>
