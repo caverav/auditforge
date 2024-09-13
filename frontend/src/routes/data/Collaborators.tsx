@@ -367,7 +367,7 @@ export const Collaborators: React.FC = () => {
             placeholder={t('username')}
             type="text"
             value={newCollaborator?.username || ''}
-            requiredField={true}
+            requiredField
             requiredAlert={addModalUsernameRequiredAlert}
           />
           <SimpleInput
