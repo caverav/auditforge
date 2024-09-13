@@ -259,7 +259,7 @@ export const Templates: React.FC = () => {
             placeholder={t('name')}
             type="text"
             value={newTemplate?.name || ''}
-            requiredField={true}
+            requiredField
             requiredAlert={addModalNameRequiredAlert}
           />
           <FileInput
