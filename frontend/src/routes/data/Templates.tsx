@@ -268,7 +268,7 @@ export const Templates: React.FC = () => {
             onFileSelect={file =>
               handleFileSelect(file.name.split('.').pop() || '', file.content)
             }
-            requiredField={true}
+            requiredField
             requiredAlert={addModalFileRequiredAlert}
             label="File"
           />
