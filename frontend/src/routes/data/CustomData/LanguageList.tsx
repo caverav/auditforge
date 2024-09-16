@@ -35,6 +35,21 @@ const LanguageList: React.FC<LanguageListProps> = ({
     { language: string; locale: string; id: string }[]
   >(data.map((row, index) => ({ ...row, id: index.toString() })));
 
+  const handleInputChange = (
+    id: string,
+    field: keyof LanguageItem,
+    value: string | boolean,
+  ) => {
+    setRows(prevRows =>
+      prevRows.map(row =>
+        row.language === id ? { ...row, [field]: value } : row,
+      ),
+    );
+  };
+
+  const handleRemoveRow = (id: string) => {
+    setRows(rows.filter(row => row.language !== id));
+  };
   /**
    * Renderiza la fila del DnD
    *
@@ -84,22 +99,6 @@ const LanguageList: React.FC<LanguageListProps> = ({
     </div>
   );
 
-  const handleInputChange = (
-    id: string,
-    field: keyof LanguageItem,
-    value: string | boolean,
-  ) => {
-    setRows(prevRows =>
-      prevRows.map(row =>
-        row.language === id ? { ...row, [field]: value } : row,
-      ),
-    );
-  };
-
-  const handleRemoveRow = (id: string) => {
-    setRows(rows.filter(row => row.language !== id));
-  };
-
   /**
    * Le "avisa" al componente padre
    * que cambió la lista.
@@ -109,9 +108,10 @@ const LanguageList: React.FC<LanguageListProps> = ({
       /**
        * Le quito el "id" y envío solamente el resto al componente padre
        */
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       onUpdateList(rows.map(({ id, ...rest }) => rest));
     }
-  }, [rows]);
+  }, [data, onUpdateList, rows]);
 
   /**
    * Se debe hacer map de las rows para agregarle ID.
