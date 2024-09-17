@@ -236,7 +236,7 @@ export const postDescriptionCWE = async (
   description: PostDescription,
 ): Promise<CWEData> => {
   try {
-    const response = await fetch(`http://localhost:8000/classify`, {
+    const response = await fetch(`${API_URL}classify`, {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
