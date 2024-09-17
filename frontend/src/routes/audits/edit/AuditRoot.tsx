@@ -76,7 +76,7 @@ export const AuditRoot = () => {
       label: 'docx',
       onClick: () =>
         window.open(
-          `https://localhost:8443/api/audits/${auditId}/generate`,
+          `${process.env.API_URL}/api/audits/${auditId}/generate`,
           '_blank',
         ),
     },
@@ -86,7 +86,7 @@ export const AuditRoot = () => {
       label: 'pdf',
       onClick: () =>
         window.open(
-          `https://localhost:8443/api/audits/${auditId}/generate/pdf`,
+          `${process.env.API_URL}/api/audits/${auditId}/generate/pdf`,
           '_blank',
         ),
     },
@@ -96,7 +96,7 @@ export const AuditRoot = () => {
       label: 'json',
       onClick: () =>
         window.open(
-          `https://localhost:8443/api/audits/${auditId}/generate/json`,
+          `${process.env.API_URL}/api/audits/${auditId}/generate/json`,
           '_blank',
         ),
     },
@@ -106,7 +106,7 @@ export const AuditRoot = () => {
       label: 'csv',
       onClick: () =>
         window.open(
-          `https://localhost:8443/api/audits/${auditId}/generate/csv`,
+          `${process.env.API_URL}/api/audits/${auditId}/generate/csv`,
           '_blank',
         ),
     },

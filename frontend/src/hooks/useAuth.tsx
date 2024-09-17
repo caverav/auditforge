@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const apiUrl = 'https://localhost:8443/api/users/token';
-const checktokenUrl = 'https://localhost:8443/api/users/checktoken';
+const tokenUrl = process.env.API_URL + '/api/users/token';
+const checktokenUrl = process.env.API_URL + '/api/users/checktoken';
 
 export const checktoken = async (): Promise<boolean> => {
   try {
@@ -36,7 +36,7 @@ const useAuth = () => {
     const data = JSON.stringify({ username, password, totp });
 
     try {
-      const response = await fetch(apiUrl, {
+      const response = await fetch(tokenUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -58,7 +58,7 @@ const useAuth = () => {
     const path = '/api/users/refreshtoken';
 
     try {
-      const response = await fetch('https://localhost:8443' + path, {
+      const response = await fetch(process.env.API_URL + path, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

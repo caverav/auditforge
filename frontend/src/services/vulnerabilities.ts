@@ -1,4 +1,4 @@
-const API_URL = 'https://localhost:4242/api/';
+const API_URL = process.env.API_URL + '/api/';
 
 const networkError = new Error('Network response was not ok');
 
