@@ -76,6 +76,8 @@ var builtInRoles = {
       'custom-fields:read',
       // Settings
       'settings:read-public',
+      // Classify
+      'classify:all',
     ],
   },
   admin: {
