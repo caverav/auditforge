@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const tokenUrl = process.env.API_URL + '/api/users/token';
-const checktokenUrl = process.env.API_URL + '/api/users/checktoken';
+const tokenUrl = `${process.env.API_URL}/api/users/token`;
+const checktokenUrl = `${process.env.API_URL}/api/users/checktoken`;
 
 export const checktoken = async (): Promise<boolean> => {
   try {
