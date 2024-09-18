@@ -1,17 +1,7 @@
 module.exports = function (app) {
-  var Response = require('../lib/httpResponse.js');
-  var acl = require('../lib/auth').acl;
-  /*
-  // Create or Update vulnerability from finding for validation
-        VulnerabilityUpdate.create(req.decodedToken.username, vuln)
-        .then(msg => {
-          if (msg === 'Finding created as new Vulnerability')
-            Response.Created(res, msg);
-          else Response.Ok(res, msg);
-        })
-        .catch(err => Response.Internal(res, err));
-    },
-  ); */
+  let Response = require('../lib/httpResponse.js');
+  let acl = require('../lib/auth').acl;
+  let config = require('../config/config-cwe.json')['cwe-container'];
 
   // Get CWE classification from description
   app.post(
@@ -28,7 +18,7 @@ module.exports = function (app) {
 
       try {
         const response = await fetch(
-          `http://auditforge-cwe-api:8000/classify`,
+          `http://${config.host}:${config.port}/classify`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
