@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const tokenUrl = `${process.env.API_URL}/api/users/token`;
-const checktokenUrl = `${process.env.API_URL}/api/users/checktoken`;
+const tokenUrl = `${import.meta.env.VITE_API_URL}/api/users/token`;
+const checktokenUrl = `${import.meta.env.VITE_API_URL}/api/users/checktoken`;
 
 export const checktoken = async (): Promise<boolean> => {
   try {
@@ -58,7 +58,7 @@ const useAuth = () => {
     const path = '/api/users/refreshtoken';
 
     try {
-      const response = await fetch(process.env.API_URL + path, {
+      const response = await fetch(import.meta.env.VITE_API_URL + path, {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
