@@ -29,7 +29,6 @@ export const Languages: React.FC = () => {
     try {
       const data = await getLanguages();
       setLanguages(data.datas);
-      console.log(data.datas);
       setLoading(false);
     } catch (err) {
       setError('Error fetching company');
@@ -38,7 +37,7 @@ export const Languages: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchLanguages();
+    void fetchLanguages();
   }, []);
 
   const handleAddLanguage = async () => {
@@ -54,7 +53,7 @@ export const Languages: React.FC = () => {
     toast.success(t('msg.languageCreatedOk'));
     setNewLanguage('');
     setNewLocale('');
-    fetchLanguages();
+    void fetchLanguages();
   };
 
   /**
@@ -80,7 +79,7 @@ export const Languages: React.FC = () => {
       return;
     }
     setIsEditing(false);
-    fetchLanguages();
+    void fetchLanguages();
   };
 
   return (
@@ -109,24 +108,22 @@ export const Languages: React.FC = () => {
         </div>
       </div>
       <EditCard
-        editTitle="edit"
+        editTitle={t('tooltip.edit')}
         isEditing={isEditing}
         onClickCancel={() => setIsEditing(false)}
         onClickEdit={() => setIsEditing(true)}
         onClickSave={onClickSave}
         title={t('listOfLanguages')}
       >
-        <>
-          {loading ? (
-            t('loading')
-          ) : (
-            <LanguageList
-              data={languages}
-              isDisabled={!isEditing}
-              onUpdateList={handleUpdateLanguageList}
-            />
-          )}
-        </>
+        {loading ? (
+          <p>{t('loading')}</p>
+        ) : (
+          <LanguageList
+            data={languages}
+            isDisabled={!isEditing}
+            onUpdateList={handleUpdateLanguageList}
+          />
+        )}
       </EditCard>
     </div>
   );
