@@ -1,7 +1,10 @@
 # AuditForge
+<!-- badges licence and build status (github actions) -->
+![License](https://img.shields.io/github/license/caverav/auditforge)
+![Build Status](https://github.com/caverav/auditforge/actions/workflows/frontend.yml/badge.svg)
 
-AuditForge is a pentest reporting application making it simple and easy to write your findings and generate a customizable Docx report.  
-The main goal is to have more time to **Pwn** and less time to **Doc** by mutualizing data like vulnerabilities between users.
+AuditForge (PwnDoc fork) is a pentest reporting application making it simple and easy to write your findings and generate a customizable Docx report.  
+The main goal is to have more time to search vulnerabilities and less time to write documentation by mutualizing data like vulnerabilities between users.
 
 # Documentation
 
@@ -14,6 +17,8 @@ The main goal is to have more time to **Pwn** and less time to **Doc** by mutual
 # Features
 
 - Multiple Language support
+- CWE recommendations powered by AI
+- Dashboard generation
 - Multiple Data support
 - Great Customization
   - Manage reusable Audit and Vulnerability Data
@@ -21,5 +26,5 @@ The main goal is to have more time to **Pwn** and less time to **Doc** by mutual
   - Add custom fields to Vulnerabilities
 - Vulnerabilities Management
 - Multi-User reporting
-- Docx Report Generation
+- Docx and PDF Report Generation
 - Docx Template customization
