@@ -57,7 +57,11 @@ const LanguageList: React.FC<LanguageListProps> = ({
    */
   const renderRow = (row: LanguageItem) => (
     <div
-      className={`grid grid-cols-1 md:grid-cols-${isDisabled ? '2' : '4'} place-items-center`}
+      className={
+        isDisabled
+          ? 'grid grid-cols-1 md:grid-cols-2 place-items-center'
+          : 'grid grid-cols-1 md:grid-cols-4 place-items-center'
+      }
     >
       {!isDisabled ? (
         <div>
