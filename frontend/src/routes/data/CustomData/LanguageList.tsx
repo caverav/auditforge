@@ -84,7 +84,7 @@ const LanguageList: React.FC<LanguageListProps> = ({
           disabled={isDisabled}
           id="locale"
           name="locale"
-          onChange={e => handleInputChange(row.locale, 'locale', e)}
+          onChange={e => handleInputChange(row.language, 'locale', e)}
           placeholder="locale"
           type="text"
           value={row.locale}
