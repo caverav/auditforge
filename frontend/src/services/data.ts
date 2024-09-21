@@ -71,7 +71,7 @@ type NewTemplate = {
 
 type NewLanguage = { language: string; locale: string };
 
-type NewAuditType = {
+export type NewAuditType = {
   name: string;
   hidden: string[];
   sections: string[]; // temporal
@@ -79,7 +79,7 @@ type NewAuditType = {
   templates: { template: string; locale: string }[];
 };
 
-type AuditType = {
+export type AuditType = {
   _id: string;
   name: string;
   hidden: string[];
@@ -520,6 +520,25 @@ export const getCustomSections = async (): Promise<{
  * Custom data: Audit types
  */
 
+export const getAuditTypes = async (): Promise<{
+  status: string;
+  datas: AuditType[];
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/audit-types`, {
+      credentials: 'include',
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
 export const createAuditType = async (
   auditType: NewAuditType,
 ): Promise<{
@@ -543,6 +562,7 @@ export const createAuditType = async (
     throw error;
   }
 };
+
 export const deleteTemplate = async (
   templateId: string,
 ): Promise<{ status: string; datas: string }> => {
@@ -565,5 +585,5 @@ export const deleteTemplate = async (
 };
 
 export const downloadTemplate = (templateId: string, window: Window): void => {
-    window.open(`${API_URL}templates/download/${templateId}`, '_blank')
+  window.open(`${API_URL}templates/download/${templateId}`, '_blank');
 };

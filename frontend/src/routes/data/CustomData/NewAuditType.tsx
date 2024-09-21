@@ -1,6 +1,9 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+// eslint-disable-next-line import/extensions
+import MultiSelectDropdown from '@/components/dropdown/MultiSelectDropdown';
+
 import CheckboxButton from '../../../components/button/CheckboxButton';
 import DefaultRadioGroup from '../../../components/button/DefaultRadioGroup';
 import PrimaryButton from '../../../components/button/PrimaryButton';
@@ -29,7 +32,9 @@ export const NewAuditTypeForm: React.FC = () => {
   const { t } = useTranslation();
 
   const [templateData, setTemplateData] = useState<Template[]>([]);
-  const [customSectionsData, setCustomSectionsData] = useState<any[]>([]);
+  const [customSectionsData, setCustomSectionsData] = useState<
+    { field: string; name: string; icon: string }[]
+  >([]);
   const [languageData, setLanguageData] = useState<Language[]>([]);
 
   const [loadingTemplates, setLoadingTemplates] = useState(false);
@@ -48,12 +53,11 @@ export const NewAuditTypeForm: React.FC = () => {
         setLoadingTemplates(false);
       } catch (err) {
         setError('Error fetching templates');
-        console.log(error);
         setLoadingTemplates(false);
       }
     };
 
-    fetchTemplates();
+    void fetchTemplates();
   }, []);
 
   useEffect(() => {
@@ -66,12 +70,11 @@ export const NewAuditTypeForm: React.FC = () => {
         setLoadingSections(false);
       } catch (err) {
         setError('Error fetching sections');
-        console.log(error);
         setLoadingSections(false);
       }
     };
 
-    fetchSections();
+    void fetchSections();
   }, []);
 
   useEffect(() => {
@@ -84,12 +87,11 @@ export const NewAuditTypeForm: React.FC = () => {
         setLoadingLanguages(false);
       } catch (err) {
         setError('Error fetching languages');
-        console.log(error);
         setLoadingLanguages(false);
       }
     };
 
-    fetchLanguages();
+    void fetchLanguages();
   }, []);
 
   const [newAuditType, setNewAuditType] = useState<NewAuditType>({
@@ -100,9 +102,9 @@ export const NewAuditTypeForm: React.FC = () => {
     templates: [],
   });
 
-  const handleInputChange = (name: string, value: string | {}) => {
+  const handleInputChange = (name: string, value: string | object) => {
     setNewAuditType(prevState => ({
-      ...prevState!,
+      ...prevState,
       [name]: value,
     }));
   };
@@ -127,7 +129,7 @@ export const NewAuditTypeForm: React.FC = () => {
     {
       locale: string;
       id: number;
-      label: string;
+      label?: string;
       value: string;
     }[]
   >([]);
@@ -152,7 +154,7 @@ export const NewAuditTypeForm: React.FC = () => {
             ? {
                 ...template,
                 value: item.value,
-                label: item.label!,
+                label: item.label,
                 locale,
               }
             : template,
@@ -161,7 +163,7 @@ export const NewAuditTypeForm: React.FC = () => {
         const newTemplate = {
           locale,
           id: item.id,
-          label: item.label!,
+          label: item.label,
           value: item.value,
         };
         return [...prevTemplates, newTemplate];
@@ -222,6 +224,45 @@ export const NewAuditTypeForm: React.FC = () => {
     handleInputChange('hidden', newHidden);
   }, [builtInSec]);
 
+  /**
+   * Custom Sections
+   */
+
+  const [customSections, setCustomSections] = useState<
+    {
+      id: number;
+      value: string;
+      label?: string;
+    }[]
+  >([]);
+
+  const [selectedCustomSections, setSelectedCustomSections] = useState<
+    {
+      id: number;
+      value: string;
+      label?: string;
+    }[]
+  >([]);
+
+  useEffect(
+    () =>
+      setCustomSections(
+        customSectionsData.map((sect, index) => ({
+          id: index,
+          value: sect.field,
+          label: sect.name,
+        })),
+      ),
+    [customSectionsData],
+  );
+
+  useEffect(() => {
+    handleInputChange(
+      'sections',
+      selectedCustomSections.map(section => section.value),
+    );
+  }, [selectedCustomSections]);
+
   return (
     <div>
       <div className="text-lg">{t('auditPhase')}</div>
@@ -249,11 +290,18 @@ export const NewAuditTypeForm: React.FC = () => {
           key={lang.language}
           onChange={item => onChangeTemplate(item, lang.locale)}
           selected={
-            langTemplates.find(item => item.locale === lang.locale)! ?? null
+            langTemplates.find(item => item.locale === lang.locale) ?? null
           }
           title={`${lang.language} ${t('template')}`}
         />
       ))}
+      <MultiSelectDropdown
+        items={customSections}
+        onChange={setSelectedCustomSections}
+        placeholder={t('customSections')}
+        selected={selectedCustomSections}
+        title={t('customSections')}
+      />
       {newAuditType.stage === 'default' ? (
         <div>
           {t('hideBuiltInSections')}
@@ -279,6 +327,7 @@ export const NewAuditTypeForm: React.FC = () => {
           />
         </div>
       ) : null}
+
       <PrimaryButton onClick={() => handleSubmitAuditType()}>
         {t('btn.create')}
       </PrimaryButton>
