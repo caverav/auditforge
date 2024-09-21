@@ -38,7 +38,7 @@ export const Languages: React.FC = () => {
     };
 
     void fetchLanguages();
-  }, []);
+  }, [isEditing]);
 
   const handleAddLanguage = async () => {
     let resp: { datas: { language: string; locale: string }; status?: string };
