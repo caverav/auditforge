@@ -104,18 +104,21 @@ const LanguageList: React.FC<LanguageListProps> = ({
   );
 
   /**
+   * Actualiza las rows al modificar data
+   * (agregar un lang. en el componente padre)
+   */
+  useEffect(() => {
+    setRows(data.map((row, index) => ({ ...row, id: index.toString() })));
+  }, [data]);
+
+  /**
    * Le "avisa" al componente padre
    * que cambió la lista.
    */
   useEffect(() => {
-    if (rows !== data) {
-      /**
-       * Le quito el "id" y envío solamente el resto al componente padre
-       */
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      onUpdateList(rows.map(({ id, ...rest }) => rest));
-    }
-  }, [data, onUpdateList, rows]);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    onUpdateList(rows.map(({ id, ...rest }) => rest));
+  }, [onUpdateList, rows]);
 
   /**
    * Se debe hacer map de las rows para agregarle ID.

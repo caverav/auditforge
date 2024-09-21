@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
@@ -25,24 +25,29 @@ export const Languages: React.FC = () => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fetchLanguages = async () => {
-    try {
-      const data = await getLanguages();
-      setLanguages(data.datas);
-      setLoading(false);
-    } catch (err) {
-      setError('Error fetching company');
-      setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchLanguages = async () => {
+      try {
+        const data = await getLanguages();
+        setLanguages(data.datas);
+        setLoading(false);
+      } catch (err) {
+        setError('Error fetching company');
+        setLoading(false);
+      }
+    };
+
     void fetchLanguages();
   }, []);
 
   const handleAddLanguage = async () => {
+    let resp: { datas: { language: string; locale: string }; status?: string };
+
     try {
-      await createLanguage({ language: newLanguage, locale: newLocale });
+      resp = await createLanguage({
+        language: newLanguage,
+        locale: newLocale,
+      });
     } catch (error) {
       setError('Error creating language');
       toast.error(t('err.errorCreatingLang'));
@@ -53,7 +58,10 @@ export const Languages: React.FC = () => {
     toast.success(t('msg.languageCreatedOk'));
     setNewLanguage('');
     setNewLocale('');
-    void fetchLanguages();
+    setLanguages(prevLanguages => [
+      ...prevLanguages,
+      { locale: resp.datas.locale, language: resp.datas.language },
+    ]);
   };
 
   /**
@@ -64,23 +72,26 @@ export const Languages: React.FC = () => {
     { language: string; locale: string }[]
   >([]);
 
-  const handleUpdateLanguageList = (
-    data: { language: string; locale: string }[],
-  ) => {
-    setNewLanguageList(data);
-  };
+  const handleUpdateLanguageList = useCallback(
+    (data: { language: string; locale: string }[]) => {
+      setNewLanguageList(data);
+    },
+    [setNewLanguageList],
+  );
 
   const onClickSave = async () => {
     try {
       await updateLanguages(newLanguageList);
+      setIsEditing(false);
     } catch (error) {
       setError('Error updating languages');
-      console.error('Error:', error);
       return;
     }
-    setIsEditing(false);
-    void fetchLanguages();
   };
+
+  useEffect(() => {
+    error && console.error(error);
+  }, [error]);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
