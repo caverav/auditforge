@@ -47,7 +47,7 @@ export const Profile = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    fetch('/api/users/me', {
+    fetch(`${import.meta.env.VITE_API_URL}/api/users/me`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
