@@ -1,5 +1,5 @@
 import { XMarkIcon } from '@heroicons/react/24/outline';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 type ModalProps = {
   title: string;
@@ -22,6 +22,14 @@ const Modal: React.FC<ModalProps> = ({
   isOpen,
   disablehr,
 }) => {
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+  }, [isOpen]);
+
   return (
     isOpen && (
       <div className="fixed z-50 inset-0 flex items-center justify-center bg-stone-900 bg-opacity-50">

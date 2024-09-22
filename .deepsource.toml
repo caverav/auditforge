@@ -1,0 +1,25 @@
+version = 1
+xclude_patterns = [  
+  "dist/**",  
+  "**/node_modules/",  
+  "js/**/*.min.js",
+  "backend/**/*"
+]
+
+[[analyzers]]
+name = "javascript"
+enabled = true
+
+[analyzers.meta]
+environment = ["mongo"]
+plugins = ["react"]
+skip_doc_coverage = ["class-expression", "method-definition"]
+dependency_file_paths = [
+  "./frontend/",
+  "./"
+]
+dialect = "typescript"
+
+[[transformers]]  
+name = "prettier"  
+enabled = false

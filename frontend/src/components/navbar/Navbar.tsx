@@ -132,17 +132,15 @@ const Navbar = (): JSX.Element => {
               aria-current={
                 item.href === location.pathname ? 'page' : undefined
               }
-              as="a"
               className={classNames(
                 item.href === location.pathname
                   ? 'bg-gray-900 text-white'
                   : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                 'block rounded-md px-3 py-2 text-base font-medium',
               )}
-              href={item.href}
               key={item.name}
             >
-              {item.name}
+              <Link to={item.href}>{item.name}</Link>
             </DisclosureButton>
           ))}
         </div>
