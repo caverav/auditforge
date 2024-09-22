@@ -50,7 +50,7 @@ export const Add = () => {
       filterable: true,
     },
     {
-      header: t('category'),
+      header: t('type'),
       accessor: 'type',
       sortable: false,
       filterable: true,
