@@ -70,6 +70,7 @@ export const CustomData: React.FC = () => {
               className={`${selected === option.id ? 'bg-gray-700' : 'bg-gray-800'} p-2 ml-4 rounded-lg hover:bg-gray-700`}
               key={option.id}
               onClick={() => handleOptionClick(option)}
+              type="button"
             >
               {option.title}
             </button>
