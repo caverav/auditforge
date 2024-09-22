@@ -38,19 +38,19 @@ export const Add = () => {
 
   const columns: Column[] = [
     {
-      header: 'Title',
+      header: t('title'),
       accessor: 'title',
       sortable: true,
       filterable: true,
     },
     {
-      header: 'Category',
+      header: t('category'),
       accessor: 'category',
       sortable: false,
       filterable: true,
     },
     {
-      header: 'Type',
+      header: t('category'),
       accessor: 'type',
       sortable: false,
       filterable: true,
