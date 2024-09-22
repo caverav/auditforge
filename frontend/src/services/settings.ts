@@ -1,4 +1,4 @@
-const API_URL = 'https://localhost:4242/api/';
+const API_URL = `${import.meta.env.VITE_API_URL}/api/`;
 
 export const getSettings = async (): Promise<any> => {
   try {
