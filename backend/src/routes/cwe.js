@@ -1,6 +1,7 @@
 module.exports = function (app) {
   let Response = require('../lib/httpResponse.js');
   let acl = require('../lib/auth').acl;
+  const errorClassify = new Error('Error classifying vulnerability');
 
   // Get CWE classification from description
   app.post(
@@ -16,7 +17,7 @@ module.exports = function (app) {
         return;
       }
 
-      var vuln = {
+      const vuln = {
         vuln: req.body.vuln.trim(),
       };
 
@@ -29,14 +30,11 @@ module.exports = function (app) {
             body: JSON.stringify(vuln),
           },
         );
-        if (!response.ok) {
-          throw networkError;
-        }
         const data = await response.json();
-
         res.json(data);
       } catch (error) {
-        throw error;
+        console.error(error);
+        Response.Internal(res, errorClassify);
       }
     },
   );
