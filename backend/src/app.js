@@ -32,6 +32,7 @@ var utils = require('./lib/utils');
 // Get configuration
 var env = process.env.NODE_ENV || 'dev';
 var config = require('./config/config.json')[env];
+global.cweConfig = require('./config/config-cwe.json')['cwe-container'];
 global.__basedir = __dirname;
 
 // Database connection

@@ -1,7 +1,6 @@
 module.exports = function (app) {
   let Response = require('../lib/httpResponse.js');
   let acl = require('../lib/auth').acl;
-  let config = require('../config/config-cwe.json')['cwe-container'];
 
   // Get CWE classification from description
   app.post(
@@ -18,7 +17,7 @@ module.exports = function (app) {
 
       try {
         const response = await fetch(
-          `http://${config.host}:${config.port}/classify`,
+          `http://${global.cweConfig.host}:${global.cweConfig.port}/classify`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
