@@ -1,4 +1,4 @@
-import { ChevronLeft, ChevronRight, Menu } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { ReactElement, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -61,13 +61,6 @@ export const Sidebar = ({ title, items }: SidebarProps) => {
           </ul>
         </nav>
       </div>
-      <button
-        className="fixed bottom-4 left-4 lg:hidden bg-gray-900 text-white p-2 rounded-full shadow-lg hover:bg-gray-800 transition-colors"
-        onClick={toggleSidebar}
-        type="button"
-      >
-        <Menu size={24} />
-      </button>
     </div>
   );
 };
