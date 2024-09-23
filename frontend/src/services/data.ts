@@ -563,6 +563,30 @@ export const createAuditType = async (
   }
 };
 
+export const updateAuditTypes = async (
+  auditTypes: AuditType[],
+): Promise<{
+  status: string;
+  datas: string;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/audit-types`, {
+      method: 'PUT',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(auditTypes),
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
 export const deleteTemplate = async (
   templateId: string,
 ): Promise<{ status: string; datas: string }> => {
