@@ -7,13 +7,18 @@ module.exports = function (app) {
     '/api/classify',
     acl.hasPermission('classify:all'),
     async function (req, res) {
-      if (!req.body.vuln) {
+      if (
+        !req.body.vuln ||
+        typeof req.body.vuln !== 'string' ||
+        req.body.vuln.trim() === ''
+      ) {
         Response.BadParameters(res, 'Required parameters: description');
         return;
       }
 
-      var vuln = {};
-      vuln.vuln = req.body.vuln;
+      var vuln = {
+        vuln: req.body.vuln.trim(),
+      };
 
       try {
         const response = await fetch(
