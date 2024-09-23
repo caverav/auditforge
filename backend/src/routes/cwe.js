@@ -2,6 +2,7 @@ module.exports = function (app) {
   let Response = require('../lib/httpResponse.js');
   let acl = require('../lib/auth').acl;
   const errorClassify = new Error('Error classifying vulnerability');
+  const networkError = new Error('Network response was not ok');
 
   // Get CWE classification from description
   app.post(
@@ -30,6 +31,10 @@ module.exports = function (app) {
             body: JSON.stringify(vuln),
           },
         );
+        if (!response.ok) {
+          throw networkError;
+        }
+
         const data = await response.json();
         res.json(data);
       } catch (error) {
