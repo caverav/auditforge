@@ -1,5 +1,3 @@
-// Configuración para el contenedor CWE API
-// Este archivo define la dirección y el puerto para conectarse al servicio CWE API
 {
   "cwe-container": {
     "host": "auditforge-cwe-api",
