@@ -31,6 +31,19 @@ type NewCollaborator = {
   enabled?: boolean;
 };
 
+type TableData = {
+  _id?: string;
+  email: string;
+  firstname: string;
+  lastname: string;
+  password: string;
+  phone: string;
+  role: string;
+  totpenabled: boolean;
+  username: string;
+  enabled?: boolean;
+};
+
 type RoleOption = {
   id: number;
   value: string;
@@ -152,19 +165,6 @@ export const Collaborators: React.FC = () => {
     void fetchCollaborators();
     void fetchRoles();
   }, [fetchCollaborators]);
-
-  type TableData = {
-    _id?: string;
-    email: string;
-    firstname: string;
-    lastname: string;
-    password: string;
-    phone: string;
-    role: string;
-    totpenabled: boolean;
-    username: string;
-    enabled?: boolean;
-  };
 
   const keyExtractor = (item: TableData) => item._id ?? '';
 
