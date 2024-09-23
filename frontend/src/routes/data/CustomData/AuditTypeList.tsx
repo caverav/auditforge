@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
-import DraggableList from '@/components/table/DraggableTable';
-
+import { CustomAccordion } from '../../../components/card/CustomAccordion';
+import DraggableList from '../../../components/table/DraggableTable';
 import { AuditType } from '../../../services/data';
 
 type AuditTypeListProps = {
@@ -41,7 +41,11 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
     setRows(rows.filter(row => row._id !== _id));
   };
 
-  const renderRow = (row: AuditType) => <div>{row.name}</div>;
+  const renderRow = (row: AuditType) => (
+    <CustomAccordion title={row.name}>
+      <p>{row.stage}</p>
+    </CustomAccordion>
+  );
 
   /**
    * Le "avisa" al componente padre
