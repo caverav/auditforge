@@ -428,6 +428,7 @@ export default {
   custom: 'Custom',
   settings: 'Settings',
   profile: 'Profile',
+  loading: 'Loading',
   logout: 'Logout',
   login: 'Login',
   username: 'Username',

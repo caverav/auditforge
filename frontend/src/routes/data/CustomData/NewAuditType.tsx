@@ -263,74 +263,84 @@ export const NewAuditTypeForm: React.FC = () => {
     );
   }, [selectedCustomSections]);
 
+  useEffect(() => {
+    error && console.error(error);
+  }, [error]);
+
   return (
     <div>
-      <div className="text-lg">{t('auditPhase')}</div>
-      <DefaultRadioGroup
-        name="stage"
-        onChange={e => handleInputChange('stage', e)}
-        options={[
-          { id: '1', label: t('default'), value: 'default' },
-          { id: '2', label: t('retest'), value: 'retest' },
-          { id: '3', label: t('multi'), value: 'multi' },
-        ]}
-        value={newAuditType.stage}
-      />
-      <SimpleInput
-        id="name"
-        name="name"
-        onChange={e => handleInputChange('name', e)}
-        placeholder={t('name')}
-        type="text"
-        value={newAuditType.name}
-      />
-      {languageData.map(lang => (
-        <SelectDropdown
-          items={templateDropdownItems}
-          key={lang.language}
-          onChange={item => onChangeTemplate(item, lang.locale)}
-          selected={
-            langTemplates.find(item => item.locale === lang.locale) ?? null
-          }
-          title={`${lang.language} ${t('template')}`}
-        />
-      ))}
-      <MultiSelectDropdown
-        items={customSections}
-        onChange={setSelectedCustomSections}
-        placeholder={t('customSections')}
-        selected={selectedCustomSections}
-        title={t('customSections')}
-      />
-      {newAuditType.stage === 'default' ? (
-        <div>
-          {t('hideBuiltInSections')}
-          <CheckboxButton
-            checked={builtInSec.networkScan}
-            onChange={() =>
-              setBuiltInSec({
-                ...builtInSec,
-                networkScan: !builtInSec.networkScan,
-              })
-            }
-            text={t('networkScan')}
+      {loadingTemplates && loadingSections && loadingLanguages ? (
+        <p>{t('loading')}</p>
+      ) : (
+        <>
+          <div className="text-lg">{t('auditPhase')}</div>
+          <DefaultRadioGroup
+            name="stage"
+            onChange={e => handleInputChange('stage', e)}
+            options={[
+              { id: '1', label: t('default'), value: 'default' },
+              { id: '2', label: t('retest'), value: 'retest' },
+              { id: '3', label: t('multi'), value: 'multi' },
+            ]}
+            value={newAuditType.stage}
           />
-          <CheckboxButton
-            checked={builtInSec.findings}
-            onChange={() =>
-              setBuiltInSec({
-                ...builtInSec,
-                findings: !builtInSec.findings,
-              })
-            }
-            text={t('findings')}
+          <SimpleInput
+            id="name"
+            name="name"
+            onChange={e => handleInputChange('name', e)}
+            placeholder={t('name')}
+            type="text"
+            value={newAuditType.name}
           />
-        </div>
-      ) : null}
+          {languageData.map(lang => (
+            <SelectDropdown
+              items={templateDropdownItems}
+              key={lang.language}
+              onChange={item => onChangeTemplate(item, lang.locale)}
+              selected={
+                langTemplates.find(item => item.locale === lang.locale) ?? null
+              }
+              title={`${lang.language} ${t('template')}`}
+            />
+          ))}
+          <MultiSelectDropdown
+            items={customSections}
+            onChange={setSelectedCustomSections}
+            placeholder={t('customSections')}
+            selected={selectedCustomSections}
+            title={t('customSections')}
+          />
+          {newAuditType.stage === 'default' ? (
+            <div>
+              {t('hideBuiltInSections')}
+              <CheckboxButton
+                checked={builtInSec.networkScan}
+                onChange={() =>
+                  setBuiltInSec({
+                    ...builtInSec,
+                    networkScan: !builtInSec.networkScan,
+                  })
+                }
+                text={t('networkScan')}
+              />
+              <CheckboxButton
+                checked={builtInSec.findings}
+                onChange={() =>
+                  setBuiltInSec({
+                    ...builtInSec,
+                    findings: !builtInSec.findings,
+                  })
+                }
+                text={t('findings')}
+              />
+            </div>
+          ) : null}
 
-      <PrimaryButton onClick={() => handleSubmitAuditType()}>
-        {t('btn.create')}
-      </PrimaryButton>
+          <PrimaryButton onClick={() => handleSubmitAuditType()}>
+            {t('btn.create')}
+          </PrimaryButton>
+        </>
+      )}
     </div>
   );
 };
