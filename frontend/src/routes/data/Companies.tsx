@@ -150,6 +150,7 @@ export const Companies: React.FC = () => {
       toast.error(t('msg.fieldRequired'));
       return;
     }
+
     try {
       await createCompany(newCompany!);
       toast.success(t('msg.companyCreatedOk'));
@@ -257,10 +258,10 @@ export const Companies: React.FC = () => {
             name="name"
             onChange={value => handleInputChange('name', value)}
             placeholder={t('name')}
+            requiredAlert={addModalNameRequiredAlert}
+            requiredField={true}
             type="text"
             value={newCompany?.name || ''}
-            requiredField={true}
-            requiredAlert={addModalNameRequiredAlert}
           />
           <SimpleInput
             id="shortname"
@@ -294,9 +295,9 @@ export const Companies: React.FC = () => {
             name="name"
             onChange={value => handleInputChange('name', value)}
             placeholder={t('name')}
+            requiredField={true}
             type="text"
             value={newCompany?.name || ''}
-            requiredField={true}
           />
           <SimpleInput
             id="shortname"

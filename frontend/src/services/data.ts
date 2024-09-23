@@ -425,5 +425,5 @@ export const deleteTemplate = async (
 };
 
 export const downloadTemplate = (templateId: string, window: Window): void => {
-    window.open(`${API_URL}templates/download/${templateId}`, '_blank')
+  window.open(`${API_URL}templates/download/${templateId}`, '_blank');
 };

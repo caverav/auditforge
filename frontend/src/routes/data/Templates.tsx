@@ -151,6 +151,7 @@ export const Templates: React.FC = () => {
       toast.error(t('msg.fieldRequired'));
       return;
     }
+
     try {
       await createTemplate(newTemplate!);
       toast.success(t('msg.templateCreatedOk'));
@@ -257,20 +258,20 @@ export const Templates: React.FC = () => {
             name="name"
             onChange={value => handleInputChange('name', value)}
             placeholder={t('name')}
+            requiredAlert={addModalNameRequiredAlert}
+            requiredField={true}
             type="text"
             value={newTemplate?.name || ''}
-            requiredField={true}
-            requiredAlert={addModalNameRequiredAlert}
           />
           <FileInput
             id="template"
+            label="File"
             name="template"
             onFileSelect={file =>
               handleFileSelect(file.name.split('.').pop() || '', file.content)
             }
-            requiredField={true}
             requiredAlert={addModalFileRequiredAlert}
-            label="File"
+            requiredField={true}
           />
         </>
       </Modal>

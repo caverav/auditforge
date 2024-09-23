@@ -229,17 +229,17 @@ export const Clients: React.FC = () => {
 
     let isValid = true;
 
-    if (!newClient?.firstname) {
+    if (!newClient.firstname) {
       setAddModalFirstnameRequiredAlert(true);
       isValid = false;
     }
 
-    if (!newClient?.lastname) {
+    if (!newClient.lastname) {
       setAddModalLastnameRequiredAlert(true);
       isValid = false;
     }
 
-    if (!newClient?.email) {
+    if (!newClient.email) {
       setAddModalEmailRequiredAlert(true);
       isValid = false;
     }
@@ -248,6 +248,7 @@ export const Clients: React.FC = () => {
       toast.error(t('msg.fieldRequired'));
       return;
     }
+
     try {
       const matchingCompany = apiCompanies.find(
         company => company._id === selectedCompany._id,
@@ -453,10 +454,10 @@ export const Clients: React.FC = () => {
             name="firstname"
             onChange={value => handleInputChange('firstname', value)}
             placeholder={t('firstname')}
+            requiredAlert={addModalFirstnameRequiredAlert}
+            requiredField={true}
             type="text"
             value={newClient?.firstname ?? ''}
-            requiredField={true}
-            requiredAlert={addModalFirstnameRequiredAlert}
           />
           <SimpleInput
             id="lastname"
@@ -464,10 +465,10 @@ export const Clients: React.FC = () => {
             name="lastname"
             onChange={value => handleInputChange('lastname', value)}
             placeholder={t('lastname')}
+            requiredAlert={addModalLastnameRequiredAlert}
+            requiredField={true}
             type="text"
             value={newClient?.lastname ?? ''}
-            requiredField={true}
-            requiredAlert={addModalLastnameRequiredAlert}
           />
           <SimpleInput
             id="email"
@@ -475,10 +476,10 @@ export const Clients: React.FC = () => {
             name="email"
             onChange={value => handleInputChange('email', value)}
             placeholder={t('email')}
+            requiredAlert={addModalEmailRequiredAlert}
+            requiredField={true}
             type="text"
             value={newClient?.email ?? ''}
-            requiredField={true}
-            requiredAlert={addModalEmailRequiredAlert}
           />
           <SimpleInput
             id="title"
