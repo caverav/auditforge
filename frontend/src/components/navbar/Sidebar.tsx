@@ -15,7 +15,7 @@ type SidebarProps = {
 };
 
 export const Sidebar = ({ title, items }: SidebarProps) => {
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(window.innerWidth >= 768);
   const location = useLocation();
 
   const toggleSidebar = () => setIsOpen(!isOpen);
