@@ -17,7 +17,7 @@ module.exports = function (app) {
 
       try {
         const response = await fetch(
-          `http://${global.cweConfig.host}:${global.cweConfig.port}/classify`,
+          `http://${cweConfig.host}:${cweConfig.port}/classify`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
