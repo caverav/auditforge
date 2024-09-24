@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import SelectDropdown from '../../../../components/dropdown/SelectDropdown';
 import { getAuditById } from '../../../../services/audits';
 import DivWrapper from './DivWrapper';
+import { t } from 'i18next';
 
 type ScopeList = {
   scope: { name: string; hosts: string[] }[];
@@ -55,7 +56,7 @@ export const Network = () => {
   return (
     <DivWrapper>
       {loadingScope ? (
-        <p>Loading...</p>
+        <p>{t('loading')}</p>
       ) : (
         scope.scope.map((item, index) => (
           <div className="mb-4" key={index}>
