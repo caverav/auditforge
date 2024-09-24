@@ -28,8 +28,10 @@ module.exports = function (app) {
       const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
 
       try {
+        //TODO: Change workaround to a proper solution for self-signed certificates
+        process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
         const response = await fetch(
-          `http://${cweConfig.host}:${cweConfig.port}/classify`,
+          `https://${cweConfig.host}:${cweConfig.port}/classify`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -51,6 +53,7 @@ module.exports = function (app) {
           ? Response.Internal(res, timeoutError)
           : Response.Internal(res, errorClassify);
       }
+      process.env.NODE_TLS_REJECT_UNAUTHORIZED = '1';
     },
   );
 };
