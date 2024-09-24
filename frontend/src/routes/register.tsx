@@ -1,7 +1,7 @@
 import { t } from 'i18next';
+import { toast } from 'sonner';
 
 import useAuth from '../hooks/useAuth';
-import { toast } from 'sonner';
 
 const getValue = (id: string): string => {
   const element = document.getElementById(id);
