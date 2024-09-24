@@ -47,7 +47,7 @@ export const Profile = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    fetch('/api/users/me', {
+    fetch(`${import.meta.env.VITE_API_URL}/api/users/me`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -68,9 +68,9 @@ export const Profile = () => {
     })
       .then(res => {
         if (res.ok) {
-          toast.success('User updated successfully');
+          toast.success(t('msg.profileUpdateOk'));
         } else {
-          toast.error('Error updating user');
+          toast.error(t('failedUpdateProfile'));
         }
       })
       .catch(console.error);
@@ -86,7 +86,7 @@ export const Profile = () => {
           <div className="flex justify-between items-center">
             <div className="flex items-center space-x-2">
               <Label className="font-medium" htmlFor="role">
-                Role:
+                {t('role')}:
               </Label>
               <span className="bg-yellow-500 text-black px-2 py-1 rounded text-sm">
                 {role}
@@ -100,7 +100,7 @@ export const Profile = () => {
             onChange={value => {
               setFormData(prev => ({ ...prev, username: value }));
             }}
-            placeholder="Username"
+            placeholder={t('username')}
             type="text"
             value={formData.username}
           />
@@ -110,7 +110,7 @@ export const Profile = () => {
             onChange={value => {
               setFormData(prev => ({ ...prev, firstname: value }));
             }}
-            placeholder="Firstname"
+            placeholder={t('firstname')}
             type="text"
             value={formData.firstname}
           />
@@ -120,7 +120,7 @@ export const Profile = () => {
             onChange={value => {
               setFormData(prev => ({ ...prev, lastname: value }));
             }}
-            placeholder="Lastname"
+            placeholder={t('lastname')}
             type="text"
             value={formData.lastname}
           />
@@ -130,7 +130,7 @@ export const Profile = () => {
             onChange={value => {
               setFormData(prev => ({ ...prev, email: value }));
             }}
-            placeholder="Email"
+            placeholder={t('email')}
             type="text"
             value={formData.email}
           />
@@ -140,7 +140,7 @@ export const Profile = () => {
             onChange={value => {
               setFormData(prev => ({ ...prev, phone: value }));
             }}
-            placeholder="Phone"
+            placeholder={t('phone')}
             type="text"
             value={formData.phone}
           />
@@ -151,7 +151,7 @@ export const Profile = () => {
               onChange={value => {
                 setFormData(prev => ({ ...prev, newPassword: value }));
               }}
-              placeholder="New Password"
+              placeholder={t('newPassword')}
               type="password"
               value={formData.newPassword ?? ''}
             />
@@ -161,7 +161,7 @@ export const Profile = () => {
               onChange={value => {
                 setFormData(prev => ({ ...prev, confirmPassword: value }));
               }}
-              placeholder="Confirm Password"
+              placeholder={t('confirmPassword')}
               type="password"
               value={formData.confirmPassword ?? ''}
             />
@@ -172,7 +172,7 @@ export const Profile = () => {
             onChange={value => {
               setFormData(prev => ({ ...prev, currentPassword: value }));
             }}
-            placeholder="Current Password"
+            placeholder={t('currentPassword')}
             requiredField
             type="password"
             value={formData.currentPassword ?? ''}
@@ -181,7 +181,7 @@ export const Profile = () => {
             className="w-full bg-blue-600 hover:bg-blue-700"
             type="submit"
           >
-            {t('update')}
+            {t('updateUserInformation')}
           </Button>
         </form>
       </CardContent>

@@ -1,3 +1,6 @@
+import { t } from 'i18next';
+import { toast } from 'sonner';
+
 import useAuth from '../hooks/useAuth';
 
 const getValue = (id: string): string => {
@@ -8,49 +11,58 @@ export const Register = () => {
   const { register } = useAuth();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const password = getValue('password');
+    const confirmPassword = getValue('confirmPassword');
+    if (password !== confirmPassword) {
+      toast.error(t('confirmPasswordDifferents'));
+      console.error('Passwords do not match');
+      return;
+    }
     register(
       getValue('username'),
       getValue('firstname'),
       getValue('lastname'),
-      getValue('password'),
+      password,
     ).catch(console.error);
   };
   return (
     <section className="bg-gray-800 h-screen flex flex-col md:flex-row justify-center space-y-10 md:space-y-0 md:space-x-16 items-center my-2 mx-5 md:mx-0 md:my-0">
       <div className="md:w-1/3 max-w-sm">
-        <img alt="Logo" src="/auditforgelogo.png" />
+        <img alt="Logo" src="/logo.svg" />
       </div>
       <div className="md:w-1/3 max-w-sm text-black">
-        <h1 className="text-center text-2xl font-bold">Register</h1>
+        <h1 className="text-center text-2xl font-bold">
+          {t('registerFirstUser')}
+        </h1>
         <form className="mt-4" onSubmit={handleSubmit}>
           <input
             className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded mt-4"
             id="username"
-            placeholder="username"
+            placeholder={t('username')}
             type="text"
           />
           <input
-            className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded"
+            className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded mt-4"
             id="firstname"
-            placeholder="First Name"
+            placeholder={t('firstname')}
             type="text"
           />
           <input
             className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded mt-4"
             id="lastname"
-            placeholder="Last Name"
+            placeholder={t('lastname')}
             type="text"
           />
           <input
             className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded mt-4"
             id="password"
-            placeholder="Password"
+            placeholder={t('password')}
             type="password"
           />
           <input
             className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded mt-4"
-            id="password"
-            placeholder="Confirm Password"
+            id="confirmPassword"
+            placeholder={t('confirmPassword')}
             type="password"
           />
 
@@ -58,7 +70,7 @@ export const Register = () => {
             className="mt-4 bg-black hover:bg-gray-100 hover:text-black px-4 py-2 text-white uppercase rounded text-xs tracking-wider"
             type="submit"
           >
-            Register
+            {t('btn.create')}
           </button>
         </form>
       </div>
