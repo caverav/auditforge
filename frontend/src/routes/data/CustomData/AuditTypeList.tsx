@@ -1,7 +1,12 @@
 import { useEffect, useState } from 'react';
 
-import { CustomAccordion } from '../../../components/card/CustomAccordion';
 import DraggableList from '../../../components/table/DraggableTable';
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '../../../components/ui/accordion';
 import { AuditType } from '../../../services/data';
 
 type AuditTypeListProps = {
@@ -42,9 +47,14 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
   };
 
   const renderRow = (row: AuditType) => (
-    <CustomAccordion title={row.name}>
-      <p>{row.stage}</p>
-    </CustomAccordion>
+    <div className="p-2">
+      <Accordion collapsible type="single">
+        <AccordionItem value="item-1">
+          <AccordionTrigger>{row.name}</AccordionTrigger>
+          <AccordionContent>{row.stage}</AccordionContent>
+        </AccordionItem>
+      </Accordion>
+    </div>
   );
 
   /**
