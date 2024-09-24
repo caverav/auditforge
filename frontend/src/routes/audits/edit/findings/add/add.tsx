@@ -92,8 +92,8 @@ export const Add = () => {
           (item: FindingByLocale): TableData => ({
             id: item._id,
             title: item.detail.title,
-            category: item.category ?? 'No category',
-            type: item.detail.vulnType ?? 'Undefined',
+            category: item.category ?? t('noCategory'),
+            type: item.detail.vulnType ?? t('undefined'),
           }),
         );
 
