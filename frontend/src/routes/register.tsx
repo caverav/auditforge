@@ -18,7 +18,7 @@ export const Register = () => {
   return (
     <section className="bg-gray-800 h-screen flex flex-col md:flex-row justify-center space-y-10 md:space-y-0 md:space-x-16 items-center my-2 mx-5 md:mx-0 md:my-0">
       <div className="md:w-1/3 max-w-sm">
-        <img alt="Logo" src="/auditforgelogo.png" />
+        <img alt="Logo" src="/logo.svg" />
       </div>
       <div className="md:w-1/3 max-w-sm text-black">
         <h1 className="text-center text-2xl font-bold">Register</h1>
