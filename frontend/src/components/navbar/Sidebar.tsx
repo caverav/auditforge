@@ -1,5 +1,5 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { ReactElement, useState } from 'react';
+import { ReactElement, useCallback, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
 type SidebarItem = {
@@ -18,7 +18,10 @@ export const Sidebar = ({ title, items }: SidebarProps) => {
   const [isOpen, setIsOpen] = useState(window.innerWidth >= 768);
   const location = useLocation();
 
-  const toggleSidebar = () => setIsOpen(!isOpen);
+  const toggleSidebar = useCallback(
+    () => setIsOpen(prevState => !prevState),
+    [],
+  );
 
   return (
     <div
