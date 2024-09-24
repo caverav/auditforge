@@ -3,6 +3,8 @@ module.exports = function (app) {
   let acl = require('../lib/auth').acl;
   const errorClassify = new Error('Error classifying vulnerability');
   const networkError = new Error('Network response was not ok');
+  const timeoutError = new Error('Request timed out');
+  const TIMEOUT_MS = 5000; // 5 segundos
 
   // Get CWE classification from description
   app.post(
@@ -22,6 +24,9 @@ module.exports = function (app) {
         vuln: req.body.vuln.trim(),
       };
 
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
+
       try {
         const response = await fetch(
           `http://${cweConfig.host}:${cweConfig.port}/classify`,
@@ -29,8 +34,11 @@ module.exports = function (app) {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(vuln),
+            signal: controller.signal,
           },
         );
+        clearTimeout(timeout);
+
         if (!response.ok) {
           throw networkError;
         }
@@ -39,7 +47,9 @@ module.exports = function (app) {
         res.json(data);
       } catch (error) {
         console.error(error);
-        Response.Internal(res, errorClassify);
+        error.name === 'AbortError'
+          ? Response.Internal(res, timeoutError)
+          : Response.Internal(res, errorClassify);
       }
     },
   );
