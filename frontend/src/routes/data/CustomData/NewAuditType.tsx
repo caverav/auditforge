@@ -311,28 +311,32 @@ export const NewAuditTypeForm: React.FC = () => {
             title={t('customSections')}
           />
           {newAuditType.stage === 'default' ? (
-            <div>
-              {t('hideBuiltInSections')}
-              <CheckboxButton
-                checked={builtInSec.networkScan}
-                onChange={() =>
-                  setBuiltInSec({
-                    ...builtInSec,
-                    networkScan: !builtInSec.networkScan,
-                  })
-                }
-                text={t('networkScan')}
-              />
-              <CheckboxButton
-                checked={builtInSec.findings}
-                onChange={() =>
-                  setBuiltInSec({
-                    ...builtInSec,
-                    findings: !builtInSec.findings,
-                  })
-                }
-                text={t('findings')}
-              />
+            <div className="py-2">
+              <div className="text-lg">{t('hideBuiltInSections')}</div>
+              <div className="py-2">
+                <CheckboxButton
+                  checked={builtInSec.networkScan}
+                  onChange={() =>
+                    setBuiltInSec({
+                      ...builtInSec,
+                      networkScan: !builtInSec.networkScan,
+                    })
+                  }
+                  text={t('networkScan')}
+                />
+              </div>
+              <div className="py-2">
+                <CheckboxButton
+                  checked={builtInSec.findings}
+                  onChange={() =>
+                    setBuiltInSec({
+                      ...builtInSec,
+                      findings: !builtInSec.findings,
+                    })
+                  }
+                  text={t('findings')}
+                />
+              </div>
             </div>
           ) : null}
 
