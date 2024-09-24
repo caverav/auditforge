@@ -1,6 +1,6 @@
 module.exports = function (app) {
-  let Response = require('../lib/httpResponse.js');
-  let acl = require('../lib/auth').acl;
+  const Response = require('../lib/httpResponse.js');
+  const acl = require('../lib/auth').acl;
   const errorClassify = new Error('Error classifying vulnerability');
   const networkError = new Error('Network response was not ok');
   const timeoutError = new Error('Request timed out');
