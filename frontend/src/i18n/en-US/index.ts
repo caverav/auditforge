@@ -161,6 +161,8 @@ export default {
     failedMergeVulnerabilities: 'Error merging vulnerabilities',
     mergeNoVulnerabilitiesSelected: 'Both vulnerabilities must be selected',
     failedDeleteAudit: 'Failed to delete the audit',
+    failedUpdateProfile: 'Failed to update profile',
+    failedUpdateAudit: 'Failed to update audit',
   },
   cvss: {
     title: 'CVSS v3.1 Base Score',
