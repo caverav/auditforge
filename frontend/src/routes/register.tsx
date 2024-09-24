@@ -1,3 +1,5 @@
+import { t } from 'i18next';
+
 import useAuth from '../hooks/useAuth';
 
 const getValue = (id: string): string => {
@@ -21,7 +23,9 @@ export const Register = () => {
         <img alt="Logo" src="/auditforgelogo.png" />
       </div>
       <div className="md:w-1/3 max-w-sm text-black">
-        <h1 className="text-center text-2xl font-bold">Register</h1>
+        <h1 className="text-center text-2xl font-bold">
+          {t('registerFirstUser')}
+        </h1>
         <form className="mt-4" onSubmit={handleSubmit}>
           <input
             className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded mt-4"
@@ -30,7 +34,7 @@ export const Register = () => {
             type="text"
           />
           <input
-            className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded"
+            className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded mt-4"
             id="firstname"
             placeholder="First Name"
             type="text"
@@ -58,7 +62,7 @@ export const Register = () => {
             className="mt-4 bg-black hover:bg-gray-100 hover:text-black px-4 py-2 text-white uppercase rounded text-xs tracking-wider"
             type="submit"
           >
-            Register
+            {t('btn.create')}
           </button>
         </form>
       </div>
