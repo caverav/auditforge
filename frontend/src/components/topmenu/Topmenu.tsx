@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import React from 'react';
 
 type TopMenuProps = {
@@ -29,7 +30,7 @@ const TopMenu: React.FC<TopMenuProps> = ({
           onClick={onSave}
           type="button"
         >
-          Save
+          {t('btn.save')}
         </button>
       </div>
     </div>
