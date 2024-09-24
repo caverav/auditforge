@@ -1,5 +1,6 @@
 var fs = require('fs');
 var app = require('express')();
+require('dotenv').config();
 
 var https = require('https').Server(
   {
@@ -113,6 +114,10 @@ io.on('connection', socket => {
 
 // CORS
 app.use(function (req, res, next) {
+  if (process.env.CORS_BYPASS === 'true') {
+    res.header('Access-Control-Allow-Origin', '*');
+    res.header('Access-Control-Allow-Credentials', 'true');
+  }
   res.header('Access-Control-Allow-Methods', 'GET,POST,DELETE,PUT,OPTIONS');
   res.header(
     'Access-Control-Allow-Headers',

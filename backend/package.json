@@ -27,6 +27,7 @@
     "docx-templates": "^4.13.0",
     "docxtemplater": "^3.50.0",
     "docxtemplater-image-module-pwndoc": "github:pwndoc/docxtemplater-image-module-pwndoc",
+    "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "full-icu": "^1.5.0",
     "htmlparser2": "^9.1.0",
