@@ -1,6 +1,7 @@
 import { t } from 'i18next';
 
 import useAuth from '../hooks/useAuth';
+import { toast } from 'sonner';
 
 const getValue = (id: string): string => {
   const element = document.getElementById(id);
@@ -10,11 +11,18 @@ export const Register = () => {
   const { register } = useAuth();
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const password = getValue('password');
+    const confirmPassword = getValue('confirmPassword');
+    if (password !== confirmPassword) {
+      toast.error(t('confirmPasswordDifferents'));
+      console.error('Passwords do not match');
+      return;
+    }
     register(
       getValue('username'),
       getValue('firstname'),
       getValue('lastname'),
-      getValue('password'),
+      password,
     ).catch(console.error);
   };
   return (
@@ -53,7 +61,7 @@ export const Register = () => {
           />
           <input
             className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded mt-4"
-            id="password"
+            id="confirmPassword"
             placeholder={t('confirmPassword')}
             type="password"
           />
