@@ -1,7 +1,7 @@
 module.exports = function (app) {
   const Response = require('../lib/httpResponse.js');
   const acl = require('../lib/auth').acl;
-  cweConfig = require('../config/config-cwe.json')['cwe-container'];
+  const cweConfig = require('../config/config-cwe.json')['cwe-container'];
   const errorClassify = new Error('Error classifying vulnerability');
   const networkError = new Error('Network response was not ok');
   const timeoutError = new Error('Request timed out');

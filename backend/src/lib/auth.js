@@ -32,7 +32,7 @@ exports.jwtRefreshSecret = jwtRefreshSecret;
     inherits: inherits other users "allows"
 */
 
-var builtInRoles = {
+const builtInRoles = {
   user: {
     allows: [
       // Audits
