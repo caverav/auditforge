@@ -88,6 +88,13 @@ export type AuditType = {
   templates: { template: string; locale: string }[];
 };
 
+export type NewCustomSection = {
+  _id?: string;
+  name: string;
+  field: string;
+  icon?: string;
+};
+
 const networkErrorMsg = 'Network response was not ok';
 
 export const getRoles = async (): Promise<{
@@ -610,4 +617,52 @@ export const deleteTemplate = async (
 
 export const downloadTemplate = (templateId: string, window: Window): void => {
   window.open(`${API_URL}templates/download/${templateId}`, '_blank');
+};
+
+export const createCustomSection = async (
+  section: NewCustomSection,
+): Promise<{
+  status: string;
+  datas: { field: string; name: string; icon?: string };
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/sections`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(section),
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const updateCustomSection = async (
+  section: NewCustomSection[],
+): Promise<{
+  status: string;
+  datas: string;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/sections`, {
+      method: 'PUT',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(section),
+    });
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
 };
