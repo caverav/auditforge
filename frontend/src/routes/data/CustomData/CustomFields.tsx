@@ -8,12 +8,27 @@ import SimpleInput from '../../../components/input/SimpleInput';
 import SelectDropdown from '../../../components/dropdown/SelectDropdown';
 import Card from '../../../components/card/Card';
 import PrimarySwitch from '../../../components/switch/PrimarySwitch';
+import { getLanguages } from '../../../services/data';
+import { getCategories } from '../../../services/vulnerabilities';
 
 type ListItem = {
   id: number;
   value: string;
   label?: string;
   icon?: string;
+};
+
+type LanguageData = {
+  language: string;
+  locale: string;
+};
+
+type CategoryData = {
+  _id: string;
+  name: string;
+  sortValue: string;
+  sortOrder: string;
+  sortAuto: boolean;
 };
 
 export const CustomFields: React.FC = () => {
@@ -66,14 +81,20 @@ export const CustomFields: React.FC = () => {
   );
   const [componentOptionSelected, setComponentOptionSelected] =
     useState<ListItem | null>(null);
-  const [sectionSelected, setSectionSelected] = useState<ListItem | null>(null);
   const [sizeSelected, setSizeSelected] = useState<ListItem | null>(sizes[12]);
   const [offsetSelected, setOffsetSelected] = useState<ListItem | null>(
     sizes[0],
   );
+
   const [languageSelected, setLanguageSelected] = useState<ListItem | null>(
     null,
   );
+  const [languagesList, setLanguagesList] = useState<ListItem[]>([]);
+
+  const [categorySelected, setCategorySelected] = useState<ListItem | null>(
+    null,
+  );
+  const [categoriesList, setCategoriesList] = useState<ListItem[]>([]);
 
   const [label, setLabel] = useState('');
   const [description, setDescription] = useState('');
@@ -86,6 +107,43 @@ export const CustomFields: React.FC = () => {
     // eslint-disable-next-line no-console
     console.log('asd');
   };
+  // Fetch
+  const fetchLanguages = async () => {
+    try {
+      const dataLanguage = await getLanguages();
+      const languageNames = dataLanguage.datas.map(
+        (item: LanguageData, index: number) => ({
+          id: index,
+          value: item.locale,
+          label: item.language,
+        }),
+      );
+      setLanguagesList(languageNames);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  const fetchCategories = async () => {
+    try {
+      const dataCategory = await getCategories();
+      const categoryNames = dataCategory.datas.map(
+        (item: CategoryData, index: number) => ({
+          id: index + 1,
+          value: item.name,
+          label: item.name,
+        }),
+      );
+      setCategoriesList([...categoryNames]);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
+  useEffect(() => {
+    void fetchLanguages();
+    void fetchCategories();
+  }, []);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -105,11 +163,11 @@ export const CustomFields: React.FC = () => {
         />
         {displayOptionSeleted.value !== 'general' ? (
           <SelectDropdown
-            items={[]}
-            onChange={value => setSectionSelected(value)}
-            placeholder={t('selectComponent')}
-            selected={sectionSelected}
-            title={t('selectSection')}
+            items={categoriesList}
+            onChange={value => setCategorySelected(value)}
+            placeholder={t('selectCategory')}
+            selected={categorySelected}
+            title={t('selectCategory')}
           />
         ) : (
           <div className="h-11" />
@@ -156,7 +214,7 @@ export const CustomFields: React.FC = () => {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-1 gap-4 content-start">
         <SelectDropdown
-          items={[]}
+          items={languagesList}
           onChange={value => setLanguageSelected(value)}
           selected={languageSelected}
           title={t('optionsLanguage')}
