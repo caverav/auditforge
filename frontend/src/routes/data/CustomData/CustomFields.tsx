@@ -1,12 +1,10 @@
 // eslint-disable-next-line simple-import-sort/imports
-import { useCallback, useEffect, useState } from 'react';
-import { toast } from 'sonner';
+import { useEffect, useState } from 'react';
 import { t } from 'i18next';
 
 import PrimaryButton from '../../../components/button/PrimaryButton';
 import SimpleInput from '../../../components/input/SimpleInput';
 import SelectDropdown from '../../../components/dropdown/SelectDropdown';
-import Card from '../../../components/card/Card';
 import PrimarySwitch from '../../../components/switch/PrimarySwitch';
 import { getLanguages } from '../../../services/data';
 import { getCategories } from '../../../services/vulnerabilities';
@@ -16,6 +14,11 @@ type ListItem = {
   value: string;
   label?: string;
   icon?: string;
+};
+
+type OptionData = {
+  locale: string;
+  value: string;
 };
 
 type LanguageData = {
@@ -102,10 +105,18 @@ export const CustomFields: React.FC = () => {
 
   const [required, setRequired] = useState(false);
 
+  const [optionsData, setOptionsData] = useState<OptionData[]>([]);
+
   // TODO: Change to a proper handler
-  const handleAddLanguage = () => {
-    // eslint-disable-next-line no-console
-    console.log('asd');
+  const handleAddOption = () => {
+    setOptionsData([
+      {
+        locale: languageSelected?.value ?? '',
+        value: addOptionField,
+      },
+      ...optionsData,
+    ]);
+    console.log(optionsData);
   };
   // Fetch
   const fetchLanguages = async () => {
@@ -119,6 +130,7 @@ export const CustomFields: React.FC = () => {
         }),
       );
       setLanguagesList(languageNames);
+      setLanguageSelected(languageNames[0]);
     } catch (error) {
       console.error('Error:', error);
     }
@@ -144,6 +156,15 @@ export const CustomFields: React.FC = () => {
     void fetchLanguages();
     void fetchCategories();
   }, []);
+
+  /*
+  const handlerAddField = () => {
+    // eslint-disable-next-line no-console
+    console.log('Added Field');
+    // eslint-disable-next-line no-console
+    console.log(optionsData);
+  };
+  */
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -232,8 +253,23 @@ export const CustomFields: React.FC = () => {
             />
           </div>
           <div className="flex-shrink-0">
-            <PrimaryButton onClick={handleAddLanguage}>+</PrimaryButton>
+            <PrimaryButton onClick={handleAddOption}>+</PrimaryButton>
           </div>
+        </div>
+        <div className="bg-white/10 rounded-lg">
+          {optionsData.map((option, index) => (
+            <div key={index} className="flex items-center gap-2">
+              <div className="flex-grow mx-2">{option.value}</div>
+              <div className="flex-shrink-0">
+                <PrimaryButton
+                  color="red"
+                  onClick={value => console.log(value)}
+                >
+                  x
+                </PrimaryButton>
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </div>
