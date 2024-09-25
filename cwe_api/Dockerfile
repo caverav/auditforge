@@ -5,12 +5,17 @@ WORKDIR /app
 COPY . .
 
 RUN  apt-get update \
-  && apt-get install -y wget \
-  && apt-get install -y unzip \
-  && rm -rf /var/lib/apt/lists/*
+      && apt-get install -y --no-install-recommends \
+        wget \
+        unzip \
+      && apt-get clean \
+      && rm -rf /var/lib/apt/lists/*
 
-RUN wget "https://drive.usercontent.google.com/download?id=1KBoB-iLT3-2HJqMvXucMuh3Wi_r0ngP-&export=download&confirm=" -O modelo_cwe.zip \
-&& unzip modelo_cwe.zip && rm modelo_cwe.zip
+RUN if [ ! -d modelo_cwe ]; then \
+      echo "modelo_cwe not found. Downloading it..."; \
+      wget "https://drive.usercontent.google.com/download?id=1KBoB-iLT3-2HJqMvXucMuh3Wi_r0ngP-&export=download&confirm=" -O modelo_cwe.zip \
+      && unzip modelo_cwe.zip && rm modelo_cwe.zip \
+    fi
 
 RUN pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 
