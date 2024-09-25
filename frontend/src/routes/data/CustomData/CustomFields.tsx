@@ -116,8 +116,16 @@ export const CustomFields: React.FC = () => {
       },
       ...optionsData,
     ]);
-    console.log(optionsData);
   };
+
+  const handleDeleteOption = (index: number) => {
+    setOptionsData(prevOptionsData => {
+      const updatedOptionsData = [...prevOptionsData];
+      updatedOptionsData.splice(index, 1);
+      return updatedOptionsData;
+    });
+  };
+
   // Fetch
   const fetchLanguages = async () => {
     try {
@@ -256,14 +264,14 @@ export const CustomFields: React.FC = () => {
             <PrimaryButton onClick={handleAddOption}>+</PrimaryButton>
           </div>
         </div>
-        <div className="bg-white/10 rounded-lg">
+        <div className="bg-white/5 rounded-lg">
           {optionsData.map((option, index) => (
             <div key={index} className="flex items-center gap-2">
               <div className="flex-grow mx-2">{option.value}</div>
               <div className="flex-shrink-0">
                 <PrimaryButton
                   color="red"
-                  onClick={value => console.log(value)}
+                  onClick={() => handleDeleteOption(index)}
                 >
                   x
                 </PrimaryButton>
