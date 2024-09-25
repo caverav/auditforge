@@ -79,6 +79,8 @@ export const CustomFields: React.FC = () => {
     { id: 12, label: '12', value: '12' },
   ];
 
+  const optionsList = ['checkbox', 'radio', 'select', 'select-multiple'];
+
   const [displayOptionSeleted, setDisplayOptionSeleted] = useState<ListItem>(
     cfDisplayOptions[0],
   );
@@ -203,15 +205,28 @@ export const CustomFields: React.FC = () => {
         )}
       </div>
       <div className="grid grid-cols-1 md:grid-cols-1 gap-4 content-start">
-        <SimpleInput
-          id="label"
-          label={t('label')}
-          name="label"
-          onChange={setLabel}
-          placeholder={t('label')}
-          type="text"
-          value={label}
-        />
+        {componentOptionSelected?.value !== 'space' ? (
+          <div>
+            <SimpleInput
+              id="label"
+              label={t('label')}
+              name="label"
+              onChange={setLabel}
+              placeholder={t('label')}
+              type="text"
+              value={label}
+            />
+            <SimpleInput
+              id="label"
+              label={t('label')}
+              name="label"
+              onChange={setLabel}
+              placeholder={t('label')}
+              type="text"
+              value={label}
+            />
+          </div>
+        ) : null}
         <SimpleInput
           id="description"
           label={t('description')}
@@ -235,54 +250,58 @@ export const CustomFields: React.FC = () => {
             title={t('offset')}
           />
         </div>
-        <PrimarySwitch
-          enabled={required}
-          label={t('required')}
-          onChange={setRequired}
-        />
+        {componentOptionSelected?.value !== 'space' ? (
+          <PrimarySwitch
+            enabled={required}
+            label={t('required')}
+            onChange={setRequired}
+          />
+        ) : null}
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-1 gap-4 content-start">
-        <SelectDropdown
-          items={languagesList}
-          onChange={value => setLanguageSelected(value)}
-          selected={languageSelected}
-          title={t('optionsLanguage')}
-        />
-        <div className="flex items-center gap-2">
-          <div className="flex-grow">
-            <SimpleInput
-              id="addOption"
-              label={t('addOption')}
-              name="addOption"
-              onChange={setAddOptionField}
-              placeholder={t('addOption')}
-              type="text"
-              value={addOptionField}
-            />
-          </div>
-          <div className="flex-shrink-0">
-            <PrimaryButton onClick={handleAddOption}>+</PrimaryButton>
-          </div>
-        </div>
-        <div className="bg-white/5 rounded-lg">
-          {optionsData.map((option, index) => (
-            <div
-              className={`flex items-center gap-2 ${index !== 0 ? 'border-t-gray-600 border-t' : ''}`}
-              key={index}
-            >
-              <div className="flex-grow mx-2">{option.value}</div>
-              <div className="flex-shrink-0 p-1">
-                <PrimaryButton
-                  color="red"
-                  onClick={() => handleDeleteOption(index)}
-                >
-                  x
-                </PrimaryButton>
-              </div>
+      {optionsList.includes(componentOptionSelected?.value ?? '') ? (
+        <div className="grid grid-cols-1 md:grid-cols-1 gap-4 content-start">
+          <SelectDropdown
+            items={languagesList}
+            onChange={value => setLanguageSelected(value)}
+            selected={languageSelected}
+            title={t('optionsLanguage')}
+          />
+          <div className="flex items-center gap-2">
+            <div className="flex-grow">
+              <SimpleInput
+                id="addOption"
+                label={t('addOption')}
+                name="addOption"
+                onChange={setAddOptionField}
+                placeholder={t('addOption')}
+                type="text"
+                value={addOptionField}
+              />
             </div>
-          ))}
+            <div className="flex-shrink-0">
+              <PrimaryButton onClick={handleAddOption}>+</PrimaryButton>
+            </div>
+          </div>
+          <div className="bg-white/5 rounded-lg">
+            {optionsData.map((option, index) => (
+              <div
+                className={`flex items-center gap-2 ${index !== 0 ? 'border-t-gray-600 border-t' : ''}`}
+                key={index}
+              >
+                <div className="flex-grow mx-2">{option.value}</div>
+                <div className="flex-shrink-0 p-1">
+                  <PrimaryButton
+                    color="red"
+                    onClick={() => handleDeleteOption(index)}
+                  >
+                    x
+                  </PrimaryButton>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
-      </div>
+      ) : null}
     </div>
   );
 };
