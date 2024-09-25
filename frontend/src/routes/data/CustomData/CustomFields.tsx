@@ -266,9 +266,12 @@ export const CustomFields: React.FC = () => {
         </div>
         <div className="bg-white/5 rounded-lg">
           {optionsData.map((option, index) => (
-            <div key={index} className="flex items-center gap-2">
+            <div
+              className={`flex items-center gap-2 ${index !== 0 ? 'border-t-gray-600 border-t' : ''}`}
+              key={index}
+            >
               <div className="flex-grow mx-2">{option.value}</div>
-              <div className="flex-shrink-0">
+              <div className="flex-shrink-0 p-1">
                 <PrimaryButton
                   color="red"
                   onClick={() => handleDeleteOption(index)}
