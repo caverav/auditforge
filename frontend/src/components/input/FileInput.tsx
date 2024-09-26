@@ -79,7 +79,7 @@ const FileInput: React.FC<FileInputProps> = ({
         />
         {!isFocused && requiredAlert && !fileName ? (
           <span className="absolute right-3 top-0 mt-2 ml-2 text-red-500">
-            <ExclamationCircleIcon className="size-5" />
+            <ExclamationCircleIcon className="h-5 w-5" />
           </span>
         ) : null}
       </div>

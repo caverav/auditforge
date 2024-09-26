@@ -36,11 +36,9 @@ const SimpleInput: React.FC<SimpleInputProps> = ({
           htmlFor={id}
         >
           {label + ' '}
-          {requiredField && !placeholder ? (
+          {requiredField ? (
             <span className="text-red-500 text-lg">*</span>
-          ) : (
-            ''
-          )}
+          ) : null}
         </label>
       ) : null}
       <div className="relative z-10 mt-2 rounded-md shadow-sm">
