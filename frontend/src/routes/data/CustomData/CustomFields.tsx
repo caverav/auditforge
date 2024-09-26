@@ -1,10 +1,9 @@
-// eslint-disable-next-line simple-import-sort/imports
-import { useEffect, useState } from 'react';
 import { t } from 'i18next';
+import { useEffect, useState } from 'react';
 
-import SelectDropdown from '../../../components/dropdown/SelectDropdown';
 import { getLanguages } from '../../../services/data';
 import { getCategories } from '../../../services/vulnerabilities';
+import { CustomFieldType } from './custom-fields/CustomFieldType';
 import { OptionsCustomData } from './custom-fields/OptionsCustomData';
 import { SettingsCustomFields } from './custom-fields/SettingsCustomFields';
 
@@ -34,39 +33,13 @@ type CategoryData = {
 };
 
 export const CustomFields: React.FC = () => {
-  const cfDisplayOptions: ListItem[] = [
-    { id: 0, label: t('auditGeneral'), value: 'general' },
-    { id: 1, label: t('auditFinding'), value: 'finding' },
-    { id: 2, label: t('auditSection'), value: 'section' },
-    { id: 3, label: t('vulnerability'), value: 'vulnerability' },
-  ];
-
-  const cfComponentOptions: ListItem[] = [
-    { id: 0, label: t('checkbox'), value: 'checkbox', icon: 'check_box' },
-    { id: 1, label: t('date'), value: 'date', icon: 'event' },
-    { id: 2, label: t('editor'), value: 'text', icon: 'mdi-format-pilcrow' },
-    { id: 3, label: t('input'), value: 'input', icon: 'title' },
-    { id: 4, label: t('radio'), value: 'radio', icon: 'radio_button_checked' },
-    {
-      id: 5,
-      label: t('select'),
-      value: 'select',
-      icon: 'far fa-caret-square-down',
-    },
-    {
-      id: 6,
-      label: t('selectMultiple'),
-      value: 'select-multiple',
-      icon: 'filter_none',
-    },
-    { id: 7, label: t('space'), value: 'space', icon: 'space_bar' },
-  ];
-
   const optionsList = ['checkbox', 'radio', 'select', 'select-multiple'];
 
-  const [displayOptionSeleted, setDisplayOptionSeleted] = useState<ListItem>(
-    cfDisplayOptions[0],
-  );
+  const [displayOptionSeleted, setDisplayOptionSeleted] = useState<ListItem>({
+    id: 0,
+    label: t('auditGeneral'),
+    value: 'general',
+  });
   const [componentOptionSelected, setComponentOptionSelected] =
     useState<ListItem | null>(null);
   const [sizeSelected, setSizeSelected] = useState<ListItem>({
@@ -79,23 +52,20 @@ export const CustomFields: React.FC = () => {
     label: '0',
     value: '0',
   });
-
   const [languageSelected, setLanguageSelected] = useState<ListItem | null>(
     null,
   );
-  const [languagesList, setLanguagesList] = useState<ListItem[]>([]);
-
   const [categorySelected, setCategorySelected] = useState<ListItem | null>(
     null,
   );
-  const [categoriesList, setCategoriesList] = useState<ListItem[]>([]);
 
   const [label, setLabel] = useState('');
   const [description, setDescription] = useState('');
   const [addOptionField, setAddOptionField] = useState('');
-
   const [required, setRequired] = useState(false);
 
+  const [languagesList, setLanguagesList] = useState<ListItem[]>([]);
+  const [categoriesList, setCategoriesList] = useState<ListItem[]>([]);
   const [optionsData, setOptionsData] = useState<OptionData[]>([]);
 
   // Fetch
@@ -148,32 +118,15 @@ export const CustomFields: React.FC = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div className="grid grid-cols-1 md:grid-cols-1 gap-4 content-start">
-        <SelectDropdown
-          items={cfDisplayOptions}
-          onChange={value => setDisplayOptionSeleted(value)}
-          selected={displayOptionSeleted}
-          title={t('selectView')}
-        />
-        <SelectDropdown
-          items={cfComponentOptions}
-          onChange={value => setComponentOptionSelected(value)}
-          placeholder={t('selectComponent')}
-          selected={componentOptionSelected}
-          title={t('selectComponent')}
-        />
-        {displayOptionSeleted.value !== 'general' ? (
-          <SelectDropdown
-            items={categoriesList}
-            onChange={value => setCategorySelected(value)}
-            placeholder={t('selectCategory')}
-            selected={categorySelected}
-            title={t('selectCategory')}
-          />
-        ) : (
-          <div className="h-11" />
-        )}
-      </div>
+      <CustomFieldType
+        categoriesList={categoriesList}
+        categorySelected={categorySelected}
+        componentOptionSelected={componentOptionSelected}
+        displayOptionSeleted={displayOptionSeleted}
+        setCategorySelected={setCategorySelected}
+        setComponentOptionSelected={setComponentOptionSelected}
+        setDisplayOptionSeleted={setDisplayOptionSeleted}
+      />
       <SettingsCustomFields
         componentOptionSelected={componentOptionSelected}
         description={description}
