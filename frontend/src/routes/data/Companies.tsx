@@ -133,7 +133,11 @@ export const Companies: React.FC = () => {
   ];
 
   const handleCancelAddCompanies = () => {
-    setNewCompany(null);
+    setNewCompany({
+      name: '',
+      shortName: '',
+      logo: '',
+    });
     setIsOpenAddCompaniesModal(!isOpenAddCompaniesModal);
     setAddModalNameRequiredAlert(false);
   };
@@ -170,7 +174,11 @@ export const Companies: React.FC = () => {
   };
 
   const handleCancelEditCompanies = () => {
-    setNewCompany(null);
+    setNewCompany({
+      name: '',
+      shortName: '',
+      logo: '',
+    });
     setIsOpenEditCompaniesModal(!isOpenEditCompaniesModal);
   };
 
@@ -264,6 +272,7 @@ export const Companies: React.FC = () => {
         </>
       </Card>
       <Modal
+        // eslint-disable-next-line sonarjs/no-duplicate-string
         cancelText={t('btn.cancel')}
         isOpen={isOpenAddCompaniesModal}
         onCancel={handleCancelAddCompanies}

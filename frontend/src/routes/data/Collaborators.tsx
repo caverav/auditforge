@@ -29,6 +29,7 @@ type NewCollaborator = {
   totpenabled: boolean;
   username: string;
   enabled?: boolean;
+  [key: string]: string | number | boolean | undefined;
 };
 
 type TableData = {
@@ -68,20 +69,16 @@ export const Collaborators: React.FC = () => {
     useState<boolean>(false);
 
   const [newCollaborator, setNewCollaborator] =
-    useState<NewCollaborator | null>(
-      selectedRole
-        ? {
-            email: '',
-            firstname: '',
-            lastname: '',
-            password: '',
-            phone: '',
-            role: selectedRole.value,
-            totpenabled: false,
-            username: '',
-          }
-        : null,
-    );
+    useState<NewCollaborator | null>({
+      email: '',
+      firstname: '',
+      lastname: '',
+      password: '',
+      phone: '',
+      role: selectedRole ? selectedRole.value : '',
+      totpenabled: false,
+      username: '',
+    });
 
   const [collaborators, setCollaborators] = useState<NewCollaborator[]>([]);
   const [_loading, setLoading] = useState<boolean>(true);
@@ -168,7 +165,7 @@ export const Collaborators: React.FC = () => {
 
   const keyExtractor = (item: TableData) => item._id ?? '';
 
-  const handleEditCompanyButton = (collaborator: TableData) => {
+  const handleEditCollaboratorButton = (collaborator: TableData) => {
     const role = roles.find(r => r.value === collaborator.role) ?? null;
     setSelectedRole(role);
 
@@ -182,7 +179,7 @@ export const Collaborators: React.FC = () => {
   const rowActions = [
     {
       label: 'Edit',
-      onClick: (item: TableData) => handleEditCompanyButton(item),
+      onClick: (item: TableData) => handleEditCollaboratorButton(item),
     },
   ];
 
@@ -202,7 +199,7 @@ export const Collaborators: React.FC = () => {
           if (!filterValue) {
             return true;
           }
-          return String(item[column.accessor as keyof TableData])
+          return String(item[column.accessor])
             .toLowerCase()
             .includes(filterValue.toLowerCase());
         })
@@ -212,7 +209,16 @@ export const Collaborators: React.FC = () => {
   }, [filters, enabledFilter, columns, collaborators, setTableData]);
 
   const handleCancelAddCollab = () => {
-    setNewCollaborator(null);
+    setNewCollaborator({
+      email: '',
+      firstname: '',
+      lastname: '',
+      password: '',
+      phone: '',
+      role: selectedRole ? selectedRole.value : '',
+      totpenabled: false,
+      username: '',
+    });
     setIsOpenAddCollabModal(!isOpenAddCollabModal);
     setAddModalUsernameRequiredAlert(false);
     setAddModalFirstnameRequiredAlert(false);
@@ -283,7 +289,16 @@ export const Collaborators: React.FC = () => {
   };
 
   const handleCancelEditCollab = () => {
-    setNewCollaborator(null);
+    setNewCollaborator({
+      email: '',
+      firstname: '',
+      lastname: '',
+      password: '',
+      phone: '',
+      role: selectedRole ? selectedRole.value : '',
+      totpenabled: false,
+      username: '',
+    });
     setIsOpenEditCollabModal(!isOpenEditCollabModal);
   };
 

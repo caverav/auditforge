@@ -106,6 +106,7 @@ export const Templates: React.FC = () => {
       } else {
         return {
           ...prevState,
+          _id: template._id,
           name: template.name,
         };
       }
@@ -134,7 +135,11 @@ export const Templates: React.FC = () => {
   ];
 
   const handleCancelAddTemplate = () => {
-    setNewTemplate(null);
+    setNewTemplate({
+      name: '',
+      ext: '',
+      file: '',
+    });
     setIsOpenAddTemplateModal(!isOpenAddTemplateModal);
     setAddModalFirstnameRequiredAlert(false);
     setAddModalFileRequiredAlert(false);
@@ -177,7 +182,11 @@ export const Templates: React.FC = () => {
   };
 
   const handleCancelEditTemplate = () => {
-    setNewTemplate(null);
+    setNewTemplate({
+      name: '',
+      ext: '',
+      file: '',
+    });
     setIsOpenEditTemplateModal(!isOpenEditTemplateModal);
   };
 
@@ -270,6 +279,7 @@ export const Templates: React.FC = () => {
         </>
       </Card>
       <Modal
+        // eslint-disable-next-line sonarjs/no-duplicate-string
         cancelText={t('btn.cancel')}
         isOpen={isOpenAddTemplateModal}
         onCancel={handleCancelAddTemplate}
