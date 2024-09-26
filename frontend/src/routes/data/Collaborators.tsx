@@ -68,17 +68,6 @@ export const Collaborators: React.FC = () => {
   const [addModalPasswordRequiredAlert, setAddModalPasswordRequiredAlert] =
     useState<boolean>(false);
 
-  const [addModalUsernameRequiredAlert, setAddModalUsernameRequiredAlert] =
-    useState<boolean>(false);
-  const [addModalFirstnameRequiredAlert, setAddModalFirstnameRequiredAlert] =
-    useState<boolean>(false);
-  const [addModalLastnameRequiredAlert, setAddModalLastnameRequiredAlert] =
-    useState<boolean>(false);
-  const [addModalRoleRequiredAlert, setAddModalRoleRequiredAlert] =
-    useState<boolean>(false);
-  const [addModalPasswordRequiredAlert, setAddModalPasswordRequiredAlert] =
-    useState<boolean>(false);
-
   const [newCollaborator, setNewCollaborator] =
     useState<NewCollaborator | null>({
       email: '',
@@ -468,8 +457,6 @@ export const Collaborators: React.FC = () => {
             requiredField
             selected={selectedRole}
             title={t('role')}
-            requiredField={true}
-            requiredAlert={addModalRoleRequiredAlert}
           />
           <SimpleInput
             id="password"
