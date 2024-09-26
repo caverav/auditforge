@@ -8,6 +8,7 @@ import SelectDropdown from '../../../components/dropdown/SelectDropdown';
 import PrimarySwitch from '../../../components/switch/PrimarySwitch';
 import { getLanguages } from '../../../services/data';
 import { getCategories } from '../../../services/vulnerabilities';
+import { OptionsCustomData } from './custom-fields/OptionsCustomData';
 
 type ListItem = {
   id: number;
@@ -217,25 +218,16 @@ export const CustomFields: React.FC = () => {
               value={label}
             />
             <SimpleInput
-              id="label"
-              label={t('label')}
-              name="label"
-              onChange={setLabel}
-              placeholder={t('label')}
+              id="description"
+              label={t('description')}
+              name="description"
+              onChange={setDescription}
+              placeholder={t('description')}
               type="text"
-              value={label}
+              value={description}
             />
           </div>
         ) : null}
-        <SimpleInput
-          id="description"
-          label={t('description')}
-          name="description"
-          onChange={setDescription}
-          placeholder={t('description')}
-          type="text"
-          value={description}
-        />
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <SelectDropdown
             items={sizes}
@@ -259,48 +251,15 @@ export const CustomFields: React.FC = () => {
         ) : null}
       </div>
       {optionsList.includes(componentOptionSelected?.value ?? '') ? (
-        <div className="grid grid-cols-1 md:grid-cols-1 gap-4 content-start">
-          <SelectDropdown
-            items={languagesList}
-            onChange={value => setLanguageSelected(value)}
-            selected={languageSelected}
-            title={t('optionsLanguage')}
-          />
-          <div className="flex items-center gap-2">
-            <div className="flex-grow">
-              <SimpleInput
-                id="addOption"
-                label={t('addOption')}
-                name="addOption"
-                onChange={setAddOptionField}
-                placeholder={t('addOption')}
-                type="text"
-                value={addOptionField}
-              />
-            </div>
-            <div className="flex-shrink-0">
-              <PrimaryButton onClick={handleAddOption}>+</PrimaryButton>
-            </div>
-          </div>
-          <div className="bg-white/5 rounded-lg">
-            {optionsData.map((option, index) => (
-              <div
-                className={`flex items-center gap-2 ${index !== 0 ? 'border-t-gray-600 border-t' : ''}`}
-                key={index}
-              >
-                <div className="flex-grow mx-2">{option.value}</div>
-                <div className="flex-shrink-0 p-1">
-                  <PrimaryButton
-                    color="red"
-                    onClick={() => handleDeleteOption(index)}
-                  >
-                    x
-                  </PrimaryButton>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        <OptionsCustomData
+          addOptionField={addOptionField}
+          languageSelected={languageSelected}
+          languagesList={languagesList}
+          optionsData={optionsData}
+          setAddOptionField={setAddOptionField}
+          setLanguageSelected={setLanguageSelected}
+          setOptionsData={setOptionsData}
+        />
       ) : null}
     </div>
   );
