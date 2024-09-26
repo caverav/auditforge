@@ -154,13 +154,19 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
   }, [templateData]);
 
   const renderRow = (row: AuditType) => (
-    <div className="flex flex-col-3">
+    <div
+      className={
+        isDisabled
+          ? 'flex flex-col-3 items-center justify-center'
+          : 'flex flex-col-1 items-center justify-center'
+      }
+    >
       {!isDisabled ? (
-        <div>
+        <div className="basis-1/4 flex flex-col items-center">
           <Bars2Icon className="size-4" />
         </div>
       ) : null}
-      <div>
+      <div className="basis-full overflow-hidden">
         <Accordion collapsible type="single">
           <AccordionItem value="item-1">
             <AccordionTrigger>{row.name}</AccordionTrigger>
@@ -172,7 +178,7 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
                   <>
                     <div className="text-lg">{t('auditPhase')}</div>
                     <DefaultRadioGroup
-                      name="stage"
+                      name={'stage' + row.name}
                       onChange={e => handleInputChange(row.name, 'stage', e)}
                       options={stageOptions}
                       value={row.stage}
@@ -218,7 +224,7 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
         </Accordion>
       </div>
       {!isDisabled ? (
-        <div>
+        <div className="basis-1/4 flex flex-col items-center">
           <PrimaryButton color="red" onClick={() => handleRemoveRow(row.name)}>
             X
           </PrimaryButton>
