@@ -136,6 +136,8 @@ export default {
     collaboratorUsernameError: 'Collaborator username already exists',
     companyNameError: 'Company name already exists',
     templateNameError: 'Template name already exists',
+    invalidEmailError:
+      'Email must follow this format: example@example.something',
   },
   err: {
     notDefinedLanguage: 'Not defined for this language',

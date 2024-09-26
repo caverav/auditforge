@@ -55,6 +55,9 @@ export const Templates: React.FC = () => {
   const [addModalFileRequiredAlert, setAddModalFileRequiredAlert] =
     useState<boolean>(false);
 
+  const [editModalNameRequiredAlert, setEditModalFirstnameRequiredAlert] =
+    useState<boolean>(false);
+
   const [selectedTemplate, setSelectedTemplate] = useState<TableData | null>(
     null,
   );
@@ -141,6 +144,7 @@ export const Templates: React.FC = () => {
   const handleCancelAddTemplate = () => {
     setNewTemplate(initialTemplateState);
     setIsOpenAddTemplateModal(!isOpenAddTemplateModal);
+
     setAddModalFirstnameRequiredAlert(false);
     setAddModalFileRequiredAlert(false);
   };
@@ -148,12 +152,12 @@ export const Templates: React.FC = () => {
   const handleSubmitAddTemplate = async () => {
     let isValid = true;
 
-    if (!newTemplate?.name) {
+    if (!newTemplate?.name || newTemplate.name.trim() === '') {
       setAddModalFirstnameRequiredAlert(true);
       isValid = false;
     }
 
-    if (!newTemplate?.file) {
+    if (!newTemplate?.file || newTemplate.file.trim() === '') {
       setAddModalFileRequiredAlert(true);
       isValid = false;
     }
@@ -167,7 +171,7 @@ export const Templates: React.FC = () => {
       if (!newTemplate) {
         return null;
       } else {
-        await createTemplate(newTemplate);
+        await createTemplate({ ...newTemplate, name: newTemplate.name.trim() });
         toast.success(t('msg.templateCreatedOk'));
         setIsOpenAddTemplateModal(!isOpenAddTemplateModal);
 
@@ -184,14 +188,28 @@ export const Templates: React.FC = () => {
   const handleCancelEditTemplate = () => {
     setNewTemplate(initialTemplateState);
     setIsOpenEditTemplateModal(!isOpenEditTemplateModal);
+
+    setEditModalFirstnameRequiredAlert(false);
   };
 
   const handleSubmitEditTemplate = async () => {
+    let isValid = true;
+
+    if (!newTemplate?.name || newTemplate.name.trim() === '') {
+      setEditModalFirstnameRequiredAlert(true);
+      isValid = false;
+    }
+
+    if (!isValid) {
+      toast.error(t('msg.fieldRequired'));
+      return;
+    }
+
     try {
       if (!newTemplate) {
         return null;
       } else {
-        await updateTemplate(newTemplate);
+        await updateTemplate({ ...newTemplate, name: newTemplate.name.trim() });
         toast.success(t('msg.templateUpdatedOk'));
         setIsOpenEditTemplateModal(!isOpenEditTemplateModal);
 
@@ -297,7 +315,7 @@ export const Templates: React.FC = () => {
           />
           <FileInput
             id="template"
-            label="File"
+            label={t('file')}
             name="template"
             onFileSelect={file =>
               handleFileSelect(file.name.split('.').pop() ?? '', file.content)
@@ -322,6 +340,8 @@ export const Templates: React.FC = () => {
             name="name"
             onChange={value => handleInputChange('name', value)}
             placeholder={newTemplate?.name ?? t('name')}
+            requiredAlert={editModalNameRequiredAlert}
+            requiredField
             type="text"
             value={newTemplate?.name ?? ''}
           />

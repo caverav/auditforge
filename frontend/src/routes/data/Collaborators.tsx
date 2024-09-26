@@ -68,6 +68,17 @@ export const Collaborators: React.FC = () => {
   const [addModalPasswordRequiredAlert, setAddModalPasswordRequiredAlert] =
     useState<boolean>(false);
 
+  const [editModalUsernameRequiredAlert, setEditModalUsernameRequiredAlert] =
+    useState<boolean>(false);
+  const [editModalFirstnameRequiredAlert, setEditModalFirstnameRequiredAlert] =
+    useState<boolean>(false);
+  const [editModalLastnameRequiredAlert, setEditModalLastnameRequiredAlert] =
+    useState<boolean>(false);
+  const [editModalRoleRequiredAlert, setEditModalRoleRequiredAlert] =
+    useState<boolean>(false);
+  const [editModalPasswordRequiredAlert, setEditModalPasswordRequiredAlert] =
+    useState<boolean>(false);
+
   const initialCollaboratorState = {
     email: '',
     firstname: '',
@@ -213,6 +224,7 @@ export const Collaborators: React.FC = () => {
   const handleCancelAddCollab = () => {
     setNewCollaborator(initialCollaboratorState);
     setIsOpenAddCollabModal(!isOpenAddCollabModal);
+
     setAddModalUsernameRequiredAlert(false);
     setAddModalFirstnameRequiredAlert(false);
     setAddModalLastnameRequiredAlert(false);
@@ -237,22 +249,34 @@ export const Collaborators: React.FC = () => {
 
     let isValid = true;
 
-    if (!updatedCollaborator.username) {
+    if (
+      !updatedCollaborator.username ||
+      updatedCollaborator.username.trim() === ''
+    ) {
       setAddModalUsernameRequiredAlert(true);
       isValid = false;
     }
 
-    if (!updatedCollaborator.firstname) {
+    if (
+      !updatedCollaborator.firstname ||
+      updatedCollaborator.firstname.trim() === ''
+    ) {
       setAddModalFirstnameRequiredAlert(true);
       isValid = false;
     }
 
-    if (!updatedCollaborator.lastname) {
+    if (
+      !updatedCollaborator.lastname ||
+      updatedCollaborator.lastname.trim() === ''
+    ) {
       setAddModalLastnameRequiredAlert(true);
       isValid = false;
     }
 
-    if (!updatedCollaborator.password) {
+    if (
+      !updatedCollaborator.password ||
+      updatedCollaborator.password.trim() === ''
+    ) {
       setAddModalPasswordRequiredAlert(true);
       isValid = false;
     }
@@ -284,10 +308,42 @@ export const Collaborators: React.FC = () => {
   const handleCancelEditCollab = () => {
     setNewCollaborator(initialCollaboratorState);
     setIsOpenEditCollabModal(!isOpenEditCollabModal);
+
+    setEditModalUsernameRequiredAlert(false);
+    setEditModalFirstnameRequiredAlert(false);
+    setEditModalLastnameRequiredAlert(false);
+    setEditModalRoleRequiredAlert(false);
+    setEditModalPasswordRequiredAlert(false);
   };
 
   const handleSubmitEditCollab = async () => {
     if (!newCollaborator) {
+      return;
+    }
+    let isValid = true;
+
+    if (!newCollaborator.username || newCollaborator.username.trim() === '') {
+      setEditModalUsernameRequiredAlert(true);
+      isValid = false;
+    }
+
+    if (!newCollaborator.firstname || newCollaborator.firstname.trim() === '') {
+      setEditModalFirstnameRequiredAlert(true);
+      isValid = false;
+    }
+
+    if (!newCollaborator.lastname || newCollaborator.lastname.trim() === '') {
+      setEditModalLastnameRequiredAlert(true);
+      isValid = false;
+    }
+
+    if (!newCollaborator.password || newCollaborator.password.trim() === '') {
+      setEditModalPasswordRequiredAlert(true);
+      isValid = false;
+    }
+
+    if (!isValid) {
+      toast.error(t('msg.fieldRequired'));
       return;
     }
 
@@ -470,6 +526,8 @@ export const Collaborators: React.FC = () => {
             name="username"
             onChange={value => handleInputChange('username', value)}
             placeholder={t('username')}
+            requiredAlert={editModalUsernameRequiredAlert}
+            requiredField
             type="text"
             value={newCollaborator?.username ?? ''}
           />
@@ -479,6 +537,8 @@ export const Collaborators: React.FC = () => {
             name="firstname"
             onChange={value => handleInputChange('firstname', value)}
             placeholder={t('firstname')}
+            requiredAlert={editModalFirstnameRequiredAlert}
+            requiredField
             type="text"
             value={newCollaborator?.firstname ?? ''}
           />
@@ -488,6 +548,8 @@ export const Collaborators: React.FC = () => {
             name="lastname"
             onChange={value => handleInputChange('lastname', value)}
             placeholder={t('lastname')}
+            requiredAlert={editModalLastnameRequiredAlert}
+            requiredField
             type="text"
             value={newCollaborator?.lastname ?? ''}
           />
@@ -512,6 +574,8 @@ export const Collaborators: React.FC = () => {
           <SelectDropdown
             items={roles}
             onChange={handleRoleChange}
+            requiredAlert={editModalRoleRequiredAlert}
+            requiredField
             selected={selectedRole}
             title={t('role')}
           />
@@ -521,6 +585,8 @@ export const Collaborators: React.FC = () => {
             name="password"
             onChange={value => handleInputChange('password', value)}
             placeholder={t('password')}
+            requiredAlert={editModalPasswordRequiredAlert}
+            requiredField
             type="password"
             value={newCollaborator?.password ?? ''}
           />

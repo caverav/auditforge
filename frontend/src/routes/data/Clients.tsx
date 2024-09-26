@@ -83,6 +83,13 @@ export const Clients: React.FC = () => {
   const [addModalEmailRequiredAlert, setAddModalEmailRequiredAlert] =
     useState<boolean>(false);
 
+  const [editModalFirstnameRequiredAlert, setEditModalFirstnameRequiredAlert] =
+    useState<boolean>(false);
+  const [editModalLastnameRequiredAlert, setEditModalLastnameRequiredAlert] =
+    useState<boolean>(false);
+  const [editModalEmailRequiredAlert, setEditModalEmailRequiredAlert] =
+    useState<boolean>(false);
+
   const [selectedCompany, setSelectedCompany] = useState<ListItem>({
     id: 0,
     _id: '',
@@ -205,6 +212,7 @@ export const Clients: React.FC = () => {
   const handleCancelAddClient = () => {
     setNewClient(initialClientState);
     setIsOpenAddClientModal(!isOpenAddClientModal);
+
     setAddModalFirstnameRequiredAlert(false);
     setAddModalLastnameRequiredAlert(false);
     setAddModalEmailRequiredAlert(false);
@@ -224,24 +232,30 @@ export const Clients: React.FC = () => {
     }
 
     let isValid = true;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    if (!newClient.firstname) {
+    if (!newClient.firstname || newClient.firstname.trim() === '') {
       setAddModalFirstnameRequiredAlert(true);
       isValid = false;
     }
 
-    if (!newClient.lastname) {
+    if (!newClient.lastname || newClient.lastname.trim() === '') {
       setAddModalLastnameRequiredAlert(true);
       isValid = false;
     }
 
-    if (!newClient.email) {
+    if (!newClient.email || newClient.email.trim() === '') {
       setAddModalEmailRequiredAlert(true);
       isValid = false;
     }
 
     if (!isValid) {
       toast.error(t('msg.fieldRequired'));
+      return;
+    }
+
+    if (!emailRegex.test(newClient.email)) {
+      toast.error(t('msg.invalidEmail'));
       return;
     }
 
@@ -281,6 +295,10 @@ export const Clients: React.FC = () => {
   const handleCancelEditClient = () => {
     setNewClient(initialClientState);
     setIsOpenEditClientModal(!isOpenEditClientModal);
+
+    setEditModalFirstnameRequiredAlert(false);
+    setEditModalLastnameRequiredAlert(false);
+    setEditModalEmailRequiredAlert(false);
   };
 
   const handleSubmitEditClient = async () => {
@@ -293,6 +311,34 @@ export const Clients: React.FC = () => {
       selectedCompany.value === '' &&
       selectedCompany._id === ''
     ) {
+      return;
+    }
+
+    let isValid = true;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!newClient.firstname || newClient.firstname.trim() === '') {
+      setEditModalFirstnameRequiredAlert(true);
+      isValid = false;
+    }
+
+    if (!newClient.lastname || newClient.lastname.trim() === '') {
+      setEditModalLastnameRequiredAlert(true);
+      isValid = false;
+    }
+
+    if (!newClient.email || newClient.email.trim() === '') {
+      setEditModalEmailRequiredAlert(true);
+      isValid = false;
+    }
+
+    if (!isValid) {
+      toast.error(t('msg.fieldRequired'));
+      return;
+    }
+
+    if (!emailRegex.test(newClient.email)) {
+      toast.error(t('msg.invalidEmail'));
       return;
     }
 
@@ -503,6 +549,8 @@ export const Clients: React.FC = () => {
             name="firstname"
             onChange={value => handleInputChange('firstname', value)}
             placeholder={t('firstname')}
+            requiredAlert={editModalFirstnameRequiredAlert}
+            requiredField
             type="text"
             value={newClient?.firstname ?? ''}
           />
@@ -512,6 +560,8 @@ export const Clients: React.FC = () => {
             name="lastname"
             onChange={value => handleInputChange('lastname', value)}
             placeholder={t('lastname')}
+            requiredAlert={editModalLastnameRequiredAlert}
+            requiredField
             type="text"
             value={newClient?.lastname ?? ''}
           />
@@ -521,6 +571,8 @@ export const Clients: React.FC = () => {
             name="email"
             onChange={value => handleInputChange('email', value)}
             placeholder={t('email')}
+            requiredAlert={editModalEmailRequiredAlert}
+            requiredField
             type="text"
             value={newClient?.email ?? ''}
           />

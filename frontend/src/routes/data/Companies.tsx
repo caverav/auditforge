@@ -51,6 +51,9 @@ export const Companies: React.FC = () => {
   const [addModalNameRequiredAlert, setAddModalNameRequiredAlert] =
     useState<boolean>(false);
 
+  const [editModalNameRequiredAlert, setEditModalNameRequiredAlert] =
+    useState<boolean>(false);
+
   const [selectedCompany, setSelectedCompany] = useState<TableData | null>(
     null,
   );
@@ -139,13 +142,14 @@ export const Companies: React.FC = () => {
   const handleCancelAddCompanies = () => {
     setNewCompany(initialCompanyState);
     setIsOpenAddCompaniesModal(!isOpenAddCompaniesModal);
+
     setAddModalNameRequiredAlert(false);
   };
 
   const handleSubmitAddCompanies = async () => {
     let isValid = true;
 
-    if (!newCompany?.name) {
+    if (!newCompany?.name || newCompany.name.trim() === '') {
       setAddModalNameRequiredAlert(true);
       isValid = false;
     }
@@ -176,9 +180,23 @@ export const Companies: React.FC = () => {
   const handleCancelEditCompanies = () => {
     setNewCompany(initialCompanyState);
     setIsOpenEditCompaniesModal(!isOpenEditCompaniesModal);
+
+    setEditModalNameRequiredAlert(false);
   };
 
   const handleSubmitEditCompanies = async () => {
+    let isValid = true;
+
+    if (!newCompany?.name || newCompany.name.trim() === '') {
+      setEditModalNameRequiredAlert(true);
+      isValid = false;
+    }
+
+    if (!isValid) {
+      toast.error(t('msg.fieldRequired'));
+      return;
+    }
+
     try {
       if (!newCompany) {
         return null;
@@ -320,6 +338,7 @@ export const Companies: React.FC = () => {
             name="name"
             onChange={value => handleInputChange('name', value)}
             placeholder={t('name')}
+            requiredAlert={editModalNameRequiredAlert}
             requiredField
             type="text"
             value={newCompany?.name ?? ''}
