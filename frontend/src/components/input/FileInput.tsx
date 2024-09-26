@@ -1,5 +1,5 @@
-import React, { ChangeEvent, useState } from 'react';
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
+import React, { ChangeEvent, useState } from 'react';
 
 type FileInputProps = {
   id: string;
@@ -8,6 +8,16 @@ type FileInputProps = {
   requiredField?: boolean;
   requiredAlert?: boolean;
   label?: string;
+};
+
+const arrayBufferToBase64 = (buffer: ArrayBuffer): string => {
+  let binary = '';
+  const bytes = new Uint8Array(buffer);
+  const len = bytes.byteLength;
+  for (let i = 0; i < len; i++) {
+    binary += String.fromCharCode(bytes[i]);
+  }
+  return btoa(binary);
 };
 
 const FileInput: React.FC<FileInputProps> = ({
@@ -28,6 +38,7 @@ const FileInput: React.FC<FileInputProps> = ({
       const reader = new FileReader();
 
       reader.onloadend = () => {
+        // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
         const arrayBuffer = reader.result as ArrayBuffer;
         const base64String = arrayBufferToBase64(arrayBuffer);
         onFileSelect({ name: file.name, content: base64String });
@@ -38,34 +49,32 @@ const FileInput: React.FC<FileInputProps> = ({
     }
   };
 
-  const arrayBufferToBase64 = (buffer: ArrayBuffer): string => {
-    let binary = '';
-    const bytes = new Uint8Array(buffer);
-    const len = bytes.byteLength;
-    for (let i = 0; i < len; i++) {
-      binary += String.fromCharCode(bytes[i]);
-    }
-    return btoa(binary);
-  };
-
   return (
     <div>
       {label ? (
-        <label className="text-sm font-medium leading-6 text-gray-300" htmlFor={id}>
-          {label} {requiredField && <span className="text-red-500 text-lg">*</span>}
+        <label
+          className="text-sm font-medium leading-6 text-gray-300"
+          htmlFor={id}
+        >
+          {label}{' '}
+          {requiredField ? (
+            <span className="text-red-500 text-lg">*</span>
+          ) : null}
         </label>
       ) : null}
       <div className="relative mt-2 rounded-md shadow-sm">
         <input
           accept=".doc,.docx,.docm,.ppt,.pptx"
           className={`block w-full rounded-md border-0 py-1.5 pl-7 pr-7 text-white-900 placeholder:text-gray-400 sm:text-sm sm:leading-6 ${
-            requiredAlert && !fileName && !isFocused ? 'ring-1 ring-red-500' : ''
+            requiredAlert && !fileName && !isFocused
+              ? 'ring-1 ring-red-500'
+              : ''
           }`}
           id={id}
           name={name}
+          onBlur={() => setIsFocused(false)}
           onChange={handleFileChange}
           onFocus={() => setIsFocused(true)}
-          onBlur={() => setIsFocused(false)}
           type="file"
         />
         {!isFocused && requiredAlert && !fileName ? (
