@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
@@ -29,6 +29,20 @@ type NewCollaborator = {
   totpenabled: boolean;
   username: string;
   enabled?: boolean;
+  [key: string]: string | number | boolean | undefined;
+};
+
+type TableData = {
+  _id?: string;
+  email: string;
+  firstname: string;
+  lastname: string;
+  password: string;
+  phone: string;
+  role: string;
+  totpenabled: boolean;
+  username: string;
+  enabled?: boolean;
 };
 
 type RoleOption = {
@@ -41,6 +55,7 @@ export const Collaborators: React.FC = () => {
 
   const [roles, setRoles] = useState<RoleOption[]>([]);
   const [selectedRole, setSelectedRole] = useState<RoleOption | null>(null);
+  const [enabledFilter, setEnabledFilter] = useState<boolean>(true);
 
   const [addModalUsernameRequiredAlert, setAddModalUsernameRequiredAlert] =
     useState<boolean>(false);
@@ -54,26 +69,61 @@ export const Collaborators: React.FC = () => {
     useState<boolean>(false);
 
   const [newCollaborator, setNewCollaborator] =
-    useState<NewCollaborator | null>(
-      selectedRole
-        ? {
-            email: '',
-            firstname: '',
-            lastname: '',
-            password: '',
-            phone: '',
-            role: selectedRole.value,
-            totpenabled: false,
-            username: '',
-          }
-        : null,
-    );
+    useState<NewCollaborator | null>({
+      email: '',
+      firstname: '',
+      lastname: '',
+      password: '',
+      phone: '',
+      role: selectedRole ? selectedRole.value : '',
+      totpenabled: false,
+      username: '',
+    });
 
-  const [collaborators, setCollaborators] = useState<any[]>([]);
+  const [collaborators, setCollaborators] = useState<NewCollaborator[]>([]);
   const [_loading, setLoading] = useState<boolean>(true);
   const [_error, setError] = useState<string | null>(null);
 
-  const fetchCollaborators = async () => {
+  const columns = useMemo(
+    () => [
+      {
+        header: t('username'),
+        accessor: 'username',
+        sortable: true,
+        filterable: true,
+      },
+      {
+        header: t('firstname'),
+        accessor: 'firstname',
+        sortable: true,
+        filterable: true,
+      },
+      {
+        header: t('lastname'),
+        accessor: 'lastname',
+        sortable: true,
+        filterable: true,
+      },
+      {
+        header: t('email'),
+        accessor: 'email',
+        sortable: true,
+        filterable: true,
+      },
+      { header: t('role'), accessor: 'role', sortable: true, filterable: true },
+    ],
+    [t],
+  );
+
+  const [tableData, handleSorting, setTableData] = useSortableTable<TableData>(
+    collaborators,
+    columns,
+  );
+
+  const [isOpenAddCollabModal, setIsOpenAddCollabModal] = useState(false);
+  const [isOpenEditCollabModal, setIsOpenEditCollabModal] = useState(false);
+
+  const fetchCollaborators = useCallback(async () => {
     try {
       const data = await getCollaborators();
       setCollaborators(data.datas);
@@ -88,7 +138,7 @@ export const Collaborators: React.FC = () => {
       setError('Error fetching collaborators');
       setLoading(false);
     }
-  };
+  }, [enabledFilter, setTableData]);
 
   const fetchRoles = async () => {
     try {
@@ -109,50 +159,14 @@ export const Collaborators: React.FC = () => {
   };
 
   useEffect(() => {
-    fetchCollaborators();
-    fetchRoles();
-  }, []);
+    void fetchCollaborators();
+    void fetchRoles();
+  }, [fetchCollaborators]);
 
-  const columns = [
-    {
-      header: t('username'),
-      accessor: 'username',
-      sortable: true,
-      filterable: true,
-    },
-    {
-      header: t('firstname'),
-      accessor: 'firstname',
-      sortable: true,
-      filterable: true,
-    },
-    {
-      header: t('lastname'),
-      accessor: 'lastname',
-      sortable: true,
-      filterable: true,
-    },
-    { header: t('email'), accessor: 'email', sortable: true, filterable: true },
-    { header: t('role'), accessor: 'role', sortable: true, filterable: true },
-  ];
+  const keyExtractor = (item: TableData) => item._id ?? '';
 
-  type TableData = {
-    _id?: string;
-    email: string;
-    firstname: string;
-    lastname: string;
-    password: string;
-    phone: string;
-    role: string;
-    totpenabled: boolean;
-    username: string;
-    enabled?: boolean;
-  };
-
-  const keyExtractor = (item: any) => item._id;
-
-  const handleEditCompanyButton = (collaborator: TableData) => {
-    const role = roles.find(r => r.value === collaborator.role) || null;
+  const handleEditCollaboratorButton = (collaborator: TableData) => {
+    const role = roles.find(r => r.value === collaborator.role) ?? null;
     setSelectedRole(role);
 
     setNewCollaborator({
@@ -165,16 +179,9 @@ export const Collaborators: React.FC = () => {
   const rowActions = [
     {
       label: 'Edit',
-      onClick: (item: TableData) => handleEditCompanyButton(item),
+      onClick: (item: TableData) => handleEditCollaboratorButton(item),
     },
   ];
-
-  const [enabledFilter, setEnabledFilter] = useState<boolean>(true);
-
-  const [tableData, handleSorting, setTableData] = useSortableTable<TableData>(
-    collaborators,
-    columns,
-  );
 
   const [filters, handleFilterChange] = useTableFiltering<TableData>(
     collaborators,
@@ -192,20 +199,26 @@ export const Collaborators: React.FC = () => {
           if (!filterValue) {
             return true;
           }
-          return String(item[column.accessor as keyof TableData])
+          return String(item[column.accessor])
             .toLowerCase()
             .includes(filterValue.toLowerCase());
         })
       );
     });
-    setTableData(newFilteredData ?? []);
-  }, [filters, enabledFilter]);
-
-  const [isOpenAddCollabModal, setIsOpenAddCollabModal] = useState(false);
-  const [isOpenEditCollabModal, setIsOpenEditCollabModal] = useState(false);
+    setTableData(newFilteredData);
+  }, [filters, enabledFilter, columns, collaborators, setTableData]);
 
   const handleCancelAddCollab = () => {
-    setNewCollaborator(null);
+    setNewCollaborator({
+      email: '',
+      firstname: '',
+      lastname: '',
+      password: '',
+      phone: '',
+      role: selectedRole ? selectedRole.value : '',
+      totpenabled: false,
+      username: '',
+    });
     setIsOpenAddCollabModal(!isOpenAddCollabModal);
     setAddModalUsernameRequiredAlert(false);
     setAddModalFirstnameRequiredAlert(false);
@@ -220,9 +233,13 @@ export const Collaborators: React.FC = () => {
   };
 
   const handleSubmitAddCollab = async () => {
+    if (!newCollaborator) {
+      return;
+    }
+
     const updatedCollaborator: NewCollaborator = {
-      ...newCollaborator!,
-      role: selectedRole?.value!,
+      ...newCollaborator,
+      role: selectedRole?.value ?? '',
     };
 
     let isValid = true;
@@ -256,13 +273,14 @@ export const Collaborators: React.FC = () => {
       toast.error(t('msg.passwordComplexity'));
       return;
     }
+
     try {
-      await createCollaborator(updatedCollaborator!);
+      await createCollaborator(updatedCollaborator);
       toast.success(t('msg.collaboratorCreatedOk'));
       setIsOpenAddCollabModal(!isOpenAddCollabModal);
 
       setNewCollaborator(null);
-      fetchCollaborators();
+      void fetchCollaborators();
     } catch (error) {
       toast.error(t('msg.collaboratorUsernameError'));
       setError('Error creating collaborator');
@@ -271,7 +289,16 @@ export const Collaborators: React.FC = () => {
   };
 
   const handleCancelEditCollab = () => {
-    setNewCollaborator(null);
+    setNewCollaborator({
+      email: '',
+      firstname: '',
+      lastname: '',
+      password: '',
+      phone: '',
+      role: selectedRole ? selectedRole.value : '',
+      totpenabled: false,
+      username: '',
+    });
     setIsOpenEditCollabModal(!isOpenEditCollabModal);
   };
 
@@ -287,13 +314,14 @@ export const Collaborators: React.FC = () => {
       toast.error(t('msg.passwordComplexity'));
       return;
     }
+
     try {
-      await updateCollaborator(newCollaborator!);
+      await updateCollaborator(newCollaborator);
       toast.success(t('msg.collaboratorUpdatedOk'));
       setIsOpenEditCollabModal(!isOpenEditCollabModal);
 
       setNewCollaborator(null);
-      fetchCollaborators();
+      void fetchCollaborators();
     } catch (error) {
       toast.error(t('msg.collaboratorUsernameError'));
       setError('Error updating collaborator');
@@ -302,18 +330,30 @@ export const Collaborators: React.FC = () => {
   };
 
   const handleInputChange = (name: string, value: string) => {
-    setNewCollaborator(prevState => ({
-      ...prevState!,
-      [name]: value,
-    }));
+    setNewCollaborator(prevState => {
+      if (!prevState) {
+        return null;
+      } else {
+        return {
+          ...prevState,
+          [name]: value,
+        };
+      }
+    });
   };
 
   const handleRoleChange = (role: RoleOption) => {
     setSelectedRole(role);
-    setNewCollaborator(prevState => ({
-      ...prevState!,
-      role: role.value,
-    }));
+    setNewCollaborator(prevState => {
+      if (!prevState) {
+        return null;
+      } else {
+        return {
+          ...prevState,
+          role: role.value,
+        };
+      }
+    });
   };
 
   return (
@@ -365,10 +405,10 @@ export const Collaborators: React.FC = () => {
             name="username"
             onChange={value => handleInputChange('username', value)}
             placeholder={t('username')}
-            type="text"
-            value={newCollaborator?.username || ''}
-            requiredField
             requiredAlert={addModalUsernameRequiredAlert}
+            requiredField
+            type="text"
+            value={newCollaborator?.username ?? ''}
           />
           <SimpleInput
             id="firstname"
@@ -376,10 +416,10 @@ export const Collaborators: React.FC = () => {
             name="firstname"
             onChange={value => handleInputChange('firstname', value)}
             placeholder={t('firstname')}
-            type="text"
-            value={newCollaborator?.firstname || ''}
-            requiredField={true}
             requiredAlert={addModalFirstnameRequiredAlert}
+            requiredField
+            type="text"
+            value={newCollaborator?.firstname ?? ''}
           />
           <SimpleInput
             id="lastname"
@@ -387,10 +427,10 @@ export const Collaborators: React.FC = () => {
             name="lastname"
             onChange={value => handleInputChange('lastname', value)}
             placeholder={t('lastname')}
-            type="text"
-            value={newCollaborator?.lastname || ''}
-            requiredField={true}
             requiredAlert={addModalLastnameRequiredAlert}
+            requiredField
+            type="text"
+            value={newCollaborator?.lastname ?? ''}
           />
           <SimpleInput
             id="email"
@@ -399,7 +439,7 @@ export const Collaborators: React.FC = () => {
             onChange={value => handleInputChange('email', value)}
             placeholder={t('email')}
             type="text"
-            value={newCollaborator?.email || ''}
+            value={newCollaborator?.email ?? ''}
           />
           <SimpleInput
             id="phone"
@@ -408,15 +448,15 @@ export const Collaborators: React.FC = () => {
             onChange={value => handleInputChange('phone', value)}
             placeholder={t('phone')}
             type="text"
-            value={newCollaborator?.phone || ''}
+            value={newCollaborator?.phone ?? ''}
           />
           <SelectDropdown
             items={roles}
             onChange={handleRoleChange}
+            requiredAlert={addModalRoleRequiredAlert}
+            requiredField
             selected={selectedRole}
             title={t('role')}
-            requiredField={true}
-            requiredAlert={addModalRoleRequiredAlert}
           />
           <SimpleInput
             id="password"
@@ -424,10 +464,10 @@ export const Collaborators: React.FC = () => {
             name="password"
             onChange={value => handleInputChange('password', value)}
             placeholder={t('password')}
-            type="password"
-            value={newCollaborator?.password || ''}
-            requiredField
             requiredAlert={addModalPasswordRequiredAlert}
+            requiredField
+            type="password"
+            value={newCollaborator?.password ?? ''}
           />
         </>
       </Modal>
@@ -447,7 +487,7 @@ export const Collaborators: React.FC = () => {
             onChange={value => handleInputChange('username', value)}
             placeholder={t('username')}
             type="text"
-            value={newCollaborator?.username || ''}
+            value={newCollaborator?.username ?? ''}
           />
           <SimpleInput
             id="firstname"
@@ -456,7 +496,7 @@ export const Collaborators: React.FC = () => {
             onChange={value => handleInputChange('firstname', value)}
             placeholder={t('firstname')}
             type="text"
-            value={newCollaborator?.firstname || ''}
+            value={newCollaborator?.firstname ?? ''}
           />
           <SimpleInput
             id="lastname"
@@ -465,7 +505,7 @@ export const Collaborators: React.FC = () => {
             onChange={value => handleInputChange('lastname', value)}
             placeholder={t('lastname')}
             type="text"
-            value={newCollaborator?.lastname || ''}
+            value={newCollaborator?.lastname ?? ''}
           />
           <SimpleInput
             id="email"
@@ -474,7 +514,7 @@ export const Collaborators: React.FC = () => {
             onChange={value => handleInputChange('email', value)}
             placeholder={t('email')}
             type="text"
-            value={newCollaborator?.email || ''}
+            value={newCollaborator?.email ?? ''}
           />
           <SimpleInput
             id="phone"
@@ -483,7 +523,7 @@ export const Collaborators: React.FC = () => {
             onChange={value => handleInputChange('phone', value)}
             placeholder={t('phone')}
             type="text"
-            value={newCollaborator?.phone || ''}
+            value={newCollaborator?.phone ?? ''}
           />
           <SelectDropdown
             items={roles}
@@ -498,7 +538,7 @@ export const Collaborators: React.FC = () => {
             onChange={value => handleInputChange('password', value)}
             placeholder={t('password')}
             type="password"
-            value={newCollaborator?.password || ''}
+            value={newCollaborator?.password ?? ''}
           />
           <div className="flex items-center mt-2">
             <PrimarySwitch
