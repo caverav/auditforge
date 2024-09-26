@@ -35,6 +35,8 @@ services:
     image: auditforge-frontend
     container_name: auditforge-frontend
     restart: always
+    depends_on:
+      - auditforge-backend
     ports:
       - 8443:8443
     networks:

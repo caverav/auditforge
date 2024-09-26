@@ -52,11 +52,19 @@ export const AuditRoot = () => {
   }, [auditId]);
 
   const sortOptions = [
-    { id: 1, value: 'CVSS Score' },
-    { id: 2, value: 'CVSS Temporal Score' },
-    { id: 3, value: 'CVSS Environmental Score' },
-    { id: 4, value: 'Priority' },
-    { id: 5, value: 'Remediation Difficulty' },
+    { id: 1, value: 'CVSS Score', label: t('cvssScore') },
+    { id: 2, value: 'CVSS Temporal Score', label: t('cvssTemporalScore') },
+    {
+      id: 3,
+      value: 'CVSS Environmental Score',
+      label: t('cvssEnvironmentalScore'),
+    },
+    { id: 4, value: 'Priority', label: t('priority') },
+    {
+      id: 5,
+      value: 'Remediation Difficulty',
+      label: t('remediationDifficulty'),
+    },
   ];
 
   const sortOrderOptions = [
@@ -133,7 +141,7 @@ export const AuditRoot = () => {
         <Outlet />
       </div>
       <div className="m-2">
-        <DropdownButton items={fileTypes} placeholder="Export as" />
+        <DropdownButton items={fileTypes} placeholder={t('export')} />
       </div>
     </div>
   );

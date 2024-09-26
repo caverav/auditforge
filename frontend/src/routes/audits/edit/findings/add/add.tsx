@@ -38,19 +38,19 @@ export const Add = () => {
 
   const columns: Column[] = [
     {
-      header: 'Title',
+      header: t('title'),
       accessor: 'title',
       sortable: true,
       filterable: true,
     },
     {
-      header: 'Category',
+      header: t('category'),
       accessor: 'category',
       sortable: false,
       filterable: true,
     },
     {
-      header: 'Type',
+      header: t('type'),
       accessor: 'type',
       sortable: false,
       filterable: true,
@@ -92,8 +92,8 @@ export const Add = () => {
           (item: FindingByLocale): TableData => ({
             id: item._id,
             title: item.detail.title,
-            category: item.category ?? 'No category',
-            type: item.detail.vulnType ?? 'Undefined',
+            category: item.category ?? t('noCategory'),
+            type: item.detail.vulnType ?? t('undefined'),
           }),
         );
 

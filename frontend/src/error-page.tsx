@@ -26,7 +26,7 @@ export const ErrorPage = () => {
             <img
               alt="home"
               className="w-64 animate-floting lg:w-[400px]"
-              src="/auditforgelogo.png"
+              src="/logo.svg"
             />
             <div className="home__shadow mx-auto h-8 w-36 animate-shadow rounded-[50%] bg-gray-900/30 blur-md lg:w-64" />
           </div>
