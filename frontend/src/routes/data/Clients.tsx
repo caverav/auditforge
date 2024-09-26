@@ -234,10 +234,12 @@ export const Clients: React.FC = () => {
       isValid = false;
     }
 
+
     if (!newClient.lastname) {
       setAddModalLastnameRequiredAlert(true);
       isValid = false;
     }
+
 
     if (!newClient.email) {
       setAddModalEmailRequiredAlert(true);
@@ -458,6 +460,8 @@ export const Clients: React.FC = () => {
             requiredField
             type="text"
             value={newClient?.firstname ?? ''}
+            requiredField
+            requiredAlert={addModalFirstnameRequiredAlert}
           />
           <SimpleInput
             id="lastname"
@@ -469,6 +473,8 @@ export const Clients: React.FC = () => {
             requiredField
             type="text"
             value={newClient?.lastname ?? ''}
+            requiredField
+            requiredAlert={addModalLastnameRequiredAlert}
           />
           <SimpleInput
             id="email"
@@ -480,6 +486,8 @@ export const Clients: React.FC = () => {
             requiredField
             type="text"
             value={newClient?.email ?? ''}
+            requiredField
+            requiredAlert={addModalEmailRequiredAlert}
           />
           <SimpleInput
             id="title"
