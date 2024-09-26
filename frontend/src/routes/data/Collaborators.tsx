@@ -406,7 +406,7 @@ export const Collaborators: React.FC = () => {
             onChange={value => handleInputChange('username', value)}
             placeholder={t('username')}
             requiredAlert={addModalUsernameRequiredAlert}
-            requiredField={true}
+            requiredField
             type="text"
             value={newCollaborator?.username ?? ''}
           />
@@ -417,7 +417,7 @@ export const Collaborators: React.FC = () => {
             onChange={value => handleInputChange('firstname', value)}
             placeholder={t('firstname')}
             requiredAlert={addModalFirstnameRequiredAlert}
-            requiredField={true}
+            requiredField
             type="text"
             value={newCollaborator?.firstname ?? ''}
           />
@@ -428,7 +428,7 @@ export const Collaborators: React.FC = () => {
             onChange={value => handleInputChange('lastname', value)}
             placeholder={t('lastname')}
             requiredAlert={addModalLastnameRequiredAlert}
-            requiredField={true}
+            requiredField
             type="text"
             value={newCollaborator?.lastname ?? ''}
           />
@@ -454,7 +454,7 @@ export const Collaborators: React.FC = () => {
             items={roles}
             onChange={handleRoleChange}
             requiredAlert={addModalRoleRequiredAlert}
-            requiredField={true}
+            requiredField
             selected={selectedRole}
             title={t('role')}
           />
@@ -465,7 +465,7 @@ export const Collaborators: React.FC = () => {
             onChange={value => handleInputChange('password', value)}
             placeholder={t('password')}
             requiredAlert={addModalPasswordRequiredAlert}
-            requiredField={true}
+            requiredField
             type="password"
             value={newCollaborator?.password ?? ''}
           />

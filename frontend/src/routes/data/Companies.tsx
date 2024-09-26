@@ -288,7 +288,7 @@ export const Companies: React.FC = () => {
             onChange={value => handleInputChange('name', value)}
             placeholder={t('name')}
             requiredAlert={addModalNameRequiredAlert}
-            requiredField={true}
+            requiredField
             type="text"
             value={newCompany?.name ?? ''}
           />
@@ -324,7 +324,7 @@ export const Companies: React.FC = () => {
             name="name"
             onChange={value => handleInputChange('name', value)}
             placeholder={t('name')}
-            requiredField={true}
+            requiredField
             type="text"
             value={newCompany?.name ?? ''}
           />

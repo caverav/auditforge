@@ -295,7 +295,7 @@ export const Templates: React.FC = () => {
             onChange={value => handleInputChange('name', value)}
             placeholder={t('name')}
             requiredAlert={addModalNameRequiredAlert}
-            requiredField={true}
+            requiredField
             type="text"
             value={newTemplate?.name ?? ''}
           />
@@ -307,7 +307,7 @@ export const Templates: React.FC = () => {
               handleFileSelect(file.name.split('.').pop() ?? '', file.content)
             }
             requiredAlert={addModalFileRequiredAlert}
-            requiredField={true}
+            requiredField
           />
         </>
       </Modal>

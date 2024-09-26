@@ -455,7 +455,7 @@ export const Clients: React.FC = () => {
             onChange={value => handleInputChange('firstname', value)}
             placeholder={t('firstname')}
             requiredAlert={addModalFirstnameRequiredAlert}
-            requiredField={true}
+            requiredField
             type="text"
             value={newClient?.firstname ?? ''}
           />
@@ -466,7 +466,7 @@ export const Clients: React.FC = () => {
             onChange={value => handleInputChange('lastname', value)}
             placeholder={t('lastname')}
             requiredAlert={addModalLastnameRequiredAlert}
-            requiredField={true}
+            requiredField
             type="text"
             value={newClient?.lastname ?? ''}
           />
@@ -477,7 +477,7 @@ export const Clients: React.FC = () => {
             onChange={value => handleInputChange('email', value)}
             placeholder={t('email')}
             requiredAlert={addModalEmailRequiredAlert}
-            requiredField={true}
+            requiredField
             type="text"
             value={newClient?.email ?? ''}
           />
