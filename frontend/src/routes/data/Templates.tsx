@@ -35,11 +35,15 @@ type TableData = {
 export const Templates: React.FC = () => {
   const { t } = useTranslation();
 
-  const [newTemplate, setNewTemplate] = useState<NewTemplate | null>({
+  const initialTemplateState = {
     name: '',
     ext: '',
     file: '',
-  });
+  };
+
+  const [newTemplate, setNewTemplate] = useState<NewTemplate | null>(
+    initialTemplateState,
+  );
 
   const [templates, setTemplates] = useState<NewTemplate[]>([]);
   const [_loading, setLoading] = useState<boolean>(true);
@@ -135,11 +139,7 @@ export const Templates: React.FC = () => {
   ];
 
   const handleCancelAddTemplate = () => {
-    setNewTemplate({
-      name: '',
-      ext: '',
-      file: '',
-    });
+    setNewTemplate(initialTemplateState);
     setIsOpenAddTemplateModal(!isOpenAddTemplateModal);
     setAddModalFirstnameRequiredAlert(false);
     setAddModalFileRequiredAlert(false);
@@ -171,7 +171,7 @@ export const Templates: React.FC = () => {
         toast.success(t('msg.templateCreatedOk'));
         setIsOpenAddTemplateModal(!isOpenAddTemplateModal);
 
-        setNewTemplate(null);
+        setNewTemplate(initialTemplateState);
         void fetchTemplates();
       }
     } catch (error) {
@@ -182,11 +182,7 @@ export const Templates: React.FC = () => {
   };
 
   const handleCancelEditTemplate = () => {
-    setNewTemplate({
-      name: '',
-      ext: '',
-      file: '',
-    });
+    setNewTemplate(initialTemplateState);
     setIsOpenEditTemplateModal(!isOpenEditTemplateModal);
   };
 
@@ -199,7 +195,7 @@ export const Templates: React.FC = () => {
         toast.success(t('msg.templateUpdatedOk'));
         setIsOpenEditTemplateModal(!isOpenEditTemplateModal);
 
-        setNewTemplate(null);
+        setNewTemplate(initialTemplateState);
         void fetchTemplates();
       }
     } catch (error) {

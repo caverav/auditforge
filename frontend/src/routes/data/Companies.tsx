@@ -34,11 +34,15 @@ type TableData = {
 export const Companies: React.FC = () => {
   const { t } = useTranslation();
 
-  const [newCompany, setNewCompany] = useState<NewCompany | null>({
+  const initialCompanyState = {
     name: '',
     shortName: '',
     logo: '',
-  });
+  };
+
+  const [newCompany, setNewCompany] = useState<NewCompany | null>(
+    initialCompanyState,
+  );
 
   const [companies, setCompanies] = useState<NewCompany[]>([]);
   const [_loading, setLoading] = useState<boolean>(true);
@@ -133,11 +137,7 @@ export const Companies: React.FC = () => {
   ];
 
   const handleCancelAddCompanies = () => {
-    setNewCompany({
-      name: '',
-      shortName: '',
-      logo: '',
-    });
+    setNewCompany(initialCompanyState);
     setIsOpenAddCompaniesModal(!isOpenAddCompaniesModal);
     setAddModalNameRequiredAlert(false);
   };
@@ -163,7 +163,7 @@ export const Companies: React.FC = () => {
         toast.success(t('msg.companyCreatedOk'));
         setIsOpenAddCompaniesModal(!isOpenAddCompaniesModal);
 
-        setNewCompany(null);
+        setNewCompany(initialCompanyState);
         void fetchCompanies();
       }
     } catch (error) {
@@ -174,11 +174,7 @@ export const Companies: React.FC = () => {
   };
 
   const handleCancelEditCompanies = () => {
-    setNewCompany({
-      name: '',
-      shortName: '',
-      logo: '',
-    });
+    setNewCompany(initialCompanyState);
     setIsOpenEditCompaniesModal(!isOpenEditCompaniesModal);
   };
 
@@ -191,7 +187,7 @@ export const Companies: React.FC = () => {
         toast.success(t('msg.companyUpdatedOk'));
         setIsOpenEditCompaniesModal(!isOpenEditCompaniesModal);
 
-        setNewCompany(null);
+        setNewCompany(initialCompanyState);
         void fetchCompanies();
       }
     } catch (error) {

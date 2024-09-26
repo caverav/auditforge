@@ -68,17 +68,19 @@ export const Collaborators: React.FC = () => {
   const [addModalPasswordRequiredAlert, setAddModalPasswordRequiredAlert] =
     useState<boolean>(false);
 
+  const initialCollaboratorState = {
+    email: '',
+    firstname: '',
+    lastname: '',
+    password: '',
+    phone: '',
+    role: selectedRole ? selectedRole.value : '',
+    totpenabled: false,
+    username: '',
+  };
+
   const [newCollaborator, setNewCollaborator] =
-    useState<NewCollaborator | null>({
-      email: '',
-      firstname: '',
-      lastname: '',
-      password: '',
-      phone: '',
-      role: selectedRole ? selectedRole.value : '',
-      totpenabled: false,
-      username: '',
-    });
+    useState<NewCollaborator | null>(initialCollaboratorState);
 
   const [collaborators, setCollaborators] = useState<NewCollaborator[]>([]);
   const [_loading, setLoading] = useState<boolean>(true);
@@ -209,16 +211,7 @@ export const Collaborators: React.FC = () => {
   }, [filters, enabledFilter, columns, collaborators, setTableData]);
 
   const handleCancelAddCollab = () => {
-    setNewCollaborator({
-      email: '',
-      firstname: '',
-      lastname: '',
-      password: '',
-      phone: '',
-      role: selectedRole ? selectedRole.value : '',
-      totpenabled: false,
-      username: '',
-    });
+    setNewCollaborator(initialCollaboratorState);
     setIsOpenAddCollabModal(!isOpenAddCollabModal);
     setAddModalUsernameRequiredAlert(false);
     setAddModalFirstnameRequiredAlert(false);
@@ -279,7 +272,7 @@ export const Collaborators: React.FC = () => {
       toast.success(t('msg.collaboratorCreatedOk'));
       setIsOpenAddCollabModal(!isOpenAddCollabModal);
 
-      setNewCollaborator(null);
+      setNewCollaborator(initialCollaboratorState);
       void fetchCollaborators();
     } catch (error) {
       toast.error(t('msg.collaboratorUsernameError'));
@@ -289,16 +282,7 @@ export const Collaborators: React.FC = () => {
   };
 
   const handleCancelEditCollab = () => {
-    setNewCollaborator({
-      email: '',
-      firstname: '',
-      lastname: '',
-      password: '',
-      phone: '',
-      role: selectedRole ? selectedRole.value : '',
-      totpenabled: false,
-      username: '',
-    });
+    setNewCollaborator(initialCollaboratorState);
     setIsOpenEditCollabModal(!isOpenEditCollabModal);
   };
 
@@ -320,7 +304,7 @@ export const Collaborators: React.FC = () => {
       toast.success(t('msg.collaboratorUpdatedOk'));
       setIsOpenEditCollabModal(!isOpenEditCollabModal);
 
-      setNewCollaborator(null);
+      setNewCollaborator(initialCollaboratorState);
       void fetchCollaborators();
     } catch (error) {
       toast.error(t('msg.collaboratorUsernameError'));

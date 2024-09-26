@@ -89,7 +89,7 @@ export const Clients: React.FC = () => {
     value: '',
   });
 
-  const [newClient, setNewClient] = useState<NewClient | null>({
+  const initialClientState = {
     company: null,
     firstname: '',
     lastname: '',
@@ -97,7 +97,11 @@ export const Clients: React.FC = () => {
     title: '',
     phone: '',
     cell: '',
-  });
+  };
+
+  const [newClient, setNewClient] = useState<NewClient | null>(
+    initialClientState,
+  );
 
   const [clients, setClients] = useState<Client[]>([]);
   const [_loading, setLoading] = useState<boolean>(true);
@@ -199,15 +203,7 @@ export const Clients: React.FC = () => {
   );
 
   const handleCancelAddClient = () => {
-    setNewClient({
-      company: null,
-      firstname: '',
-      lastname: '',
-      email: '',
-      title: '',
-      phone: '',
-      cell: '',
-    });
+    setNewClient(initialClientState);
     setIsOpenAddClientModal(!isOpenAddClientModal);
     setAddModalFirstnameRequiredAlert(false);
     setAddModalLastnameRequiredAlert(false);
@@ -273,15 +269,7 @@ export const Clients: React.FC = () => {
       toast.success(t('msg.clientCreatedOk'));
       setIsOpenAddClientModal(!isOpenAddClientModal);
 
-      setNewClient({
-        company: null,
-        firstname: '',
-        lastname: '',
-        email: '',
-        title: '',
-        phone: '',
-        cell: '',
-      });
+      setNewClient(initialClientState);
       void fetchClients();
     } catch (error) {
       toast.error(t('msg.clientEmailError'));
@@ -291,15 +279,7 @@ export const Clients: React.FC = () => {
   };
 
   const handleCancelEditClient = () => {
-    setNewClient({
-      company: null,
-      firstname: '',
-      lastname: '',
-      email: '',
-      title: '',
-      phone: '',
-      cell: '',
-    });
+    setNewClient(initialClientState);
     setIsOpenEditClientModal(!isOpenEditClientModal);
   };
 
@@ -340,15 +320,7 @@ export const Clients: React.FC = () => {
       toast.success(t('msg.clientUpdatedOk'));
       setIsOpenEditClientModal(!isOpenEditClientModal);
 
-      setNewClient({
-        company: null,
-        firstname: '',
-        lastname: '',
-        email: '',
-        title: '',
-        phone: '',
-        cell: '',
-      });
+      setNewClient(initialClientState);
       void fetchClients();
     } catch (error) {
       toast.error(t('msg.clientEmailError'));
