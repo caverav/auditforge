@@ -88,6 +88,72 @@ export type AuditType = {
   templates: { template: string; locale: string }[];
 };
 
+type OptionData = {
+  locale: string;
+  value: string;
+};
+
+export type AddCustomFieldType = {
+  label: string;
+  fieldType: string;
+  display: string;
+  displaySub: string;
+  size: number;
+  offset: number;
+  required: boolean;
+  description: string;
+  text: OptionData[];
+  options: OptionData[];
+  position: number;
+};
+
+export type AddCustomFieldTypeResponse = {
+  label: string;
+  fieldType: string;
+  display: string;
+  displaySub: string;
+  size: number;
+  offset: number;
+  required: boolean;
+  description: string;
+  text: OptionData[];
+  options: OptionData[];
+  position: number;
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+};
+
+export type GetCustomFieldType = {
+  _id: string;
+  label: string;
+  fieldType: string;
+  display: string;
+  displaySub: string;
+  size: number;
+  offset: number;
+  required: boolean;
+  description: string;
+  text: OptionData[];
+  options: OptionData[];
+};
+
+export type UpdateCustomFieldType = {
+  _id: string;
+  label: string;
+  fieldType: string;
+  display: string;
+  displaySub: string;
+  size: number;
+  offset: number;
+  required: boolean;
+  description: string;
+  text: OptionData[];
+  options: OptionData[];
+  position: number;
+};
+
 const networkErrorMsg = 'Network response was not ok';
 
 export const getRoles = async (): Promise<{
@@ -610,4 +676,72 @@ export const deleteTemplate = async (
 
 export const downloadTemplate = (templateId: string, window: Window): void => {
   window.open(`${API_URL}templates/download/${templateId}`, '_blank');
+};
+
+export const getCustomField = async (): Promise<{
+  status: string;
+  datas: GetCustomFieldType[];
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/custom-fields}`, {
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const addCustomField = async (
+  customField: AddCustomFieldType,
+): Promise<{
+  status: string;
+  datas: AddCustomFieldTypeResponse;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/custom-fields`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(customField),
+    });
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const UpdateCustomField = async (
+  customFields: UpdateCustomFieldType[],
+): Promise<{
+  status: string;
+  datas: string;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/custom-fields/`, {
+      method: 'PUT',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(customFields),
+    });
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
 };
