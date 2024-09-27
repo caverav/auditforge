@@ -162,8 +162,8 @@ export const CustomFields: React.FC = () => {
           />
         ) : null}
       </div>
-      <div className="w-full">
-        <PrimaryButton color="red" onClick={() => handlerAddField()}>
+      <div className="w-full mt-10">
+        <PrimaryButton color="blue" onClick={() => handlerAddField()}>
           {
             t('add') //TODO:{t('add') //TODO: add i18n}
           }
