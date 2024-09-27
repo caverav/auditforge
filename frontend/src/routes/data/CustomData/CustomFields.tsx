@@ -1,6 +1,7 @@
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 
+import PrimaryButton from '../../../components/button/PrimaryButton';
 import { getLanguages } from '../../../services/data';
 import { getCategories } from '../../../services/vulnerabilities';
 import { CustomFieldType } from './custom-fields/CustomFieldType';
@@ -63,6 +64,9 @@ export const CustomFields: React.FC = () => {
   const [description, setDescription] = useState('');
   const [addOptionField, setAddOptionField] = useState('');
   const [required, setRequired] = useState(false);
+  const [requiredSelectComponentAlert, setRequiredSelectComponentAlert] =
+    useState(false);
+  const [requiredLabelAlert, setRequiredLabelAlert] = useState(false);
 
   const [languagesList, setLanguagesList] = useState<ListItem[]>([]);
   const [categoriesList, setCategoriesList] = useState<ListItem[]>([]);
@@ -107,50 +111,64 @@ export const CustomFields: React.FC = () => {
     void fetchCategories();
   }, []);
 
-  /*
   const handlerAddField = () => {
+    if (componentOptionSelected === null || label === '') {
+      setRequiredSelectComponentAlert(true);
+      setRequiredLabelAlert(true);
+      return;
+    }
     // eslint-disable-next-line no-console
     console.log('Added Field');
     // eslint-disable-next-line no-console
     console.log(optionsData);
   };
-  */
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <CustomFieldType
-        categoriesList={categoriesList}
-        categorySelected={categorySelected}
-        componentOptionSelected={componentOptionSelected}
-        displayOptionSeleted={displayOptionSeleted}
-        setCategorySelected={setCategorySelected}
-        setComponentOptionSelected={setComponentOptionSelected}
-        setDisplayOptionSeleted={setDisplayOptionSeleted}
-      />
-      <SettingsCustomFields
-        componentOptionSelected={componentOptionSelected}
-        description={description}
-        label={label}
-        offsetSelected={offsetSelected}
-        required={required}
-        setDescription={setDescription}
-        setLabel={setLabel}
-        setOffsetSelected={setOffsetSelected}
-        setRequired={setRequired}
-        setSizeSelected={setSizeSelected}
-        sizeSelected={sizeSelected}
-      />
-      {optionsList.includes(componentOptionSelected?.value ?? '') ? (
-        <OptionsCustomData
-          addOptionField={addOptionField}
-          languageSelected={languageSelected}
-          languagesList={languagesList}
-          optionsData={optionsData}
-          setAddOptionField={setAddOptionField}
-          setLanguageSelected={setLanguageSelected}
-          setOptionsData={setOptionsData}
+    <div>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <CustomFieldType
+          categoriesList={categoriesList}
+          categorySelected={categorySelected}
+          componentOptionSelected={componentOptionSelected}
+          displayOptionSeleted={displayOptionSeleted}
+          requiredSelectComponentAlert={requiredSelectComponentAlert}
+          setCategorySelected={setCategorySelected}
+          setComponentOptionSelected={setComponentOptionSelected}
+          setDisplayOptionSeleted={setDisplayOptionSeleted}
         />
-      ) : null}
+        <SettingsCustomFields
+          componentOptionSelected={componentOptionSelected}
+          description={description}
+          label={label}
+          offsetSelected={offsetSelected}
+          required={required}
+          requiredLabelAlert={requiredLabelAlert}
+          setDescription={setDescription}
+          setLabel={setLabel}
+          setOffsetSelected={setOffsetSelected}
+          setRequired={setRequired}
+          setSizeSelected={setSizeSelected}
+          sizeSelected={sizeSelected}
+        />
+        {optionsList.includes(componentOptionSelected?.value ?? '') ? (
+          <OptionsCustomData
+            addOptionField={addOptionField}
+            languageSelected={languageSelected}
+            languagesList={languagesList}
+            optionsData={optionsData}
+            setAddOptionField={setAddOptionField}
+            setLanguageSelected={setLanguageSelected}
+            setOptionsData={setOptionsData}
+          />
+        ) : null}
+      </div>
+      <div className="w-full">
+        <PrimaryButton color="red" onClick={() => handlerAddField()}>
+          {
+            t('add') //TODO:{t('add') //TODO: add i18n}
+          }
+        </PrimaryButton>
+      </div>
     </div>
   );
 };

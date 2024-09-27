@@ -17,6 +17,7 @@ type CustomFieldTypeProps = {
   categorySelected: ListItem | null;
   setCategorySelected: (value: ListItem) => void;
   categoriesList: ListItem[];
+  requiredSelectComponentAlert: boolean;
 };
 
 export const CustomFieldType: React.FC<CustomFieldTypeProps> = ({
@@ -27,6 +28,7 @@ export const CustomFieldType: React.FC<CustomFieldTypeProps> = ({
   categorySelected,
   setCategorySelected,
   categoriesList,
+  requiredSelectComponentAlert,
 }) => {
   const cfDisplayOptions: ListItem[] = [
     { id: 0, label: t('auditGeneral'), value: 'general' },
@@ -68,6 +70,8 @@ export const CustomFieldType: React.FC<CustomFieldTypeProps> = ({
         items={cfComponentOptions}
         onChange={value => setComponentOptionSelected(value)}
         placeholder={t('selectComponent')}
+        requiredAlert={requiredSelectComponentAlert}
+        requiredField
         selected={componentOptionSelected}
         title={t('selectComponent')}
       />

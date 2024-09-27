@@ -23,6 +23,7 @@ type SettingsCustomFieldsProps = {
   setOffsetSelected: (value: ListItem) => void;
   required: boolean;
   setRequired: React.Dispatch<React.SetStateAction<boolean>>;
+  requiredLabelAlert: boolean;
 };
 
 export const SettingsCustomFields: React.FC<SettingsCustomFieldsProps> = ({
@@ -37,6 +38,7 @@ export const SettingsCustomFields: React.FC<SettingsCustomFieldsProps> = ({
   setOffsetSelected,
   required,
   setRequired,
+  requiredLabelAlert,
 }) => {
   const sizes: ListItem[] = [
     { id: 0, label: '0', value: '0' },
@@ -64,6 +66,8 @@ export const SettingsCustomFields: React.FC<SettingsCustomFieldsProps> = ({
             name="label"
             onChange={setLabel}
             placeholder={t('label')}
+            requiredAlert={requiredLabelAlert}
+            requiredField
             type="text"
             value={label}
           />
@@ -92,13 +96,15 @@ export const SettingsCustomFields: React.FC<SettingsCustomFieldsProps> = ({
           title={t('offset')}
         />
       </div>
-      {componentOptionSelected?.value !== 'space' ? (
-        <PrimarySwitch
-          enabled={required}
-          label={t('required')}
-          onChange={setRequired}
-        />
-      ) : null}
+      <div>
+        {componentOptionSelected?.value !== 'space' ? (
+          <PrimarySwitch
+            enabled={required}
+            label={t('required')}
+            onChange={setRequired}
+          />
+        ) : null}
+      </div>
     </div>
   );
 };
