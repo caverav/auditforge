@@ -37,9 +37,9 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
   const { t } = useTranslation();
 
   const stageOptions = [
-    { id: '1', label: t('default'), value: 'default' },
-    { id: '2', label: t('retest'), value: 'retest' },
-    { id: '3', label: t('multi'), value: 'multi' },
+    { id: '1', label: t('default'), value: 'default', disabled: isDisabled },
+    { id: '2', label: t('retest'), value: 'retest', disabled: isDisabled },
+    { id: '3', label: t('multi'), value: 'multi', disabled: isDisabled },
   ];
 
   /**
@@ -124,13 +124,38 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
   const handleInputChange = (
     name: string,
     field: keyof AuditType,
-    value: string | boolean | object,
+    value: string | boolean | { template: string; locale: string },
   ) => {
-    setRows(prevRows =>
-      prevRows.map(row => {
-        return row.name === name ? { ...row, [field]: value } : row;
-      }),
-    );
+    if (field === 'templates' && typeof value === 'object') {
+      let temps = rows.find(item => item.name === name)?.templates ?? false;
+      /**
+       * Si no tiene templates o viene vacío
+       */
+      if (!temps || temps.length === 0) {
+        temps = languageData.map(lang => {
+          return { locale: lang.locale, template: '' };
+        });
+      }
+
+      /**
+       * Asigna los nuevos valores a las templates
+       */
+      const newTemps = temps.map(temp =>
+        temp.locale === value.locale ? value : temp,
+      );
+
+      setRows(prevRows =>
+        prevRows.map(row => {
+          return row.name === name ? { ...row, templates: newTemps } : row;
+        }),
+      );
+    } else {
+      setRows(prevRows =>
+        prevRows.map(row => {
+          return row.name === name ? { ...row, [field]: value } : row;
+        }),
+      );
+    }
   };
 
   const handleRemoveRow = (name: string) => {
@@ -184,6 +209,7 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
                       value={row.stage}
                     />
                     <SimpleInput
+                      disabled={isDisabled}
                       id="name"
                       name="name"
                       onChange={e => handleInputChange(row.name, 'name', e)}
@@ -196,21 +222,17 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
                         items={templateDropdownItems}
                         key={lang.language}
                         onChange={item =>
-                          handleInputChange(row._id, 'templates', [
-                            ...row.templates,
-                            {
-                              template: item.value,
-                              locale: lang.locale,
-                            },
-                          ])
+                          handleInputChange(row.name, 'templates', {
+                            template: item.value,
+                            locale: lang.locale,
+                          })
                         }
                         selected={
                           templateDropdownItems.find(
-                            item =>
-                              item.value ===
-                              row.templates.find(
-                                temp => temp.template === item.value,
-                              )?.template,
+                            temp =>
+                              temp.value ===
+                              row.templates.find(t => t.locale === lang.locale)
+                                ?.template,
                           ) ?? null
                         }
                         title={`${lang.language} ${t('template')}`}
