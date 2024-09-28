@@ -9,7 +9,6 @@ import {
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 import { Chip } from '@mui/material';
 import clsx from 'clsx';
-import React from 'react';
 
 type ListItem = {
   id: number;
