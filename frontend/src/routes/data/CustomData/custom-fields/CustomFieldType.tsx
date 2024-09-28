@@ -38,24 +38,24 @@ export const CustomFieldType: React.FC<CustomFieldTypeProps> = ({
   ];
 
   const cfComponentOptions: ListItem[] = [
-    { id: 0, label: t('checkbox'), value: 'checkbox', icon: 'check_box' },
-    { id: 1, label: t('date'), value: 'date', icon: 'event' },
-    { id: 2, label: t('editor'), value: 'text', icon: 'mdi-format-pilcrow' },
-    { id: 3, label: t('input'), value: 'input', icon: 'title' },
-    { id: 4, label: t('radio'), value: 'radio', icon: 'radio_button_checked' },
+    { id: 1, label: t('checkbox'), value: 'checkbox', icon: 'check_box' },
+    { id: 2, label: t('date'), value: 'date', icon: 'event' },
+    { id: 3, label: t('editor'), value: 'text', icon: 'mdi-format-pilcrow' },
+    { id: 4, label: t('input'), value: 'input', icon: 'title' },
+    { id: 5, label: t('radio'), value: 'radio', icon: 'radio_button_checked' },
     {
-      id: 5,
+      id: 6,
       label: t('select'),
       value: 'select',
       icon: 'far fa-caret-square-down',
     },
     {
-      id: 6,
+      id: 7,
       label: t('selectMultiple'),
       value: 'select-multiple',
       icon: 'filter_none',
     },
-    { id: 7, label: t('space'), value: 'space', icon: 'space_bar' },
+    { id: 8, label: t('space'), value: 'space', icon: 'space_bar' },
   ];
 
   return (
