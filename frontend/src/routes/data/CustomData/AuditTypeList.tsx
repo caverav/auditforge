@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import DefaultRadioGroup from '@/components/button/DefaultRadioGroup';
 import PrimaryButton from '@/components/button/PrimaryButton';
+import MultiSelectDropdown from '@/components/dropdown/MultiSelectDropdown';
 import SelectDropdown from '@/components/dropdown/SelectDropdown';
 import SimpleInput from '@/components/input/SimpleInput';
 import {
@@ -149,6 +150,17 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
           return row.name === name ? { ...row, templates: newTemps } : row;
         }),
       );
+    } else if (field === 'sections' && typeof value === 'string') {
+      /**
+       * Arreglo ya que no se puede comprobar que
+       * value sea string[] de manera sencilla
+       */
+      const newSections = JSON.parse(value);
+      setRows(prevRows =>
+        prevRows.map(row => {
+          return row.name === name ? { ...row, sections: newSections } : row;
+        }),
+      );
     } else {
       setRows(prevRows =>
         prevRows.map(row => {
@@ -177,6 +189,26 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
       })),
     );
   }, [templateData]);
+
+  const [customSectionsItems, setCustomSectionsItems] = useState<
+    {
+      id: number;
+      value: string;
+      label?: string;
+    }[]
+  >([]);
+
+  useEffect(
+    () =>
+      setCustomSectionsItems(
+        customSectionsData.map((sect, index) => ({
+          id: index,
+          value: sect.field,
+          label: sect.name,
+        })),
+      ),
+    [customSectionsData],
+  );
 
   const renderRow = (row: AuditType) => (
     <div
@@ -238,6 +270,21 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
                         title={`${lang.language} ${t('template')}`}
                       />
                     ))}
+                    <MultiSelectDropdown
+                      items={customSectionsItems}
+                      onChange={items => {
+                        handleInputChange(
+                          row.name,
+                          'sections',
+                          JSON.stringify(items.map(item => item.value)),
+                        );
+                      }}
+                      placeholder={t('customSections')}
+                      selected={customSectionsItems.filter(cs =>
+                        row.sections.includes(cs.value),
+                      )}
+                      title={t('customSections')}
+                    />
                   </>
                 )}
               </div>
