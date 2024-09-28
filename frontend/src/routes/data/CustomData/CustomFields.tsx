@@ -3,9 +3,12 @@ import { useEffect, useState } from 'react';
 import { toast, Toaster } from 'sonner';
 
 import PrimaryButton from '../../../components/button/PrimaryButton';
+import Card from '../../../components/card/Card';
 import {
   addCustomField,
   AddCustomFieldType,
+  getCustomField,
+  GetCustomFieldType,
   getLanguages,
 } from '../../../services/data';
 import { getCategories } from '../../../services/vulnerabilities';
@@ -77,6 +80,10 @@ export const CustomFields: React.FC = () => {
   const [categoriesList, setCategoriesList] = useState<ListItem[]>([]);
   const [optionsData, setOptionsData] = useState<OptionData[]>([]);
 
+  const [currentCustomFields, setCurrentCustomFields] = useState<
+    GetCustomFieldType[]
+  >([]);
+
   // Fetch
   const fetchLanguages = async () => {
     try {
@@ -111,9 +118,19 @@ export const CustomFields: React.FC = () => {
     }
   };
 
+  const fetchCustomFields = async () => {
+    try {
+      const dataCustomFields = await getCustomField();
+      setCurrentCustomFields(dataCustomFields.datas);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
   useEffect(() => {
     void fetchLanguages();
     void fetchCategories();
+    void fetchCustomFields();
   }, []);
 
   const handlerAddField = async () => {
@@ -162,50 +179,54 @@ export const CustomFields: React.FC = () => {
   return (
     <div>
       <Toaster />
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <CustomFieldType
-          categoriesList={categoriesList}
-          categorySelected={categorySelected}
-          componentOptionSelected={componentOptionSelected}
-          displayOptionSeleted={displayOptionSeleted}
-          requiredSelectComponentAlert={requiredSelectComponentAlert}
-          setCategorySelected={setCategorySelected}
-          setComponentOptionSelected={setComponentOptionSelected}
-          setDisplayOptionSeleted={setDisplayOptionSeleted}
-        />
-        <SettingsCustomFields
-          componentOptionSelected={componentOptionSelected}
-          description={description}
-          label={label}
-          offsetSelected={offsetSelected}
-          required={required}
-          requiredLabelAlert={requiredLabelAlert}
-          setDescription={setDescription}
-          setLabel={setLabel}
-          setOffsetSelected={setOffsetSelected}
-          setRequired={setRequired}
-          setSizeSelected={setSizeSelected}
-          sizeSelected={sizeSelected}
-        />
-        {optionsList.includes(componentOptionSelected?.value ?? '') ? (
-          <OptionsCustomData
-            addOptionField={addOptionField}
-            languageSelected={languageSelected}
-            languagesList={languagesList}
-            optionsData={optionsData}
-            setAddOptionField={setAddOptionField}
-            setLanguageSelected={setLanguageSelected}
-            setOptionsData={setOptionsData}
-          />
-        ) : null}
-      </div>
-      <div className="w-full mt-10">
-        <PrimaryButton color="blue" onClick={() => handlerAddField()}>
-          {
-            t('add') //TODO:{t('add') //TODO: add i18n}
-          }
-        </PrimaryButton>
-      </div>
+      <Card title="asd">
+        <div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <CustomFieldType
+              categoriesList={categoriesList}
+              categorySelected={categorySelected}
+              componentOptionSelected={componentOptionSelected}
+              displayOptionSeleted={displayOptionSeleted}
+              requiredSelectComponentAlert={requiredSelectComponentAlert}
+              setCategorySelected={setCategorySelected}
+              setComponentOptionSelected={setComponentOptionSelected}
+              setDisplayOptionSeleted={setDisplayOptionSeleted}
+            />
+            <SettingsCustomFields
+              componentOptionSelected={componentOptionSelected}
+              description={description}
+              label={label}
+              offsetSelected={offsetSelected}
+              required={required}
+              requiredLabelAlert={requiredLabelAlert}
+              setDescription={setDescription}
+              setLabel={setLabel}
+              setOffsetSelected={setOffsetSelected}
+              setRequired={setRequired}
+              setSizeSelected={setSizeSelected}
+              sizeSelected={sizeSelected}
+            />
+            {optionsList.includes(componentOptionSelected?.value ?? '') ? (
+              <OptionsCustomData
+                addOptionField={addOptionField}
+                languageSelected={languageSelected}
+                languagesList={languagesList}
+                optionsData={optionsData}
+                setAddOptionField={setAddOptionField}
+                setLanguageSelected={setLanguageSelected}
+                setOptionsData={setOptionsData}
+              />
+            ) : null}
+          </div>
+          <div className="w-full mt-10">
+            <PrimaryButton color="blue" onClick={() => handlerAddField()}>
+              {
+                t('add') //TODO:{t('add') //TODO: add i18n}
+              }
+            </PrimaryButton>
+          </div>
+        </div>
+      </Card>
     </div>
   );
 };
