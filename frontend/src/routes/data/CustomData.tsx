@@ -3,8 +3,8 @@ import { useTranslation } from 'react-i18next';
 
 import Card from '../../components/card/Card';
 import { AuditTypes } from './CustomData/AuditTypes';
-import { Languages } from './CustomData/Languages';
 import { CustomFields } from './CustomData/CustomFields';
+import { Languages } from './CustomData/Languages';
 
 export const CustomData: React.FC = () => {
   const { t } = useTranslation();
@@ -79,7 +79,11 @@ export const CustomData: React.FC = () => {
         </div>
       </div>
       <div className="mt-4">
-        <Card title={cardContent.cardTitle}>{cardContent.cardChildren}</Card>
+        {cardContent.id === 6 ? (
+          <CustomFields />
+        ) : (
+          <Card title={cardContent.cardTitle}>{cardContent.cardChildren}</Card>
+        )}
       </div>
     </div>
   );
