@@ -186,44 +186,6 @@ export const NewAuditTypeForm: React.FC = () => {
     );
   }, [langTemplates]);
 
-  const handleSubmitAuditType = async () => {
-    try {
-      await createAuditType(newAuditType);
-    } catch (error) {
-      setError('Error creating audit type');
-      console.error('Error:', error);
-      return;
-    }
-    setNewAuditType({
-      name: '',
-      hidden: [],
-      sections: [],
-      stage: 'default',
-      templates: [],
-    });
-    setLangTemplates([]);
-  };
-
-  /**
-   * Hide built-in sections
-   */
-
-  const [builtInSec, setBuiltInSec] = useState({
-    networkScan: false,
-    findings: false,
-  });
-
-  useEffect(() => {
-    const newHidden = [];
-    if (builtInSec.networkScan) {
-      newHidden.push('network');
-    }
-    if (builtInSec.findings) {
-      newHidden.push('findings');
-    }
-    handleInputChange('hidden', newHidden);
-  }, [builtInSec]);
-
   /**
    * Custom Sections
    */
@@ -262,6 +224,45 @@ export const NewAuditTypeForm: React.FC = () => {
       selectedCustomSections.map(section => section.value),
     );
   }, [selectedCustomSections]);
+
+  const handleSubmitAuditType = async () => {
+    try {
+      await createAuditType(newAuditType);
+    } catch (error) {
+      setError('Error creating audit type');
+      console.error('Error:', error);
+      return;
+    }
+    setNewAuditType({
+      name: '',
+      hidden: [],
+      sections: [],
+      stage: 'default',
+      templates: [],
+    });
+    setLangTemplates([]);
+    setSelectedCustomSections([]);
+  };
+
+  /**
+   * Hide built-in sections
+   */
+
+  const [builtInSec, setBuiltInSec] = useState({
+    networkScan: false,
+    findings: false,
+  });
+
+  useEffect(() => {
+    const newHidden = [];
+    if (builtInSec.networkScan) {
+      newHidden.push('network');
+    }
+    if (builtInSec.findings) {
+      newHidden.push('findings');
+    }
+    handleInputChange('hidden', newHidden);
+  }, [builtInSec]);
 
   useEffect(() => {
     error && console.error(error);
