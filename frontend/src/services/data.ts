@@ -683,7 +683,7 @@ export const getCustomField = async (): Promise<{
   datas: GetCustomFieldType[];
 }> => {
   try {
-    const response = await fetch(`${API_URL}data/custom-fields}`, {
+    const response = await fetch(`${API_URL}data/custom-fields`, {
       credentials: 'include',
     });
 
