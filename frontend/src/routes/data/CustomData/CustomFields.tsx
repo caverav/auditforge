@@ -1,8 +1,13 @@
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
+import { toast, Toaster } from 'sonner';
 
 import PrimaryButton from '../../../components/button/PrimaryButton';
-import { getLanguages } from '../../../services/data';
+import {
+  addCustomField,
+  AddCustomFieldType,
+  getLanguages,
+} from '../../../services/data';
 import { getCategories } from '../../../services/vulnerabilities';
 import { CustomFieldType } from './custom-fields/CustomFieldType';
 import { OptionsCustomData } from './custom-fields/OptionsCustomData';
@@ -111,20 +116,52 @@ export const CustomFields: React.FC = () => {
     void fetchCategories();
   }, []);
 
-  const handlerAddField = () => {
+  const handlerAddField = async () => {
     if (componentOptionSelected === null || label === '') {
       setRequiredSelectComponentAlert(true);
       setRequiredLabelAlert(true);
       return;
     }
-    // eslint-disable-next-line no-console
-    console.log('Added Field');
-    // eslint-disable-next-line no-console
-    console.log(optionsData);
+
+    const newCustomField: AddCustomFieldType = {
+      label,
+      fieldType: componentOptionSelected.value,
+      display: displayOptionSeleted.value,
+      displaySub: categorySelected?.value ?? '',
+      size: Number(sizeSelected.value),
+      offset: Number(offsetSelected.value),
+      required,
+      description,
+      text: [],
+      options: optionsData,
+      position: 10,
+    };
+
+    try {
+      const response = await addCustomField(newCustomField);
+      if (response.status === 'success') {
+        //TODO: Add fetchCustomFields
+        toast.success(t('msg.customFieldCreatedOk'));
+        setLabel('');
+        setRequiredSelectComponentAlert(false);
+        setRequiredLabelAlert(false);
+      }
+    } catch (error) {
+      if (
+        error instanceof Error &&
+        error.message === 'Custom Field already exists'
+      ) {
+        toast.error(t('err.customFieldAlreadyExists'));
+      } else {
+        toast.error(t('err.failedCreateCustomField'));
+      }
+      console.error('Error:', error);
+    }
   };
 
   return (
     <div>
+      <Toaster />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         <CustomFieldType
           categoriesList={categoriesList}

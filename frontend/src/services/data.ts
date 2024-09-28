@@ -712,8 +712,15 @@ export const addCustomField = async (
       body: JSON.stringify(customField),
     });
     if (!response.ok) {
-      throw new Error(networkErrorMsg);
+      const errorText = await response.text();
+      const errorData = JSON.parse(errorText).datas;
+      if (errorData === 'Custom Field already exists') {
+        throw new Error(errorData);
+      } else {
+        throw new Error(networkErrorMsg);
+      }
     }
+
     return await response.json();
   } catch (error) {
     console.error(error);
@@ -722,7 +729,7 @@ export const addCustomField = async (
   }
 };
 
-export const UpdateCustomField = async (
+export const updateCustomField = async (
   customFields: UpdateCustomFieldType[],
 ): Promise<{
   status: string;
