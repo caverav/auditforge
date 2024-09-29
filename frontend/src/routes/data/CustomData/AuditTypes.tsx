@@ -1,8 +1,8 @@
+/* eslint-disable import/extensions */
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import EditCard from '@/components/card/EditCard';
-// eslint-disable-next-line import/extensions
 import { AuditType, getAuditTypes, updateAuditTypes } from '@/services/data.ts';
 
 import { AuditTypeList } from './AuditTypeList';
@@ -30,7 +30,7 @@ export const AuditTypes: React.FC = () => {
     };
 
     void fetchAuditTypes();
-  }, []);
+  }, [isEditing]);
 
   useEffect(() => {
     error && console.error(error);
@@ -80,7 +80,6 @@ export const AuditTypes: React.FC = () => {
           />
         </EditCard>
       )}
-      <div>{JSON.stringify(newAuditTypeList)}</div>
     </div>
   );
 };
