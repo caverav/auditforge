@@ -134,6 +134,7 @@ export default {
     recommendationSuboptimal: 'The recommendation is suboptimal',
     auditDeletedOk: 'Audit deleted successfully',
     auditDeleteNotice: 'Audit will be permanently deleted',
+    auditTypeCreatedOk: 'Audit Type Created Successfully',
   },
   err: {
     notDefinedLanguage: 'Not defined for this language',
@@ -163,6 +164,7 @@ export default {
     failedDeleteAudit: 'Failed to delete the audit',
     failedUpdateProfile: 'Failed to update profile',
     failedUpdateAudit: 'Failed to update audit',
+    failedCreateAuditType: 'Failed To Create Audit Type',
   },
   cvss: {
     title: 'CVSS v3.1 Base Score',
@@ -439,6 +441,7 @@ export default {
   noAudit: 'No Audit Types are defined.  Please create Audit Types in ',
   auditTypes: 'Audit Types',
   auditType: 'Audit Type',
+  addAuditType: 'Add Audit Type',
   searchFinds: 'Search Finding',
   myAudits: 'My Audits',
   usersConnected: 'Users Connected',
