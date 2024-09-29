@@ -12,6 +12,7 @@ import {
   getLanguages,
 } from '../../../services/data';
 import { getCategories } from '../../../services/vulnerabilities';
+import { CustomFieldDisplay } from './custom-fields/CustomFieldDisplay';
 import { CustomFieldType } from './custom-fields/CustomFieldType';
 import { OptionsCustomData } from './custom-fields/OptionsCustomData';
 import { SettingsCustomFields } from './custom-fields/SettingsCustomFields';
@@ -227,6 +228,13 @@ export const CustomFields: React.FC = () => {
           </div>
         </div>
       </Card>
+      {currentCustomFields.length > 0 ? ( //TODO: Add Loading instead currentCustomFields.length
+        <CustomFieldDisplay
+          currentCustomFields={currentCustomFields}
+          fetchCustomFields={fetchCustomFields}
+          setCurrentCustomFields={setCurrentCustomFields}
+        />
+      ) : null}
     </div>
   );
 };
