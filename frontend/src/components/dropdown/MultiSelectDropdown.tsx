@@ -22,7 +22,7 @@ type MultiSelectDropdownProps = {
   title: string;
   onChange: (items: ListItem[]) => void;
   placeholder?: string;
-  isDisabled?: boolean;
+  disabled?: boolean;
 };
 
 const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
@@ -31,7 +31,7 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   selected,
   onChange,
   placeholder,
-  isDisabled = false,
+  disabled = false,
 }) => {
   const ids = items.map(item => item.id);
   const hasDuplicateIds = new Set(ids).size !== ids.length;
@@ -47,14 +47,20 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   };
 
   return (
-    <Field disabled={isDisabled}>
+    <Field disabled={disabled}>
       <Label className="block text-sm font-medium leading-6 text-gray-300">
         {title}
       </Label>
-      <Listbox multiple onChange={handleChange} value={selected}>
+      <Listbox
+        disabled={disabled}
+        multiple
+        onChange={handleChange}
+        value={selected}
+      >
         <ListboxButton
           className={clsx(
             'inline-flex items-center justify-between w-full text-left rounded-lg bg-white/5 py-1.5 pl-3 text-left text-sm/6 text-white focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25 min-h-[2.3rem]',
+            { 'opacity-50 cursor-not-allowed': disabled },
           )}
         >
           <span className="overflow-x-auto">
@@ -64,7 +70,7 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
                     color="primary"
                     key={s.id}
                     label={s.label ? s.label : s.value}
-                    onDelete={() => handleDeleteChip(s)}
+                    onDelete={disabled ? undefined : () => handleDeleteChip(s)}
                     variant="outlined"
                   />
                 ))
