@@ -233,6 +233,17 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
                   <p>{t('loading')}</p>
                 ) : (
                   <>
+                    <div className="pb-4">
+                      <SimpleInput
+                        disabled={isDisabled}
+                        id="name"
+                        name="name"
+                        onChange={e => handleInputChange(row.name, 'name', e)}
+                        placeholder={t('name')}
+                        type="text"
+                        value={row.name}
+                      />
+                    </div>
                     <div className="text-lg">{t('auditPhase')}</div>
                     <DefaultRadioGroup
                       name={'stage' + row.name}
@@ -240,17 +251,9 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
                       options={stageOptions}
                       value={row.stage}
                     />
-                    <SimpleInput
-                      disabled={isDisabled}
-                      id="name"
-                      name="name"
-                      onChange={e => handleInputChange(row.name, 'name', e)}
-                      placeholder={t('name')}
-                      type="text"
-                      value={row.name}
-                    />
                     {languageData.map(lang => (
                       <SelectDropdown
+                        isDisabled={isDisabled}
                         items={templateDropdownItems}
                         key={lang.language}
                         onChange={item =>
@@ -271,6 +274,7 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
                       />
                     ))}
                     <MultiSelectDropdown
+                      isDisabled={isDisabled}
                       items={customSectionsItems}
                       onChange={items => {
                         handleInputChange(
@@ -314,6 +318,13 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
   useEffect(() => {
     error && console.error(error);
   }, [error]);
+
+  /**
+   * Actualiza las rows si es que cambiaron en el componente padre.
+   */
+  useEffect(() => {
+    setRows(auditTypes.map((row, index) => ({ ...row, id: index.toString() })));
+  }, [auditTypes]);
 
   return (
     <div>

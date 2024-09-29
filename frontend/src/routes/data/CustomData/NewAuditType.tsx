@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'sonner';
 
 // eslint-disable-next-line import/extensions
 import MultiSelectDropdown from '@/components/dropdown/MultiSelectDropdown';
@@ -218,32 +219,6 @@ export const NewAuditTypeForm: React.FC = () => {
     [customSectionsData],
   );
 
-  useEffect(() => {
-    handleInputChange(
-      'sections',
-      selectedCustomSections.map(section => section.value),
-    );
-  }, [selectedCustomSections]);
-
-  const handleSubmitAuditType = async () => {
-    try {
-      await createAuditType(newAuditType);
-    } catch (error) {
-      setError('Error creating audit type');
-      console.error('Error:', error);
-      return;
-    }
-    setNewAuditType({
-      name: '',
-      hidden: [],
-      sections: [],
-      stage: 'default',
-      templates: [],
-    });
-    setLangTemplates([]);
-    setSelectedCustomSections([]);
-  };
-
   /**
    * Hide built-in sections
    */
@@ -265,6 +240,35 @@ export const NewAuditTypeForm: React.FC = () => {
   }, [builtInSec]);
 
   useEffect(() => {
+    handleInputChange(
+      'sections',
+      selectedCustomSections.map(section => section.value),
+    );
+  }, [selectedCustomSections]);
+
+  const handleSubmitAuditType = async () => {
+    try {
+      await createAuditType(newAuditType);
+    } catch (error) {
+      setError('Error creating audit type');
+      toast.error(t('err.failedCreateAuditType'));
+      console.error('Error:', error);
+      return;
+    }
+    setNewAuditType({
+      name: '',
+      hidden: [],
+      sections: [],
+      stage: 'default',
+      templates: [],
+    });
+    setLangTemplates([]);
+    setSelectedCustomSections([]);
+    setBuiltInSec({ networkScan: false, findings: false });
+    toast.success(t('msg.auditTypeCreatedOk'));
+  };
+
+  useEffect(() => {
     error && console.error(error);
   }, [error]);
 
@@ -274,17 +278,7 @@ export const NewAuditTypeForm: React.FC = () => {
         <p>{t('loading')}</p>
       ) : (
         <>
-          <div className="text-lg">{t('auditPhase')}</div>
-          <DefaultRadioGroup
-            name="stage"
-            onChange={e => handleInputChange('stage', e)}
-            options={[
-              { id: '1', label: t('default'), value: 'default' },
-              { id: '2', label: t('retest'), value: 'retest' },
-              { id: '3', label: t('multi'), value: 'multi' },
-            ]}
-            value={newAuditType.stage}
-          />
+          <div className="text-xl">{t('addAuditType')}</div>
           <SimpleInput
             id="name"
             name="name"
@@ -293,24 +287,47 @@ export const NewAuditTypeForm: React.FC = () => {
             type="text"
             value={newAuditType.name}
           />
-          {languageData.map(lang => (
-            <SelectDropdown
-              items={templateDropdownItems}
-              key={lang.language}
-              onChange={item => onChangeTemplate(item, lang.locale)}
-              selected={
-                langTemplates.find(item => item.locale === lang.locale) ?? null
-              }
-              title={`${lang.language} ${t('template')}`}
+          <div className="pt-4 pb-2">
+            <div className="text-lg">{t('auditPhase')}</div>
+            <DefaultRadioGroup
+              name="stage"
+              onChange={e => handleInputChange('stage', e)}
+              options={[
+                { id: '1', label: t('default'), value: 'default' },
+                { id: '2', label: t('retest'), value: 'retest' },
+                { id: '3', label: t('multi'), value: 'multi' },
+              ]}
+              value={newAuditType.stage}
             />
-          ))}
-          <MultiSelectDropdown
-            items={customSections}
-            onChange={setSelectedCustomSections}
-            placeholder={t('customSections')}
-            selected={selectedCustomSections}
-            title={t('customSections')}
-          />
+          </div>
+          <div className="pb-4">
+            <div className="text-lg">{t('templates')}</div>
+            {languageData.map(lang => (
+              <SelectDropdown
+                items={templateDropdownItems}
+                key={lang.language}
+                onChange={item => onChangeTemplate(item, lang.locale)}
+                selected={
+                  templateDropdownItems.find(
+                    item =>
+                      item.value ===
+                      langTemplates.find(lt => lt.locale === lang.locale)
+                        ?.value,
+                  ) ?? null
+                }
+                title={`${lang.language} ${t('template')}`}
+              />
+            ))}
+          </div>
+          <div className="pb-4">
+            <MultiSelectDropdown
+              items={customSections}
+              onChange={setSelectedCustomSections}
+              placeholder={t('customSections')}
+              selected={selectedCustomSections}
+              title={t('customSections')}
+            />
+          </div>
           {newAuditType.stage === 'default' ? (
             <div className="py-2">
               <div className="text-lg">{t('hideBuiltInSections')}</div>
