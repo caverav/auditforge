@@ -62,6 +62,7 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
             'inline-flex items-center justify-between w-full text-left rounded-lg bg-white/5 py-1.5 pl-3 text-left text-sm/6 text-white focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25 min-h-[2.3rem]',
             { 'opacity-50 cursor-not-allowed': disabled },
           )}
+          disabled={disabled}
         >
           <span className="overflow-x-auto">
             {selected.length > 0
@@ -83,6 +84,7 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
         </ListboxButton>
         <ListboxOptions
           anchor="bottom"
+          aria-disabled={disabled}
           className={clsx(
             'w-[var(--button-width)] rounded-xl border border-white/5 bg-stone-800 p-1 [--anchor-gap:var(--spacing-1)] focus:outline-none transition duration-100 ease-in data-[leave]:data-[closed]:opacity-0 z-50',
           )}
@@ -91,6 +93,7 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
           {items.map(item => (
             <ListboxOption
               className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-white/10"
+              disabled={disabled}
               key={item.id}
               value={item}
             >

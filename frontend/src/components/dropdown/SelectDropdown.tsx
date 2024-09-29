@@ -54,7 +54,9 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({
               'inline-flex items-center justify-between w-full text-left rounded-lg bg-white/5 py-1.5 pl-3 text-left text-sm/6 text-white',
               'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25',
               'min-h-[2.3rem]',
+              disabled && 'opacity-50 cursor-not-allowed',
             )}
+            tabIndex={disabled ? -1 : undefined}
           >
             <div>
               <ListboxSelectedOption
