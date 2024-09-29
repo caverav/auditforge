@@ -26,6 +26,7 @@ type SelectDropdownProps = {
   placeholder?: string;
   requiredAlert?: boolean;
   requiredField?: boolean;
+  isDisabled?: boolean;
 };
 
 const SelectDropdown: React.FC<SelectDropdownProps> = ({
@@ -36,9 +37,10 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({
   placeholder,
   requiredAlert = false,
   requiredField = false,
+  isDisabled = false,
 }) => {
   return (
-    <Field aria-required={requiredField}>
+    <Field aria-required={requiredField} disabled={isDisabled}>
       <Label className="block text-sm font-medium leading-6 mb-2 text-gray-300">
         {title + ' '}
         {requiredField ? <span className="text-red-500 text-lg">*</span> : ''}

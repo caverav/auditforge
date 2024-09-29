@@ -22,6 +22,7 @@ type MultiSelectDropdownProps = {
   title: string;
   onChange: (items: ListItem[]) => void;
   placeholder?: string;
+  isDisabled?: boolean;
 };
 
 const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
@@ -30,6 +31,7 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   selected,
   onChange,
   placeholder,
+  isDisabled = false,
 }) => {
   const ids = items.map(item => item.id);
   const hasDuplicateIds = new Set(ids).size !== ids.length;
@@ -45,7 +47,7 @@ const MultiSelectDropdown: React.FC<MultiSelectDropdownProps> = ({
   };
 
   return (
-    <Field>
+    <Field disabled={isDisabled}>
       <Label className="block text-sm font-medium leading-6 text-gray-300">
         {title}
       </Label>
