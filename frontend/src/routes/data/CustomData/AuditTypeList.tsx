@@ -253,7 +253,7 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
                     />
                     {languageData.map(lang => (
                       <SelectDropdown
-                        isDisabled={isDisabled}
+                        disabled={isDisabled}
                         items={templateDropdownItems}
                         key={lang.language}
                         onChange={item =>
@@ -274,7 +274,7 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
                       />
                     ))}
                     <MultiSelectDropdown
-                      isDisabled={isDisabled}
+                      disabled={isDisabled}
                       items={customSectionsItems}
                       onChange={items => {
                         handleInputChange(
