@@ -61,7 +61,11 @@ export const AuditTypes: React.FC = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <NewAuditTypeForm />
+      <NewAuditTypeForm
+        onAddAuditType={newAuditType =>
+          setAuditTypes(prevAudits => [...prevAudits, newAuditType])
+        }
+      />
       {loading ? (
         t('loading')
       ) : (

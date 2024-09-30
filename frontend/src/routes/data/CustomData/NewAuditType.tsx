@@ -11,6 +11,7 @@ import PrimaryButton from '../../../components/button/PrimaryButton';
 import SelectDropdown from '../../../components/dropdown/SelectDropdown';
 import SimpleInput from '../../../components/input/SimpleInput';
 import {
+  AuditType,
   createAuditType,
   getCustomSections,
   getLanguages,
@@ -29,7 +30,12 @@ type Template = {
   _id: string;
 };
 
-export const NewAuditTypeForm: React.FC = () => {
+type NewAuditTypeFormProps = {
+  onAddAuditType: (audit: AuditType) => void;
+};
+export const NewAuditTypeForm: React.FC<NewAuditTypeFormProps> = ({
+  onAddAuditType,
+}) => {
   const { t } = useTranslation();
 
   const [templateData, setTemplateData] = useState<Template[]>([]);
@@ -247,8 +253,10 @@ export const NewAuditTypeForm: React.FC = () => {
   }, [selectedCustomSections]);
 
   const handleSubmitAuditType = async () => {
+    let res;
+
     try {
-      await createAuditType(newAuditType);
+      res = await createAuditType(newAuditType);
     } catch (error) {
       setError('Error creating audit type');
       toast.error(t('err.failedCreateAuditType'));
@@ -265,6 +273,7 @@ export const NewAuditTypeForm: React.FC = () => {
     setLangTemplates([]);
     setSelectedCustomSections([]);
     setBuiltInSec({ networkScan: false, findings: false });
+    onAddAuditType(res.datas);
     toast.success(t('msg.auditTypeCreatedOk'));
   };
 
