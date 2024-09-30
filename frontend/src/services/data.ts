@@ -543,7 +543,7 @@ export const createAuditType = async (
   auditType: NewAuditType,
 ): Promise<{
   status: string;
-  datas: AuditType[];
+  datas: AuditType;
 }> => {
   try {
     const response = await fetch(`${API_URL}data/audit-types`, {
