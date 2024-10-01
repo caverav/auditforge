@@ -5,7 +5,7 @@ type DraggableListProps<T> = {
   items: T[];
   onOrderChange: (items: T[]) => void;
   renderItem: (item: T, index: number) => React.ReactNode;
-  isDisabled: boolean;
+  isDisabled?: boolean;
 };
 
 /**
