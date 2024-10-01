@@ -48,9 +48,12 @@ const CheckboxButtonCustom = ({
   };
 
   return (
-    <div className="flex items-center">
+    <div className="flex flex-col items-center">
       {options.map((option: string, index: number) => (
-        <div key={index}>
+        <div
+          className={`w-full flex items-center ${index !== 0 ? 'mt-2' : ''}`}
+          key={index}
+        >
           <Checkbox
             checked={selectedBox[index]}
             className="group flex items-center justify-center size-6 rounded-md bg-white/10 p-1 ring-1 ring-white/15 ring-inset data-[checked]:bg-white"
