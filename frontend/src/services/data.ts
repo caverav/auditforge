@@ -100,7 +100,7 @@ type TextDataChild = {
 
 type TextData = {
   locale: string;
-  value: string | TextDataChild;
+  value: string | string[] | TextDataChild;
 };
 
 export type AddCustomFieldType = {
@@ -752,6 +752,28 @@ export const updateCustomField = async (
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(customFields),
     });
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const deleteCustomField = async (
+  customFieldId: string,
+): Promise<{ status: string; datas: { msg: string; vulnCount: number } }> => {
+  try {
+    const response = await fetch(
+      `${API_URL}data/custom-fields/${customFieldId}`,
+      {
+        method: 'DELETE',
+        credentials: 'include',
+      },
+    );
     if (!response.ok) {
       throw new Error(networkErrorMsg);
     }
