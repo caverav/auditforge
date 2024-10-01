@@ -9,7 +9,7 @@ import {
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 import { Chip } from '@mui/material';
 import clsx from 'clsx';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { GetCustomFieldType } from '../../../../../services/data';
 
@@ -19,12 +19,18 @@ type ListItem = {
   label?: string;
 };
 
+type TextDataChild = {
+  locale: string;
+  value: string[];
+};
+
 type MultiSelectDropdownProps = {
   items: ListItem[];
   title: string;
   placeholder?: string;
   setCurrentCustomFields: (fields: GetCustomFieldType[]) => void;
   id: string;
+  text: TextDataChild;
 };
 
 const MultiSelectDropdownCustom: React.FC<MultiSelectDropdownProps> = ({
@@ -33,16 +39,24 @@ const MultiSelectDropdownCustom: React.FC<MultiSelectDropdownProps> = ({
   placeholder,
   setCurrentCustomFields,
   id,
+  text,
 }) => {
-  const [selected, setSelected] = useState<ListItem[]>([]);
+  /* const [selected, setSelected] = useState<ListItem[]>(
+    items.map(item => (item.value === text.value[0] ? item : null)) ?? [],
+  ); */
+  const [selected, setSelected] = useState<ListItem[]>(
+    items.filter(item => text.value.includes(item.value)),
+  );
   const onChange = (items: ListItem[]) => {
     setSelected(items);
+    const values = items.map(item => item.value);
     setCurrentCustomFields((prevFields: GetCustomFieldType[]) => {
       return prevFields.map((field: GetCustomFieldType) =>
         field._id === id
           ? {
               ...field,
-              text: items.map(item => ({ locale: 'es-ES', value: item.value })),
+              text: [{ locale: 'es-ES', value: values }],
+              // text: items.map(item => ({ locale: 'es-ES', value: values })),
             }
           : field,
       );

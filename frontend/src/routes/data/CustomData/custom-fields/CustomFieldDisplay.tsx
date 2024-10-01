@@ -4,7 +4,7 @@ import DefaultRadioGroup from '../../../../components/button/DefaultRadioGroup';
 import Card from '../../../../components/card/Card';
 import SimpleInput from '../../../../components/input/SimpleInput';
 import RichText from '../../../../components/text/RichText';
-import { GetCustomFieldType, OptionData } from '../../../../services/data';
+import { GetCustomFieldType } from '../../../../services/data';
 import {
   CheckboxButtonCustom,
   DayPickerCustom,
@@ -24,14 +24,6 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
   fetchCustomFields,
 }) => {
   const stringList = ['text', 'input', 'radio'];
-  const [formData, setFormData] = useState<OptionData>({});
-
-  const handleInputChange = (id: string, value: string) => {
-    setFormData((prevData: OptionData) => ({
-      ...prevData,
-      [id]: value,
-    }));
-  };
 
   const handleInputChangeText = (id: string, name: string, value: string) => {
     // TODO: Corregir error eslint
@@ -68,8 +60,17 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
               id={_id}
               options={options.map(option => option.value)}
               setCurrentCustomFields={setCurrentCustomFields}
-              text={
+              /* text={
                 Array.isArray(text[0].value) ? text[0].value : [text[0].value]
+              } */
+              text={
+                Array.isArray(text[0].value)
+                  ? text[0].value
+                  : typeof text[0].value === 'object'
+                    ? Array.isArray(text[0].value.value)
+                      ? text[0].value.value
+                      : [text[0].value.value]
+                    : [text[0].value]
               }
             />
           </div>
@@ -87,8 +88,17 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
                 handleInputChangeText(_id, fieldType, value)
               }
               placeholder="asd"
-              value={
+              /* value={
                 Array.isArray(text[0].value) ? text[0].value[0] : text[0].value
+              } */
+              value={
+                Array.isArray(text[0].value)
+                  ? text[0].value[0]
+                  : typeof text[0].value === 'object'
+                    ? Array.isArray(text[0].value.value)
+                      ? text[0].value.value[0]
+                      : text[0].value.value
+                    : text[0].value
               }
             />
           </div>
@@ -107,8 +117,17 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
               placeholder=""
               type="text"
               // value={text[0].value}
-              value={
+              /* value={
                 Array.isArray(text[0].value) ? text[0].value[0] : text[0].value
+              } */
+              value={
+                Array.isArray(text[0].value)
+                  ? text[0].value[0]
+                  : typeof text[0].value === 'object'
+                    ? Array.isArray(text[0].value.value)
+                      ? text[0].value.value[0]
+                      : text[0].value.value
+                    : text[0].value
               }
             />
           </div>
@@ -130,7 +149,13 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
               }))}
               // value={text[0].value}
               value={
-                Array.isArray(text[0].value) ? text[0].value[0] : text[0].value
+                Array.isArray(text[0].value)
+                  ? text[0].value[0]
+                  : typeof text[0].value === 'object'
+                    ? Array.isArray(text[0].value.value)
+                      ? text[0].value.value[0]
+                      : text[0].value.value
+                    : text[0].value
               }
             />
           </div>
@@ -149,6 +174,21 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
               }))}
               placeholder="Select"
               setCurrentCustomFields={setCurrentCustomFields}
+              text={
+                typeof text[0].value === 'object' && 'locale' in text[0].value
+                  ? {
+                      locale: text[0].value.locale,
+                      value: Array.isArray(text[0].value.value)
+                        ? text[0].value.value
+                        : [text[0].value.value],
+                    }
+                  : {
+                      locale: text[0].locale,
+                      value: Array.isArray(text[0].value)
+                        ? text[0].value
+                        : [text[0].value],
+                    }
+              }
               title=""
             />
           </div>
@@ -167,6 +207,21 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
               }))}
               placeholder="Select"
               setCurrentCustomFields={setCurrentCustomFields}
+              text={
+                typeof text[0].value === 'object' && 'locale' in text[0].value
+                  ? {
+                      locale: text[0].value.locale,
+                      value: Array.isArray(text[0].value.value)
+                        ? text[0].value.value
+                        : [text[0].value.value],
+                    }
+                  : {
+                      locale: text[0].locale,
+                      value: Array.isArray(text[0].value)
+                        ? text[0].value
+                        : [text[0].value],
+                    }
+              }
               title=""
             />
           </div>
