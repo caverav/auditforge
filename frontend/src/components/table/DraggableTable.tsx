@@ -1,4 +1,9 @@
-import { DragDropContext, Draggable, Droppable } from '@hello-pangea/dnd';
+import {
+  DragDropContext,
+  Draggable,
+  Droppable,
+  DropResult,
+} from '@hello-pangea/dnd';
 import React from 'react';
 
 type DraggableListProps<T> = {
@@ -20,7 +25,7 @@ const DraggableList = <T extends { id: string }>({
   renderItem,
   isDisabled = false,
 }: DraggableListProps<T>) => {
-  const handleDragEnd = (result: any) => {
+  const handleDragEnd = (result: DropResult) => {
     if (!result.destination) {
       return;
     }
