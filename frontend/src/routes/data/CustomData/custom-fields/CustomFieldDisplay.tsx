@@ -1,34 +1,14 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import CheckboxButton from '../../../../components/button/CheckboxButton';
-import DefaultRadioGroup, {
-  RadioOption,
-} from '../../../../components/button/DefaultRadioGroup';
+import DefaultRadioGroup from '../../../../components/button/DefaultRadioGroup';
 import Card from '../../../../components/card/Card';
-import SelectDropdown from '../../../../components/dropdown/SelectDropdown';
 import SimpleInput from '../../../../components/input/SimpleInput';
 import RichText from '../../../../components/text/RichText';
 import { GetCustomFieldType, OptionData } from '../../../../services/data';
-
-type ListItem = {
-  id: number;
-  value: string;
-  label?: string;
-  icon?: string;
-};
-
-type LanguageData = {
-  language: string;
-  locale: string;
-};
-
-type CategoryData = {
-  _id: string;
-  name: string;
-  sortValue: string;
-  sortOrder: string;
-  sortAuto: boolean;
-};
+import DayPickerCustom from './customComponents/DayPicker';
+import MultiSelectDropdownCustom from './customComponents/MultiSelectDropdown';
+import SelectDropdownCustom from './customComponents/SelectDropdown';
 
 type CustomFieldProps = {
   currentCustomFields: GetCustomFieldType[];
@@ -69,17 +49,15 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
       field;
     //TODO: Cambiar width
     const sizeStyle = size !== 12 ? `w-${size}/12` : 'w-full';
+    //TODO: Change text added by default
     if (stringList.includes(fieldType)) {
       if (text.length === 0) {
         text.push({ locale: 'es-ES', value: '' });
       }
       //values = options[0].value;
       //values = options[0].value ?? { locale: 'es-ES', value: '' };
-    } else if (fieldType === 'date') {
-      // TODO: Add custom component
-    } else if (fieldType === 'select') {
-      //
     }
+
     switch (fieldType) {
       case 'checkbox':
         return options.length > 0 ? (
@@ -162,17 +140,46 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
         //TODO: Fix input width 12
         return (
           <div className={`mx-4 rounded-lg mt-3 ${sizeStyle}`}>
-            <SelectDropdown
+            <SelectDropdownCustom
+              id={_id}
               items={options.map((option, index) => ({
                 id: index,
                 value: option.value,
                 label: option.value,
               }))}
-              onChange={(value: ListItem) => {
-                handleInputChangeText(_id, fieldType, value.value);
-              }}
-              selected={{ id: 0, value: options[0].value }}
+              placeholder="Select"
+              setCurrentCustomFields={setCurrentCustomFields}
               title=""
+            />
+          </div>
+        );
+
+      case 'select-multiple':
+        //TODO: Fix input width 12
+        return (
+          <div className={`mx-4 rounded-lg mt-3 ${sizeStyle}`}>
+            <MultiSelectDropdownCustom
+              id={_id}
+              items={options.map((option, index) => ({
+                id: index,
+                value: option.value,
+                label: option.value,
+              }))}
+              placeholder="Select"
+              setCurrentCustomFields={setCurrentCustomFields}
+              title=""
+            />
+          </div>
+        );
+
+      case 'date':
+        //TODO: Fix input width 12
+        return (
+          <div className={`mx-4 rounded-lg mt-3 ${sizeStyle}`}>
+            <DayPickerCustom
+              id={_id}
+              setCurrentCustomFields={setCurrentCustomFields}
+              label=""
             />
           </div>
         );
