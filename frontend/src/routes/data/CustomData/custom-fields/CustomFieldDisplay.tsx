@@ -6,9 +6,11 @@ import Card from '../../../../components/card/Card';
 import SimpleInput from '../../../../components/input/SimpleInput';
 import RichText from '../../../../components/text/RichText';
 import { GetCustomFieldType, OptionData } from '../../../../services/data';
-import DayPickerCustom from './customComponents/DayPicker';
-import MultiSelectDropdownCustom from './customComponents/MultiSelectDropdown';
-import SelectDropdownCustom from './customComponents/SelectDropdown';
+import {
+  DayPickerCustom,
+  MultiSelectDropdownCustom,
+  SelectDropdownCustom,
+} from './customComponents';
 
 type CustomFieldProps = {
   currentCustomFields: GetCustomFieldType[];
