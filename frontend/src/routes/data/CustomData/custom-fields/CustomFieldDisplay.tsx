@@ -1,8 +1,11 @@
+import { t } from 'i18next';
 import { useState } from 'react';
 
 import DefaultRadioGroup from '../../../../components/button/DefaultRadioGroup';
+import PrimaryButton from '../../../../components/button/PrimaryButton';
 import Card from '../../../../components/card/Card';
 import SimpleInput from '../../../../components/input/SimpleInput';
+import Modal from '../../../../components/modal/Modal';
 import RichText from '../../../../components/text/RichText';
 import { GetCustomFieldType } from '../../../../services/data';
 import {
@@ -24,6 +27,9 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
   fetchCustomFields,
 }) => {
   const stringList = ['text', 'input', 'radio', 'date'];
+  const [deletedCustomField, setDeletedCustomField] = useState<string>('');
+  const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
+  const [deletedCustomFieldId, setDeletedCustomFieldId] = useState<string>('');
 
   const handleInputChangeText = (id: string, name: string, value: string) => {
     // TODO: Corregir error eslint
@@ -39,18 +45,11 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
   };
 
   const renderField = (field: GetCustomFieldType) => {
-    const { _id, fieldType, label, size, offset, required, options, text } =
-      field;
+    // const { _id, fieldType, label, size, offset, required, options, text } =
+    const { _id, fieldType, size, options, text } = field;
     //TODO: Cambiar width
     const sizeStyle = size !== 12 ? `w-${size}/12` : 'w-full';
     //TODO: Change text added by default
-    /* if (stringList.includes(fieldType)) {
-      if (text.length === 0) {
-        text.push({ locale: 'es-ES', value: '' });
-      }
-      //values = options[0].value;
-      //values = options[0].value ?? { locale: 'es-ES', value: '' };
-    } */
     if (text.length === 0) {
       if (stringList.includes(fieldType)) {
         text.push({ locale: 'es-ES', value: '' });
@@ -264,19 +263,64 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
     }
   };
 
+  const deleteCustomFieldModal = (id: string, name: string) => {
+    setDeletedCustomField(name);
+    setDeletedCustomFieldId(id);
+    setDeleteModalOpen(true);
+  };
+
+  const handlerdeleteCustomFieldModal = (name: string) => {
+    setDeleteModalOpen(false);
+    if (name === 'confirm') {
+      //TODO: Eliminar campo personalizado
+      console.log(deletedCustomFieldId);
+    }
+    setDeletedCustomFieldId('');
+    setDeletedCustomField('');
+  };
+
   return (
     <div className="mt-4">
+      <Modal
+        cancelText={t('btn.stay')}
+        disablehr
+        isOpen={deleteModalOpen}
+        onCancel={() => handlerdeleteCustomFieldModal('cancel')}
+        onSubmit={() => handlerdeleteCustomFieldModal('confirm')}
+        submitText={t('btn.confirm')}
+        title={t('msg.confirmSuppression')}
+      >
+        <span className="ml-3">
+          {t('msg.customFieldDeleteNotice', { 0: deletedCustomField })}
+        </span>
+      </Modal>
       <Card title="test">
         <div className="">
           {currentCustomFields.map(
             (field: GetCustomFieldType, index: number) => (
               <div className="bg-gray-700 rounded-lg pb-2" key={field._id}>
-                <label
-                  className={`block font-medium leading-6 text-gray-300 ml-4 pt-1 ${index !== 0 ? 'mt-4' : ''}`}
-                  htmlFor={field._id}
+                <div
+                  className={`flex items-center justify-between ml-4 mt-1  ${index !== 0 ? 'mt-4' : ''}`}
                 >
-                  {field.fieldType !== 'space' ? field.label : 'space'}
-                </label>
+                  <label
+                    className="font-medium leading-6 text-gray-300"
+                    htmlFor={field._id}
+                  >
+                    {field.fieldType !== 'space' ? field.label : 'space'}
+                  </label>
+                  <div className="mr-4 mt-2">
+                    <PrimaryButton
+                      color="red"
+                      onClick={() =>
+                        deleteCustomFieldModal(field._id, field.label)
+                      }
+                    >
+                      {
+                        t('delete') //TODO:{t('add') //TODO: add i18n}
+                      }
+                    </PrimaryButton>
+                  </div>
+                </div>
                 <div>{renderField(field)}</div>
               </div>
             ),

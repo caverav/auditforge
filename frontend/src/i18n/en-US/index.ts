@@ -135,6 +135,8 @@ export default {
     auditDeletedOk: 'Audit deleted successfully',
     auditDeleteNotice: 'Audit will be permanently deleted',
     customFieldCreatedOk: 'Custom Field Created Successfully!',
+    customFieldDeleteNotice:
+      'Custom Field {{0}} will be permanently deleted.<br>This field will be removed from ALL Vulnerablities and associated data will be permanently LOST!',
   },
   err: {
     notDefinedLanguage: 'Not defined for this language',
