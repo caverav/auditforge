@@ -5,6 +5,7 @@ import DefaultRadioGroup, {
   RadioOption,
 } from '../../../../components/button/DefaultRadioGroup';
 import Card from '../../../../components/card/Card';
+import SelectDropdown from '../../../../components/dropdown/SelectDropdown';
 import SimpleInput from '../../../../components/input/SimpleInput';
 import RichText from '../../../../components/text/RichText';
 import { GetCustomFieldType, OptionData } from '../../../../services/data';
@@ -40,14 +41,6 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
   setCurrentCustomFields,
   fetchCustomFields,
 }) => {
-  const optionsList = [
-    'checkbox',
-    'radio',
-    'select',
-    'select-multiple',
-    'date',
-  ];
-
   const stringList = ['text', 'input', 'radio'];
   const [formData, setFormData] = useState<OptionData>({});
 
@@ -76,7 +69,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
       field;
     //TODO: Cambiar width
     const sizeStyle = size !== 12 ? `w-${size}/12` : 'w-full';
-    if (!optionsList.includes(fieldType)) {
+    if (stringList.includes(fieldType)) {
       if (text.length === 0) {
         text.push({ locale: 'es-ES', value: '' });
       }
@@ -84,10 +77,8 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
       //values = options[0].value ?? { locale: 'es-ES', value: '' };
     } else if (fieldType === 'date') {
       // TODO: Add custom component
-    } else if (fieldType === 'radio') {
-      options.map(option =>
-        text.push({ locale: 'es-ES', value: option.value }),
-      );
+    } else if (fieldType === 'select') {
+      //
     }
     switch (fieldType) {
       case 'checkbox':
@@ -165,7 +156,26 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
               value={text[0].value}
             />
           </div>
-        ); // Espacio vertical
+        );
+
+      case 'select':
+        //TODO: Fix input width 12
+        return (
+          <div className={`mx-4 rounded-lg mt-3 ${sizeStyle}`}>
+            <SelectDropdown
+              items={options.map((option, index) => ({
+                id: index,
+                value: option.value,
+                label: option.value,
+              }))}
+              onChange={(value: ListItem) => {
+                handleInputChangeText(_id, fieldType, value.value);
+              }}
+              selected={{ id: 0, value: options[0].value }}
+              title=""
+            />
+          </div>
+        );
 
       default:
         return null;
