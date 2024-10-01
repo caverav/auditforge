@@ -11,7 +11,7 @@ import { NewAuditTypeForm } from './NewAuditType';
 export const AuditTypes: React.FC = () => {
   const { t } = useTranslation();
 
-  const [error, setError] = useState<string | null>();
+  const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
 
   const [auditTypes, setAuditTypes] = useState<AuditType[]>([]);
