@@ -1,17 +1,16 @@
 import { useState } from 'react';
 
-import CheckboxButton from '../../../../components/button/CheckboxButton';
 import DefaultRadioGroup from '../../../../components/button/DefaultRadioGroup';
 import Card from '../../../../components/card/Card';
 import SimpleInput from '../../../../components/input/SimpleInput';
 import RichText from '../../../../components/text/RichText';
 import { GetCustomFieldType, OptionData } from '../../../../services/data';
 import {
+  CheckboxButtonCustom,
   DayPickerCustom,
   MultiSelectDropdownCustom,
   SelectDropdownCustom,
 } from './customComponents';
-import CheckboxButtonCustom from './customComponents/CheckboxButton';
 
 type CustomFieldProps = {
   currentCustomFields: GetCustomFieldType[];
