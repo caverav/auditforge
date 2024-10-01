@@ -1,5 +1,6 @@
 import { t } from 'i18next';
 import { useState } from 'react';
+import { toast, Toaster } from 'sonner';
 
 import DefaultRadioGroup from '../../../../components/button/DefaultRadioGroup';
 import PrimaryButton from '../../../../components/button/PrimaryButton';
@@ -7,7 +8,10 @@ import Card from '../../../../components/card/Card';
 import SimpleInput from '../../../../components/input/SimpleInput';
 import Modal from '../../../../components/modal/Modal';
 import RichText from '../../../../components/text/RichText';
-import { GetCustomFieldType } from '../../../../services/data';
+import {
+  deleteCustomField,
+  GetCustomFieldType,
+} from '../../../../services/data';
 import {
   CheckboxButtonCustom,
   DayPickerCustom,
@@ -263,17 +267,34 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
     }
   };
 
+  const confirmDeleteCustomField = async () => {
+    try {
+      const response = await deleteCustomField(deletedCustomFieldId);
+      if (response.status === 'success') {
+        toast.success(
+          t('msg.customFieldDeleteOk', {
+            0: deletedCustomField,
+            1: response.datas.vulnCount.toString(),
+          }),
+        );
+      }
+    } catch (error) {
+      toast.error(t('err.failedDeleteCustomField'));
+      console.error('Error:', error);
+    }
+  };
+
   const deleteCustomFieldModal = (id: string, name: string) => {
     setDeletedCustomField(name);
     setDeletedCustomFieldId(id);
     setDeleteModalOpen(true);
   };
 
-  const handlerdeleteCustomFieldModal = (name: string) => {
+  const handlerdeleteCustomFieldModal = async (name: string) => {
     setDeleteModalOpen(false);
     if (name === 'confirm') {
-      //TODO: Eliminar campo personalizado
-      console.log(deletedCustomFieldId);
+      await confirmDeleteCustomField();
+      fetchCustomFields();
     }
     setDeletedCustomFieldId('');
     setDeletedCustomField('');
@@ -294,6 +315,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
           {t('msg.customFieldDeleteNotice', { 0: deletedCustomField })}
         </span>
       </Modal>
+      <Toaster />
       <Card title="test">
         <div className="">
           {currentCustomFields.map(
