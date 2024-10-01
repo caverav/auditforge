@@ -11,14 +11,18 @@ type DayPickerProps = {
   label: string;
   setCurrentCustomFields: (fields: GetCustomFieldType[]) => void;
   id: string;
+  text?: string;
 };
 
 const DayPickerCustom: React.FC<DayPickerProps> = ({
   label,
   setCurrentCustomFields,
   id,
+  text,
 }) => {
-  const [selectedDay, setSelectedDay] = useState<Dayjs | null>(null);
+  const [selectedDay, setSelectedDay] = useState<Dayjs | null>(
+    text ? dayjs(text) : null,
+  );
   const onChange = (item: Dayjs) => {
     setSelectedDay(item);
     setCurrentCustomFields((prevFields: GetCustomFieldType[]) => {

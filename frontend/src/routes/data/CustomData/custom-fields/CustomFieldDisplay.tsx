@@ -23,7 +23,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
   setCurrentCustomFields,
   fetchCustomFields,
 }) => {
-  const stringList = ['text', 'input', 'radio'];
+  const stringList = ['text', 'input', 'radio', 'date'];
 
   const handleInputChangeText = (id: string, name: string, value: string) => {
     // TODO: Corregir error eslint
@@ -44,12 +44,23 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
     //TODO: Cambiar width
     const sizeStyle = size !== 12 ? `w-${size}/12` : 'w-full';
     //TODO: Change text added by default
-    if (stringList.includes(fieldType)) {
+    /* if (stringList.includes(fieldType)) {
       if (text.length === 0) {
         text.push({ locale: 'es-ES', value: '' });
       }
       //values = options[0].value;
       //values = options[0].value ?? { locale: 'es-ES', value: '' };
+    } */
+    if (text.length === 0) {
+      if (stringList.includes(fieldType)) {
+        text.push({ locale: 'es-ES', value: '' });
+      } else if (
+        fieldType === 'checkbox' ||
+        fieldType === 'select-multiple' ||
+        fieldType === 'select'
+      ) {
+        text.push({ locale: 'es-ES', value: [] });
+      }
     }
 
     switch (fieldType) {
@@ -233,8 +244,17 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
           <div className={`mx-4 rounded-lg mt-3 ${sizeStyle}`}>
             <DayPickerCustom
               id={_id}
-              setCurrentCustomFields={setCurrentCustomFields}
               label=""
+              setCurrentCustomFields={setCurrentCustomFields}
+              text={
+                Array.isArray(text[0].value)
+                  ? text[0].value[0]
+                  : typeof text[0].value === 'object'
+                    ? Array.isArray(text[0].value.value)
+                      ? text[0].value.value[0]
+                      : text[0].value.value
+                    : text[0].value
+              }
             />
           </div>
         );
