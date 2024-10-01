@@ -137,6 +137,8 @@ export default {
     customFieldCreatedOk: 'Custom Field Created Successfully!',
     customFieldDeleteNotice:
       'Custom Field {{0}} will be permanently deleted.<br>This field will be removed from ALL Vulnerablities and associated data will be permanently LOST!',
+    customFieldDeleteOk:
+      'Custom Field {{0}} deleted successfully. {{1}} Vulnerabilities were affected.',
   },
   err: {
     notDefinedLanguage: 'Not defined for this language',
@@ -168,6 +170,7 @@ export default {
     failedUpdateAudit: 'Failed to update audit',
     customFieldAlreadyExists: 'Custom Field already exists',
     failedCreateCustomField: 'Error creating custom field',
+    failedDeleteCustomField: 'Failed to delete the custom field',
   },
   cvss: {
     title: 'CVSS v3.1 Base Score',
