@@ -37,8 +37,8 @@ export const AuditTypes: React.FC = () => {
   }, [error]);
 
   /**
-   * Lógica para hacer uptdate (PUT)
-   * de los lenguajes.
+   * Lógica para actualizar (PUT)
+   * los tipos de auditoría.
    */
   const [newAuditTypeList, setNewAuditTypeList] = useState<AuditType[]>([]);
 
