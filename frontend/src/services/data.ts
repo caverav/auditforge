@@ -93,9 +93,14 @@ type OptionData = {
   value: string;
 };
 
-type TextData = {
+type TextDataChild = {
   locale: string;
   value: string | string[];
+};
+
+type TextData = {
+  locale: string;
+  value: string | TextDataChild;
 };
 
 export type AddCustomFieldType = {
