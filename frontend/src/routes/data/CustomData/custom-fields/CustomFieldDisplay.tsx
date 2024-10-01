@@ -11,6 +11,7 @@ import {
   MultiSelectDropdownCustom,
   SelectDropdownCustom,
 } from './customComponents';
+import CheckboxButtonCustom from './customComponents/CheckboxButton';
 
 type CustomFieldProps = {
   currentCustomFields: GetCustomFieldType[];
@@ -62,27 +63,17 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
 
     switch (fieldType) {
       case 'checkbox':
-        return options.length > 0 ? (
-          options.map(option => (
-            <div
-              className={`flex items-center m-3 ${sizeStyle}`}
-              key={option.value}
-            >
-              <CheckboxButton
-                checked={(formData[_id] || {})[option.value] || false}
-                onChange={checked => {
-                  const currentValues = formData[_id];
-                  handleInputChange(_id, {
-                    ...currentValues,
-                    [option.value]: checked,
-                  });
-                }}
-                text={option.value}
-              />
-            </div>
-          ))
-        ) : (
-          <p className="text-gray-500 italic">No hay opciones disponibles</p>
+        return (
+          <div className={`mx-4 rounded-lg mt-3 ${sizeStyle}`}>
+            <CheckboxButtonCustom
+              id={_id}
+              options={options.map(option => option.value)}
+              setCurrentCustomFields={setCurrentCustomFields}
+              text={
+                Array.isArray(text[0].value) ? text[0].value : [text[0].value]
+              }
+            />
+          </div>
         );
 
       case 'space':
@@ -97,7 +88,9 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
                 handleInputChangeText(_id, fieldType, value)
               }
               placeholder="asd"
-              value={text[0].value}
+              value={
+                Array.isArray(text[0].value) ? text[0].value[0] : text[0].value
+              }
             />
           </div>
         ); // Espacio vertical
@@ -114,7 +107,10 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
               }
               placeholder=""
               type="text"
-              value={text[0].value}
+              // value={text[0].value}
+              value={
+                Array.isArray(text[0].value) ? text[0].value[0] : text[0].value
+              }
             />
           </div>
         ); // Espacio vertical
@@ -133,7 +129,10 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
                 label: option.value,
                 value: option.value,
               }))}
-              value={text[0].value}
+              // value={text[0].value}
+              value={
+                Array.isArray(text[0].value) ? text[0].value[0] : text[0].value
+              }
             />
           </div>
         );

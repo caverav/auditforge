@@ -93,6 +93,11 @@ type OptionData = {
   value: string;
 };
 
+type TextData = {
+  locale: string;
+  value: string | string[];
+};
+
 export type AddCustomFieldType = {
   label: string;
   fieldType: string;
@@ -102,7 +107,7 @@ export type AddCustomFieldType = {
   offset: number;
   required: boolean;
   description: string;
-  text: OptionData[];
+  text: TextData[];
   options: OptionData[];
   position: number;
 };
@@ -116,7 +121,7 @@ export type AddCustomFieldTypeResponse = {
   offset: number;
   required: boolean;
   description: string;
-  text: OptionData[];
+  text: TextData[];
   options: OptionData[];
   position: number;
   _id: string;
@@ -135,7 +140,7 @@ export type GetCustomFieldType = {
   offset: number;
   required: boolean;
   description: string;
-  text: OptionData[];
+  text: TextData[];
   options: OptionData[];
 };
 
