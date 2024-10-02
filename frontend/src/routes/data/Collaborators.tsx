@@ -81,12 +81,6 @@ export const Collaborators: React.FC = () => {
     useState<boolean>(false);
   const [editModalRoleRequiredAlert, setEditModalRoleRequiredAlert] =
     useState<boolean>(false);
-  const [editModalPasswordRequiredAlert, setEditModalPasswordRequiredAlert] =
-    useState<boolean>(false);
-  const [
-    editModalConfirmPasswordRequiredAlert,
-    setEditModalConfirmPasswordRequiredAlert,
-  ] = useState<boolean>(false);
 
   const initialCollaboratorState = {
     email: '',
@@ -334,8 +328,6 @@ export const Collaborators: React.FC = () => {
     setEditModalFirstnameRequiredAlert(false);
     setEditModalLastnameRequiredAlert(false);
     setEditModalRoleRequiredAlert(false);
-    setEditModalPasswordRequiredAlert(false);
-    setEditModalConfirmPasswordRequiredAlert(false);
   };
 
   const handleSubmitEditCollab = async () => {
@@ -359,16 +351,6 @@ export const Collaborators: React.FC = () => {
       isValid = false;
     }
 
-    if (!newCollaborator.password || newCollaborator.password.trim() === '') {
-      setEditModalPasswordRequiredAlert(true);
-      isValid = false;
-    }
-
-    if (!newCollaborator.confirmPassword) {
-      setEditModalConfirmPasswordRequiredAlert(true);
-      isValid = false;
-    }
-
     if (!isValid) {
       toast.error(t('msg.fieldRequired'));
       return;
@@ -382,7 +364,10 @@ export const Collaborators: React.FC = () => {
       return;
     }
 
-    if (newCollaborator.password != newCollaborator.confirmPassword) {
+    if (
+      newCollaborator.password &&
+      newCollaborator.password !== newCollaborator.confirmPassword
+    ) {
       toast.error(t('msg.passwordsDoNotMatch'));
       return;
     }
@@ -628,8 +613,6 @@ export const Collaborators: React.FC = () => {
             name="password"
             onChange={value => handleInputChange('password', value)}
             placeholder={t('password')}
-            requiredAlert={editModalPasswordRequiredAlert}
-            requiredField
             type="password"
             value={newCollaborator?.password ?? ''}
           />
@@ -639,8 +622,6 @@ export const Collaborators: React.FC = () => {
             name="confirmPassword"
             onChange={value => handleInputChange('confirmPassword', value)}
             placeholder={t('password')}
-            requiredAlert={editModalConfirmPasswordRequiredAlert}
-            requiredField
             type="password"
             value={newCollaborator?.confirmPassword ?? ''}
           />
