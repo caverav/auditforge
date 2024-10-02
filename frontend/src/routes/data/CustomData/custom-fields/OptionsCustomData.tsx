@@ -37,11 +37,11 @@ export const OptionsCustomData: React.FC<OptionsCustomDataProps> = ({
 }) => {
   const handleAddOption = () => {
     setOptionsData([
+      ...optionsData,
       {
         locale: languageSelected?.value ?? '',
         value: addOptionField,
       },
-      ...optionsData,
     ]);
   };
 
