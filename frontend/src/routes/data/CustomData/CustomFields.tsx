@@ -163,6 +163,8 @@ export const CustomFields: React.FC = () => {
         setLabel('');
         setRequiredSelectComponentAlert(false);
         setRequiredLabelAlert(false);
+        setAddOptionField('');
+        setOptionsData([]);
         void fetchCustomFields();
       }
     } catch (error) {

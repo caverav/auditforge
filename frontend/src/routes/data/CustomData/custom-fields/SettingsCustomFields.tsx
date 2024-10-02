@@ -84,7 +84,7 @@ export const SettingsCustomFields: React.FC<SettingsCustomFieldsProps> = ({
       ) : null}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <SelectDropdown
-          items={sizes}
+          items={sizes.slice(1)}
           onChange={value => setSizeSelected(value)}
           selected={sizeSelected}
           title={t('size')}
