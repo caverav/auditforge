@@ -301,7 +301,7 @@ export const Collaborators: React.FC = () => {
       return;
     }
 
-    if (updatedCollaborator.password != updatedCollaborator.confirmPassword) {
+    if (updatedCollaborator.password !== updatedCollaborator.confirmPassword) {
       toast.error(t('msg.passwordsDoNotMatch'));
       return;
     }
