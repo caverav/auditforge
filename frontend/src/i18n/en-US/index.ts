@@ -138,6 +138,7 @@ export default {
     templateNameError: 'Template name already exists',
     invalidEmailError:
       'Email must follow this format: example@example.something',
+    passwordsDoNotMatch: 'Passwords do not match',
   },
   err: {
     notDefinedLanguage: 'Not defined for this language',

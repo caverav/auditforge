@@ -10,16 +10,6 @@ type FileInputProps = {
   label?: string;
 };
 
-const arrayBufferToBase64 = (buffer: ArrayBuffer): string => {
-  let binary = '';
-  const bytes = new Uint8Array(buffer);
-  const len = bytes.byteLength;
-  for (let i = 0; i < len; i++) {
-    binary += String.fromCharCode(bytes[i]);
-  }
-  return btoa(binary);
-};
-
 const FileInput: React.FC<FileInputProps> = ({
   id,
   name,
@@ -39,13 +29,13 @@ const FileInput: React.FC<FileInputProps> = ({
 
       reader.onloadend = () => {
         // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-        const arrayBuffer = reader.result as ArrayBuffer;
-        const base64String = arrayBufferToBase64(arrayBuffer);
+        const base64String = reader.result as string;
         onFileSelect({ name: file.name, content: base64String });
       };
-      reader.readAsArrayBuffer(file);
+      reader.readAsDataURL(file);
     } else {
       setFileName('');
+      onFileSelect({ name: '', content: '' });
     }
   };
 

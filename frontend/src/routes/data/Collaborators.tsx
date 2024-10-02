@@ -24,6 +24,7 @@ type NewCollaborator = {
   firstname: string;
   lastname: string;
   password: string;
+  confirmPassword?: string;
   phone: string;
   role: string;
   totpenabled: boolean;
@@ -67,6 +68,10 @@ export const Collaborators: React.FC = () => {
     useState<boolean>(false);
   const [addModalPasswordRequiredAlert, setAddModalPasswordRequiredAlert] =
     useState<boolean>(false);
+  const [
+    addModalConfirmPasswordRequiredAlert,
+    setAddModalConfirmPasswordRequiredAlert,
+  ] = useState<boolean>(false);
 
   const [editModalUsernameRequiredAlert, setEditModalUsernameRequiredAlert] =
     useState<boolean>(false);
@@ -78,12 +83,17 @@ export const Collaborators: React.FC = () => {
     useState<boolean>(false);
   const [editModalPasswordRequiredAlert, setEditModalPasswordRequiredAlert] =
     useState<boolean>(false);
+  const [
+    editModalConfirmPasswordRequiredAlert,
+    setEditModalConfirmPasswordRequiredAlert,
+  ] = useState<boolean>(false);
 
   const initialCollaboratorState = {
     email: '',
     firstname: '',
     lastname: '',
     password: '',
+    confirmPassword: '',
     phone: '',
     role: selectedRole ? selectedRole.value : '',
     totpenabled: false,
@@ -281,6 +291,11 @@ export const Collaborators: React.FC = () => {
       isValid = false;
     }
 
+    if (!updatedCollaborator.confirmPassword) {
+      setAddModalConfirmPasswordRequiredAlert(true);
+      isValid = false;
+    }
+
     if (!isValid) {
       toast.error(t('msg.fieldRequired'));
       return;
@@ -288,6 +303,11 @@ export const Collaborators: React.FC = () => {
 
     if (!validatePassword(updatedCollaborator.password)) {
       toast.error(t('msg.passwordComplexity'));
+      return;
+    }
+
+    if (updatedCollaborator.password != updatedCollaborator.confirmPassword) {
+      toast.error(t('msg.passwordsDoNotMatch'));
       return;
     }
 
@@ -342,6 +362,11 @@ export const Collaborators: React.FC = () => {
       isValid = false;
     }
 
+    if (!newCollaborator.confirmPassword) {
+      setEditModalConfirmPasswordRequiredAlert(true);
+      isValid = false;
+    }
+
     if (!isValid) {
       toast.error(t('msg.fieldRequired'));
       return;
@@ -352,6 +377,11 @@ export const Collaborators: React.FC = () => {
       !validatePassword(newCollaborator.password)
     ) {
       toast.error(t('msg.passwordComplexity'));
+      return;
+    }
+
+    if (newCollaborator.password != newCollaborator.confirmPassword) {
+      toast.error(t('msg.passwordsDoNotMatch'));
       return;
     }
 
@@ -509,6 +539,17 @@ export const Collaborators: React.FC = () => {
             type="password"
             value={newCollaborator?.password ?? ''}
           />
+          <SimpleInput
+            id="confirmPassword"
+            label={t('confirmPassword')}
+            name="confirmPassword"
+            onChange={value => handleInputChange('confirmPassword', value)}
+            placeholder={t('password')}
+            requiredAlert={addModalConfirmPasswordRequiredAlert}
+            requiredField
+            type="password"
+            value={newCollaborator?.confirmPassword ?? ''}
+          />
         </>
       </Modal>
       <Modal
@@ -589,6 +630,17 @@ export const Collaborators: React.FC = () => {
             requiredField
             type="password"
             value={newCollaborator?.password ?? ''}
+          />
+          <SimpleInput
+            id="confirmPassword"
+            label={t('confirmPassword')}
+            name="confirmPassword"
+            onChange={value => handleInputChange('confirmPassword', value)}
+            placeholder={t('password')}
+            requiredAlert={editModalConfirmPasswordRequiredAlert}
+            requiredField
+            type="password"
+            value={newCollaborator?.confirmPassword ?? ''}
           />
           <div className="flex items-center mt-2">
             <PrimarySwitch
