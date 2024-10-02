@@ -12,10 +12,12 @@ import {
   getLanguages,
 } from '../../../services/data';
 import { getCategories } from '../../../services/vulnerabilities';
-import { CustomFieldDisplay } from './custom-fields/CustomFieldDisplay';
-import { CustomFieldType } from './custom-fields/CustomFieldType';
-import { OptionsCustomData } from './custom-fields/OptionsCustomData';
-import { SettingsCustomFields } from './custom-fields/SettingsCustomFields';
+import {
+  CustomFieldDisplay,
+  CustomFieldType,
+  OptionsCustomData,
+  SettingsCustomFields,
+} from './custom-fields/';
 
 type ListItem = {
   id: number;
