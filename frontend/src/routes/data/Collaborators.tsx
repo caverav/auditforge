@@ -240,6 +240,7 @@ export const Collaborators: React.FC = () => {
     setAddModalLastnameRequiredAlert(false);
     setAddModalRoleRequiredAlert(false);
     setAddModalPasswordRequiredAlert(false);
+    setAddModalConfirmPasswordRequiredAlert(false);
   };
 
   const validatePassword = (password: string): boolean => {
@@ -334,6 +335,7 @@ export const Collaborators: React.FC = () => {
     setEditModalLastnameRequiredAlert(false);
     setEditModalRoleRequiredAlert(false);
     setEditModalPasswordRequiredAlert(false);
+    setEditModalConfirmPasswordRequiredAlert(false);
   };
 
   const handleSubmitEditCollab = async () => {
