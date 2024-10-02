@@ -316,7 +316,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
         </span>
       </Modal>
       <Toaster />
-      <Card title="test">
+      <Card title={t('manageCustomFields')}>
         <div className="">
           {currentCustomFields.map(
             (field: GetCustomFieldType, index: number) => (

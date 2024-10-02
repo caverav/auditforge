@@ -679,4 +679,5 @@ export default {
   originalAudit: 'Original Audit',
   willBeRemoved: 'will be removed',
   auditPhase: 'Audit Phase',
+  manageCustomFields: 'Manage Custom Fields',
 };

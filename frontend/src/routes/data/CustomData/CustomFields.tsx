@@ -183,7 +183,7 @@ export const CustomFields: React.FC = () => {
   return (
     <div>
       <Toaster />
-      <Card title="asd">
+      <Card title={t('createAndManageCustomFields')}>
         <div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <CustomFieldType
