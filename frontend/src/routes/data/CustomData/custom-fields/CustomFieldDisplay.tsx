@@ -19,6 +19,16 @@ import {
   SelectDropdownCustom,
 } from './customComponents';
 
+type TextDataChild = {
+  locale: string;
+  value: string | string[];
+};
+
+type TextData = {
+  locale: string;
+  value: string | string[] | TextDataChild;
+};
+
 type CustomFieldProps = {
   currentCustomFields: GetCustomFieldType[];
   setCurrentCustomFields: (fields: GetCustomFieldType[]) => void;
@@ -35,7 +45,41 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [deletedCustomFieldId, setDeletedCustomFieldId] = useState<string>('');
 
-  const handleInputChangeText = (id: string, name: string, value: string) => {
+  const handlerTextString = (text: TextData[]) => {
+    return Array.isArray(text[0].value)
+      ? text[0].value[0]
+      : typeof text[0].value === 'object'
+        ? Array.isArray(text[0].value.value)
+          ? text[0].value.value[0]
+          : text[0].value.value
+        : text[0].value;
+  };
+
+  const handlerTextSelect = (text: TextData[]) => {
+    return typeof text[0].value === 'object' && 'locale' in text[0].value
+      ? {
+          locale: text[0].value.locale,
+          value: Array.isArray(text[0].value.value)
+            ? text[0].value.value
+            : [text[0].value.value],
+        }
+      : {
+          locale: text[0].locale,
+          value: Array.isArray(text[0].value) ? text[0].value : [text[0].value],
+        };
+  };
+
+  const handlerTextCheckbox = (text: TextData[]) => {
+    return Array.isArray(text[0].value)
+      ? text[0].value
+      : typeof text[0].value === 'object'
+        ? Array.isArray(text[0].value.value)
+          ? text[0].value.value
+          : [text[0].value.value]
+        : [text[0].value];
+  };
+
+  const handlerInputChangeText = (id: string, name: string, value: string) => {
     // TODO: Corregir error eslint
     if (stringList.includes(name)) {
       setCurrentCustomFields((prevFields: GetCustomFieldType[]) => {
@@ -74,18 +118,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
               id={_id}
               options={options.map(option => option.value)}
               setCurrentCustomFields={setCurrentCustomFields}
-              /* text={
-                Array.isArray(text[0].value) ? text[0].value : [text[0].value]
-              } */
-              text={
-                Array.isArray(text[0].value)
-                  ? text[0].value
-                  : typeof text[0].value === 'object'
-                    ? Array.isArray(text[0].value.value)
-                      ? text[0].value.value
-                      : [text[0].value.value]
-                    : [text[0].value]
-              }
+              text={handlerTextCheckbox(text)}
             />
           </div>
         );
@@ -99,24 +132,13 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
             <RichText
               label=""
               onChange={(value: string) =>
-                handleInputChangeText(_id, fieldType, value)
+                handlerInputChangeText(_id, fieldType, value)
               }
               placeholder="asd"
-              /* value={
-                Array.isArray(text[0].value) ? text[0].value[0] : text[0].value
-              } */
-              value={
-                Array.isArray(text[0].value)
-                  ? text[0].value[0]
-                  : typeof text[0].value === 'object'
-                    ? Array.isArray(text[0].value.value)
-                      ? text[0].value.value[0]
-                      : text[0].value.value
-                    : text[0].value
-              }
+              value={handlerTextString(text)}
             />
           </div>
-        ); // Espacio vertical
+        );
 
       case 'input':
         //TODO: Fix input width 12
@@ -126,23 +148,11 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
               id={_id}
               name={_id}
               onChange={(value: string) =>
-                handleInputChangeText(_id, fieldType, value)
+                handlerInputChangeText(_id, fieldType, value)
               }
               placeholder=""
               type="text"
-              // value={text[0].value}
-              /* value={
-                Array.isArray(text[0].value) ? text[0].value[0] : text[0].value
-              } */
-              value={
-                Array.isArray(text[0].value)
-                  ? text[0].value[0]
-                  : typeof text[0].value === 'object'
-                    ? Array.isArray(text[0].value.value)
-                      ? text[0].value.value[0]
-                      : text[0].value.value
-                    : text[0].value
-              }
+              value={handlerTextString(text)}
             />
           </div>
         ); // Espacio vertical
@@ -154,7 +164,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
             <DefaultRadioGroup
               name={_id}
               onChange={(value: string) =>
-                handleInputChangeText(_id, fieldType, value)
+                handlerInputChangeText(_id, fieldType, value)
               }
               options={options.map((option, index) => ({
                 id: index.toString(),
@@ -162,15 +172,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
                 value: option.value,
               }))}
               // value={text[0].value}
-              value={
-                Array.isArray(text[0].value)
-                  ? text[0].value[0]
-                  : typeof text[0].value === 'object'
-                    ? Array.isArray(text[0].value.value)
-                      ? text[0].value.value[0]
-                      : text[0].value.value
-                    : text[0].value
-              }
+              value={handlerTextString(text)}
             />
           </div>
         );
@@ -188,21 +190,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
               }))}
               placeholder="Select"
               setCurrentCustomFields={setCurrentCustomFields}
-              text={
-                typeof text[0].value === 'object' && 'locale' in text[0].value
-                  ? {
-                      locale: text[0].value.locale,
-                      value: Array.isArray(text[0].value.value)
-                        ? text[0].value.value
-                        : [text[0].value.value],
-                    }
-                  : {
-                      locale: text[0].locale,
-                      value: Array.isArray(text[0].value)
-                        ? text[0].value
-                        : [text[0].value],
-                    }
-              }
+              text={handlerTextSelect(text)}
               title=""
             />
           </div>
@@ -221,21 +209,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
               }))}
               placeholder="Select"
               setCurrentCustomFields={setCurrentCustomFields}
-              text={
-                typeof text[0].value === 'object' && 'locale' in text[0].value
-                  ? {
-                      locale: text[0].value.locale,
-                      value: Array.isArray(text[0].value.value)
-                        ? text[0].value.value
-                        : [text[0].value.value],
-                    }
-                  : {
-                      locale: text[0].locale,
-                      value: Array.isArray(text[0].value)
-                        ? text[0].value
-                        : [text[0].value],
-                    }
-              }
+              text={handlerTextSelect(text)}
               title=""
             />
           </div>
@@ -249,15 +223,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
               id={_id}
               label=""
               setCurrentCustomFields={setCurrentCustomFields}
-              text={
-                Array.isArray(text[0].value)
-                  ? text[0].value[0]
-                  : typeof text[0].value === 'object'
-                    ? Array.isArray(text[0].value.value)
-                      ? text[0].value.value[0]
-                      : text[0].value.value
-                    : text[0].value
-              }
+              text={handlerTextString(text)}
             />
           </div>
         );
