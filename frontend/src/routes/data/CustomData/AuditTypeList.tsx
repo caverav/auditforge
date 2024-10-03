@@ -256,7 +256,7 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
                     </div>
                     <div className="text-lg">{t('auditPhase')}</div>
                     <DefaultRadioGroup
-                      name={'stage' + row._id}
+                      name={`stage${row._id}`}
                       onChange={e => handleInputChange(row._id, 'stage', e)}
                       options={stageOptions}
                       value={row.stage}
