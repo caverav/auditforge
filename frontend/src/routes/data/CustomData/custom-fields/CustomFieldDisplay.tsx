@@ -58,6 +58,29 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
     languagesList[0],
   );
 
+  const [currentPage, setCurrentPage] = useState(1); // Página inicial
+  const itemsPerPage = 5;
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = currentCustomFields.slice(
+    indexOfFirstItem,
+    indexOfLastItem,
+  );
+  const totalPages = Math.ceil(currentCustomFields.length / itemsPerPage);
+
+  const goToNextPage = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
+
+  const goToPreviousPage = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
   const handlerTextString = (text: TextData[]) => {
     return Array.isArray(text[0].value) ? text[0].value[0] : text[0].value;
   };
@@ -308,39 +331,45 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
               title={t('selectLanguage')}
             />
           </div>
-          {currentCustomFields.map(
-            (field: GetCustomFieldType, index: number) => (
-              <div className="bg-gray-700 rounded-lg pb-3" key={field._id}>
-                <div
-                  className={`flex items-center justify-between mt-1  ${index !== 0 ? 'mt-4' : ''}`}
+          {currentItems.map((field: GetCustomFieldType, index: number) => (
+            <div className="bg-gray-700 rounded-lg pb-3" key={field._id}>
+              <div
+                className={`flex items-center justify-between mt-1  ${index !== 0 ? 'mt-4' : ''}`}
+              >
+                <label
+                  className="font-medium leading-6 text-gray-300 ml-4"
+                  htmlFor={field._id}
                 >
-                  <label
-                    className="font-medium leading-6 text-gray-300 ml-4"
-                    htmlFor={field._id}
+                  {field.fieldType !== 'space' ? field.label : 'space'}
+                </label>
+                <div className="mr-4 mt-2">
+                  <PrimaryButton
+                    color="red"
+                    onClick={() =>
+                      deleteCustomFieldModal(field._id, field.label)
+                    }
                   >
-                    {field.fieldType !== 'space' ? field.label : 'space'}
-                  </label>
-                  <div className="mr-4 mt-2">
-                    <PrimaryButton
-                      color="red"
-                      onClick={() =>
-                        deleteCustomFieldModal(field._id, field.label)
-                      }
-                    >
-                      {
-                        t('btn.delete') //TODO:{t('add') //TODO: add i18n}
-                      }
-                    </PrimaryButton>
-                  </div>
+                    {
+                      t('btn.delete') //TODO:{t('add') //TODO: add i18n}
+                    }
+                  </PrimaryButton>
                 </div>
-                <div>{renderField(field)}</div>
               </div>
-            ),
-          )}
-          <div className="mt-4">
+              <div>{renderField(field)}</div>
+            </div>
+          ))}
+          <div className="mt-4 flex items-center justify-between">
             <PrimaryButton color="blue" onClick={() => addCustomField()}>
               {t('btn.save')}
             </PrimaryButton>
+            <div className="flex space-x-4">
+              <PrimaryButton color="blue" onClick={goToPreviousPage}>
+                {t('btn.previous')}
+              </PrimaryButton>
+              <PrimaryButton color="blue" onClick={goToNextPage}>
+                {t('btn.next')}
+              </PrimaryButton>
+            </div>
           </div>
           {JSON.stringify(currentCustomFields)}
         </div>

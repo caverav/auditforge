@@ -240,8 +240,8 @@ export const CustomFields: React.FC = () => {
         <CustomFieldDisplay
           currentCustomFields={currentCustomFields}
           fetchCustomFields={fetchCustomFields}
-          setCurrentCustomFields={setCurrentCustomFields}
           languagesList={languagesList}
+          setCurrentCustomFields={setCurrentCustomFields}
         />
       ) : null}
     </div>

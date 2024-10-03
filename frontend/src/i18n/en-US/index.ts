@@ -37,6 +37,8 @@ export default {
     accountEnabled: 'Account enabled',
     accountDisabled: 'Account disabled',
     all: 'All',
+    previous: 'Previous',
+    next: 'Next',
   },
   tooltip: {
     usersConnected: 'Users on the Audit:',
