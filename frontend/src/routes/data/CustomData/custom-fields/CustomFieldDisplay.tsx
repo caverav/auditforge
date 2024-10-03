@@ -118,7 +118,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
     switch (fieldType) {
       case 'checkbox':
         return (
-          <div className={`mx-4 rounded-lg mt-3 ${sizeStyle}`}>
+          <div className={`px-4 rounded-lg mt-3 ${sizeStyle}`}>
             <CheckboxButtonCustom
               id={_id}
               options={options.map(option => option.value)}
@@ -148,7 +148,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
       case 'input':
         //TODO: Fix input width 12
         return (
-          <div className={`bg-white mx-4 rounded-lg mt-3 ${sizeStyle}`}>
+          <div className={`px-4 rounded-lg mt-3 ${sizeStyle}`}>
             <SimpleInput
               id={_id}
               name={_id}
@@ -165,7 +165,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
       case 'radio':
         //TODO: Fix input width 12
         return (
-          <div className={`mx-4 rounded-lg mt-3 ${sizeStyle}`}>
+          <div className={`px-4 rounded-lg mt-3 ${sizeStyle}`}>
             <DefaultRadioGroup
               name={_id}
               onChange={(value: string) =>
@@ -184,7 +184,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
       case 'select':
         //TODO: Fix input width 12
         return (
-          <div className={`mx-4 rounded-lg mt-3 ${sizeStyle}`}>
+          <div className={`px-4 rounded-lg mt-3 ${sizeStyle}`}>
             <SelectDropdownCustom
               id={_id}
               items={options.map((option, index) => ({
@@ -203,7 +203,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
       case 'select-multiple':
         //TODO: Fix input width 12
         return (
-          <div className={`mx-4 rounded-lg mt-3 ${sizeStyle}`}>
+          <div className={`px-4 rounded-lg mt-3 ${sizeStyle}`}>
             <MultiSelectDropdownCustom
               id={_id}
               items={options.map((option, index) => ({
@@ -222,7 +222,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
       case 'date':
         //TODO: Fix input width 12
         return (
-          <div className={`mx-4 rounded-lg mt-3 ${sizeStyle}`}>
+          <div className={`rounded-lg mt-3 ${sizeStyle}`}>
             <DayPickerCustom
               id={_id}
               label=""
@@ -314,10 +314,10 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
             (field: GetCustomFieldType, index: number) => (
               <div className="bg-gray-700 rounded-lg pb-3" key={field._id}>
                 <div
-                  className={`flex items-center justify-between ml-4 mt-1  ${index !== 0 ? 'mt-4' : ''}`}
+                  className={`flex items-center justify-between mt-1  ${index !== 0 ? 'mt-4' : ''}`}
                 >
                   <label
-                    className="font-medium leading-6 text-gray-300"
+                    className="font-medium leading-6 text-gray-300 ml-4"
                     htmlFor={field._id}
                   >
                     {field.fieldType !== 'space' ? field.label : 'space'}
