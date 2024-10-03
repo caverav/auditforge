@@ -239,7 +239,7 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
             <AccordionTrigger>{row.name}</AccordionTrigger>
             <AccordionContent>
               <div className="p-1">
-                {loadingTemplates && loadingSections && loadingLanguages ? (
+                {loadingTemplates || loadingSections || loadingLanguages ? (
                   <p>{t('loading')}</p>
                 ) : (
                   <>
