@@ -287,6 +287,15 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
       (customField: GetCustomFieldType, index: number) => {
         return {
           ...customField,
+          text: customField.text.filter(item => {
+            if (typeof item.value === 'string') {
+              return item.value !== '';
+            }
+            if (Array.isArray(item.value)) {
+              return item.value.length > 0;
+            }
+            return true;
+          }),
           position: index,
         };
       },
