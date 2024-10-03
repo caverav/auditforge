@@ -139,6 +139,7 @@ export default {
       'Custom Field {{0}} will be permanently deleted.<br>This field will be removed from ALL Vulnerablities and associated data will be permanently LOST!',
     customFieldDeleteOk:
       'Custom Field {{0}} deleted successfully. {{1}} Vulnerabilities were affected.',
+    customFieldUpdatedOk: 'Custom Field Updated Successfully!',
   },
   err: {
     notDefinedLanguage: 'Not defined for this language',

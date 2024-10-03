@@ -159,7 +159,7 @@ export type UpdateCustomFieldType = {
   offset: number;
   required: boolean;
   description: string;
-  text: OptionData[];
+  text: TextData[];
   options: OptionData[];
   position: number;
 };

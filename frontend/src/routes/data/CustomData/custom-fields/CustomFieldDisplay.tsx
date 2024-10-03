@@ -11,6 +11,8 @@ import RichText from '../../../../components/text/RichText';
 import {
   deleteCustomField,
   GetCustomFieldType,
+  updateCustomField,
+  UpdateCustomFieldType,
 } from '../../../../services/data';
 import {
   CheckboxButtonCustom,
@@ -268,6 +270,28 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
     setDeletedCustomField('');
   };
 
+  const addCustomField = async () => {
+    const newCustomFields: UpdateCustomFieldType[] = currentCustomFields.map(
+      (customField: GetCustomFieldType, index: number) => {
+        return {
+          ...customField,
+          position: index,
+        };
+      },
+    );
+
+    try {
+      const response = await updateCustomField(newCustomFields);
+      if (response.status === 'success') {
+        toast.success(t('msg.customFieldUpdatedOk'));
+        fetchCustomFields();
+      }
+    } catch (error) {
+      toast.error(t('err.failedDeleteCustomField'));
+      console.error('Error:', error);
+    }
+  };
+
   return (
     <div className="mt-4">
       <Modal
@@ -316,7 +340,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
             ),
           )}
           <div className="mt-4">
-            <PrimaryButton color="blue" onClick={() => console.log('asd')}>
+            <PrimaryButton color="blue" onClick={() => addCustomField()}>
               {t('btn.save')}
             </PrimaryButton>
           </div>
