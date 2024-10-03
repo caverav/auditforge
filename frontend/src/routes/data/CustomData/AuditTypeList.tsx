@@ -161,6 +161,16 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
           return row.name === name ? { ...row, sections: newSections } : row;
         }),
       );
+    } else if (field === 'name' && typeof value === 'string') {
+      /**
+       * name en este caso es el _id del row
+       */
+      name &&
+        setRows(prevRows =>
+          prevRows.map(row => {
+            return row._id === name ? { ...row, name: value } : row;
+          }),
+        );
     } else {
       setRows(prevRows =>
         prevRows.map(row => {
@@ -238,7 +248,7 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
                         disabled={isDisabled}
                         id="name"
                         name="name"
-                        onChange={e => handleInputChange(row.name, 'name', e)}
+                        onChange={e => handleInputChange(row._id, 'name', e)}
                         placeholder={t('name')}
                         type="text"
                         value={row.name}

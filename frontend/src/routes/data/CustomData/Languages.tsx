@@ -82,9 +82,12 @@ export const Languages: React.FC = () => {
   const onClickSave = async () => {
     try {
       await updateLanguages(newLanguageList);
+      toast.success(t('msg.languagesUpdatedOk'));
       setIsEditing(false);
     } catch (error) {
       setError('Error updating languages');
+      toast.error(t('err.failedUpdateLanguages'));
+      setIsEditing(false);
       return;
     }
   };
