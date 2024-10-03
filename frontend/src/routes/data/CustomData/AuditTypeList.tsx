@@ -321,8 +321,7 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
    * que cambió la lista.
    */
   useEffect(() => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    onUpdateList(rows.map(({ id, ...rest }) => rest));
+    onUpdateList(rows.map(({ id: _, ...rest }) => rest));
   }, [onUpdateList, rows]);
 
   useEffect(() => {
