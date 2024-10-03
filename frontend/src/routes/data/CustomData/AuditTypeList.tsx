@@ -95,7 +95,7 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
 
   useEffect(() => {
     const fetchLanguages = async () => {
-      setLoadingTemplates(true);
+      setLoadingLanguages(true);
 
       try {
         const data = await getLanguages();
