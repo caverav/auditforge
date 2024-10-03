@@ -165,6 +165,7 @@ export default {
     failedUpdateProfile: 'Failed to update profile',
     failedUpdateAudit: 'Failed to update audit',
     failedCreateAuditType: 'Failed To Create Audit Type',
+    failedUpdateLanguages: 'Failed To Update Languages',
   },
   cvss: {
     title: 'CVSS v3.1 Base Score',
