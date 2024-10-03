@@ -37,6 +37,8 @@ export default {
     accountEnabled: 'Account enabled',
     accountDisabled: 'Account disabled',
     all: 'All',
+    generatePassword: 'Generate Password',
+    submitEncryption: 'Encrypt',
   },
   tooltip: {
     usersConnected: 'Users on the Audit:',
@@ -132,6 +134,7 @@ export default {
     recommendationSuboptimal: 'The recommendation is suboptimal',
     auditDeletedOk: 'Audit deleted successfully',
     auditDeleteNotice: 'Audit will be permanently deleted',
+    copiedToClipboard: 'Copied to clipboard',
   },
   err: {
     notDefinedLanguage: 'Not defined for this language',
@@ -159,6 +162,7 @@ export default {
     failedDeleteAudit: 'Failed to delete the audit',
     failedUpdateProfile: 'Failed to update profile',
     failedUpdateAudit: 'Failed to update audit',
+    passwordsDontMatch: 'Passwords do not match',
   },
   cvss: {
     title: 'CVSS v3.1 Base Score',
@@ -666,4 +670,5 @@ export default {
   originalAudit: 'Original Audit',
   willBeRemoved: 'will be removed',
   auditPhase: 'Audit Phase',
+  encryption: 'Encryption',
 };
