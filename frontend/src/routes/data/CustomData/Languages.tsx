@@ -42,6 +42,18 @@ export const Languages: React.FC = () => {
 
   const handleAddLanguage = async () => {
     let resp: { datas: { language: string; locale: string }; status?: string };
+    if (!newLanguage.trim()) {
+      // eslint-disable-next-line sonarjs/no-duplicate-string
+      setError(`${t('err.createEmptyField')}: ${t('name')}`);
+      toast.error(`${t('err.createEmptyField')}: ${t('name')}`);
+      return;
+    }
+
+    if (!newLocale.trim()) {
+      setError(`${t('err.createEmptyField')}: ${t('locale')}`);
+      toast.error(`${t('err.createEmptyField')}: ${t('locale')}`);
+      return;
+    }
 
     try {
       resp = await createLanguage({
@@ -51,8 +63,6 @@ export const Languages: React.FC = () => {
     } catch (error) {
       setError('Error creating language');
       toast.error(t('err.errorCreatingLang'));
-      setNewLanguage('');
-      setNewLocale('');
       return;
     }
     toast.success(t('msg.languageCreatedOk'));
