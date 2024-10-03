@@ -19,11 +19,6 @@ type ListItem = {
   label?: string;
 };
 
-type TextDataChild = {
-  locale: string;
-  value: string[];
-};
-
 type SelectDropdownProps = {
   items: ListItem[];
   title: string;
@@ -33,7 +28,7 @@ type SelectDropdownProps = {
     React.SetStateAction<GetCustomFieldType[]>
   >;
   id: string;
-  text: TextDataChild;
+  text: string;
 };
 
 const SelectDropdownCustom: React.FC<SelectDropdownProps> = ({
@@ -45,7 +40,7 @@ const SelectDropdownCustom: React.FC<SelectDropdownProps> = ({
   text,
 }) => {
   const [selected, setSelected] = useState<ListItem | null>(
-    items.find(item => (item.value === text.value[0] ? item : null)) ?? null,
+    items.find(item => (item.value === text ? item : null)) ?? null,
   );
   const onChange = (item: ListItem) => {
     //

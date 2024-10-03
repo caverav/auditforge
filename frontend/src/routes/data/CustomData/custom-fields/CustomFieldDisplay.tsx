@@ -50,7 +50,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
   setCurrentCustomFields,
   fetchCustomFields,
 }) => {
-  const stringList = ['text', 'input', 'radio', 'date'];
+  const stringList = ['text', 'input', 'radio', 'date', 'select'];
   const [deletedCustomField, setDeletedCustomField] = useState<string>('');
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [deletedCustomFieldId, setDeletedCustomFieldId] = useState<string>('');
@@ -118,11 +118,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
     if (text.length === 0) {
       if (stringList.includes(fieldType)) {
         text.push({ locale: 'es-ES', value: '' });
-      } else if (
-        fieldType === 'checkbox' ||
-        fieldType === 'select-multiple' ||
-        fieldType === 'select'
-      ) {
+      } else if (fieldType === 'checkbox' || fieldType === 'select-multiple') {
         text.push({ locale: 'es-ES', value: [] });
       }
     }
@@ -206,7 +202,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
               }))}
               placeholder="Select"
               setCurrentCustomFields={setCurrentCustomFields}
-              text={handlerTextSelect(text)}
+              text={handlerTextString(text)}
               title=""
             />
           </div>
@@ -247,6 +243,16 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
       default:
         return null;
     }
+  };
+
+  const clearCustomFieldSelected = (id: string) => {
+    setCurrentCustomFields(prevFields =>
+      prevFields.map(field =>
+        field._id === id
+          ? { ...field, text: [{ locale: 'es-ES', value: '' }] }
+          : field,
+      ),
+    );
   };
 
   const confirmDeleteCustomField = async () => {
@@ -351,7 +357,10 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
                 >
                   {field.fieldType !== 'space' ? field.label : 'space'}
                 </label>
-                <div className="mr-4 mt-2">
+                <div className="mr-4 mt-2 flex space-x-4">
+                  <PrimaryButton color="blue" onClick={() => console.log('as')}>
+                    clear
+                  </PrimaryButton>
                   <PrimaryButton
                     color="red"
                     onClick={() =>
