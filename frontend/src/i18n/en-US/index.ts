@@ -37,6 +37,8 @@ export default {
     accountEnabled: 'Account enabled',
     accountDisabled: 'Account disabled',
     all: 'All',
+    generatePassword: 'Generate Password',
+    submitEncryption: 'Encrypt',
   },
   tooltip: {
     usersConnected: 'Users on the Audit:',
@@ -139,6 +141,7 @@ export default {
     invalidEmailError:
       'Email must follow this format: example@example.something',
     passwordsDoNotMatch: 'Passwords do not match',
+    copiedToClipboard: 'Copied to clipboard',
   },
   err: {
     notDefinedLanguage: 'Not defined for this language',
@@ -166,6 +169,7 @@ export default {
     failedDeleteAudit: 'Failed to delete the audit',
     failedUpdateProfile: 'Failed to update profile',
     failedUpdateAudit: 'Failed to update audit',
+    passwordsDontMatch: 'Passwords do not match',
   },
   cvss: {
     title: 'CVSS v3.1 Base Score',
@@ -673,4 +677,5 @@ export default {
   originalAudit: 'Original Audit',
   willBeRemoved: 'will be removed',
   auditPhase: 'Audit Phase',
+  encryption: 'Encryption',
 };
