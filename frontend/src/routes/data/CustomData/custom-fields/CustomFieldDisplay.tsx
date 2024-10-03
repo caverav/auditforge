@@ -22,14 +22,9 @@ import {
   SelectDropdownCustom,
 } from './customComponents';
 
-type TextDataChild = {
-  locale: string;
-  value: string | string[];
-};
-
 type TextData = {
   locale: string;
-  value: string | string[] | TextDataChild;
+  value: string | string[];
 };
 
 type ListItem = {
@@ -64,37 +59,18 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
   );
 
   const handlerTextString = (text: TextData[]) => {
-    return Array.isArray(text[0].value)
-      ? text[0].value[0]
-      : typeof text[0].value === 'object'
-        ? Array.isArray(text[0].value.value)
-          ? text[0].value.value[0]
-          : text[0].value.value
-        : text[0].value;
+    return Array.isArray(text[0].value) ? text[0].value[0] : text[0].value;
   };
 
   const handlerTextSelect = (text: TextData[]) => {
-    return typeof text[0].value === 'object' && 'locale' in text[0].value
-      ? {
-          locale: text[0].value.locale,
-          value: Array.isArray(text[0].value.value)
-            ? text[0].value.value
-            : [text[0].value.value],
-        }
-      : {
-          locale: text[0].locale,
-          value: Array.isArray(text[0].value) ? text[0].value : [text[0].value],
-        };
+    return {
+      locale: text[0].locale,
+      value: Array.isArray(text[0].value) ? text[0].value : [text[0].value],
+    };
   };
 
   const handlerTextCheckbox = (text: TextData[]) => {
-    return Array.isArray(text[0].value)
-      ? text[0].value
-      : typeof text[0].value === 'object'
-        ? Array.isArray(text[0].value.value)
-          ? text[0].value.value
-          : [text[0].value.value]
-        : [text[0].value];
+    return Array.isArray(text[0].value) ? text[0].value : [text[0].value];
   };
 
   const handlerInputChangeText = (id: string, name: string, value: string) => {
@@ -366,6 +342,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
               {t('btn.save')}
             </PrimaryButton>
           </div>
+          {JSON.stringify(currentCustomFields)}
         </div>
       </Card>
     </div>
