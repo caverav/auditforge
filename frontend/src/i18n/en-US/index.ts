@@ -39,6 +39,7 @@ export default {
     all: 'All',
     previous: 'Previous',
     next: 'Next',
+    clear: 'Clear',
   },
   tooltip: {
     usersConnected: 'Users on the Audit:',

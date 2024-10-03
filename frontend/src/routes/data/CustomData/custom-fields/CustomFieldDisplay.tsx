@@ -378,7 +378,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
                           : clearCustomFieldArray(field._id)
                       }
                     >
-                      clear
+                      {t('btn.clear')}
                     </PrimaryButton>
                   ) : null}
                   <PrimaryButton
@@ -401,14 +401,18 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
               {t('btn.save')}
             </PrimaryButton>
             <div className="flex space-x-4">
-              <PrimaryButton color="blue" onClick={goToPreviousPage}>
-                {
-                  t('btn.previous') // TODO: Add limits to the paginator
-                }
-              </PrimaryButton>
-              <PrimaryButton color="blue" onClick={goToNextPage}>
-                {t('btn.next')}
-              </PrimaryButton>
+              {currentPage > 1 ? (
+                <PrimaryButton color="blue" onClick={goToPreviousPage}>
+                  {
+                    t('btn.previous') // TODO: Add limits to the paginator
+                  }
+                </PrimaryButton>
+              ) : null}
+              {currentPage < totalPages ? (
+                <PrimaryButton color="blue" onClick={goToNextPage}>
+                  {t('btn.next')}
+                </PrimaryButton>
+              ) : null}
             </div>
           </div>
           {JSON.stringify(currentCustomFields)}
