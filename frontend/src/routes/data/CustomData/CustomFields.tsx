@@ -241,6 +241,7 @@ export const CustomFields: React.FC = () => {
           currentCustomFields={currentCustomFields}
           fetchCustomFields={fetchCustomFields}
           setCurrentCustomFields={setCurrentCustomFields}
+          languagesList={languagesList}
         />
       ) : null}
     </div>

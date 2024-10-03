@@ -1,10 +1,11 @@
 import { t } from 'i18next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast, Toaster } from 'sonner';
 
 import DefaultRadioGroup from '../../../../components/button/DefaultRadioGroup';
 import PrimaryButton from '../../../../components/button/PrimaryButton';
 import Card from '../../../../components/card/Card';
+import SelectDropdown from '../../../../components/dropdown/SelectDropdown';
 import SimpleInput from '../../../../components/input/SimpleInput';
 import Modal from '../../../../components/modal/Modal';
 import RichText from '../../../../components/text/RichText';
@@ -31,8 +32,16 @@ type TextData = {
   value: string | string[] | TextDataChild;
 };
 
+type ListItem = {
+  id: number;
+  value: string;
+  label?: string;
+  locale?: string;
+};
+
 type CustomFieldProps = {
   currentCustomFields: GetCustomFieldType[];
+  languagesList: ListItem[];
   // setCurrentCustomFields: (fields: GetCustomFieldType[]) => void;
   setCurrentCustomFields: React.Dispatch<
     React.SetStateAction<GetCustomFieldType[]>
@@ -42,6 +51,7 @@ type CustomFieldProps = {
 
 export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
   currentCustomFields,
+  languagesList,
   setCurrentCustomFields,
   fetchCustomFields,
 }) => {
@@ -49,6 +59,9 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
   const [deletedCustomField, setDeletedCustomField] = useState<string>('');
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [deletedCustomFieldId, setDeletedCustomFieldId] = useState<string>('');
+  const [currentLanguage, setCurrentLanguage] = useState<ListItem>(
+    languagesList[0],
+  );
 
   const handlerTextString = (text: TextData[]) => {
     return Array.isArray(text[0].value)
@@ -222,7 +235,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
       case 'date':
         //TODO: Fix input width 12
         return (
-          <div className={`rounded-lg mt-3 ${sizeStyle}`}>
+          <div className={`rounded-lg ${sizeStyle}`}>
             <DayPickerCustom
               id={_id}
               label=""
@@ -309,7 +322,16 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
       </Modal>
       <Toaster />
       <Card title={t('manageCustomFields')}>
-        <div className="">
+        <div>
+          <div className="mb-5">
+            <SelectDropdown
+              items={languagesList}
+              onChange={(item: ListItem) => setCurrentLanguage(item)}
+              placeholder={t('selectLanguage')}
+              selected={currentLanguage}
+              title={t('selectLanguage')}
+            />
+          </div>
           {currentCustomFields.map(
             (field: GetCustomFieldType, index: number) => (
               <div className="bg-gray-700 rounded-lg pb-3" key={field._id}>
