@@ -123,12 +123,12 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
   >(auditTypes.map((row, index) => ({ ...row, id: index.toString() })));
 
   const handleInputChange = (
-    name: string,
+    _id: string,
     field: keyof AuditType,
     value: string | boolean | { template: string; locale: string },
   ) => {
     if (field === 'templates' && typeof value === 'object') {
-      let temps = rows.find(item => item.name === name)?.templates ?? false;
+      let temps = rows.find(item => item._id === _id)?.templates ?? false;
       /**
        * Si no tiene templates o viene vacío
        */
@@ -147,7 +147,7 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
 
       setRows(prevRows =>
         prevRows.map(row => {
-          return row.name === name ? { ...row, templates: newTemps } : row;
+          return row._id === _id ? { ...row, templates: newTemps } : row;
         }),
       );
     } else if (field === 'sections' && typeof value === 'string') {
@@ -158,30 +158,30 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
       const newSections = JSON.parse(value);
       setRows(prevRows =>
         prevRows.map(row => {
-          return row.name === name ? { ...row, sections: newSections } : row;
+          return row._id === _id ? { ...row, sections: newSections } : row;
         }),
       );
     } else if (field === 'name' && typeof value === 'string') {
       /**
        * name en este caso es el _id del row
        */
-      name &&
+      _id &&
         setRows(prevRows =>
           prevRows.map(row => {
-            return row._id === name ? { ...row, name: value } : row;
+            return row._id === _id ? { ...row, name: value } : row;
           }),
         );
     } else {
       setRows(prevRows =>
         prevRows.map(row => {
-          return row.name === name ? { ...row, [field]: value } : row;
+          return row._id === _id ? { ...row, [field]: value } : row;
         }),
       );
     }
   };
 
-  const handleRemoveRow = (name: string) => {
-    setRows(rows.filter(row => row.name !== name));
+  const handleRemoveRow = (_id: string) => {
+    setRows(rows.filter(row => row._id !== _id));
   };
 
   /**
@@ -256,8 +256,8 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
                     </div>
                     <div className="text-lg">{t('auditPhase')}</div>
                     <DefaultRadioGroup
-                      name={'stage' + row.name}
-                      onChange={e => handleInputChange(row.name, 'stage', e)}
+                      name={'stage' + row._id}
+                      onChange={e => handleInputChange(row._id, 'stage', e)}
                       options={stageOptions}
                       value={row.stage}
                     />
@@ -267,7 +267,7 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
                         items={templateDropdownItems}
                         key={lang.language}
                         onChange={item =>
-                          handleInputChange(row.name, 'templates', {
+                          handleInputChange(row._id, 'templates', {
                             template: item.value,
                             locale: lang.locale,
                           })
@@ -288,7 +288,7 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
                       items={customSectionsItems}
                       onChange={items => {
                         handleInputChange(
-                          row.name,
+                          row._id,
                           'sections',
                           JSON.stringify(items.map(item => item.value)),
                         );
@@ -308,7 +308,7 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
       </div>
       {!isDisabled ? (
         <div className="basis-1/4 flex flex-col items-center">
-          <PrimaryButton color="red" onClick={() => handleRemoveRow(row.name)}>
+          <PrimaryButton color="red" onClick={() => handleRemoveRow(row._id)}>
             X
           </PrimaryButton>
         </div>
