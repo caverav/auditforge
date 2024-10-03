@@ -110,18 +110,18 @@ export const Languages: React.FC = () => {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <SimpleInput
-          id={t('language')}
+          id="language"
           label={t('language')}
-          name={t('language')}
+          name="language"
           onChange={setNewLanguage}
           placeholder={t('language')}
           type="text"
           value={newLanguage}
         />
         <SimpleInput
-          id={t('locale')}
+          id="locale"
           label={t('locale')}
-          name={t('locale')}
+          name="locale"
           onChange={setNewLocale}
           placeholder={t('locale')}
           type="text"
