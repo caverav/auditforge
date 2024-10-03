@@ -9,7 +9,7 @@ import {
 } from '@headlessui/react';
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { GetCustomFieldType } from '../../../../../services/data';
 
@@ -42,6 +42,13 @@ const SelectDropdownCustom: React.FC<SelectDropdownProps> = ({
   const [selected, setSelected] = useState<ListItem | null>(
     items.find(item => (item.value === text ? item : null)) ?? null,
   );
+
+  useEffect(() => {
+    setSelected(
+      items.find(item => (item.value === text ? item : null)) ?? null,
+    );
+  }, [items, text]);
+
   const onChange = (item: ListItem) => {
     //
     setSelected(item);

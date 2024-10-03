@@ -3,13 +3,12 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import dayjs, { Dayjs } from 'dayjs';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { GetCustomFieldType } from '../../../../../services/data';
 
 type DayPickerProps = {
   label: string;
-  // setCurrentCustomFields: (fields: GetCustomFieldType[]) => void;
   setCurrentCustomFields: React.Dispatch<
     React.SetStateAction<GetCustomFieldType[]>
   >;
@@ -26,6 +25,11 @@ const DayPickerCustom: React.FC<DayPickerProps> = ({
   const [selectedDay, setSelectedDay] = useState<Dayjs | null>(
     text ? dayjs(text) : null,
   );
+
+  useEffect(() => {
+    setSelectedDay(text ? dayjs(text) : null);
+  }, [text]);
+
   const onChange = (item: Dayjs) => {
     setSelectedDay(item);
     setCurrentCustomFields((prevFields: GetCustomFieldType[]) => {

@@ -9,7 +9,7 @@ import {
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/20/solid';
 import { Chip } from '@mui/material';
 import clsx from 'clsx';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { GetCustomFieldType } from '../../../../../services/data';
 
@@ -44,12 +44,14 @@ const MultiSelectDropdownCustom: React.FC<MultiSelectDropdownProps> = ({
   id,
   text,
 }) => {
-  /* const [selected, setSelected] = useState<ListItem[]>(
-    items.map(item => (item.value === text.value[0] ? item : null)) ?? [],
-  ); */
   const [selected, setSelected] = useState<ListItem[]>(
     items.filter(item => text.value.includes(item.value)),
   );
+
+  useEffect(() => {
+    setSelected(items.filter(item => text.value.includes(item.value)));
+  }, [items, text]);
+
   const onChange = (items: ListItem[]) => {
     setSelected(items);
     const values = items.map(item => item.value);
