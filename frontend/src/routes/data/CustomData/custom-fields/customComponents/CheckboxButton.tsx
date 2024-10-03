@@ -1,13 +1,12 @@
 import { Checkbox } from '@headlessui/react';
 import { CheckIcon } from '@heroicons/react/16/solid';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { GetCustomFieldType } from '../../../../../services/data';
 
 export type CheckboxButtonProps = {
   text: string[];
   options: string[];
-  // setCurrentCustomFields: (fields: GetCustomFieldType[]) => void;
   setCurrentCustomFields: React.Dispatch<
     React.SetStateAction<GetCustomFieldType[]>
   >;
@@ -16,8 +15,6 @@ export type CheckboxButtonProps = {
 
 const CheckboxButtonCustom = ({
   text,
-  // checked,
-  // onChange,
   options,
   setCurrentCustomFields,
   id,
@@ -29,14 +26,20 @@ const CheckboxButtonCustom = ({
     ),
   );
 
+  useEffect(() => {
+    setSelectedBox(
+      options.map((option: string) =>
+        text.some((item: string) => (item === option ? true : false)),
+      ),
+    );
+  }, [options, text]);
+
   const onChange = (index: number) => {
     const values = selectedBox.map((itemMap, i) =>
       i === index ? !itemMap : itemMap,
     );
     setSelectedBox(values);
-    /* setSelectedBox((prevState: boolean[]) =>
-      prevState.map((itemMap, i) => (i === index ? !itemMap : itemMap)),
-    ); */
+
     const selectedOptions = options.filter((_, index) => values[index]);
     setCurrentCustomFields((prevFields: GetCustomFieldType[]) => {
       return prevFields.map((field: GetCustomFieldType) =>
