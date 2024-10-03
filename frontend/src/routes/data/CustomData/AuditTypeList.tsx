@@ -248,7 +248,7 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
                         disabled={isDisabled}
                         id="name"
                         name="name"
-                        onChange={e => handleInputChange(row._id, 'name', e)}
+                        onChange={e => handleInputChange(row._id, 'name', e.target.value)}
                         placeholder={t('name')}
                         type="text"
                         value={row.name}
