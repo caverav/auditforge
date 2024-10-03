@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { toast, Toaster } from 'sonner';
 
 import DefaultRadioGroup from '../../../../components/button/DefaultRadioGroup';
@@ -63,6 +63,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  //TODO: Make pagitnator variable
   const currentItems = currentCustomFields.slice(
     indexOfFirstItem,
     indexOfLastItem,
@@ -245,11 +246,21 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
     }
   };
 
-  const clearCustomFieldSelected = (id: string) => {
+  const clearCustomFieldString = (id: string) => {
     setCurrentCustomFields(prevFields =>
       prevFields.map(field =>
         field._id === id
           ? { ...field, text: [{ locale: 'es-ES', value: '' }] }
+          : field,
+      ),
+    );
+  };
+
+  const clearCustomFieldArray = (id: string) => {
+    setCurrentCustomFields(prevFields =>
+      prevFields.map(field =>
+        field._id === id
+          ? { ...field, text: [{ locale: 'es-ES', value: [] }] }
           : field,
       ),
     );
@@ -358,9 +369,18 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
                   {field.fieldType !== 'space' ? field.label : 'space'}
                 </label>
                 <div className="mr-4 mt-2 flex space-x-4">
-                  <PrimaryButton color="blue" onClick={() => console.log('as')}>
-                    clear
-                  </PrimaryButton>
+                  {field.fieldType !== 'space' ? ( //TODO: show clear button only if is not empty
+                    <PrimaryButton
+                      color="blue"
+                      onClick={() =>
+                        stringList.includes(field.fieldType)
+                          ? clearCustomFieldString(field._id)
+                          : clearCustomFieldArray(field._id)
+                      }
+                    >
+                      clear
+                    </PrimaryButton>
+                  ) : null}
                   <PrimaryButton
                     color="red"
                     onClick={() =>
@@ -382,7 +402,9 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
             </PrimaryButton>
             <div className="flex space-x-4">
               <PrimaryButton color="blue" onClick={goToPreviousPage}>
-                {t('btn.previous')}
+                {
+                  t('btn.previous') // TODO: Add limits to the paginator
+                }
               </PrimaryButton>
               <PrimaryButton color="blue" onClick={goToNextPage}>
                 {t('btn.next')}
