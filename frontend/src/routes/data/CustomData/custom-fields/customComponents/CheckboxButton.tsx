@@ -7,7 +7,10 @@ import { GetCustomFieldType } from '../../../../../services/data';
 export type CheckboxButtonProps = {
   text: string[];
   options: string[];
-  setCurrentCustomFields: (fields: GetCustomFieldType[]) => void;
+  // setCurrentCustomFields: (fields: GetCustomFieldType[]) => void;
+  setCurrentCustomFields: React.Dispatch<
+    React.SetStateAction<GetCustomFieldType[]>
+  >;
   id: string;
 };
 

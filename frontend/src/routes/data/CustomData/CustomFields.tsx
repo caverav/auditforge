@@ -137,7 +137,10 @@ export const CustomFields: React.FC = () => {
   }, []);
 
   const handlerAddField = async () => {
-    if (componentOptionSelected === null || label === '') {
+    if (
+      componentOptionSelected === null ||
+      (label === '' && componentOptionSelected.value !== 'space')
+    ) {
       setRequiredSelectComponentAlert(true);
       setRequiredLabelAlert(true);
       return;

@@ -9,7 +9,10 @@ import { GetCustomFieldType } from '../../../../../services/data';
 
 type DayPickerProps = {
   label: string;
-  setCurrentCustomFields: (fields: GetCustomFieldType[]) => void;
+  // setCurrentCustomFields: (fields: GetCustomFieldType[]) => void;
+  setCurrentCustomFields: React.Dispatch<
+    React.SetStateAction<GetCustomFieldType[]>
+  >;
   id: string;
   text?: string;
 };

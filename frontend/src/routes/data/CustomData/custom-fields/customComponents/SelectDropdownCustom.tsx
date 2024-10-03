@@ -28,7 +28,10 @@ type SelectDropdownProps = {
   items: ListItem[];
   title: string;
   placeholder?: string;
-  setCurrentCustomFields: (fields: GetCustomFieldType[]) => void;
+  // setCurrentCustomFields: (fields: GetCustomFieldType[]) => void;
+  setCurrentCustomFields: React.Dispatch<
+    React.SetStateAction<GetCustomFieldType[]>
+  >;
   id: string;
   text: TextDataChild;
 };

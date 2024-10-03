@@ -31,7 +31,10 @@ type TextData = {
 
 type CustomFieldProps = {
   currentCustomFields: GetCustomFieldType[];
-  setCurrentCustomFields: (fields: GetCustomFieldType[]) => void;
+  // setCurrentCustomFields: (fields: GetCustomFieldType[]) => void;
+  setCurrentCustomFields: React.Dispatch<
+    React.SetStateAction<GetCustomFieldType[]>
+  >;
   fetchCustomFields: () => void;
 };
 
@@ -171,7 +174,6 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
                 label: option.value,
                 value: option.value,
               }))}
-              // value={text[0].value}
               value={handlerTextString(text)}
             />
           </div>
