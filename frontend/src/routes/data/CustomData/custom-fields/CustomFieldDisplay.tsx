@@ -288,7 +288,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
         <div className="">
           {currentCustomFields.map(
             (field: GetCustomFieldType, index: number) => (
-              <div className="bg-gray-700 rounded-lg pb-2" key={field._id}>
+              <div className="bg-gray-700 rounded-lg pb-3" key={field._id}>
                 <div
                   className={`flex items-center justify-between ml-4 mt-1  ${index !== 0 ? 'mt-4' : ''}`}
                 >
@@ -306,7 +306,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
                       }
                     >
                       {
-                        t('delete') //TODO:{t('add') //TODO: add i18n}
+                        t('btn.delete') //TODO:{t('add') //TODO: add i18n}
                       }
                     </PrimaryButton>
                   </div>
@@ -315,7 +315,11 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
               </div>
             ),
           )}
-          {JSON.stringify(currentCustomFields)}
+          <div className="mt-4">
+            <PrimaryButton color="blue" onClick={() => console.log('asd')}>
+              {t('btn.save')}
+            </PrimaryButton>
+          </div>
         </div>
       </Card>
     </div>
