@@ -75,7 +75,7 @@ export const Languages: React.FC = () => {
   };
 
   /**
-   * Lógica para hacer uptdate (PUT)
+   * Lógica para hacer update (PUT)
    * de los lenguajes.
    */
   const [newLanguageList, setNewLanguageList] = useState<
