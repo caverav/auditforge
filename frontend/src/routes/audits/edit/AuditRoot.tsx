@@ -9,6 +9,7 @@ import DropdownButton, {
 } from '../../../components/button/DropdownButton';
 import AuditSidebar from '../../../components/navbar/AuditSidebar';
 import { Finding, getAuditById } from '../../../services/audits';
+import { EncryptionModal } from './general/EncryptionModal';
 
 export const AuditRoot = () => {
   const { t } = useTranslation();
@@ -62,6 +63,7 @@ export const AuditRoot = () => {
     }
     return 'I';
   };
+  const [auditName, setAuditName] = useState('');
 
   useEffect(() => {
     getAuditById(auditId)
@@ -77,6 +79,7 @@ export const AuditRoot = () => {
             };
           }),
         );
+        setAuditName(audit.datas.name);
       })
       .catch(console.error);
   }, [auditId]);
@@ -89,6 +92,14 @@ export const AuditRoot = () => {
   ];
 
   const connectedUsers: { id: number; name: string; online: boolean }[] = [];
+
+  /**
+   * PDF Export encryption
+   */
+
+  const [isOpenModal, setIsOpenModal] = useState(false);
+
+  const handleSubmitEncrypt = () => {};
 
   const fileTypes: ListItem[] = [
     {
@@ -131,6 +142,12 @@ export const AuditRoot = () => {
           '_blank',
         ),
     },
+    {
+      id: 5,
+      value: 'pdf/encrypted',
+      label: `pdf (${t('encrypted')})`,
+      onClick: () => setIsOpenModal(true),
+    },
   ];
 
   return (
@@ -153,9 +170,15 @@ export const AuditRoot = () => {
       <div className="flex-1 ml-64 overflow-auto">
         <Outlet />
       </div>
-      <div className="m-2">
+      <div className="m-3">
         <DropdownButton items={fileTypes} placeholder={t('export')} />
       </div>
+      <EncryptionModal
+        auditName={auditName}
+        handleSubmitEncrypt={handleSubmitEncrypt}
+        isOpen={isOpenModal}
+        onCancel={() => setIsOpenModal(false)}
+      />
     </div>
   );
 };
