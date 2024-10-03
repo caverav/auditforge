@@ -63,7 +63,6 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  //TODO: Make pagitnator variable
   const currentItems = currentCustomFields.slice(
     indexOfFirstItem,
     indexOfLastItem,
@@ -98,7 +97,6 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
   };
 
   const handlerInputChangeText = (id: string, name: string, value: string) => {
-    // TODO: Corregir error eslint
     if (stringList.includes(name)) {
       setCurrentCustomFields((prevFields: GetCustomFieldType[]) => {
         return prevFields.map((field: GetCustomFieldType) =>
@@ -115,7 +113,6 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
     const { _id, fieldType, size, options, text } = field;
     //TODO: Cambiar width
     const sizeStyle = size !== 12 ? `w-${size}/12` : 'w-full';
-    //TODO: Change text added by default
     if (text.length === 0) {
       if (stringList.includes(fieldType)) {
         text.push({ locale: 'es-ES', value: '' });
@@ -387,9 +384,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
                       deleteCustomFieldModal(field._id, field.label)
                     }
                   >
-                    {
-                      t('btn.delete') //TODO:{t('add') //TODO: add i18n}
-                    }
+                    {t('btn.delete')}
                   </PrimaryButton>
                 </div>
               </div>
@@ -403,9 +398,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
             <div className="flex space-x-4">
               {currentPage > 1 ? (
                 <PrimaryButton color="blue" onClick={goToPreviousPage}>
-                  {
-                    t('btn.previous') // TODO: Add limits to the paginator
-                  }
+                  {t('btn.previous')}
                 </PrimaryButton>
               ) : null}
               {currentPage < totalPages ? (

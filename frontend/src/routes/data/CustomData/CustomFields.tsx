@@ -163,7 +163,6 @@ export const CustomFields: React.FC = () => {
     try {
       const response = await addCustomField(newCustomField);
       if (response.status === 'success') {
-        //TODO: Add fetchCustomFields
         toast.success(t('msg.customFieldCreatedOk'));
         setLabel('');
         setRequiredSelectComponentAlert(false);
@@ -229,14 +228,12 @@ export const CustomFields: React.FC = () => {
           </div>
           <div className="w-full mt-10">
             <PrimaryButton color="blue" onClick={() => handlerAddField()}>
-              {
-                t('add') //TODO:{t('add') //TODO: add i18n}
-              }
+              {t('btn.add')}
             </PrimaryButton>
           </div>
         </div>
       </Card>
-      {currentCustomFields.length > 0 ? ( //TODO: Add Loading instead currentCustomFields.length
+      {currentCustomFields.length > 0 ? (
         <CustomFieldDisplay
           currentCustomFields={currentCustomFields}
           fetchCustomFields={fetchCustomFields}
