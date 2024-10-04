@@ -158,6 +158,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
         return (
           <div className={`px-4 rounded-lg mt-3 ${sizeStyle}`}>
             <CheckboxButtonCustom
+              currentLanguage={currentLanguage.value}
               id={_id}
               options={options.map(option => option.value)}
               setCurrentCustomFields={setCurrentCustomFields}

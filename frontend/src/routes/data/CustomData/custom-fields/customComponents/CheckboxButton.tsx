@@ -11,6 +11,7 @@ export type CheckboxButtonProps = {
     React.SetStateAction<GetCustomFieldType[]>
   >;
   id: string;
+  currentLanguage: string;
 };
 
 const CheckboxButtonCustom = ({
@@ -18,6 +19,7 @@ const CheckboxButtonCustom = ({
   options,
   setCurrentCustomFields,
   id,
+  currentLanguage,
 }: CheckboxButtonProps) => {
   const [selectedBox, setSelectedBox] = useState<boolean[]>(
     // new Array(options.length).fill(false),
@@ -46,7 +48,11 @@ const CheckboxButtonCustom = ({
         field._id === id
           ? {
               ...field,
-              text: [{ locale: 'es-ES', value: selectedOptions }],
+              text: field.text.map(item =>
+                item.locale === currentLanguage
+                  ? { locale: item.locale, value: selectedOptions }
+                  : item,
+              ),
             }
           : field,
       );
