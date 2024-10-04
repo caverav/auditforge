@@ -127,11 +127,17 @@ export const EncryptionModal: React.FC<EncryptionModalProps> = ({
             </button>
             <button
               className={
-                password === confirmPassword
-                  ? 'bg-blue-500 text-white px-4 py-2 rounded'
-                  : 'bg-blue-500/50 text-white/50 px-4 py-2 rounded'
+                !(password === confirmPassword) ||
+                password.length < 1 ||
+                confirmPassword.length < 1
+                  ? 'bg-blue-500/50 text-white/50 px-4 py-2 rounded'
+                  : 'bg-blue-500 text-white px-4 py-2 rounded'
               }
-              disabled={!(password === confirmPassword)}
+              disabled={
+                !(password === confirmPassword) ||
+                password.length < 1 ||
+                confirmPassword.length < 1
+              }
               onClick={() => handleSubmitEncrypt(password)}
               type="button"
             >
