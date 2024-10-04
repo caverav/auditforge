@@ -34,6 +34,7 @@ type MultiSelectDropdownProps = {
   >;
   id: string;
   text: TextDataChild;
+  currentLanguage: string;
 };
 
 const MultiSelectDropdownCustom: React.FC<MultiSelectDropdownProps> = ({
@@ -43,6 +44,7 @@ const MultiSelectDropdownCustom: React.FC<MultiSelectDropdownProps> = ({
   setCurrentCustomFields,
   id,
   text,
+  currentLanguage,
 }) => {
   const [selected, setSelected] = useState<ListItem[]>(
     items.filter(item => text.value.includes(item.value)),
@@ -60,8 +62,16 @@ const MultiSelectDropdownCustom: React.FC<MultiSelectDropdownProps> = ({
         field._id === id
           ? {
               ...field,
-              text: [{ locale: 'es-ES', value: values }],
+              // text: [{ locale: 'es-ES', value: values }],
               // text: items.map(item => ({ locale: 'es-ES', value: values })),
+              text: field.text.map(itemIter =>
+                itemIter.locale === currentLanguage
+                  ? {
+                      locale: itemIter.locale,
+                      value: values,
+                    }
+                  : itemIter,
+              ),
             }
           : field,
       );

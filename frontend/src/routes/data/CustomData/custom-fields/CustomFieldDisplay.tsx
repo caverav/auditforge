@@ -244,6 +244,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
         return (
           <div className={`px-4 rounded-lg mt-3 ${sizeStyle}`}>
             <MultiSelectDropdownCustom
+              currentLanguage={currentLanguage.value}
               id={_id}
               items={options.map((option, index) => ({
                 id: index,
