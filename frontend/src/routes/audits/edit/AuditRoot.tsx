@@ -105,6 +105,7 @@ export const AuditRoot = () => {
       `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate/pdf?password=${encodedPassword}`,
       '_blank',
     );
+    setIsOpenModal(false);
   };
 
   const fileTypes: ListItem[] = [
