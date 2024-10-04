@@ -14,6 +14,7 @@ type DayPickerProps = {
   >;
   id: string;
   text?: string;
+  currentLanguage: string;
 };
 
 const DayPickerCustom: React.FC<DayPickerProps> = ({
@@ -21,6 +22,7 @@ const DayPickerCustom: React.FC<DayPickerProps> = ({
   setCurrentCustomFields,
   id,
   text,
+  currentLanguage,
 }) => {
   const [selectedDay, setSelectedDay] = useState<Dayjs | null>(
     text ? dayjs(text) : null,
@@ -37,9 +39,14 @@ const DayPickerCustom: React.FC<DayPickerProps> = ({
         field._id === id
           ? {
               ...field,
-              text: [
-                { locale: 'es-ES', value: dayjs(item).format('YYYY-MM-DD') },
-              ],
+              text: field.text.map(itemIter =>
+                itemIter.locale === currentLanguage
+                  ? {
+                      locale: itemIter.locale,
+                      value: dayjs(item).format('YYYY-MM-DD'),
+                    }
+                  : itemIter,
+              ),
             }
           : field,
       );

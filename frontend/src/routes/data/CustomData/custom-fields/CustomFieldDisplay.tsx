@@ -263,6 +263,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
         return (
           <div className={`rounded-lg ${sizeStyle}`}>
             <DayPickerCustom
+              currentLanguage={currentLanguage.value}
               id={_id}
               label=""
               setCurrentCustomFields={setCurrentCustomFields}
