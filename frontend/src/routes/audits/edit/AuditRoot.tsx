@@ -99,7 +99,13 @@ export const AuditRoot = () => {
 
   const [isOpenModal, setIsOpenModal] = useState(false);
 
-  const handleSubmitEncrypt = () => {};
+  const handleSubmitEncrypt = (password: string) => {
+    const encodedPassword = encodeURIComponent(password);
+    window.open(
+      `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate/pdf?password=${encodedPassword}`,
+      '_blank',
+    );
+  };
 
   const fileTypes: ListItem[] = [
     {
