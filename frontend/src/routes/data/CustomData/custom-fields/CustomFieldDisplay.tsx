@@ -285,7 +285,14 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
         field._id === id
           ? {
               ...field,
-              text: [{ locale: currentLanguage.value, value: '' }],
+              text: field.text.map(itemIter =>
+                itemIter.locale === currentLanguage.value
+                  ? {
+                      locale: itemIter.locale,
+                      value: '',
+                    }
+                  : itemIter,
+              ),
             }
           : field,
       ),
@@ -298,7 +305,14 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
         field._id === id
           ? {
               ...field,
-              text: [{ locale: currentLanguage.value, value: [] }],
+              text: field.text.map(itemIter =>
+                itemIter.locale === currentLanguage.value
+                  ? {
+                      locale: itemIter.locale,
+                      value: [],
+                    }
+                  : itemIter,
+              ),
             }
           : field,
       ),
