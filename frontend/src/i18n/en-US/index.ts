@@ -135,6 +135,13 @@ export default {
     auditDeletedOk: 'Audit deleted successfully',
     auditDeleteNotice: 'Audit will be permanently deleted',
     auditTypeCreatedOk: 'Audit Type Created Successfully',
+    clientEmailError: 'Client email already exists',
+    collaboratorUsernameError: 'Collaborator username already exists',
+    companyNameError: 'Company name already exists',
+    templateNameError: 'Template name already exists',
+    invalidEmailError:
+      'Email must follow this format: example@example.something',
+    passwordsDoNotMatch: 'Passwords do not match',
   },
   err: {
     notDefinedLanguage: 'Not defined for this language',
