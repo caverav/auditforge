@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast, Toaster } from 'sonner';
 
 import DefaultRadioGroup from '../../../../components/button/DefaultRadioGroup';
@@ -54,9 +54,13 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
   const [deletedCustomField, setDeletedCustomField] = useState<string>('');
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [deletedCustomFieldId, setDeletedCustomFieldId] = useState<string>('');
+  const [languageIndex, setLanguageIndex] = useState<number>(0); // Página inicial
   const [currentLanguage, setCurrentLanguage] = useState<ListItem>(
     languagesList[0],
   );
+  const [languagesUsed, setLanguagesUsed] = useState<ListItem[]>([
+    languagesList[0],
+  ]);
 
   const [currentPage, setCurrentPage] = useState(1); // Página inicial
   const itemsPerPage = 5;
@@ -82,18 +86,24 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
   };
 
   const handlerTextString = (text: TextData[]) => {
-    return Array.isArray(text[0].value) ? text[0].value[0] : text[0].value;
+    return Array.isArray(text[languageIndex].value)
+      ? text[languageIndex].value[0]
+      : text[languageIndex].value;
   };
 
   const handlerTextSelect = (text: TextData[]) => {
     return {
       locale: text[0].locale,
-      value: Array.isArray(text[0].value) ? text[0].value : [text[0].value],
+      value: Array.isArray(text[languageIndex].value)
+        ? text[languageIndex].value
+        : [text[languageIndex].value],
     };
   };
 
   const handlerTextCheckbox = (text: TextData[]) => {
-    return Array.isArray(text[0].value) ? text[0].value : [text[0].value];
+    return Array.isArray(text[languageIndex].value)
+      ? text[languageIndex].value
+      : [text[languageIndex].value];
   };
 
   const handlerInputChangeText = (id: string, name: string, value: string) => {
@@ -101,7 +111,15 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
       setCurrentCustomFields((prevFields: GetCustomFieldType[]) => {
         return prevFields.map((field: GetCustomFieldType) =>
           field._id === id
-            ? { ...field, text: [{ locale: 'es-ES', value }] }
+            ? {
+                ...field,
+                text: field.text.map(item =>
+                  item.locale === currentLanguage.value
+                    ? { locale: item.locale, value }
+                    : item,
+                ),
+                // text: [{ locale: languagesList[languageIndex].value, value }],
+              }
             : field,
         );
       });
@@ -113,11 +131,25 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
     const { _id, fieldType, size, options, text } = field;
     //TODO: Cambiar width
     const sizeStyle = size !== 12 ? `w-${size}/12` : 'w-full';
+
     if (text.length === 0) {
+      //TODO: Refactor this
       if (stringList.includes(fieldType)) {
-        text.push({ locale: 'es-ES', value: '' });
+        text.push({ locale: currentLanguage.value, value: '' });
       } else if (fieldType === 'checkbox' || fieldType === 'select-multiple') {
-        text.push({ locale: 'es-ES', value: [] });
+        text.push({ locale: currentLanguage.value, value: [] });
+      }
+    } else if (text.length < languagesUsed.length) {
+      if (stringList.includes(fieldType)) {
+        text.push({
+          locale: currentLanguage.value,
+          value: '',
+        });
+      } else if (fieldType === 'checkbox' || fieldType === 'select-multiple') {
+        text.push({
+          locale: currentLanguage.value,
+          value: [],
+        });
       }
     }
 
@@ -247,7 +279,10 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
     setCurrentCustomFields(prevFields =>
       prevFields.map(field =>
         field._id === id
-          ? { ...field, text: [{ locale: 'es-ES', value: '' }] }
+          ? {
+              ...field,
+              text: [{ locale: currentLanguage.value, value: '' }],
+            }
           : field,
       ),
     );
@@ -257,7 +292,10 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
     setCurrentCustomFields(prevFields =>
       prevFields.map(field =>
         field._id === id
-          ? { ...field, text: [{ locale: 'es-ES', value: [] }] }
+          ? {
+              ...field,
+              text: [{ locale: currentLanguage.value, value: [] }],
+            }
           : field,
       ),
     );
@@ -326,6 +364,18 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
       console.error('Error:', error);
     }
   };
+
+  useEffect(() => {
+    const findLang = languagesUsed.findIndex(
+      lang => lang.value === currentLanguage.value,
+    );
+    if (findLang !== -1) {
+      setLanguageIndex(findLang);
+    } else {
+      setLanguagesUsed(prevLang => [...prevLang, currentLanguage]);
+      setLanguageIndex(languagesUsed.length);
+    }
+  }, [currentLanguage, languagesUsed]);
 
   return (
     <div className="mt-4">
