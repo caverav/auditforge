@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import { t } from 'i18next';
-import { ChevronDown, ChevronUp, Users } from 'lucide-react';
+import { ChevronDown, ChevronUp, FilePlus2, Plus, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 import DefaultRadioGroup from '../button/DefaultRadioGroup';
@@ -117,6 +117,7 @@ const AuditSidebar = ({
               <span
                 className={clsx(
                   'flex-1 transition-opacity',
+                  // eslint-disable-next-line sonarjs/no-duplicate-string
                   isCollapsed && 'opacity-0 w-0 overflow-hidden',
                 )}
               >
@@ -163,6 +164,32 @@ const AuditSidebar = ({
         </ul>
       </div>
     </nav>
+    <div className="p-4 border-t border-gray-800">
+      <div className="mb-2 flex gap-2">
+        <button
+          className="w-full flex items-center justify-start gap-3 text-gray-400 hover:text-gray-100 hover:bg-gray-800 px-4 py-2 rounded-lg transition-colors duration-200"
+          type="button"
+        >
+          <FilePlus2 className="h-5 w-5 flex-shrink-0" />
+          <span
+            className={clsx(
+              'transition-opacity whitespace-nowrap',
+              isCollapsed && 'opacity-0 w-0 overflow-hidden',
+            )}
+          >
+            {t('customSections')}
+          </span>
+        </button>
+        {!isCollapsed ? (
+          <button
+            className="flex items-center justify-center text-gray-400 hover:text-gray-100 hover:bg-gray-800 rounded-full transition-colors duration-200 w-10 h-10"
+            type="button"
+          >
+            <Plus className="h-5 w-5 flex-shrink-0" />
+          </button>
+        ) : null}
+      </div>
+    </div>
     <div className="p-4 border-t border-gray-800">
       <div className="mb-2">
         <button
