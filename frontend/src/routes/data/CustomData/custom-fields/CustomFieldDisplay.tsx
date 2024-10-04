@@ -132,24 +132,11 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
     //TODO: Cambiar width
     const sizeStyle = size !== 12 ? `w-${size}/12` : 'w-full';
 
-    if (text.length === 0) {
-      //TODO: Refactor this
+    if (text.length === 0 || text.length < languagesUsed.length) {
       if (stringList.includes(fieldType)) {
         text.push({ locale: currentLanguage.value, value: '' });
       } else if (fieldType === 'checkbox' || fieldType === 'select-multiple') {
         text.push({ locale: currentLanguage.value, value: [] });
-      }
-    } else if (text.length < languagesUsed.length) {
-      if (stringList.includes(fieldType)) {
-        text.push({
-          locale: currentLanguage.value,
-          value: '',
-        });
-      } else if (fieldType === 'checkbox' || fieldType === 'select-multiple') {
-        text.push({
-          locale: currentLanguage.value,
-          value: [],
-        });
       }
     }
 
@@ -476,7 +463,6 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
               ) : null}
             </div>
           </div>
-          {JSON.stringify(currentCustomFields)}
         </div>
       </Card>
     </div>
