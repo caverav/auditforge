@@ -29,6 +29,7 @@ type SelectDropdownProps = {
   >;
   id: string;
   text: string;
+  currentLanguage: string;
 };
 
 const SelectDropdownCustom: React.FC<SelectDropdownProps> = ({
@@ -38,6 +39,7 @@ const SelectDropdownCustom: React.FC<SelectDropdownProps> = ({
   id,
   setCurrentCustomFields,
   text,
+  currentLanguage,
 }) => {
   const [selected, setSelected] = useState<ListItem | null>(
     items.find(item => (item.value === text ? item : null)) ?? null,
@@ -55,7 +57,18 @@ const SelectDropdownCustom: React.FC<SelectDropdownProps> = ({
     setCurrentCustomFields((prevFields: GetCustomFieldType[]) => {
       return prevFields.map((field: GetCustomFieldType) =>
         field._id === id
-          ? { ...field, text: [{ locale: 'es-ES', value: item.value }] }
+          ? {
+              ...field,
+              // text: [{ locale: 'es-ES', value: item.value }],
+              text: field.text.map(itemIter =>
+                itemIter.locale === currentLanguage
+                  ? {
+                      locale: itemIter.locale,
+                      value: item.value,
+                    }
+                  : itemIter,
+              ),
+            }
           : field,
       );
     });
