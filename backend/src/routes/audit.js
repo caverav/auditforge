@@ -450,8 +450,16 @@ module.exports = function (app, io) {
               ext => ext === audit.template.ext,
             )
           ) {
-            var reportPdf = await reportGenerator.generatePdf(audit);
-            Response.SendFile(res, `${audit.name}.pdf`, reportPdf);
+            if (req.query.password) {
+              var reportPdf = await reportGenerator.generateEncryptedPdf(
+                audit,
+                decodeURIComponent(req.query.password),
+              );
+              Response.SendFile(res, `${audit.name}.pdf`, reportPdf);
+            } else {
+              var reportPdf = await reportGenerator.generatePdf(audit);
+              Response.SendFile(res, `${audit.name}.pdf`, reportPdf);
+            }
           } else {
             Response.BadParameters(
               res,
