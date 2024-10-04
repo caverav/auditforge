@@ -129,6 +129,7 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
   ) => {
     if (field === 'templates' && typeof value === 'object') {
       let temps = rows.find(item => item._id === _id)?.templates ?? false;
+
       /**
        * Si no tiene templates o viene vacío
        */
@@ -136,6 +137,14 @@ export const AuditTypeList: React.FC<AuditTypeListProps> = ({
         temps = languageData.map(lang => {
           return { locale: lang.locale, template: '' };
         });
+      }
+
+      /**
+       * Si el idioma modificado no existe aún
+       */
+      const hasTempOnLang = temps.some(t => t.locale === value.locale);
+      if (!hasTempOnLang) {
+        temps.push(value);
       }
 
       /**
