@@ -178,7 +178,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
               onChange={(value: string) =>
                 handlerInputChangeText(_id, fieldType, value)
               }
-              placeholder="asd"
+              placeholder=""
               value={handlerTextString(text)}
             />
           </div>
