@@ -139,10 +139,12 @@ async function generateEncryptedPdf(audit, password) {
         console.log(err);
         return reject(err);
       }
-      const tempPdfPath = path.join(__dirname, 'documento_sin_contraseña.pdf');
+      const os = require('os');
+
+      const tempPdfPath = path.join(os.tmpdir(), `documento_sin_contraseña_${Date.now()}.pdf`);
       fs.writeFileSync(tempPdfPath, pdf);
 
-      const protectedPdfPath = path.join(__dirname, 'documento_protegido.pdf');
+      const protectedPdfPath = path.join(os.tmpdir(), `documento_protegido_${Date.now()}.pdf`);
 
       try {
         const Recipe = muhammara.Recipe;
