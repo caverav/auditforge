@@ -34,7 +34,7 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({
           className="text-sm font-medium leading-6 text-gray-300"
           htmlFor={id}
         >
-          {label + ' '}
+          {`${label} `}
           {requiredField ? <span className="text-red-500 text-lg">*</span> : ''}
         </label>
       ) : null}
