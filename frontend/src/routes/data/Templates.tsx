@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
@@ -25,42 +25,38 @@ type NewTemplate = {
   file: string;
 };
 
-type TableData = {
-  _id?: string;
-  name: string;
-  ext: string;
-  file: string;
-};
-
 export const Templates: React.FC = () => {
   const { t } = useTranslation();
 
-  const initialTemplateState = {
+  const [newTemplate, setNewTemplate] = useState<NewTemplate | null>({
     name: '',
     ext: '',
     file: '',
-  };
+  });
 
-  const [newTemplate, setNewTemplate] = useState<NewTemplate | null>(
-    initialTemplateState,
-  );
-
-  const [templates, setTemplates] = useState<NewTemplate[]>([]);
+  const [templates, setTemplates] = useState<any[]>([]);
   const [_loading, setLoading] = useState<boolean>(true);
   const [_error, setError] = useState<string | null>(null);
-
-  const [addModalNameRequiredAlert, setAddModalFirstnameRequiredAlert] =
-    useState<boolean>(false);
-
-  const [addModalFileRequiredAlert, setAddModalFileRequiredAlert] =
-    useState<boolean>(false);
-
-  const [editModalNameRequiredAlert, setEditModalFirstnameRequiredAlert] =
-    useState<boolean>(false);
 
   const [selectedTemplate, setSelectedTemplate] = useState<TableData | null>(
     null,
   );
+
+  const fetchTemplates = async () => {
+    try {
+      const data = await getTemplates();
+      setTemplates(data.datas);
+      setTableData(data.datas);
+      setLoading(false);
+    } catch (err) {
+      setError('Error fetching company');
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchTemplates();
+  }, []);
 
   const columns = [
     { header: t('name'), accessor: 'name', sortable: true, filterable: true },
@@ -69,6 +65,43 @@ export const Templates: React.FC = () => {
       accessor: 'ext',
       sortable: true,
       filterable: true,
+    },
+  ];
+
+  type TableData = {
+    _id: string;
+    name: string;
+    ext: string;
+  };
+
+  const keyExtractor = (item: any) => item._id;
+
+  const handleEditTemplateButton = (template: TableData) => {
+    setNewTemplate(prevState => ({
+      ...prevState!,
+      _id: template._id,
+      name: template.name,
+    }));
+    setIsOpenEditTemplateModal(true);
+  };
+
+  const handleDeleteTemplateButton = async (template: TableData) => {
+    setSelectedTemplate(template);
+    setIsOpenDeleteTemplateModal(!isOpenDeleteTemplateModal);
+  };
+
+  const rowActions = [
+    {
+      label: 'Edit',
+      onClick: (item: TableData) => handleEditTemplateButton(item),
+    },
+    {
+      label: 'Download',
+      onClick: (item: TableData) => downloadTemplate(item._id, window),
+    },
+    {
+      label: 'Delete',
+      onClick: (item: TableData) => handleDeleteTemplateButton(item),
     },
   ];
 
@@ -88,139 +121,40 @@ export const Templates: React.FC = () => {
   const [isOpenDeleteTemplateModal, setIsOpenDeleteTemplateModal] =
     useState(false);
 
-  const fetchTemplates = useCallback(async () => {
-    try {
-      const data = await getTemplates();
-      setTemplates(data.datas);
-      setTableData(data.datas);
-      setLoading(false);
-    } catch (err) {
-      setError('Error fetching company');
-      setLoading(false);
-    }
-  }, [setTableData]);
-
-  useEffect(() => {
-    void fetchTemplates();
-  }, [fetchTemplates]);
-
-  const keyExtractor = (item: TableData) => item._id ?? '';
-
-  const handleEditTemplateButton = (template: TableData) => {
-    setNewTemplate(prevState => {
-      if (!prevState) {
-        return null;
-      } else {
-        return {
-          ...prevState,
-          _id: template._id,
-          name: template.name,
-        };
-      }
-    });
-    setIsOpenEditTemplateModal(true);
-  };
-
-  const handleDeleteTemplateButton = (template: TableData) => {
-    setSelectedTemplate(template);
-    setIsOpenDeleteTemplateModal(!isOpenDeleteTemplateModal);
-  };
-
-  const rowActions = [
-    {
-      label: 'Edit',
-      onClick: (item: TableData) => handleEditTemplateButton(item),
-    },
-    {
-      label: 'Download',
-      onClick: (item: TableData) => downloadTemplate(item._id ?? '', window),
-    },
-    {
-      label: 'Delete',
-      onClick: (item: TableData) => handleDeleteTemplateButton(item),
-    },
-  ];
-
   const handleCancelAddTemplate = () => {
-    setNewTemplate(initialTemplateState);
+    setNewTemplate(null);
     setIsOpenAddTemplateModal(!isOpenAddTemplateModal);
-
-    setAddModalFirstnameRequiredAlert(false);
-    setAddModalFileRequiredAlert(false);
   };
 
   const handleSubmitAddTemplate = async () => {
-    let isValid = true;
-
-    if (!newTemplate?.name || newTemplate.name.trim() === '') {
-      setAddModalFirstnameRequiredAlert(true);
-      isValid = false;
-    }
-
-    if (!newTemplate?.file || newTemplate.file.trim() === '') {
-      setAddModalFileRequiredAlert(true);
-      isValid = false;
-    }
-
-    if (!isValid) {
-      toast.error(t('msg.fieldRequired'));
-      return;
-    }
-
     try {
-      if (!newTemplate) {
-        return null;
-      } else {
-        await createTemplate({ ...newTemplate, name: newTemplate.name.trim() });
-        toast.success(t('msg.templateCreatedOk'));
-        setIsOpenAddTemplateModal(!isOpenAddTemplateModal);
-
-        setNewTemplate(initialTemplateState);
-        void fetchTemplates();
-      }
+      await createTemplate(newTemplate!);
+      toast.success(t('msg.templateCreatedOk'));
     } catch (error) {
-      toast.error(t('msg.templateNameError'));
-      setError('Error creating template');
+      setError('Error creating company');
       console.error('Error:', error);
     }
+    setNewTemplate(null);
+    setIsOpenAddTemplateModal(!isOpenAddTemplateModal);
+    fetchTemplates();
   };
 
   const handleCancelEditTemplate = () => {
-    setNewTemplate(initialTemplateState);
+    setNewTemplate(null);
     setIsOpenEditTemplateModal(!isOpenEditTemplateModal);
-
-    setEditModalFirstnameRequiredAlert(false);
   };
 
   const handleSubmitEditTemplate = async () => {
-    let isValid = true;
-
-    if (!newTemplate?.name || newTemplate.name.trim() === '') {
-      setEditModalFirstnameRequiredAlert(true);
-      isValid = false;
-    }
-
-    if (!isValid) {
-      toast.error(t('msg.fieldRequired'));
-      return;
-    }
-
     try {
-      if (!newTemplate) {
-        return null;
-      } else {
-        await updateTemplate({ ...newTemplate, name: newTemplate.name.trim() });
-        toast.success(t('msg.templateUpdatedOk'));
-        setIsOpenEditTemplateModal(!isOpenEditTemplateModal);
-
-        setNewTemplate(initialTemplateState);
-        void fetchTemplates();
-      }
+      await updateTemplate(newTemplate!);
+      toast.success(t('msg.templateUpdatedOk'));
     } catch (error) {
-      toast.error(t('msg.templateNameError'));
       setError('Error updating template');
       console.error('Error:', error);
     }
+    setNewTemplate(null);
+    setIsOpenEditTemplateModal(!isOpenEditTemplateModal);
+    fetchTemplates();
   };
 
   const handleCancelDeleteTemplate = () => {
@@ -238,35 +172,23 @@ export const Templates: React.FC = () => {
       }
       setSelectedTemplate(null);
       setIsOpenDeleteTemplateModal(!isOpenDeleteTemplateModal);
-      void fetchTemplates();
+      fetchTemplates();
     }
   };
 
   const handleInputChange = (name: string, value: string) => {
-    setNewTemplate(prevState => {
-      if (!prevState) {
-        return null;
-      } else {
-        return {
-          ...prevState,
-          [name]: value,
-        };
-      }
-    });
+    setNewTemplate(prevState => ({
+      ...prevState!,
+      [name]: value,
+    }));
   };
 
   const handleFileSelect = (ext: string, content: string) => {
-    setNewTemplate(prevState => {
-      if (!prevState) {
-        return null;
-      } else {
-        return {
-          ...prevState,
-          ext,
-          file: content,
-        };
-      }
-    });
+    setNewTemplate(prevState => ({
+      ...prevState!,
+      ext,
+      file: content,
+    }));
   };
 
   return (
@@ -293,7 +215,6 @@ export const Templates: React.FC = () => {
         </>
       </Card>
       <Modal
-        // eslint-disable-next-line sonarjs/no-duplicate-string
         cancelText={t('btn.cancel')}
         isOpen={isOpenAddTemplateModal}
         onCancel={handleCancelAddTemplate}
@@ -308,20 +229,15 @@ export const Templates: React.FC = () => {
             name="name"
             onChange={value => handleInputChange('name', value)}
             placeholder={t('name')}
-            requiredAlert={addModalNameRequiredAlert}
-            requiredField
             type="text"
-            value={newTemplate?.name ?? ''}
+            value={newTemplate?.name || ''}
           />
           <FileInput
             id="template"
-            label={t('file')}
             name="template"
             onFileSelect={file =>
-              handleFileSelect(file.name.split('.').pop() ?? '', file.content)
+              handleFileSelect(file.name.split('.').pop() || '', file.content)
             }
-            requiredAlert={addModalFileRequiredAlert}
-            requiredField
           />
         </>
       </Modal>
@@ -339,17 +255,15 @@ export const Templates: React.FC = () => {
             label={t('name')}
             name="name"
             onChange={value => handleInputChange('name', value)}
-            placeholder={newTemplate?.name ?? t('name')}
-            requiredAlert={editModalNameRequiredAlert}
-            requiredField
+            placeholder={newTemplate?.name || t('name')}
             type="text"
-            value={newTemplate?.name ?? ''}
+            value={newTemplate?.name || ''}
           />
           <FileInput
             id="template"
             name="template"
             onFileSelect={file =>
-              handleFileSelect(file.name.split('.').pop() ?? '', file.content)
+              handleFileSelect(file.name.split('.').pop() || '', file.content)
             }
           />
         </>

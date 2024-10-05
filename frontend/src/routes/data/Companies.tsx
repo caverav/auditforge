@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
@@ -24,78 +24,24 @@ type NewCompany = {
   logo: string;
 };
 
-type TableData = {
-  _id?: string;
-  name: string;
-  shortName: string;
-  logo: string;
-};
-
 export const Companies: React.FC = () => {
   const { t } = useTranslation();
 
-  const initialCompanyState = {
+  const [newCompany, setNewCompany] = useState<NewCompany | null>({
     name: '',
     shortName: '',
     logo: '',
-  };
+  });
 
-  const [newCompany, setNewCompany] = useState<NewCompany | null>(
-    initialCompanyState,
-  );
-
-  const [companies, setCompanies] = useState<NewCompany[]>([]);
+  const [companies, setCompanies] = useState<any[]>([]);
   const [_loading, setLoading] = useState<boolean>(true);
   const [_error, setError] = useState<string | null>(null);
-
-  const [addModalNameRequiredAlert, setAddModalNameRequiredAlert] =
-    useState<boolean>(false);
-
-  const [editModalNameRequiredAlert, setEditModalNameRequiredAlert] =
-    useState<boolean>(false);
 
   const [selectedCompany, setSelectedCompany] = useState<TableData | null>(
     null,
   );
 
-  const columns = [
-    { header: t('name'), accessor: 'name', sortable: true, filterable: true },
-    { header: t('shortName'), accessor: 'shortName', sortable: true },
-    {
-      header: t('logo'),
-      accessor: 'logo',
-      sortable: false,
-      render: (logo: string) =>
-        logo ? (
-          <img
-            alt="Company Logo"
-            src={`${logo}`}
-            style={{ width: '50px', height: '50px', objectFit: 'contain' }}
-          />
-        ) : (
-          <span />
-        ),
-    },
-  ];
-
-  const [tableData, handleSorting, setTableData] = useSortableTable<TableData>(
-    companies,
-    columns,
-  );
-
-  const [filters, handleFilterChange] = useTableFiltering<TableData>(
-    companies,
-    columns,
-    setTableData,
-  );
-
-  const [isOpenAddCompaniesModal, setIsOpenAddCompaniesModal] = useState(false);
-  const [isOpenEditCompaniesModal, setIsOpenEditCompaniesModal] =
-    useState(false);
-  const [isOpenDeleteCompanyModal, setIsOpenDeleteCompanyModal] =
-    useState(false);
-
-  const fetchCompanies = useCallback(async () => {
+  const fetchCompanies = async () => {
     try {
       const data = await getCompanies();
       setCompanies(data.datas);
@@ -105,13 +51,37 @@ export const Companies: React.FC = () => {
       setError('Error fetching company');
       setLoading(false);
     }
-  }, [setTableData]);
+  };
 
   useEffect(() => {
-    void fetchCompanies();
-  }, [fetchCompanies]);
+    fetchCompanies();
+  }, []);
 
-  const keyExtractor = (item: TableData) => item._id ?? '';
+  const columns = [
+    { header: t('name'), accessor: 'name', sortable: true, filterable: true },
+    { header: t('shortName'), accessor: 'shortName', sortable: true },
+    {
+      header: t('logo'),
+      accessor: 'logo',
+      sortable: false,
+      render: (logo: string) => (
+        <img
+          alt="Company Logo"
+          src={`${logo}`}
+          style={{ width: '50px', height: '50px', objectFit: 'contain' }}
+        />
+      ),
+    },
+  ];
+
+  type TableData = {
+    _id: string;
+    name: string;
+    shortName: string;
+    logo: string;
+  };
+
+  const keyExtractor = (item: any) => item._id;
 
   const handleEditCompanyButton = (company: TableData) => {
     setNewCompany({
@@ -139,80 +109,57 @@ export const Companies: React.FC = () => {
     },
   ];
 
-  const handleCancelAddCompanies = () => {
-    setNewCompany(initialCompanyState);
-    setIsOpenAddCompaniesModal(!isOpenAddCompaniesModal);
+  const [tableData, handleSorting, setTableData] = useSortableTable<TableData>(
+    companies,
+    columns,
+  );
 
-    setAddModalNameRequiredAlert(false);
+  const [filters, handleFilterChange] = useTableFiltering<TableData>(
+    companies,
+    columns,
+    setTableData,
+  );
+
+  const [isOpenAddCompaniesModal, setIsOpenAddCompaniesModal] = useState(false);
+  const [isOpenEditCompaniesModal, setIsOpenEditCompaniesModal] =
+    useState(false);
+  const [isOpenDeleteCompanyModal, setIsOpenDeleteCompanyModal] =
+    useState(false);
+
+  const handleCancelAddCompanies = () => {
+    setNewCompany(null);
+    setIsOpenAddCompaniesModal(!isOpenAddCompaniesModal);
   };
 
   const handleSubmitAddCompanies = async () => {
-    let isValid = true;
-
-    if (!newCompany?.name || newCompany.name.trim() === '') {
-      setAddModalNameRequiredAlert(true);
-      isValid = false;
-    }
-
-    if (!isValid) {
-      toast.error(t('msg.fieldRequired'));
-      return;
-    }
-
     try {
-      if (!newCompany) {
-        return null;
-      } else {
-        await createCompany(newCompany);
-        toast.success(t('msg.companyCreatedOk'));
-        setIsOpenAddCompaniesModal(!isOpenAddCompaniesModal);
-
-        setNewCompany(initialCompanyState);
-        void fetchCompanies();
-      }
+      await createCompany(newCompany!);
+      toast.success(t('msg.companyCreatedOk'));
     } catch (error) {
-      toast.error(t('msg.companyNameError'));
       setError('Error creating company');
       console.error('Error:', error);
     }
+    setNewCompany(null);
+    setIsOpenAddCompaniesModal(!isOpenAddCompaniesModal);
+    fetchCompanies();
   };
 
   const handleCancelEditCompanies = () => {
-    setNewCompany(initialCompanyState);
+    setNewCompany(null);
     setIsOpenEditCompaniesModal(!isOpenEditCompaniesModal);
-
-    setEditModalNameRequiredAlert(false);
   };
 
   const handleSubmitEditCompanies = async () => {
-    let isValid = true;
-
-    if (!newCompany?.name || newCompany.name.trim() === '') {
-      setEditModalNameRequiredAlert(true);
-      isValid = false;
-    }
-
-    if (!isValid) {
-      toast.error(t('msg.fieldRequired'));
-      return;
-    }
-
     try {
-      if (!newCompany) {
-        return null;
-      } else {
-        await updateCompany(newCompany);
-        toast.success(t('msg.companyUpdatedOk'));
-        setIsOpenEditCompaniesModal(!isOpenEditCompaniesModal);
-
-        setNewCompany(initialCompanyState);
-        void fetchCompanies();
-      }
+      await updateCompany(newCompany!);
+      toast.success(t('msg.companyUpdatedOk'));
     } catch (error) {
-      toast.error(t('msg.companyNameError'));
       setError('Error updating company');
       console.error('Error:', error);
     }
+    setNewCompany(null);
+    setIsOpenEditCompaniesModal(!isOpenEditCompaniesModal);
+    fetchCompanies();
   };
 
   const handleCancelDeleteCompany = () => {
@@ -230,34 +177,22 @@ export const Companies: React.FC = () => {
       }
       setSelectedCompany(null);
       setIsOpenDeleteCompanyModal(!isOpenDeleteCompanyModal);
-      void fetchCompanies();
+      fetchCompanies();
     }
   };
 
   const handleInputChange = (name: string, value: string) => {
-    setNewCompany(prevState => {
-      if (!prevState) {
-        return null;
-      } else {
-        return {
-          ...prevState,
-          [name]: value,
-        };
-      }
-    });
+    setNewCompany(prevState => ({
+      ...prevState!,
+      [name]: value,
+    }));
   };
 
   const handleImageSelect = (base64String: string) => {
-    setNewCompany(prevState => {
-      if (!prevState) {
-        return null;
-      } else {
-        return {
-          ...prevState,
-          logo: base64String,
-        };
-      }
-    });
+    setNewCompany(prevState => ({
+      ...prevState!,
+      logo: base64String,
+    }));
   };
 
   return (
@@ -286,7 +221,6 @@ export const Companies: React.FC = () => {
         </>
       </Card>
       <Modal
-        // eslint-disable-next-line sonarjs/no-duplicate-string
         cancelText={t('btn.cancel')}
         isOpen={isOpenAddCompaniesModal}
         onCancel={handleCancelAddCompanies}
@@ -301,10 +235,8 @@ export const Companies: React.FC = () => {
             name="name"
             onChange={value => handleInputChange('name', value)}
             placeholder={t('name')}
-            requiredAlert={addModalNameRequiredAlert}
-            requiredField
             type="text"
-            value={newCompany?.name ?? ''}
+            value={newCompany?.name || ''}
           />
           <SimpleInput
             id="shortname"
@@ -313,7 +245,7 @@ export const Companies: React.FC = () => {
             onChange={value => handleInputChange('shortName', value)}
             placeholder={t('shortName')}
             type="text"
-            value={newCompany?.shortName ?? ''}
+            value={newCompany?.shortName || ''}
           />
           <ImageInput
             id="logo"
@@ -338,10 +270,8 @@ export const Companies: React.FC = () => {
             name="name"
             onChange={value => handleInputChange('name', value)}
             placeholder={t('name')}
-            requiredAlert={editModalNameRequiredAlert}
-            requiredField
             type="text"
-            value={newCompany?.name ?? ''}
+            value={newCompany?.name || ''}
           />
           <SimpleInput
             id="shortname"
@@ -350,11 +280,11 @@ export const Companies: React.FC = () => {
             onChange={value => handleInputChange('shortName', value)}
             placeholder={t('shortName')}
             type="text"
-            value={newCompany?.shortName ?? ''}
+            value={newCompany?.shortName || ''}
           />
           <ImageInput
             id="logo"
-            initialImage={newCompany?.logo ?? ''}
+            initialImage={newCompany?.logo || ''}
             label={t('logo')}
             name="logo"
             onImageSelect={handleImageSelect}

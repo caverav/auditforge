@@ -1,8 +1,8 @@
-/* eslint-disable import/extensions */
 import { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import EditCard from '@/components/card/EditCard';
+// eslint-disable-next-line import/extensions
 import { AuditType, getAuditTypes, updateAuditTypes } from '@/services/data.ts';
 
 import { AuditTypeList } from './AuditTypeList';
@@ -11,7 +11,7 @@ import { NewAuditTypeForm } from './NewAuditType';
 export const AuditTypes: React.FC = () => {
   const { t } = useTranslation();
 
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>();
   const [loading, setLoading] = useState<boolean>(true);
 
   const [auditTypes, setAuditTypes] = useState<AuditType[]>([]);
@@ -30,15 +30,15 @@ export const AuditTypes: React.FC = () => {
     };
 
     void fetchAuditTypes();
-  }, [isEditing]);
+  }, []);
 
   useEffect(() => {
     error && console.error(error);
   }, [error]);
 
   /**
-   * Lógica para actualizar (PUT)
-   * los tipos de auditoría.
+   * Lógica para hacer uptdate (PUT)
+   * de los lenguajes.
    */
   const [newAuditTypeList, setNewAuditTypeList] = useState<AuditType[]>([]);
 
@@ -61,11 +61,7 @@ export const AuditTypes: React.FC = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <NewAuditTypeForm
-        onAddAuditType={newAuditType =>
-          setAuditTypes(prevAudits => [...prevAudits, newAuditType])
-        }
-      />
+      <NewAuditTypeForm />
       {loading ? (
         t('loading')
       ) : (
@@ -84,6 +80,7 @@ export const AuditTypes: React.FC = () => {
           />
         </EditCard>
       )}
+      <div>{JSON.stringify(newAuditTypeList)}</div>
     </div>
   );
 };

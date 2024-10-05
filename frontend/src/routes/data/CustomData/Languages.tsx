@@ -42,18 +42,6 @@ export const Languages: React.FC = () => {
 
   const handleAddLanguage = async () => {
     let resp: { datas: { language: string; locale: string }; status?: string };
-    if (!newLanguage.trim()) {
-      // eslint-disable-next-line sonarjs/no-duplicate-string
-      setError(`${t('err.createEmptyField')}: ${t('name')}`);
-      toast.error(`${t('err.createEmptyField')}: ${t('name')}`);
-      return;
-    }
-
-    if (!newLocale.trim()) {
-      setError(`${t('err.createEmptyField')}: ${t('locale')}`);
-      toast.error(`${t('err.createEmptyField')}: ${t('locale')}`);
-      return;
-    }
 
     try {
       resp = await createLanguage({
@@ -63,6 +51,8 @@ export const Languages: React.FC = () => {
     } catch (error) {
       setError('Error creating language');
       toast.error(t('err.errorCreatingLang'));
+      setNewLanguage('');
+      setNewLocale('');
       return;
     }
     toast.success(t('msg.languageCreatedOk'));
@@ -75,7 +65,7 @@ export const Languages: React.FC = () => {
   };
 
   /**
-   * Lógica para hacer update (PUT)
+   * Lógica para hacer uptdate (PUT)
    * de los lenguajes.
    */
   const [newLanguageList, setNewLanguageList] = useState<
@@ -92,12 +82,9 @@ export const Languages: React.FC = () => {
   const onClickSave = async () => {
     try {
       await updateLanguages(newLanguageList);
-      toast.success(t('msg.languagesUpdatedOk'));
       setIsEditing(false);
     } catch (error) {
       setError('Error updating languages');
-      toast.error(t('err.failedUpdateLanguages'));
-      setIsEditing(false);
       return;
     }
   };
@@ -110,18 +97,18 @@ export const Languages: React.FC = () => {
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <SimpleInput
-          id="language"
+          id={t('language')}
           label={t('language')}
-          name="language"
+          name={t('language')}
           onChange={setNewLanguage}
           placeholder={t('language')}
           type="text"
           value={newLanguage}
         />
         <SimpleInput
-          id="locale"
+          id={t('locale')}
           label={t('locale')}
-          name="locale"
+          name={t('locale')}
           onChange={setNewLocale}
           placeholder={t('locale')}
           type="text"

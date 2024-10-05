@@ -144,14 +144,6 @@ export default {
     customFieldDeleteOk:
       'Custom Field {{0}} deleted successfully. {{1}} Vulnerabilities were affected.',
     customFieldUpdatedOk: 'Custom Field Updated Successfully!',
-    auditTypeCreatedOk: 'Audit Type Created Successfully',
-    clientEmailError: 'Client email already exists',
-    collaboratorUsernameError: 'Collaborator username already exists',
-    companyNameError: 'Company name already exists',
-    templateNameError: 'Template name already exists',
-    invalidEmailError:
-      'Email must follow this format: example@example.something',
-    passwordsDoNotMatch: 'Passwords do not match',
   },
   err: {
     notDefinedLanguage: 'Not defined for this language',
@@ -184,9 +176,6 @@ export default {
     customFieldAlreadyExists: 'Custom Field already exists',
     failedCreateCustomField: 'Error creating custom field',
     failedDeleteCustomField: 'Failed to delete the custom field',
-    failedCreateAuditType: 'Failed To Create Audit Type',
-    failedUpdateLanguages: 'Failed To Update Languages',
-    createEmptyField: 'Failed to Create: Empty field',
   },
   cvss: {
     title: 'CVSS v3.1 Base Score',
@@ -463,7 +452,6 @@ export default {
   noAudit: 'No Audit Types are defined.  Please create Audit Types in ',
   auditTypes: 'Audit Types',
   auditType: 'Audit Type',
-  addAuditType: 'Add Audit Type',
   searchFinds: 'Search Finding',
   myAudits: 'My Audits',
   usersConnected: 'Users Connected',
