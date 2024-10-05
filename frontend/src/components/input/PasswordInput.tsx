@@ -1,8 +1,8 @@
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import SimpleInput from './SimpleInput';
-import { useTranslation } from 'react-i18next';
 
 type PasswordInputProps = {
   label?: string;
