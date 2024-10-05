@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
-import { PasswordInput } from '@/components/input/PasswordInput';
 import { PasswordStrengthCard } from '@/components/card/PasswordStrengthCard';
+import { PasswordInput } from '@/components/input/PasswordInput';
 
 type EncryptionModalProps = {
   isOpen: boolean;
