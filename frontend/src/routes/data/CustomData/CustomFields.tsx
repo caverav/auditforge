@@ -157,7 +157,7 @@ export const CustomFields: React.FC = () => {
       description,
       text: [],
       options: optionsData,
-      position: 10,
+      position: currentCustomFields.length,
     };
 
     try {
