@@ -2,6 +2,7 @@ import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
 import { useState } from 'react';
 
 import SimpleInput from './SimpleInput';
+import { useTranslation } from 'react-i18next';
 
 type PasswordInputProps = {
   label?: string;
@@ -26,6 +27,7 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({
   requiredAlert = false,
   requiredField = false,
 }) => {
+  const { t } = useTranslation();
   const [type, setType] = useState<'password' | 'text'>('password');
   return (
     <>
@@ -54,9 +56,17 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({
         </div>
         <div className="basis-1/12 flex items-center justify-center">
           <button
-            onClick={() => setType(type === 'password' ? 'text' : 'password')}
+            aria-label={
+              type === 'password'
+                ? t('aria.showPassword')
+                : t('aria.hidePassword')
+            }
+            onClick={() =>
+              setType(prevType =>
+                prevType === 'password' ? 'text' : 'password',
+              )
+            }
             type="button"
-            aria-label={type === 'password' ? 'Mostrar contraseña' : 'Ocultar contraseña'}
           >
             {type === 'password' ? (
               <EyeIcon className="size-6" />
