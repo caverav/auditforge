@@ -1,4 +1,4 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
+import { InformationCircleIcon } from '@heroicons/react/24/outline';
 import { passwordStrength } from 'check-password-strength';
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
@@ -23,12 +23,19 @@ export const PasswordStrengthCard: React.FC<PasswordStrengthCardProps> = ({
     text: t('noPasswordText'),
   };
 
-  if (password) {
+  if (password !== '') {
     switch (strength.value) {
       case 'Strong':
         cardText = {
           title: t('strongPasswordTitle'),
           text: t('strongPasswordText'),
+        };
+        break;
+
+      case 'Medium':
+        cardText = {
+          title: t('mediumPasswordTitle'),
+          text: t('mediumPasswordText'),
         };
         break;
 
@@ -60,7 +67,8 @@ export const PasswordStrengthCard: React.FC<PasswordStrengthCardProps> = ({
       className={clsx('p-4 relative rounded-lg', {
         'bg-red-400': strength.value === 'Too weak' && password !== '',
         'bg-yellow-400': strength.value === 'Weak',
-        'bg-green-400': strength.value === 'Strong',
+        'bg-green-400': strength.value === 'Medium',
+        'bg-sky-400': strength.value === 'Strong',
         'bg-stone-400': password === '',
       })}
     >
@@ -68,24 +76,33 @@ export const PasswordStrengthCard: React.FC<PasswordStrengthCardProps> = ({
         className={clsx('absolute top-0 left-0 bottom-0 w-2 rounded-l-lg', {
           'bg-red-600': strength.value === 'Too weak' && password !== '',
           'bg-yellow-600': strength.value === 'Weak',
-          'bg-green-600': strength.value === 'Strong',
+          'bg-green-600': strength.value === 'Medium',
+          'bg-sky-600': strength.value === 'Strong',
           'bg-stone-600': password === '',
         })}
       />
       <h1
         className={clsx('font-bold underline', {
-          'text-black': strength.value === 'Strong',
+          'text-black':
+            strength.value === 'Medium' || strength.value === 'Strong',
         })}
       >
         {cardText.title}
       </h1>
       <p
         className={clsx('text-bold ', {
-          'text-black': strength.value === 'Strong',
+          'text-black':
+            strength.value === 'Medium' || strength.value === 'Strong',
         })}
       >
         {cardText.text}
       </p>
+      <InformationCircleIcon
+        className={clsx('absolute top-5 right-2 bottom-0 size-8 ', {
+          'text-black':
+            strength.value === 'Medium' || strength.value === 'Strong',
+        })}
+      />
     </div>
   );
 };
