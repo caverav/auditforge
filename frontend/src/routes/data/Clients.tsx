@@ -76,13 +76,27 @@ export const Clients: React.FC = () => {
   const [companies, setCompanies] = useState<ListItem[]>([]);
   const [apiCompanies, setApiCompanies] = useState<Company[]>([]);
 
+  const [addModalFirstnameRequiredAlert, setAddModalFirstnameRequiredAlert] =
+    useState<boolean>(false);
+  const [addModalLastnameRequiredAlert, setAddModalLastnameRequiredAlert] =
+    useState<boolean>(false);
+  const [addModalEmailRequiredAlert, setAddModalEmailRequiredAlert] =
+    useState<boolean>(false);
+
+  const [editModalFirstnameRequiredAlert, setEditModalFirstnameRequiredAlert] =
+    useState<boolean>(false);
+  const [editModalLastnameRequiredAlert, setEditModalLastnameRequiredAlert] =
+    useState<boolean>(false);
+  const [editModalEmailRequiredAlert, setEditModalEmailRequiredAlert] =
+    useState<boolean>(false);
+
   const [selectedCompany, setSelectedCompany] = useState<ListItem>({
     id: 0,
     _id: '',
     value: '',
   });
 
-  const [newClient, setNewClient] = useState<NewClient | null>({
+  const initialClientState = {
     company: null,
     firstname: '',
     lastname: '',
@@ -90,7 +104,11 @@ export const Clients: React.FC = () => {
     title: '',
     phone: '',
     cell: '',
-  });
+  };
+
+  const [newClient, setNewClient] = useState<NewClient | null>(
+    initialClientState,
+  );
 
   const [clients, setClients] = useState<Client[]>([]);
   const [_loading, setLoading] = useState<boolean>(true);
@@ -192,8 +210,12 @@ export const Clients: React.FC = () => {
   );
 
   const handleCancelAddClient = () => {
-    setNewClient(null);
+    setNewClient(initialClientState);
     setIsOpenAddClientModal(!isOpenAddClientModal);
+
+    setAddModalFirstnameRequiredAlert(false);
+    setAddModalLastnameRequiredAlert(false);
+    setAddModalEmailRequiredAlert(false);
   };
 
   const handleSubmitAddClient = async () => {
@@ -206,6 +228,34 @@ export const Clients: React.FC = () => {
       selectedCompany.value === '' &&
       selectedCompany._id === ''
     ) {
+      return;
+    }
+
+    let isValid = true;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!newClient.firstname || newClient.firstname.trim() === '') {
+      setAddModalFirstnameRequiredAlert(true);
+      isValid = false;
+    }
+
+    if (!newClient.lastname || newClient.lastname.trim() === '') {
+      setAddModalLastnameRequiredAlert(true);
+      isValid = false;
+    }
+
+    if (!newClient.email || newClient.email.trim() === '') {
+      setAddModalEmailRequiredAlert(true);
+      isValid = false;
+    }
+
+    if (!isValid) {
+      toast.error(t('msg.fieldRequired'));
+      return;
+    }
+
+    if (!emailRegex.test(newClient.email)) {
+      toast.error(t('msg.invalidEmail'));
       return;
     }
 
@@ -228,20 +278,27 @@ export const Clients: React.FC = () => {
           logo: matchingCompany.logo,
         },
       };
+
       await createClient(clientToCreate);
       toast.success(t('msg.clientCreatedOk'));
+      setIsOpenAddClientModal(!isOpenAddClientModal);
+
+      setNewClient(initialClientState);
+      void fetchClients();
     } catch (error) {
+      toast.error(t('msg.clientEmailError'));
       setError('Error creating client');
       console.error('Error:', error);
     }
-    setNewClient(null);
-    setIsOpenAddClientModal(!isOpenAddClientModal);
-    void fetchClients();
   };
 
   const handleCancelEditClient = () => {
-    setNewClient(null);
+    setNewClient(initialClientState);
     setIsOpenEditClientModal(!isOpenEditClientModal);
+
+    setEditModalFirstnameRequiredAlert(false);
+    setEditModalLastnameRequiredAlert(false);
+    setEditModalEmailRequiredAlert(false);
   };
 
   const handleSubmitEditClient = async () => {
@@ -254,6 +311,34 @@ export const Clients: React.FC = () => {
       selectedCompany.value === '' &&
       selectedCompany._id === ''
     ) {
+      return;
+    }
+
+    let isValid = true;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+    if (!newClient.firstname || newClient.firstname.trim() === '') {
+      setEditModalFirstnameRequiredAlert(true);
+      isValid = false;
+    }
+
+    if (!newClient.lastname || newClient.lastname.trim() === '') {
+      setEditModalLastnameRequiredAlert(true);
+      isValid = false;
+    }
+
+    if (!newClient.email || newClient.email.trim() === '') {
+      setEditModalEmailRequiredAlert(true);
+      isValid = false;
+    }
+
+    if (!isValid) {
+      toast.error(t('msg.fieldRequired'));
+      return;
+    }
+
+    if (!emailRegex.test(newClient.email)) {
+      toast.error(t('msg.invalidEmail'));
       return;
     }
 
@@ -279,13 +364,15 @@ export const Clients: React.FC = () => {
 
       await updateClient(clientToUpdate);
       toast.success(t('msg.clientUpdatedOk'));
+      setIsOpenEditClientModal(!isOpenEditClientModal);
+
+      setNewClient(initialClientState);
+      void fetchClients();
     } catch (error) {
+      toast.error(t('msg.clientEmailError'));
       setError('Error updating client');
       console.error('Error:', error);
     }
-    setNewClient(null);
-    setIsOpenEditClientModal(!isOpenEditClientModal);
-    void fetchClients();
   };
 
   const handleCancelDeleteClient = () => {
@@ -385,6 +472,8 @@ export const Clients: React.FC = () => {
             name="firstname"
             onChange={value => handleInputChange('firstname', value)}
             placeholder={t('firstname')}
+            requiredAlert={addModalFirstnameRequiredAlert}
+            requiredField
             type="text"
             value={newClient?.firstname ?? ''}
           />
@@ -394,6 +483,8 @@ export const Clients: React.FC = () => {
             name="lastname"
             onChange={value => handleInputChange('lastname', value)}
             placeholder={t('lastname')}
+            requiredAlert={addModalLastnameRequiredAlert}
+            requiredField
             type="text"
             value={newClient?.lastname ?? ''}
           />
@@ -403,6 +494,8 @@ export const Clients: React.FC = () => {
             name="email"
             onChange={value => handleInputChange('email', value)}
             placeholder={t('email')}
+            requiredAlert={addModalEmailRequiredAlert}
+            requiredField
             type="text"
             value={newClient?.email ?? ''}
           />
@@ -456,6 +549,8 @@ export const Clients: React.FC = () => {
             name="firstname"
             onChange={value => handleInputChange('firstname', value)}
             placeholder={t('firstname')}
+            requiredAlert={editModalFirstnameRequiredAlert}
+            requiredField
             type="text"
             value={newClient?.firstname ?? ''}
           />
@@ -465,6 +560,8 @@ export const Clients: React.FC = () => {
             name="lastname"
             onChange={value => handleInputChange('lastname', value)}
             placeholder={t('lastname')}
+            requiredAlert={editModalLastnameRequiredAlert}
+            requiredField
             type="text"
             value={newClient?.lastname ?? ''}
           />
@@ -474,6 +571,8 @@ export const Clients: React.FC = () => {
             name="email"
             onChange={value => handleInputChange('email', value)}
             placeholder={t('email')}
+            requiredAlert={editModalEmailRequiredAlert}
+            requiredField
             type="text"
             value={newClient?.email ?? ''}
           />
