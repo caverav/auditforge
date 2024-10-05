@@ -4,13 +4,14 @@ WORKDIR /app
 
 COPY . .
 
-RUN apt-get update -y \
+RUN set -e \
+    && apt-get update -y \
     && apt-get install -y --no-install-recommends \
        wget=1.21.3-1+deb11u1 \
        unzip=6.0-26+deb11u1 \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
-    || (echo "Failed to install packages" && exit 1)
+    || { echo "Error: Fallo en la instalación de paquetes"; exit 1; }
 
 RUN pip install --no-cache-dir torchvision==0.15.2 torchaudio==2.0.2 --index-url https://download.pytorch.org/whl/cpu \
     && pip install --no-cache-dir -r requirements.txt
