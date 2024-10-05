@@ -1,5 +1,9 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 export default {
+  aria: {
+    showPassword: 'Show password',
+    hidePassword: 'Hide password',
+  },
   generalSettings: 'General Settings',
   changeDisplayLanguage: 'Display Language',
   changeDisplayLanguageInfo: 'Choose your preferred default language',
