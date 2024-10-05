@@ -87,13 +87,37 @@ export const AuditRoot = () => {
 
   const [isOpenModal, setIsOpenModal] = useState(false);
 
-  const handleSubmitEncrypt = (password: string) => {
-    const encodedPassword = encodeURIComponent(password);
-    window.open(
-      `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate/pdf?password=${encodedPassword}`,
-      '_blank',
-    );
-    setIsOpenModal(false);
+  const handleSubmitEncrypt = async (password: string) => {
+    const bodyParam = {
+      password,
+    };
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate/pdf`,
+        {
+          credentials: 'include',
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(bodyParam),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error('Error generating PDF');
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      window.open(url, '_blank');
+      window.URL.revokeObjectURL(url);
+
+      setIsOpenModal(false);
+    } catch (error) {
+      console.error('Error:', error);
+    }
   };
 
   const fileTypes: ListItem[] = [
