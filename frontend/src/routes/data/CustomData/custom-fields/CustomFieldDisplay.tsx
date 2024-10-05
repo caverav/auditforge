@@ -128,9 +128,16 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
 
   const renderField = (field: GetCustomFieldType) => {
     // const { _id, fieldType, label, size, offset, required, options, text } =
-    const { _id, fieldType, size, options, text } = field;
-    //TODO: Cambiar width
-    const sizeStyle = size !== 12 ? `w-${size}/12` : 'w-full';
+    const { _id, fieldType, size, offset, options, text } = field;
+    // const sizeStyle = 10 + size * 7.5;
+    const validSize = Math.max(12, Math.min(0, size));
+    const sizeStyle = validSize > 0 ? Math.round((validSize / 12) * 100) : 0;
+    const validOffset = Math.max(0, Math.min(12, offset));
+    const offsetStyle =
+      validOffset > 0 ? Math.round((validOffset / 12) * 100) : 0;
+    /* if (sizeStyle + offsetStyle > 100) {
+      offsetStyle = 100 - sizeStyle;
+    } */
 
     if (text.length === 0 || text.length < languagesUsed.length) {
       if (stringList.includes(fieldType)) {
@@ -143,7 +150,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
     switch (fieldType) {
       case 'checkbox':
         return (
-          <div className={`px-4 rounded-lg mt-3 ${sizeStyle}`}>
+          <div className="px-4 rounded-lg mt-3 min-h-6">
             <CheckboxButtonCustom
               currentLanguage={currentLanguage.value}
               id={_id}
@@ -155,11 +162,21 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
         );
 
       case 'space':
-        return <div className="h-20 bg-white mx-4 rounded-lg mt-3" />; // Espacio vertical
+        return (
+          <div
+            className="h-20 mx-4 rounded-lg mt-3"
+            style={{ width: `calc(${sizeStyle}%)` }}
+          />
+        );
 
       case 'text':
         return (
-          <div className={`${sizeStyle}`}>
+          <div
+            style={{
+              width: `calc(${sizeStyle}%)`,
+              marginLeft: `${offsetStyle}%`,
+            }}
+          >
             <RichText
               label=""
               onChange={(value: string) =>
@@ -172,9 +189,11 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
         );
 
       case 'input':
-        //TODO: Fix input width 12
         return (
-          <div className={`px-4 rounded-lg mt-3 ${sizeStyle}`}>
+          <div
+            className="px-4 rounded-lg mt-3"
+            style={{ width: `calc(${sizeStyle}%)` }}
+          >
             <SimpleInput
               id={_id}
               name={_id}
@@ -189,9 +208,8 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
         ); // Espacio vertical
 
       case 'radio':
-        //TODO: Fix input width 12
         return (
-          <div className={`px-4 rounded-lg mt-3 ${sizeStyle}`}>
+          <div className="px-4 rounded-lg mt-3 min-h-6">
             <DefaultRadioGroup
               name={_id}
               onChange={(value: string) =>
@@ -208,9 +226,8 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
         );
 
       case 'select':
-        //TODO: Fix input width 12
         return (
-          <div className={`px-4 rounded-lg mt-3 ${sizeStyle}`}>
+          <div className="px-4 rounded-lg mt-3">
             <SelectDropdownCustom
               currentLanguage={currentLanguage.value}
               id={_id}
@@ -228,9 +245,8 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
         );
 
       case 'select-multiple':
-        //TODO: Fix input width 12
         return (
-          <div className={`px-4 rounded-lg mt-3 ${sizeStyle}`}>
+          <div className="px-4 rounded-lg mt-3">
             <MultiSelectDropdownCustom
               currentLanguage={currentLanguage.value}
               id={_id}
@@ -248,9 +264,8 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
         );
 
       case 'date':
-        //TODO: Fix input width 12
         return (
-          <div className={`rounded-lg ${sizeStyle}`}>
+          <div className="rounded-lg">
             <DayPickerCustom
               currentLanguage={currentLanguage.value}
               id={_id}
