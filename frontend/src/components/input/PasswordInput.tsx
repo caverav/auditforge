@@ -56,6 +56,7 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({
           <button
             onClick={() => setType(type === 'password' ? 'text' : 'password')}
             type="button"
+            aria-label={type === 'password' ? 'Mostrar contraseña' : 'Ocultar contraseña'}
           >
             {type === 'password' ? (
               <EyeIcon className="size-6" />
