@@ -4,6 +4,13 @@ import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger,
+  // eslint-disable-next-line import/extensions
+} from '@/components/ui/hover-card';
+
 type PasswordStrengthCardProps = {
   password: string;
 };
@@ -97,12 +104,29 @@ export const PasswordStrengthCard: React.FC<PasswordStrengthCardProps> = ({
       >
         {cardText.text}
       </p>
-      <InformationCircleIcon
-        className={clsx('absolute top-5 right-2 bottom-0 size-8 ', {
-          'text-black':
-            strength.value === 'Medium' || strength.value === 'Strong',
+
+      <div className="sm:hidden md:block">
+        <HoverCard>
+          <HoverCardTrigger>
+            <InformationCircleIcon
+              className={clsx('absolute top-5 right-2 bottom-0 size-8 ', {
+                'text-black':
+                  strength.value === 'Medium' || strength.value === 'Strong',
+              })}
+            />
+          </HoverCardTrigger>
+          <HoverCardContent className="absolute">
+            {t('passwordStrengthInfo')}
+          </HoverCardContent>
+        </HoverCard>
+      </div>
+      <p
+        className={clsx('text-sm italic text-stone-500 md:hidden', {
+          hidden: strength.value === 'Strong',
         })}
-      />
+      >
+        {t('passwordStrengthInfo')}
+      </p>
     </div>
   );
 };
