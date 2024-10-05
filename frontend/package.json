@@ -23,6 +23,7 @@
     "@radix-ui/react-switch": "^1.1.0",
     "@types/react-router-dom": "^5.3.3",
     "ae-cvss-calculator": "^1.0.2",
+    "check-password-strength": "^2.0.10",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.7",
