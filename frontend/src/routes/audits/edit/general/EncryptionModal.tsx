@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { PasswordInput } from '@/components/input/PasswordInput';
+import { PasswordStrengthCard } from '@/components/card/PasswordStrengthCard';
 
 type EncryptionModalProps = {
   isOpen: boolean;
@@ -35,14 +36,20 @@ export const EncryptionModal: React.FC<EncryptionModalProps> = ({
     const charset =
       // eslint-disable-next-line no-secrets/no-secrets
       'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
-    const passwordLength = 30;
+    const passwordLength = 35;
     let newPassword = '';
 
     const randomValues = new Uint32Array(passwordLength);
     window.crypto.getRandomValues(randomValues);
 
     for (let i = 0; i < passwordLength; i++) {
-      newPassword += charset.charAt(randomValues[i] % charset.length);
+      if (randomValues[i] % 7 === 0) {
+        newPassword += '!@#$%^&*()'.charAt(randomValues[i] % 10);
+      } else if (randomValues[i] % 3 === 0) {
+        newPassword += '0123456789'.charAt(randomValues[i] % 10);
+      } else {
+        newPassword += charset.charAt(randomValues[i] % charset.length);
+      }
     }
 
     return newPassword;
@@ -89,6 +96,9 @@ export const EncryptionModal: React.FC<EncryptionModalProps> = ({
                 placeholder={t('password')}
                 value={password}
               />
+              <div className="py-2 pr-9">
+                <PasswordStrengthCard password={password} />
+              </div>
               <PasswordInput
                 id="confirmPassword"
                 label={t('confirmPassword')}
