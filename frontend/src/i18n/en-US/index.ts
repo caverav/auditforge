@@ -688,4 +688,6 @@ export default {
   tooWeakPasswordText: 'The entered password is too weak',
   noPasswordTitle: 'No password',
   noPasswordText: 'Start typing to check the password strength',
+  passwordStrengthInfo:
+    'A password must have: at least an uppercase letter, a lowercase letter, a number, a special symbol, and a minimum length of 10 to be considered strong.',
 };
