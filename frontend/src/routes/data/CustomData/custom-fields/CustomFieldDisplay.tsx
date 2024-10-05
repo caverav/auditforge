@@ -436,7 +436,11 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
                   {field.fieldType !== 'space' ? field.label : 'space'}
                 </label>
                 <div className="mr-4 mt-2 flex space-x-4">
-                  {field.fieldType !== 'space' ? ( //TODO: show clear button only if is not empty
+                  {field.fieldType !== 'space' &&
+                  field.text.length === languagesUsed.length &&
+                  (Array.isArray(field.text[languageIndex].value)
+                    ? field.text[languageIndex].value.length > 0
+                    : field.text[languageIndex].value.trim() !== '') ? (
                     <PrimaryButton
                       color="blue"
                       onClick={() =>
