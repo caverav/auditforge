@@ -448,7 +448,6 @@ module.exports = function (app, io) {
           if (
             ['ppt', 'pptx', 'doc', 'docx', 'docm'].includes(audit.template.ext)
           ) {
-            console.log(req.body);
             let reportPdf;
             if (req.body.password) {
               reportPdf = await reportGenerator.generateEncryptedPdf(
@@ -467,6 +466,7 @@ module.exports = function (app, io) {
               res.setHeader('Content-Type', 'application/pdf');
               res.send(reportPdf);
             } else {
+              console.error('Error generating PDF:', error);
               Response.Internal(res, 'Error generating PDF');
             }
           } else {
