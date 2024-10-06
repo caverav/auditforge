@@ -145,68 +145,86 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
     switch (fieldType) {
       case 'checkbox':
         return (
-          <div
-            className="px-4 rounded-lg mt-3 min-h-6"
-            style={{ width: `calc(${sizeStyle}%)` }}
-          >
-            <CheckboxButtonCustom
-              currentLanguage={currentLanguage.value}
-              id={_id}
-              options={options.map(option => option.value)}
-              setCurrentCustomFields={setCurrentCustomFields}
-              text={handlerTextCheckbox(text)}
-            />
+          <div className="px-4 min-h-6">
+            <span className="font-medium leading-6 text-gray-300">
+              offset: {offset}
+            </span>
+            <div
+              className="mt-1 rounded-lg"
+              style={{ width: `calc(${sizeStyle}%)` }}
+            >
+              <CheckboxButtonCustom
+                currentLanguage={currentLanguage.value}
+                id={_id}
+                options={options.map(option => option.value)}
+                setCurrentCustomFields={setCurrentCustomFields}
+                text={handlerTextCheckbox(text)}
+              />
+            </div>
           </div>
         );
 
       case 'space':
         return (
-          <div
-            className="h-20 mt-3 px-4"
-            style={{ width: `calc(${sizeStyle}%)` }}
-          >
-            <div className="bg-white h-full w-full rounded-lg" />
+          <div className="px-4">
+            <span className="font-medium leading-6 text-gray-300">
+              offset: {offset}
+            </span>
+            <div
+              className="bg-white w-full rounded-lg mt-1 h-28"
+              style={{ width: `calc(${sizeStyle}%)` }}
+            />
           </div>
         );
 
       case 'text':
         return (
-          <div
-            style={{
-              width: `calc(${sizeStyle}%)`,
-            }}
-          >
-            <RichText
-              label=""
-              onChange={(value: string) =>
-                handlerInputChangeText(_id, fieldType, value)
-              }
-              placeholder=""
-              value={handlerTextString(text)}
-            />
+          <div>
+            <span className="font-medium leading-6 text-gray-300 mx-4">
+              offset: {offset}
+            </span>
+            <div
+              style={{
+                width: `calc(${sizeStyle}%)`,
+              }}
+            >
+              <RichText
+                label=""
+                onChange={(value: string) =>
+                  handlerInputChangeText(_id, fieldType, value)
+                }
+                placeholder=""
+                value={handlerTextString(text)}
+              />
+            </div>
           </div>
         );
 
       case 'input':
         return (
-          <div
-            className="px-4 rounded-lg mt-3"
-            style={{ width: `calc(${sizeStyle}%)` }}
-          >
-            <SimpleInput
-              id={_id}
-              name={_id}
-              onChange={(value: string) =>
-                handlerInputChangeText(_id, fieldType, value)
-              }
-              placeholder=""
-              type="text"
-              value={handlerTextString(text)}
-            />
+          <div className="px-4">
+            <span className="font-medium leading-6 text-gray-300">
+              offset: {offset}
+            </span>
+            <div
+              className="rounded-lg mt-1"
+              style={{ width: `calc(${sizeStyle}%)` }}
+            >
+              <SimpleInput
+                id={_id}
+                name={_id}
+                onChange={(value: string) =>
+                  handlerInputChangeText(_id, fieldType, value)
+                }
+                placeholder=""
+                type="text"
+                value={handlerTextString(text)}
+              />
+            </div>
           </div>
         );
 
-      case 'radio':
+      /* case 'radio':
         return (
           <div
             className="px-4 rounded-lg mt-3 min-h-6"
@@ -225,62 +243,106 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
               value={handlerTextString(text)}
             />
           </div>
+        ); */
+
+      case 'radio':
+        return (
+          <div className="px-4 min-h-6">
+            <span className="font-medium leading-6 text-gray-300">
+              offset: {offset}
+            </span>
+            <div
+              className="rounded-lg mt-1"
+              style={{ width: `calc(${sizeStyle}%)` }}
+            >
+              <DefaultRadioGroup
+                name={_id}
+                onChange={(value: string) =>
+                  handlerInputChangeText(_id, fieldType, value)
+                }
+                options={options.map((option, index) => ({
+                  id: index.toString(),
+                  label: option.value,
+                  value: option.value,
+                }))}
+                value={handlerTextString(text)}
+              />
+            </div>
+          </div>
         );
 
       case 'select':
         return (
-          <div
-            className="px-4 rounded-lg mt-3"
-            style={{ width: `calc(${sizeStyle}%)` }}
-          >
-            <SelectDropdownCustom
-              currentLanguage={currentLanguage.value}
-              id={_id}
-              items={options.map((option, index) => ({
-                id: index,
-                value: option.value,
-                label: option.value,
-              }))}
-              placeholder="Select"
-              setCurrentCustomFields={setCurrentCustomFields}
-              text={handlerTextString(text)}
-              title=""
-            />
+          <div className="px-4 min-h-6">
+            <span className="font-medium leading-6 text-gray-300">
+              offset: {offset}
+            </span>
+            <div
+              className="rounded-lg"
+              style={{ width: `calc(${sizeStyle}%)` }}
+            >
+              <SelectDropdownCustom
+                currentLanguage={currentLanguage.value}
+                id={_id}
+                items={options.map((option, index) => ({
+                  id: index,
+                  value: option.value,
+                  label: option.value,
+                }))}
+                placeholder="Select"
+                setCurrentCustomFields={setCurrentCustomFields}
+                text={handlerTextString(text)}
+                title=""
+              />
+            </div>
           </div>
         );
 
       case 'select-multiple':
         return (
-          <div
-            className="px-4 rounded-lg mt-3"
-            style={{ width: `calc(${sizeStyle}%)` }}
-          >
-            <MultiSelectDropdownCustom
-              currentLanguage={currentLanguage.value}
-              id={_id}
-              items={options.map((option, index) => ({
-                id: index,
-                value: option.value,
-                label: option.value,
-              }))}
-              placeholder="Select"
-              setCurrentCustomFields={setCurrentCustomFields}
-              text={handlerTextSelect(text)}
-              title=""
-            />
+          <div className="px-4 min-h-6">
+            <span className="font-medium leading-6 text-gray-300">
+              offset: {offset}
+            </span>
+            <div
+              className="rounded-lg mt-1"
+              style={{ width: `calc(${sizeStyle}%)` }}
+            >
+              <MultiSelectDropdownCustom
+                currentLanguage={currentLanguage.value}
+                id={_id}
+                items={options.map((option, index) => ({
+                  id: index,
+                  value: option.value,
+                  label: option.value,
+                }))}
+                placeholder="Select"
+                setCurrentCustomFields={setCurrentCustomFields}
+                text={handlerTextSelect(text)}
+                title=""
+              />
+            </div>
           </div>
         );
 
       case 'date':
         return (
-          <div className="rounded-lg" style={{ width: `calc(${sizeStyle}%)` }}>
-            <DayPickerCustom
-              currentLanguage={currentLanguage.value}
-              id={_id}
-              label=""
-              setCurrentCustomFields={setCurrentCustomFields}
-              text={handlerTextString(text)}
-            />
+          <div className="">
+            <span className="font-medium leading-6 text-gray-300 mx-4">
+              offset: {offset}
+            </span>
+            <div
+              className="rounded-lg"
+              style={{ width: `calc(${sizeStyle}%)` }}
+            >
+              <DayPickerCustom
+                currentLanguage={currentLanguage.value}
+                id={_id}
+                label=""
+                setCurrentCustomFields={setCurrentCustomFields}
+                text={handlerTextString(text)}
+              />
+            </div>
           </div>
         );
 
