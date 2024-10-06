@@ -61,6 +61,7 @@ export const PasswordInput: React.FC<PasswordInputProps> = ({
                 ? t('aria.showPassword')
                 : t('aria.hidePassword')
             }
+            aria-pressed={type === 'text'}
             onClick={() =>
               setType(prevType =>
                 prevType === 'password' ? 'text' : 'password',
