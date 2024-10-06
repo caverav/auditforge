@@ -127,17 +127,12 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
   };
 
   const renderField = (field: GetCustomFieldType) => {
-    // const { _id, fieldType, label, size, offset, required, options, text } =
     const { _id, fieldType, size, offset, options, text } = field;
-    // const sizeStyle = 10 + size * 7.5;
-    const validSize = Math.max(12, Math.min(0, size));
-    const sizeStyle = validSize > 0 ? Math.round((validSize / 12) * 100) : 0;
-    const validOffset = Math.max(0, Math.min(12, offset));
-    const offsetStyle =
-      validOffset > 0 ? Math.round((validOffset / 12) * 100) : 0;
-    /* if (sizeStyle + offsetStyle > 100) {
-      offsetStyle = 100 - sizeStyle;
-    } */
+    const validSize = Math.min(12, Math.max(0, size));
+    const sizeStyle =
+      validSize > 0
+        ? Math.round((validSize / 12) * 100)
+        : Math.round((1 / 12) * 100);
 
     if (text.length === 0 || text.length < languagesUsed.length) {
       if (stringList.includes(fieldType)) {
@@ -150,7 +145,10 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
     switch (fieldType) {
       case 'checkbox':
         return (
-          <div className="px-4 rounded-lg mt-3 min-h-6">
+          <div
+            className="px-4 rounded-lg mt-3 min-h-6"
+            style={{ width: `calc(${sizeStyle}%)` }}
+          >
             <CheckboxButtonCustom
               currentLanguage={currentLanguage.value}
               id={_id}
@@ -164,9 +162,11 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
       case 'space':
         return (
           <div
-            className="h-20 mx-4 rounded-lg mt-3"
+            className="h-20 mt-3 px-4"
             style={{ width: `calc(${sizeStyle}%)` }}
-          />
+          >
+            <div className="bg-white h-full w-full rounded-lg" />
+          </div>
         );
 
       case 'text':
@@ -174,7 +174,6 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
           <div
             style={{
               width: `calc(${sizeStyle}%)`,
-              marginLeft: `${offsetStyle}%`,
             }}
           >
             <RichText
@@ -205,11 +204,14 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
               value={handlerTextString(text)}
             />
           </div>
-        ); // Espacio vertical
+        );
 
       case 'radio':
         return (
-          <div className="px-4 rounded-lg mt-3 min-h-6">
+          <div
+            className="px-4 rounded-lg mt-3 min-h-6"
+            style={{ width: `calc(${sizeStyle}%)` }}
+          >
             <DefaultRadioGroup
               name={_id}
               onChange={(value: string) =>
@@ -227,7 +229,10 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
 
       case 'select':
         return (
-          <div className="px-4 rounded-lg mt-3">
+          <div
+            className="px-4 rounded-lg mt-3"
+            style={{ width: `calc(${sizeStyle}%)` }}
+          >
             <SelectDropdownCustom
               currentLanguage={currentLanguage.value}
               id={_id}
@@ -246,7 +251,10 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
 
       case 'select-multiple':
         return (
-          <div className="px-4 rounded-lg mt-3">
+          <div
+            className="px-4 rounded-lg mt-3"
+            style={{ width: `calc(${sizeStyle}%)` }}
+          >
             <MultiSelectDropdownCustom
               currentLanguage={currentLanguage.value}
               id={_id}
@@ -265,7 +273,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
 
       case 'date':
         return (
-          <div className="rounded-lg">
+          <div className="rounded-lg" style={{ width: `calc(${sizeStyle}%)` }}>
             <DayPickerCustom
               currentLanguage={currentLanguage.value}
               id={_id}
