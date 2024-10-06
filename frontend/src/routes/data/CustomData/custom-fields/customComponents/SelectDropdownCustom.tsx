@@ -23,7 +23,6 @@ type SelectDropdownProps = {
   items: ListItem[];
   title: string;
   placeholder?: string;
-  // setCurrentCustomFields: (fields: GetCustomFieldType[]) => void;
   setCurrentCustomFields: React.Dispatch<
     React.SetStateAction<GetCustomFieldType[]>
   >;
@@ -92,7 +91,7 @@ const SelectDropdownCustom: React.FC<SelectDropdownProps> = ({
                 options={items.map(item => (
                   <ListboxOption
                     className="group flex cursor-default items-center gap-2 rounded-lg px-3 select-none data-[focus]:bg-white/10"
-                    key={item.value}
+                    key={item.id}
                     value={item}
                   >
                     <CheckIcon className="invisible size-4 fill-white group-data-[selected]:visible" />
@@ -121,7 +120,7 @@ const SelectDropdownCustom: React.FC<SelectDropdownProps> = ({
             {items.map(item => (
               <ListboxOption
                 className="group flex cursor-default items-center gap-2 rounded-lg py-1.5 px-3 select-none data-[focus]:bg-white/10"
-                key={item.value}
+                key={item.id}
                 value={item}
               >
                 <CheckIcon className="invisible size-4 fill-white group-data-[selected]:visible" />
