@@ -174,6 +174,7 @@ export default {
     failedUpdateProfile: 'Failed to update profile',
     failedUpdateAudit: 'Failed to update audit',
     passwordsDontMatch: 'Passwords do not match',
+    errorGeneratingPdf: 'Failed exporting audit to pdf',
   },
   cvss: {
     title: 'CVSS v3.1 Base Score',

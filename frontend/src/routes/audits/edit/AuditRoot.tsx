@@ -10,6 +10,7 @@ import DropdownButton, {
 import AuditSidebar from '../../../components/navbar/AuditSidebar';
 import { Finding, getAuditById } from '../../../services/audits';
 import { EncryptionModal } from './general/EncryptionModal';
+import { toast } from 'sonner';
 
 export const AuditRoot = () => {
   const { t } = useTranslation();
@@ -129,6 +130,7 @@ export const AuditRoot = () => {
       setIsOpenModal(false);
     } catch (error) {
       console.error('Error:', error);
+      toast.error(t('err.errorGeneratingPdf'));
     }
   };
 
