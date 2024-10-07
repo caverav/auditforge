@@ -50,7 +50,7 @@ export const AuditTypes: React.FC = () => {
       const newData = data.map(at => {
         return {
           ...at,
-          templates: at.templates.filter(at => at.template !== ''),
+          templates: at.templates.filter(template => template.template !== ''),
         };
       });
       setNewAuditTypeList(newData);
