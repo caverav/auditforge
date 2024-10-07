@@ -22,9 +22,9 @@ export const AuditTypes: React.FC = () => {
       try {
         const data = await getAuditTypes();
         setAuditTypes(data.datas);
-        setLoading(false);
       } catch (err) {
         setError('Error fetching auditTypes');
+      } finally {
         setLoading(false);
       }
     };
