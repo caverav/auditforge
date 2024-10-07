@@ -512,12 +512,14 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
                   </PrimaryButton>
                 </div>
               </div>
-              <div>{renderField(field)}</div>
-              <PopOverEditCustomField
-                currentCustomField={field}
-                currentLanguage={currentLanguage.value}
-                setCurrentCustomFields={setCurrentCustomFields}
-              />
+              <div className="flex items-center ml-4">
+                <PopOverEditCustomField
+                  currentCustomField={field}
+                  currentLanguage={currentLanguage.value}
+                  setCurrentCustomFields={setCurrentCustomFields}
+                />
+                <div className="w-full">{renderField(field)}</div>
+              </div>
             </div>
           ))}
           <div className="mt-4 flex items-center justify-between">

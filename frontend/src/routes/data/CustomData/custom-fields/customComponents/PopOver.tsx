@@ -155,11 +155,11 @@ export const PopOverEditCustomField: React.FC<PopOverProps> = ({
   }, [setCurrentCustomFields]);
 
   return (
-    <div className="bg-white">
+    <div>
       <Popover>
         <PopoverTrigger>
           <button
-            className="bg-gray-700 focus:wg-white/10 rounded-md"
+            className="bg-gray-700 hover:bg-white/10 rounded-md"
             type="button"
           >
             <PencilSquareIcon className="text-gray-300 h-5 w-5 m-1" />
