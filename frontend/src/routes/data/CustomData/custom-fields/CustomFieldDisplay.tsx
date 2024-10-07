@@ -21,6 +21,7 @@ import {
   MultiSelectDropdownCustom,
   SelectDropdownCustom,
 } from './customComponents';
+import { PopOverEditCustomField } from './customComponents/PopOver';
 
 type TextData = {
   locale: string;
@@ -223,27 +224,6 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
             </div>
           </div>
         );
-
-      /* case 'radio':
-        return (
-          <div
-            className="px-4 rounded-lg mt-3 min-h-6"
-            style={{ width: `calc(${sizeStyle}%)` }}
-          >
-            <DefaultRadioGroup
-              name={_id}
-              onChange={(value: string) =>
-                handlerInputChangeText(_id, fieldType, value)
-              }
-              options={options.map((option, index) => ({
-                id: index.toString(),
-                label: option.value,
-                value: option.value,
-              }))}
-              value={handlerTextString(text)}
-            />
-          </div>
-        ); */
 
       case 'radio':
         return (
@@ -533,6 +513,11 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
                 </div>
               </div>
               <div>{renderField(field)}</div>
+              <PopOverEditCustomField
+                currentCustomField={field}
+                currentLanguage={currentLanguage.value}
+                setCurrentCustomFields={setCurrentCustomFields}
+              />
             </div>
           ))}
           <div className="mt-4 flex items-center justify-between">
