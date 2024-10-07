@@ -1,3 +1,4 @@
+import { TrashIcon } from '@heroicons/react/24/outline';
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { toast, Toaster } from 'sonner';
@@ -501,23 +502,28 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
                     >
                       {t('btn.clear')}
                     </PrimaryButton>
-                  ) : null}
-                  <PrimaryButton
-                    color="red"
-                    onClick={() =>
-                      deleteCustomFieldModal(field._id, field.label)
-                    }
-                  >
-                    {t('btn.delete')}
-                  </PrimaryButton>
+                  ) : (
+                    <div className="md:min-h-10" />
+                  )}
                 </div>
               </div>
               <div className="flex items-center ml-4">
-                <PopOverEditCustomField
-                  currentCustomField={field}
-                  currentLanguage={currentLanguage.value}
-                  setCurrentCustomFields={setCurrentCustomFields}
-                />
+                <div>
+                  <PopOverEditCustomField
+                    currentCustomField={field}
+                    currentLanguage={currentLanguage.value}
+                    setCurrentCustomFields={setCurrentCustomFields}
+                  />
+                  <button
+                    className="bg-gray-700 hover:bg-white/10 rounded-md"
+                    onClick={() =>
+                      deleteCustomFieldModal(field._id, field.label)
+                    }
+                    type="button"
+                  >
+                    <TrashIcon className="text-red-500 h-5 w-5 m-1" />
+                  </button>
+                </div>
                 <div className="w-full">{renderField(field)}</div>
               </div>
             </div>

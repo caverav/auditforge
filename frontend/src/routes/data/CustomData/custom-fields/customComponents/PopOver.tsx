@@ -63,7 +63,7 @@ export const PopOverEditCustomField: React.FC<PopOverProps> = ({
   );
 
   const [offsetSelected, setOffsetSelected] = useState<ListItem>(
-    sizes.find(item => item.id === currentCustomField.size) ?? sizes[0],
+    sizes.find(item => item.id === currentCustomField.offset) ?? sizes[0],
   );
 
   const [optionsData, setOptionsData] = useState<OptionData[]>(
