@@ -44,7 +44,16 @@ export const AuditTypes: React.FC = () => {
 
   const handleUpdateAuditList = useCallback(
     (data: AuditType[]) => {
-      setNewAuditTypeList(data);
+      /**
+       * Filtra aquellas templates no seleccionadas
+       */
+      const newData = data.map(at => {
+        return {
+          ...at,
+          templates: at.templates.filter(at => at.template !== ''),
+        };
+      });
+      setNewAuditTypeList(newData);
     },
     [setNewAuditTypeList],
   );
