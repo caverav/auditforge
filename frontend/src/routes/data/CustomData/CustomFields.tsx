@@ -236,6 +236,7 @@ export const CustomFields: React.FC = () => {
       {currentCustomFields.length > 0 ? (
         <CustomFieldDisplay
           currentCustomFields={currentCustomFields}
+          displayOptionSeleted={displayOptionSeleted}
           fetchCustomFields={fetchCustomFields}
           languagesList={languagesList}
           setCurrentCustomFields={setCurrentCustomFields}

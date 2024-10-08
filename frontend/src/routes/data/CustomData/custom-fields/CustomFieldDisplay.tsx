@@ -38,8 +38,8 @@ type ListItem = {
 
 type CustomFieldProps = {
   currentCustomFields: GetCustomFieldType[];
+  displayOptionSeleted: ListItem;
   languagesList: ListItem[];
-  // setCurrentCustomFields: (fields: GetCustomFieldType[]) => void;
   setCurrentCustomFields: React.Dispatch<
     React.SetStateAction<GetCustomFieldType[]>
   >;
@@ -48,6 +48,7 @@ type CustomFieldProps = {
 
 export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
   currentCustomFields,
+  displayOptionSeleted,
   languagesList,
   setCurrentCustomFields,
   fetchCustomFields,
@@ -69,11 +70,20 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentItems = currentCustomFields.slice(
+  const [currentItems, setCurrentItems] = useState<GetCustomFieldType[]>([]);
+  const [totalPages, setTotalPages] = useState(0);
+  /* const currentItems = currentCustomFields.slice(
     indexOfFirstItem,
     indexOfLastItem,
   );
-  const totalPages = Math.ceil(currentCustomFields.length / itemsPerPage);
+  const totalPages = Math.ceil(currentCustomFields.length / itemsPerPage); */
+  useEffect(() => {
+    const filteredFields = currentCustomFields.filter(
+      field => field.display === displayOptionSeleted.value,
+    );
+    setCurrentItems(filteredFields.slice(indexOfFirstItem, indexOfLastItem));
+    setTotalPages(Math.ceil(filteredFields.length / itemsPerPage));
+  }, [currentCustomFields, displayOptionSeleted]);
 
   const goToNextPage = () => {
     if (currentPage < totalPages) {
