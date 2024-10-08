@@ -72,8 +72,13 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const [currentItems, setCurrentItems] = useState<GetCustomFieldType[]>([]);
-  const [totalPages, setTotalPages] = useState(0);
+
+  const currentItems = currentCustomFields
+    .filter(field => {
+      return field.display === displayOptionSeleted.value;
+    })
+    .slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(currentItems.length / itemsPerPage);
 
   const goToNextPage = () => {
     if (currentPage < totalPages) {
@@ -86,15 +91,6 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
       setCurrentPage(currentPage - 1);
     }
   };
-
-  useEffect(() => {
-    const filteredFields = currentCustomFields.filter(
-      field => field.display === displayOptionSeleted.value,
-    );
-    setCurrentItems(filteredFields.slice(indexOfFirstItem, indexOfLastItem));
-    setTotalPages(Math.ceil(filteredFields.length / itemsPerPage));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentCustomFields, displayOptionSeleted, currentPage]);
 
   const handlerTextString = (text: TextData[]) => {
     return Array.isArray(text[languageIndex].value)
@@ -109,22 +105,20 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
   };
 
   const handlerInputChangeText = (id: string, name: string, value: string) => {
-    if (stringList.includes(name)) {
-      setCurrentCustomFields((prevFields: GetCustomFieldType[]) => {
-        return prevFields.map((field: GetCustomFieldType) =>
-          field._id === id
-            ? {
-                ...field,
-                text: field.text.map(item =>
-                  item.locale === currentLanguage.value
-                    ? { locale: item.locale, value }
-                    : item,
-                ),
-              }
-            : field,
-        );
-      });
-    }
+    setCurrentCustomFields((prevFields: GetCustomFieldType[]) => {
+      return prevFields.map((field: GetCustomFieldType) =>
+        field._id === id
+          ? {
+              ...field,
+              text: field.text.map(item =>
+                item.locale === currentLanguage.value
+                  ? { locale: item.locale, value }
+                  : item,
+              ),
+            }
+          : field,
+      );
+    });
   };
 
   const renderField = (field: GetCustomFieldType) => {
