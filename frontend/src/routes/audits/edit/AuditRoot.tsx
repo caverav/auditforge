@@ -77,31 +77,14 @@ export const AuditRoot = () => {
       .catch(console.error);
   }, [auditId]);
 
-  const sortOptions = [
-    { id: 1, value: 'CVSS Score', label: t('cvssScore') },
-    { id: 2, value: 'CVSS Temporal Score', label: t('cvssTemporalScore') },
-    {
-      id: 3,
-      value: 'CVSS Environmental Score',
-      label: t('cvssEnvironmentalScore'),
-    },
-    { id: 4, value: 'Priority', label: t('priority') },
-    {
-      id: 5,
-      value: 'Remediation Difficulty',
-      label: t('remediationDifficulty'),
-    },
-  ];
+  const sortOptions = [{ id: 1, value: 'CVSS Score', label: t('cvssScore') }];
 
   const sortOrderOptions = [
-    { id: 'asc', label: t('ascending'), value: 'Ascending' },
     { id: 'desc', label: t('descending'), value: 'Descending' },
+    { id: 'asc', label: t('ascending'), value: 'Ascending' },
   ];
 
-  const connectedUsers = [
-    { id: 1, name: 'camilo (me)', online: true },
-    { id: 2, name: 'massi', online: false },
-  ];
+  const connectedUsers: { id: number; name: string; online: boolean }[] = [];
 
   const fileTypes: ListItem[] = [
     {
