@@ -541,9 +541,16 @@ export const addVuln = async (
   datas: string;
 }> => {
   try {
-    const data = await getVulnerabilities()
-      .then(res => res.datas.find(item => item._id === vulnId))
-      .catch(console.error);
+    let data;
+
+    try {
+      const res = await getVulnerabilities();
+      data = res.datas.find(item => item._id === vulnId);
+    } catch (error) {
+      console.error(error);
+
+      throw error;
+    }
 
     if (!data) {
       throw new Error('Vulnerability not found');
