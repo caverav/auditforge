@@ -11,17 +11,19 @@ type ListItem = {
 
 type CustomFieldTypeProps = {
   displayOptionSeleted: ListItem;
+  customSectionsList: ListItem[];
   setDisplayOptionSeleted: (value: ListItem) => void;
   componentOptionSelected: ListItem | null;
   setComponentOptionSelected: (value: ListItem) => void;
   categorySelected: ListItem | null;
-  setCategorySelected: (value: ListItem) => void;
+  setCategorySelected: (value: ListItem | null) => void;
   categoriesList: ListItem[];
   requiredSelectComponentAlert: boolean;
 };
 
 export const CustomFieldType: React.FC<CustomFieldTypeProps> = ({
   displayOptionSeleted,
+  customSectionsList,
   setDisplayOptionSeleted,
   componentOptionSelected,
   setComponentOptionSelected,
@@ -58,11 +60,16 @@ export const CustomFieldType: React.FC<CustomFieldTypeProps> = ({
     { id: 8, label: t('space'), value: 'space', icon: 'space_bar' },
   ];
 
+  const onChangeDisplayOption = (value: ListItem) => {
+    setDisplayOptionSeleted(value);
+    setCategorySelected(null);
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-1 gap-4 content-start">
       <SelectDropdown
         items={cfDisplayOptions}
-        onChange={value => setDisplayOptionSeleted(value)}
+        onChange={value => onChangeDisplayOption(value)}
         selected={displayOptionSeleted}
         title={t('selectView')}
       />
@@ -77,11 +84,23 @@ export const CustomFieldType: React.FC<CustomFieldTypeProps> = ({
       />
       {displayOptionSeleted.value !== 'general' ? (
         <SelectDropdown
-          items={categoriesList}
+          items={
+            displayOptionSeleted.value === 'section'
+              ? customSectionsList
+              : categoriesList
+          }
           onChange={value => setCategorySelected(value)}
-          placeholder={t('selectCategory')}
+          placeholder={
+            displayOptionSeleted.value === 'section'
+              ? t('selectSection')
+              : t('selectCategory')
+          }
           selected={categorySelected}
-          title={t('selectCategory')}
+          title={
+            displayOptionSeleted.value === 'section'
+              ? t('selectSection')
+              : t('selectCategory')
+          }
         />
       ) : (
         <div className="h-11" />

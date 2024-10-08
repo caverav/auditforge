@@ -9,6 +9,7 @@ import {
   AddCustomFieldType,
   getCustomField,
   GetCustomFieldType,
+  getCustomSections,
   getLanguages,
 } from '../../../services/data';
 import { getCategories } from '../../../services/vulnerabilities';
@@ -24,6 +25,12 @@ type ListItem = {
   value: string;
   label?: string;
   icon?: string;
+};
+
+type CustomSectionFields = {
+  field: string;
+  name: string;
+  icon: string;
 };
 
 type OptionData = {
@@ -82,6 +89,7 @@ export const CustomFields: React.FC = () => {
   const [languagesList, setLanguagesList] = useState<ListItem[]>([]);
   const [categoriesList, setCategoriesList] = useState<ListItem[]>([]);
   const [optionsData, setOptionsData] = useState<OptionData[]>([]);
+  const [customSectionsList, setCustomSectionsList] = useState<ListItem[]>([]);
 
   const [currentCustomFields, setCurrentCustomFields] = useState<
     GetCustomFieldType[]
@@ -129,10 +137,27 @@ export const CustomFields: React.FC = () => {
     }
   };
 
+  const fetchCustomSections = async () => {
+    try {
+      const dataCustomFields = await getCustomSections();
+      const customSectionsNames = dataCustomFields.datas.map(
+        (item: CustomSectionFields, index: number) => ({
+          id: index + 1,
+          value: item.name,
+          label: item.name,
+        }),
+      );
+      setCustomSectionsList(customSectionsNames);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+
   useEffect(() => {
     void fetchLanguages();
     void fetchCategories();
     void fetchCustomFields();
+    void fetchCustomSections();
   }, []);
 
   const handlerAddField = async () => {
@@ -193,6 +218,7 @@ export const CustomFields: React.FC = () => {
               categoriesList={categoriesList}
               categorySelected={categorySelected}
               componentOptionSelected={componentOptionSelected}
+              customSectionsList={customSectionsList}
               displayOptionSeleted={displayOptionSeleted}
               requiredSelectComponentAlert={requiredSelectComponentAlert}
               setCategorySelected={setCategorySelected}
