@@ -128,7 +128,12 @@ export const Languages: React.FC = () => {
           value={newLocale}
         />
         <div>
-          <PrimaryButton onClick={handleAddLanguage} aria-label={t('addLanguage')}>+</PrimaryButton>
+          <PrimaryButton
+            onClick={handleAddLanguage}
+            aria-label={t('addLanguage')}
+          >
+            +
+          </PrimaryButton>
         </div>
       </div>
       <EditCard
