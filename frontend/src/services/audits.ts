@@ -236,6 +236,16 @@ export type Client = {
   title: string;
 };
 
+export type AuditFinding = {
+  title: string;
+  vulnType: string;
+  references: string[];
+  cwes: string[];
+  cvssv3: string;
+  category: string;
+  customFields: string[];
+};
+
 export const createAudit = async (
   audit: NewAudit,
 ): Promise<{
@@ -510,6 +520,68 @@ export const deleteAudit = async (
     const response = await fetch(`${API_URL}audits/${id}`, {
       method: 'DELETE',
       credentials: 'include',
+    });
+    if (!response.ok) {
+      throw networkError;
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const addVuln = async (
+  vulnId: string,
+  auditId: string,
+): Promise<{
+  status: string;
+  datas: string;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}vulnerabilities/${vulnId}`, {
+      credentials: 'include',
+    });
+    if (!response.ok) {
+      throw networkError;
+    }
+    const data = await response.json();
+
+    const response2 = await fetch(`${API_URL}audits/${auditId}/findings`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        data,
+      }),
+    });
+    if (!response2.ok) {
+      throw networkError;
+    }
+    return await response2.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const addFinding = async (
+  title: string,
+  auditId: string,
+): Promise<{
+  status: string;
+  datas: string;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}audits/${auditId}/findings`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title,
+      }),
     });
     if (!response.ok) {
       throw networkError;
