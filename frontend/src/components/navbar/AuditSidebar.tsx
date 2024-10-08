@@ -19,6 +19,7 @@ type Finding = {
   name: string;
   category: string;
   severity: string;
+  identifier: string;
 };
 
 type SortOption = {
@@ -176,16 +177,24 @@ const AuditSidebar = ({
         </div>
         <ul className="space-y-2">
           {findings.map(finding => (
-            <li className="flex items-center gap-2 text-sm" key={finding.id}>
-              <span
-                className={`w-6 h-6 flex items-center justify-center ${getSeverityColor(finding.severity)} text-white rounded-full font-medium`}
-              >
-                {finding.severity}
-              </span>
-              <span className={clsx('text-gray-300', isCollapsed && 'sr-only')}>
-                {finding.name}
-              </span>
-            </li>
+            <Link
+              className="flex items-center gap-2 text-sm hover:bg-gray-800 transition-colors duration-200 rounded-lg"
+              key={finding.id}
+              to={`findings/${finding.identifier}`}
+            >
+              <li className="flex items-center gap-2 text-sm px-4 py-2">
+                <span
+                  className={`w-6 h-6 flex items-center justify-center ${getSeverityColor(finding.severity)} text-white rounded-full font-medium`}
+                >
+                  {finding.severity}
+                </span>
+                <span
+                  className={clsx('text-gray-300', isCollapsed && 'sr-only')}
+                >
+                  {finding.name}
+                </span>
+              </li>
+            </Link>
           ))}
         </ul>
       </div>

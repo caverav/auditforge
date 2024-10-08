@@ -19,7 +19,13 @@ export const AuditRoot = () => {
   const [sortOrder, setSortOrder] = useState('Descending');
 
   const [findings, setFindings] = useState<
-    { id: number; name: string; category: string; severity: string }[]
+    {
+      id: number;
+      name: string;
+      category: string;
+      severity: string;
+      identifier: string;
+    }[]
   >([]);
 
   const menuItems = [
@@ -66,6 +72,7 @@ export const AuditRoot = () => {
               name: finding.title,
               category: 'No Category',
               severity: cvssStringToSeverity(finding.cvssv3),
+              identifier: finding._id,
             };
           }),
         );
