@@ -492,40 +492,39 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
                   (Array.isArray(field.text[languageIndex].value)
                     ? field.text[languageIndex].value.length > 0
                     : field.text[languageIndex].value.trim() !== '') ? (
+                    <div className="h-10">
+                      <PrimaryButton
+                        color="blue"
+                        onClick={() =>
+                          stringList.includes(field.fieldType)
+                            ? clearCustomFieldString(field._id)
+                            : clearCustomFieldArray(field._id)
+                        }
+                      >
+                        {t('btn.clear')}
+                      </PrimaryButton>
+                    </div>
+                  ) : (
+                    <div className="h-10" />
+                  )}
+                  <div className="flex flex-col space-y-1 md:flex-row md:space-x-4 md:max-h-10">
+                    <PopOverEditCustomField
+                      currentCustomField={field}
+                      currentLanguage={currentLanguage.value}
+                      setCurrentCustomFields={setCurrentCustomFields}
+                    />
                     <PrimaryButton
-                      color="blue"
+                      color="red"
                       onClick={() =>
-                        stringList.includes(field.fieldType)
-                          ? clearCustomFieldString(field._id)
-                          : clearCustomFieldArray(field._id)
+                        deleteCustomFieldModal(field._id, field.label)
                       }
                     >
-                      {t('btn.clear')}
+                      <TrashIcon className="h-5 w-5" />
                     </PrimaryButton>
-                  ) : (
-                    <div className="md:min-h-10" />
-                  )}
+                  </div>
                 </div>
               </div>
-              <div className="flex items-center ml-4">
-                <div>
-                  <PopOverEditCustomField
-                    currentCustomField={field}
-                    currentLanguage={currentLanguage.value}
-                    setCurrentCustomFields={setCurrentCustomFields}
-                  />
-                  <button
-                    className="bg-gray-700 hover:bg-white/10 rounded-md"
-                    onClick={() =>
-                      deleteCustomFieldModal(field._id, field.label)
-                    }
-                    type="button"
-                  >
-                    <TrashIcon className="text-red-500 h-5 w-5 m-1" />
-                  </button>
-                </div>
-                <div className="w-full">{renderField(field)}</div>
-              </div>
+              <div className="w-full">{renderField(field)}</div>
             </div>
           ))}
           <div className="mt-4 flex items-center justify-between">
