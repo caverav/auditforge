@@ -134,7 +134,7 @@ export default {
     recommendationSuboptimal: 'The recommendation is suboptimal',
     auditDeletedOk: 'Audit deleted successfully',
     auditDeleteNotice: 'Audit will be permanently deleted',
-    sectionCreatedOk: 'Custom Section created successfully',
+    sectionCreatedOk: 'Custom Section Created Successfully!',
     auditTypeCreatedOk: 'Audit Type Created Successfully',
     clientEmailError: 'Client email already exists',
     collaboratorUsernameError: 'Collaborator username already exists',
