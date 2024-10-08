@@ -94,7 +94,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
     setCurrentItems(filteredFields.slice(indexOfFirstItem, indexOfLastItem));
     setTotalPages(Math.ceil(filteredFields.length / itemsPerPage));
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentCustomFields, displayOptionSeleted]);
+  }, [currentCustomFields, displayOptionSeleted, currentPage]);
 
   const handlerTextString = (text: TextData[]) => {
     return Array.isArray(text[languageIndex].value)
