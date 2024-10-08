@@ -134,6 +134,7 @@ export default {
     recommendationSuboptimal: 'The recommendation is suboptimal',
     auditDeletedOk: 'Audit deleted successfully',
     auditDeleteNotice: 'Audit will be permanently deleted',
+    sectionCreatedOk: 'Custom Section created successfully',
   },
   err: {
     notDefinedLanguage: 'Not defined for this language',
@@ -163,6 +164,7 @@ export default {
     failedDeleteAudit: 'Failed to delete the audit',
     failedUpdateProfile: 'Failed to update profile',
     failedUpdateAudit: 'Failed to update audit',
+    errorCreatingSection: 'Failed to create section',
   },
   cvss: {
     title: 'CVSS v3.1 Base Score',
