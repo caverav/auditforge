@@ -33,7 +33,6 @@ const DayPickerCustom: React.FC<DayPickerProps> = ({
   }, [text]);
 
   const onChange = (item: Dayjs) => {
-    setSelectedDay(item);
     setCurrentCustomFields((prevFields: GetCustomFieldType[]) => {
       return prevFields.map((field: GetCustomFieldType) =>
         field._id === id

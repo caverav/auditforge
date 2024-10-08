@@ -39,7 +39,6 @@ const CheckboxButtonCustom = ({
     const values = selectedBox.map((itemMap, i) =>
       i === index ? !itemMap : itemMap,
     );
-    setSelectedBox(values);
 
     const selectedOptions = options.filter((_, index) => values[index]);
     setCurrentCustomFields((prevFields: GetCustomFieldType[]) => {

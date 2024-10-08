@@ -49,7 +49,6 @@ const MultiSelectDropdownCustom: React.FC<MultiSelectDropdownProps> = ({
   }, [items, text]);
 
   const onChange = (items: ListItem[]) => {
-    setSelected(items);
     const values = items.map(item => item.value);
     setCurrentCustomFields((prevFields: GetCustomFieldType[]) => {
       return prevFields.map((field: GetCustomFieldType) =>
