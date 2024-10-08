@@ -83,6 +83,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
     );
     setCurrentItems(filteredFields.slice(indexOfFirstItem, indexOfLastItem));
     setTotalPages(Math.ceil(filteredFields.length / itemsPerPage));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentCustomFields, displayOptionSeleted]);
 
   const goToNextPage = () => {
@@ -146,13 +147,20 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
         ? Math.round((validSize / 12) * 100)
         : Math.round((1 / 12) * 100);
 
-    if (text.length === 0 || text.length < languagesUsed.length) {
-      if (stringList.includes(fieldType)) {
-        text.push({ locale: currentLanguage.value, value: '' });
-      } else if (fieldType === 'checkbox' || fieldType === 'select-multiple') {
-        text.push({ locale: currentLanguage.value, value: [] });
+    languagesUsed.forEach(language => {
+      const existsInText = text.some(item => item.locale === language.value);
+
+      if (!existsInText) {
+        if (stringList.includes(fieldType)) {
+          text.push({ locale: language.value, value: '' });
+        } else if (
+          fieldType === 'checkbox' ||
+          fieldType === 'select-multiple'
+        ) {
+          text.push({ locale: language.value, value: [] });
+        }
       }
-    }
+    });
 
     switch (fieldType) {
       case 'checkbox':
