@@ -2,16 +2,15 @@ import { PencilSquareIcon } from '@heroicons/react/24/outline';
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
-
 import PrimaryButton from '../../../../../components/button/PrimaryButton';
 import SelectDropdown from '../../../../../components/dropdown/SelectDropdown';
 import SimpleInput from '../../../../../components/input/SimpleInput';
 import PrimarySwitch from '../../../../../components/switch/PrimarySwitch';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '../../../../../components/ui/popover';
 import { GetCustomFieldType } from '../../../../../services/data';
 
 type ListItem = {
