@@ -26,6 +26,7 @@ type SelectDropdownProps = {
   placeholder?: string;
   requiredAlert?: boolean;
   requiredField?: boolean;
+  disabled?: boolean;
 };
 
 const SelectDropdown: React.FC<SelectDropdownProps> = ({
@@ -36,9 +37,10 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({
   placeholder,
   requiredAlert = false,
   requiredField = false,
+  disabled = false,
 }) => {
   return (
-    <Field aria-required={requiredField}>
+    <Field aria-required={requiredField} disabled={disabled}>
       <Label className="block text-sm font-medium leading-6 mb-2 text-gray-300">
         {title + ' '}
         {requiredField ? <span className="text-red-500 text-lg">*</span> : ''}
@@ -46,13 +48,15 @@ const SelectDropdown: React.FC<SelectDropdownProps> = ({
       <div
         className={`relative ${requiredAlert && (!selected?.id || !selected.value) && 'rounded-lg ring-1 ring-red-500'}`}
       >
-        <Listbox onChange={onChange} value={selected}>
+        <Listbox disabled={disabled} onChange={onChange} value={selected}>
           <ListboxButton
             className={clsx(
               'inline-flex items-center justify-between w-full text-left rounded-lg bg-white/5 py-1.5 pl-3 text-left text-sm/6 text-white',
               'focus:outline-none data-[focus]:outline-2 data-[focus]:-outline-offset-2 data-[focus]:outline-white/25',
               'min-h-[2.3rem]',
+              disabled && 'opacity-50 cursor-not-allowed',
             )}
+            tabIndex={disabled ? -1 : undefined}
           >
             <div>
               <ListboxSelectedOption

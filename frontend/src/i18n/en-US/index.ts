@@ -135,6 +135,14 @@ export default {
     auditDeletedOk: 'Audit deleted successfully',
     auditDeleteNotice: 'Audit will be permanently deleted',
     sectionCreatedOk: 'Custom Section created successfully',
+    auditTypeCreatedOk: 'Audit Type Created Successfully',
+    clientEmailError: 'Client email already exists',
+    collaboratorUsernameError: 'Collaborator username already exists',
+    companyNameError: 'Company name already exists',
+    templateNameError: 'Template name already exists',
+    invalidEmailError:
+      'Email must follow this format: example@example.something',
+    passwordsDoNotMatch: 'Passwords do not match',
   },
   err: {
     notDefinedLanguage: 'Not defined for this language',
@@ -165,6 +173,9 @@ export default {
     failedUpdateProfile: 'Failed to update profile',
     failedUpdateAudit: 'Failed to update audit',
     errorCreatingSection: 'Failed to create section',
+    failedCreateAuditType: 'Failed To Create Audit Type',
+    failedUpdateLanguages: 'Failed To Update Languages',
+    createEmptyField: 'Failed to Create: Empty field',
   },
   cvss: {
     title: 'CVSS v3.1 Base Score',
@@ -441,6 +452,7 @@ export default {
   noAudit: 'No Audit Types are defined.  Please create Audit Types in ',
   auditTypes: 'Audit Types',
   auditType: 'Audit Type',
+  addAuditType: 'Add Audit Type',
   searchFinds: 'Search Finding',
   myAudits: 'My Audits',
   usersConnected: 'Users Connected',
