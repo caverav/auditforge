@@ -1,11 +1,9 @@
 import clsx from 'clsx';
 import { t } from 'i18next';
 import { ChevronDown, ChevronUp, Users } from 'lucide-react';
-import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 import DefaultRadioGroup from '../button/DefaultRadioGroup';
-import SelectDropdown from '../dropdown/SelectDropdown';
 import DropdownButton, { ListItem } from '../button/DropdownButton';
 
 type MenuItem = {
@@ -81,13 +79,10 @@ const AuditSidebar = ({
   setActiveItem,
   isCollapsed,
   setIsCollapsed,
-  sortBy,
-  setSortBy,
   sortOrder,
   setSortOrder,
   menuItems,
   findings,
-  sortOptions,
   sortOrderOptions,
   connectedUsers,
   fileTypes,
