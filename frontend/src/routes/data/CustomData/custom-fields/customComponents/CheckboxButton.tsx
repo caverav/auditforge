@@ -22,7 +22,6 @@ const CheckboxButtonCustom = ({
   currentLanguage,
 }: CheckboxButtonProps) => {
   const [selectedBox, setSelectedBox] = useState<boolean[]>(
-    // new Array(options.length).fill(false),
     options.map((option: string) =>
       text.some((item: string) => (item === option ? true : false)),
     ),

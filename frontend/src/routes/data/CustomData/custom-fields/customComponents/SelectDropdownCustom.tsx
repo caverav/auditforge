@@ -58,7 +58,6 @@ const SelectDropdownCustom: React.FC<SelectDropdownProps> = ({
         field._id === id
           ? {
               ...field,
-              // text: [{ locale: 'es-ES', value: item.value }],
               text: field.text.map(itemIter =>
                 itemIter.locale === currentLanguage
                   ? {
