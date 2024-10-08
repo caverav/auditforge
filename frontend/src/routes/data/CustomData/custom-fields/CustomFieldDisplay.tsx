@@ -20,9 +20,9 @@ import {
   CheckboxButtonCustom,
   DayPickerCustom,
   MultiSelectDropdownCustom,
+  PopOverEditCustomField,
   SelectDropdownCustom,
 } from './customComponents';
-import { PopOverEditCustomField } from './customComponents/PopOver';
 
 type TextData = {
   locale: string;
@@ -54,10 +54,12 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
   fetchCustomFields,
 }) => {
   const stringList = ['text', 'input', 'radio', 'date', 'select'];
+
   const [deletedCustomField, setDeletedCustomField] = useState<string>('');
   const [deleteModalOpen, setDeleteModalOpen] = useState<boolean>(false);
   const [deletedCustomFieldId, setDeletedCustomFieldId] = useState<string>('');
-  const [languageIndex, setLanguageIndex] = useState<number>(0); // Página inicial
+
+  const [languageIndex, setLanguageIndex] = useState<number>(0);
   const [currentLanguage, setCurrentLanguage] = useState<ListItem>(
     languagesList[0],
   );
@@ -65,26 +67,13 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
     languagesList[0],
   ]);
 
-  const [currentPage, setCurrentPage] = useState(1); // Página inicial
+  const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 5;
 
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const [currentItems, setCurrentItems] = useState<GetCustomFieldType[]>([]);
   const [totalPages, setTotalPages] = useState(0);
-  /* const currentItems = currentCustomFields.slice(
-    indexOfFirstItem,
-    indexOfLastItem,
-  );
-  const totalPages = Math.ceil(currentCustomFields.length / itemsPerPage); */
-  useEffect(() => {
-    const filteredFields = currentCustomFields.filter(
-      field => field.display === displayOptionSeleted.value,
-    );
-    setCurrentItems(filteredFields.slice(indexOfFirstItem, indexOfLastItem));
-    setTotalPages(Math.ceil(filteredFields.length / itemsPerPage));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentCustomFields, displayOptionSeleted]);
 
   const goToNextPage = () => {
     if (currentPage < totalPages) {
@@ -98,22 +87,22 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
     }
   };
 
+  useEffect(() => {
+    const filteredFields = currentCustomFields.filter(
+      field => field.display === displayOptionSeleted.value,
+    );
+    setCurrentItems(filteredFields.slice(indexOfFirstItem, indexOfLastItem));
+    setTotalPages(Math.ceil(filteredFields.length / itemsPerPage));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentCustomFields, displayOptionSeleted]);
+
   const handlerTextString = (text: TextData[]) => {
     return Array.isArray(text[languageIndex].value)
       ? text[languageIndex].value[0]
       : text[languageIndex].value;
   };
 
-  const handlerTextSelect = (text: TextData[]) => {
-    return {
-      locale: text[0].locale,
-      value: Array.isArray(text[languageIndex].value)
-        ? text[languageIndex].value
-        : [text[languageIndex].value],
-    };
-  };
-
-  const handlerTextCheckbox = (text: TextData[]) => {
+  const handlerTextArray = (text: TextData[]) => {
     return Array.isArray(text[languageIndex].value)
       ? text[languageIndex].value
       : [text[languageIndex].value];
@@ -178,7 +167,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
                 id={_id}
                 options={options.map(option => option.value)}
                 setCurrentCustomFields={setCurrentCustomFields}
-                text={handlerTextCheckbox(text)}
+                text={handlerTextArray(text)}
               />
             </div>
           </div>
@@ -317,7 +306,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
                 }))}
                 placeholder="Select"
                 setCurrentCustomFields={setCurrentCustomFields}
-                text={handlerTextSelect(text)}
+                text={handlerTextArray(text)}
                 title=""
               />
             </div>
@@ -562,6 +551,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
               ) : null}
             </div>
           </div>
+          {JSON.stringify(currentItems)}
         </div>
       </Card>
     </div>

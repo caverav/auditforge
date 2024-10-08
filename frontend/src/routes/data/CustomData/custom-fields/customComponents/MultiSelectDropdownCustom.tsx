@@ -19,11 +19,6 @@ type ListItem = {
   label?: string;
 };
 
-type TextDataChild = {
-  locale: string;
-  value: string[];
-};
-
 type MultiSelectDropdownProps = {
   items: ListItem[];
   title: string;
@@ -33,7 +28,7 @@ type MultiSelectDropdownProps = {
     React.SetStateAction<GetCustomFieldType[]>
   >;
   id: string;
-  text: TextDataChild;
+  text: string[];
   currentLanguage: string;
 };
 
@@ -47,11 +42,11 @@ const MultiSelectDropdownCustom: React.FC<MultiSelectDropdownProps> = ({
   currentLanguage,
 }) => {
   const [selected, setSelected] = useState<ListItem[]>(
-    items.filter(item => text.value.includes(item.value)),
+    items.filter(item => text.includes(item.value)),
   );
 
   useEffect(() => {
-    setSelected(items.filter(item => text.value.includes(item.value)));
+    setSelected(items.filter(item => text.includes(item.value)));
   }, [items, text]);
 
   const onChange = (items: ListItem[]) => {
