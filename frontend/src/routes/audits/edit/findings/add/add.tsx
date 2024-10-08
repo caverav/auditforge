@@ -114,27 +114,34 @@ export const Add = () => {
     fetchData().catch(console.error);
   }, [currentLanguage, setTableData]);
 
-  const handleAddVuln = vulnId => {
-    addVuln(vulnId, auditId ?? '')
+  const handleAddVuln = (item: TableData) => {
+    addVuln(item.id, auditId ?? '')
       .then(res => {
         if (res.status === 'success') {
           setNewVulnTitle('');
-          toast.success(t('vulnerabilityAdded'));
+          toast.success(t('msg.findingCreateOk'));
         } else {
-          toast.error(t('err.vulnerabilityNotAdded'));
+          toast.error(t(res.datas));
         }
       })
       .catch(console.error);
   };
+
+  const rowActions = [
+    {
+      label: 'Add',
+      onClick: handleAddVuln,
+    },
+  ];
 
   const handleAddFinding = () => {
     addFinding(newVulnTitle, auditId ?? '')
       .then(res => {
         if (res.status === 'success') {
           setNewVulnTitle('');
-          toast.success(t('findingAdded'));
+          toast.success(t('msg.findingCreateOk'));
         } else {
-          toast.error(t('err.findingNotAdded'));
+          toast.error(t(res.datas));
         }
       })
       .catch(console.error);
@@ -177,6 +184,7 @@ export const Add = () => {
           keyExtractor={item => item._id}
           onFilter={handleFilterChange}
           onSort={handleSorting}
+          rowActions={rowActions}
           sortable={true}
         />
       </div>

@@ -53,6 +53,25 @@ type AuditSidebarProps = {
   connectedUsers: ConnectedUser[];
 };
 
+const getSeverityColor = (severity: string) => {
+  switch (severity) {
+    case 'L':
+      return 'bg-green-600';
+
+    case 'M':
+      return 'bg-yellow-500';
+
+    case 'H':
+      return 'bg-orange-500';
+
+    case 'C':
+      return 'bg-red-600';
+
+    default:
+      return 'bg-gray-600';
+  }
+};
+
 const AuditSidebar = ({
   activeItem,
   setActiveItem,
@@ -152,7 +171,9 @@ const AuditSidebar = ({
         <ul className="space-y-2">
           {findings.map(finding => (
             <li className="flex items-center gap-2 text-sm" key={finding.id}>
-              <span className="w-6 h-6 flex items-center justify-center bg-green-600 text-white rounded-full font-medium">
+              <span
+                className={`w-6 h-6 flex items-center justify-center ${getSeverityColor(finding.severity)} text-white rounded-full font-medium`}
+              >
                 {finding.severity}
               </span>
               <span className={clsx('text-gray-300', isCollapsed && 'sr-only')}>
