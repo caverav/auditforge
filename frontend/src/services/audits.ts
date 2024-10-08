@@ -556,6 +556,10 @@ export const addVuln = async (
       throw new Error('Vulnerability not found');
     }
 
+    if (data.details.length === 0) {
+      throw new Error('Vulnerability has no details');
+    }
+
     const response2 = await fetch(`${API_URL}audits/${auditId}/findings`, {
       method: 'POST',
       credentials: 'include',
