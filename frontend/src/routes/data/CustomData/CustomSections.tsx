@@ -102,7 +102,7 @@ export const CustomSections: React.FC = () => {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-6 gap-4">
         {/* TODO: Alinear bien los inputs */}
         <SimpleInput
           id="name"
@@ -131,6 +131,12 @@ export const CustomSections: React.FC = () => {
           type="text"
           value={newIcon}
         />
+        {newIcon.startsWith('fa-') ? (
+          <i className={`fa ${newIcon}`} />
+        ) : (
+          <i className="material-icons">{newIcon}</i>
+        )}
+
         <div className="mt-4 mx-auto">
           <PrimaryButton onClick={handleAddSection}>
             {t('btn.create')}

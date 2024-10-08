@@ -65,8 +65,8 @@ const SectionList: React.FC<SectionListProps> = ({
     <div
       className={
         isDisabled
-          ? 'grid grid-cols-1 md:grid-cols-3 place-items-center'
-          : 'grid grid-cols-1 md:grid-cols-5 place-items-center'
+          ? 'grid grid-cols-1 md:grid-cols-4 place-items-center'
+          : 'grid grid-cols-1 md:grid-cols-6 place-items-center'
       }
     >
       {!isDisabled ? (
@@ -110,6 +110,11 @@ const SectionList: React.FC<SectionListProps> = ({
           value={row.icon}
         />
       </div>
+      {row.icon.startsWith('fa-') ? (
+        <i className={`fa ${row.icon}`} />
+      ) : (
+        <i className="material-icons">{row.icon}</i>
+      )}
       {!isDisabled ? (
         <div>
           <PrimaryButton color="red" onClick={() => handleRemoveRow(row.id)}>
