@@ -130,7 +130,7 @@ const SectionList: React.FC<SectionListProps> = ({
    * (agregar una section en el componente padre)
    */
   useEffect(() => {
-    if (rows.map(row => row.id).length !== data.length) {
+    if (rows.map(row => row._id).length !== data.length) {
       setRows(
         data.map((section, index) => ({ ...section, _id: index.toString() })),
       );
