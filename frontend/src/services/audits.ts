@@ -1,3 +1,4 @@
+import { getVulnerabilities } from './vulnerabilities';
 const API_URL = `${import.meta.env.VITE_API_URL}/api/`;
 
 const networkError = new Error('Network response was not ok');
@@ -540,20 +541,28 @@ export const addVuln = async (
   datas: string;
 }> => {
   try {
-    const response = await fetch(`${API_URL}vulnerabilities/${vulnId}`, {
-      credentials: 'include',
-    });
-    if (!response.ok) {
-      throw networkError;
+    const data = await getVulnerabilities()
+      .then(res => res.datas.find(item => item._id === vulnId))
+      .catch(console.error);
+
+    if (!data) {
+      throw new Error('Vulnerability not found');
     }
-    const data = await response.json();
 
     const response2 = await fetch(`${API_URL}audits/${auditId}/findings`, {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        data,
+        title: data.details[0].title,
+        vulnType: data.details[0].vulnType,
+        description: data.details[0].description,
+        observation: data.details[0].observation,
+        remediation: data.details[0].remediation,
+        cwes: data.details[0].cwes,
+        references: data.details[0].references,
+        customFields: data.details[0].customFields,
+        cvssv3: data.cvssv3,
       }),
     });
     if (!response2.ok) {

@@ -1,3 +1,4 @@
+import { Cvss3P1 } from 'ae-cvss-calculator';
 import { BarChart, Globe, List, Plus, Settings } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -37,6 +38,24 @@ export const AuditRoot = () => {
     },
   ];
 
+  const cvssStringToSeverity = (cvssScore: string) => {
+    const cvssVector = new Cvss3P1(cvssScore);
+    const score = cvssVector.calculateExactOverallScore();
+    if (score >= 9.0) {
+      return 'C';
+    }
+    if (score >= 7.0) {
+      return 'H';
+    }
+    if (score >= 4.0) {
+      return 'M';
+    }
+    if (score >= 0.1) {
+      return 'L';
+    }
+    return 'I';
+  };
+
   useEffect(() => {
     getAuditById(auditId)
       .then(audit => {
@@ -46,7 +65,7 @@ export const AuditRoot = () => {
               id: finding.identifier,
               name: finding.title,
               category: 'No Category',
-              severity: 'L', //TODO: it's harcoded
+              severity: cvssStringToSeverity(finding.cvssv3),
             };
           }),
         );
