@@ -96,7 +96,7 @@ export const PopOverEditCustomField: React.FC<PopOverProps> = ({
     });
   };
 
-  const handleAddOption = () => {
+  const handlerAddOption = () => {
     const newOptions = [
       ...optionsData,
       { locale: currentLanguage, value: addOptionField },
@@ -114,7 +114,7 @@ export const PopOverEditCustomField: React.FC<PopOverProps> = ({
     });
   };
 
-  const handleDeleteOption = (index: number) => {
+  const handlerDeleteOption = (index: number) => {
     const newOptions = [...optionsData];
     const removedOption = newOptions.splice(index, 1);
     setOptionsData(newOptions);
@@ -218,7 +218,7 @@ export const PopOverEditCustomField: React.FC<PopOverProps> = ({
                     />
                   </div>
                   <div className="flex-shrink-0">
-                    <PrimaryButton onClick={handleAddOption}>+</PrimaryButton>
+                    <PrimaryButton onClick={handlerAddOption}>+</PrimaryButton>
                   </div>
                 </div>
                 <div className="bg-white/5 rounded-lg">
@@ -231,7 +231,7 @@ export const PopOverEditCustomField: React.FC<PopOverProps> = ({
                       <div className="flex-shrink-0 p-1">
                         <PrimaryButton
                           color="red"
-                          onClick={() => handleDeleteOption(index)}
+                          onClick={() => handlerDeleteOption(index)}
                         >
                           x
                         </PrimaryButton>

@@ -120,7 +120,6 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
                     ? { locale: item.locale, value }
                     : item,
                 ),
-                // text: [{ locale: languagesList[languageIndex].value, value }],
               }
             : field,
         );
@@ -412,7 +411,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
     setDeletedCustomField('');
   };
 
-  const addCustomField = async () => {
+  const submitUpdateCustomField = async () => {
     const newCustomFields: UpdateCustomFieldType[] = currentCustomFields.map(
       (customField: GetCustomFieldType, index: number) => {
         return {
@@ -535,7 +534,10 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
             </div>
           ))}
           <div className="mt-4 flex items-center justify-between">
-            <PrimaryButton color="blue" onClick={() => addCustomField()}>
+            <PrimaryButton
+              color="blue"
+              onClick={() => submitUpdateCustomField()}
+            >
               {t('btn.save')}
             </PrimaryButton>
             <div className="flex space-x-4">

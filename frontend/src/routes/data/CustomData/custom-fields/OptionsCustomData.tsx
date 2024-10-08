@@ -35,7 +35,7 @@ export const OptionsCustomData: React.FC<OptionsCustomDataProps> = ({
   optionsData,
   setOptionsData,
 }) => {
-  const handleAddOption = () => {
+  const handlerAddOption = () => {
     setOptionsData([
       ...optionsData,
       {
@@ -45,7 +45,7 @@ export const OptionsCustomData: React.FC<OptionsCustomDataProps> = ({
     ]);
   };
 
-  const handleDeleteOption = (index: number) => {
+  const handlerDeleteOption = (index: number) => {
     setOptionsData(prevOptionsData => {
       const updatedOptionsData = [...prevOptionsData];
       updatedOptionsData.splice(index, 1);
@@ -74,7 +74,7 @@ export const OptionsCustomData: React.FC<OptionsCustomDataProps> = ({
           />
         </div>
         <div className="flex-shrink-0">
-          <PrimaryButton onClick={handleAddOption}>+</PrimaryButton>
+          <PrimaryButton onClick={handlerAddOption}>+</PrimaryButton>
         </div>
       </div>
       <div className="bg-white/5 rounded-lg">
@@ -87,7 +87,7 @@ export const OptionsCustomData: React.FC<OptionsCustomDataProps> = ({
             <div className="flex-shrink-0 p-1">
               <PrimaryButton
                 color="red"
-                onClick={() => handleDeleteOption(index)}
+                onClick={() => handlerDeleteOption(index)}
               >
                 x
               </PrimaryButton>
