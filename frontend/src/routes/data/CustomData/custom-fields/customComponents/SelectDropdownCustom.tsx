@@ -51,7 +51,6 @@ const SelectDropdownCustom: React.FC<SelectDropdownProps> = ({
   }, [items, text]);
 
   const onChange = (item: ListItem) => {
-    //
     setSelected(item);
     setCurrentCustomFields((prevFields: GetCustomFieldType[]) => {
       return prevFields.map((field: GetCustomFieldType) =>

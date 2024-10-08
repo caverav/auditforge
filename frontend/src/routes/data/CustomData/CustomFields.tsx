@@ -87,7 +87,6 @@ export const CustomFields: React.FC = () => {
     GetCustomFieldType[]
   >([]);
 
-  // Fetch
   const fetchLanguages = async () => {
     try {
       const dataLanguage = await getLanguages();

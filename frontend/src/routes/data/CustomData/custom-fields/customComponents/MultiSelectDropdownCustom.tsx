@@ -23,7 +23,6 @@ type MultiSelectDropdownProps = {
   items: ListItem[];
   title: string;
   placeholder?: string;
-  // setCurrentCustomFields: (fields: GetCustomFieldType[]) => void;
   setCurrentCustomFields: React.Dispatch<
     React.SetStateAction<GetCustomFieldType[]>
   >;
@@ -57,8 +56,6 @@ const MultiSelectDropdownCustom: React.FC<MultiSelectDropdownProps> = ({
         field._id === id
           ? {
               ...field,
-              // text: [{ locale: 'es-ES', value: values }],
-              // text: items.map(item => ({ locale: 'es-ES', value: values })),
               text: field.text.map(itemIter =>
                 itemIter.locale === currentLanguage
                   ? {
