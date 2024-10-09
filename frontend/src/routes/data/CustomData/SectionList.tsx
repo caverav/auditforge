@@ -81,7 +81,7 @@ const SectionList: React.FC<SectionListProps> = ({
       <div className="pr-2">
         <SimpleInput
           disabled={isDisabled}
-          id="name"
+          id={`name-${row.id}`}
           label={t('name')}
           name="name"
           onChange={value => handleInputChange(row.id, 'name', value)}
@@ -93,7 +93,7 @@ const SectionList: React.FC<SectionListProps> = ({
       <div className="pr-2">
         <SimpleInput
           disabled={isDisabled}
-          id="field"
+          id={`field-${row.id}`}
           label={t('field')}
           name="field"
           onChange={value => handleInputChange(row.id, 'field', value)}
@@ -105,7 +105,7 @@ const SectionList: React.FC<SectionListProps> = ({
       <div className="pr-2">
         <SimpleInput
           disabled={isDisabled}
-          id="icon"
+          id={`icon-${row.id}`}
           label={t('icon')}
           name="icon"
           onChange={value => handleInputChange(row.id, 'icon', value)}
@@ -114,11 +114,13 @@ const SectionList: React.FC<SectionListProps> = ({
           value={row.icon}
         />
       </div>
-      {row.icon.startsWith('fa-') ? (
-        <i className={`fa ${row.icon}`} />
-      ) : (
-        <i className="material-icons">{row.icon}</i>
-      )}
+      {row.icon ? (
+        row.icon.startsWith('fa-') ? (
+          <i className={`fa ${row.icon}`} />
+        ) : (
+          <i className="material-icons">{row.icon}</i>
+        )
+      ) : null}
       {!isDisabled ? (
         <div>
           <PrimaryButton color="red" onClick={() => handleRemoveRow(row.id)}>
@@ -146,7 +148,7 @@ const SectionList: React.FC<SectionListProps> = ({
    * que cambió la lista.
    */
   useEffect(() => {
-    onUpdateList(rows.map(rest => rest));
+    onUpdateList(rows);
   }, [onUpdateList, rows]);
 
   /**

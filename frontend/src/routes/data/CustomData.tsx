@@ -44,7 +44,7 @@ export const CustomData: React.FC = () => {
     {
       id: 7,
       title: t('customSections'),
-      cardTitle: t('auditTypesUsedInAudits'),
+      cardTitle: t('createCustomSections'),
       cardChildren: <CustomSections />,
     },
   ];

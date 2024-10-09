@@ -33,7 +33,7 @@ export const CustomSections: React.FC = () => {
         setSections(data.datas);
         setLoading(false);
       } catch (err) {
-        setError('Error fetching company');
+        setError('Error fetching sections');
         setLoading(false);
       }
     };
@@ -90,8 +90,10 @@ export const CustomSections: React.FC = () => {
     try {
       await updateCustomSection(newSectionList);
       setIsEditing(false);
+      toast.success(t('msg.sectionUpdateOk'));
     } catch (error) {
       setError('Error updating sections');
+      toast.error(t('err.errorUpdatingSections'));
       return;
     }
   };
@@ -131,11 +133,13 @@ export const CustomSections: React.FC = () => {
           type="text"
           value={newIcon}
         />
-        {newIcon.startsWith('fa-') ? (
-          <i className={`fa ${newIcon}`} />
-        ) : (
-          <i className="material-icons">{newIcon}</i>
-        )}
+        {newIcon ? (
+          newIcon.startsWith('fa-') ? (
+            <i className={`fa ${newIcon}`} />
+          ) : (
+            <i className="material-icons">{newIcon}</i>
+          )
+        ) : null}
 
         <div className="mt-4 mx-auto">
           <PrimaryButton onClick={handleAddSection}>
