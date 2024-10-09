@@ -92,6 +92,7 @@ export const CustomSections: React.FC = () => {
       setIsEditing(false);
     } catch (error) {
       setError('Error updating sections');
+      toast.error(t('err.errorUpdatingSections'));
       return;
     }
   };
