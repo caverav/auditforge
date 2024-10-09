@@ -394,9 +394,9 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
     if (name === 'confirm') {
       await confirmDeleteCustomField();
       fetchCustomFields();
-      if (currentItems.length === 1 && currentPage > 1) {
+      /* if (currentItems.length === 1 && currentPage > 1) {
         setCurrentPage(currentPage - 1);
-      }
+      } */
     }
     setDeletedCustomFieldId('');
     setDeletedCustomField('');
@@ -432,6 +432,12 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
       console.error('Error:', error);
     }
   };
+
+  useEffect(() => {
+    if (currentItems.length === 0 && currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  }, [currentItems.length, currentPage]);
 
   useEffect(() => {
     const findLang = languagesUsed.findIndex(
