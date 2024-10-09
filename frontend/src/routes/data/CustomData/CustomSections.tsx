@@ -162,6 +162,7 @@ export const CustomSections: React.FC = () => {
             }))}
             isDisabled={!isEditing}
             onUpdateList={handleUpdateSectionList}
+            setSections={setSections}
           />
         )}
       </EditCard>

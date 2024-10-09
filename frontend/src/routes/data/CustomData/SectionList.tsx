@@ -7,6 +7,7 @@ import SimpleInput from '../../../components/input/SimpleInput';
 import DraggableList from '../../../components/table/DraggableTable';
 
 type Section = {
+  _id: string;
   name: string;
   field: string;
   icon: string;
@@ -14,6 +15,7 @@ type Section = {
 
 type SectionListProps = {
   data: Section[];
+  setSections: (data: Section[]) => void;
   isDisabled: boolean;
   onUpdateList: (data: Section[]) => void;
 };
@@ -23,6 +25,7 @@ type SectionListProps = {
  */
 const SectionList: React.FC<SectionListProps> = ({
   data,
+  setSections,
   isDisabled,
   onUpdateList,
 }) => {
@@ -49,6 +52,7 @@ const SectionList: React.FC<SectionListProps> = ({
 
   const handleRemoveRow = (id: string) => {
     setRows(prevRows => prevRows.filter(row => row._id !== id));
+    setSections(rows.filter((row: Section) => row._id !== id));
   };
   /**
    * Renderiza la fila del DnD
@@ -142,7 +146,7 @@ const SectionList: React.FC<SectionListProps> = ({
    * que cambió la lista.
    */
   useEffect(() => {
-    onUpdateList(rows.map(({ _id, ...rest }) => rest));
+    onUpdateList(rows.map(rest => rest));
   }, [onUpdateList, rows]);
 
   /**
