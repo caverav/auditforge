@@ -29,7 +29,7 @@ const EditCard: React.FC<EditCardProps> = ({
         {!isEditing ? (
           <>
             <h2 className="text-xl font-semibold">{title}</h2>
-            <button onClick={onClickEdit}>
+            <button onClick={onClickEdit} type="button">
               <PencilSquareIcon className="py-1 size-10" />
             </button>
           </>
@@ -38,7 +38,7 @@ const EditCard: React.FC<EditCardProps> = ({
         )}
       </div>
       <hr className="h-1 mx-4 bg-gray-600 border-0 rounded" />
-      <div className="py-4 mx-4">{children}</div>
+      <div className="p-2">{children}</div>
       {isEditing ? (
         <div>
           <hr className="h-1 mx-4 bg-gray-600 border-0 rounded" />

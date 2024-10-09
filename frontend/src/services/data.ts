@@ -69,6 +69,32 @@ type NewTemplate = {
   file: string;
 };
 
+type NewLanguage = { language: string; locale: string };
+
+export type NewAuditType = {
+  name: string;
+  hidden: string[];
+  sections: string[]; // temporal
+  stage: string;
+  templates: { template: string; locale: string }[];
+};
+
+export type AuditType = {
+  _id: string;
+  name: string;
+  hidden: string[];
+  sections: string[]; // temporal
+  stage: string;
+  templates: { template: string; locale: string }[];
+};
+
+export type NewCustomSection = {
+  _id?: string;
+  name: string;
+  field: string;
+  icon?: string;
+};
+
 const networkErrorMsg = 'Network response was not ok';
 
 export const getRoles = async (): Promise<{
@@ -379,6 +405,77 @@ export const createTemplate = async (
   }
 };
 
+/**
+ * Custom data: Languages
+ */
+
+export const getLanguages = async (): Promise<{
+  status: string;
+  datas: NewLanguage[];
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/languages`, {
+      credentials: 'include',
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const createLanguage = async (
+  language: NewLanguage,
+): Promise<{
+  status: string;
+  datas: { language: string; locale: string; _id: string };
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/languages`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(language),
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const updateLanguages = async (
+  language: NewLanguage[],
+): Promise<{
+  status: string;
+  datas: string;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/languages`, {
+      method: 'PUT',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(language),
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
 export const updateTemplate = async (
   template: NewTemplate,
 ): Promise<{ status: string; datas: string }> => {
@@ -392,6 +489,100 @@ export const updateTemplate = async (
       body: JSON.stringify(TemplateWithoutId),
     });
 
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+/**
+ * Custom data: Custom sections
+ */
+
+export const getCustomSections = async (): Promise<{
+  status: string;
+  datas: { field: string; name: string; icon: string }[];
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/sections`, {
+      credentials: 'include',
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+/**
+ * Custom data: Audit types
+ */
+
+export const getAuditTypes = async (): Promise<{
+  status: string;
+  datas: AuditType[];
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/audit-types`, {
+      credentials: 'include',
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const createAuditType = async (
+  auditType: NewAuditType,
+): Promise<{
+  status: string;
+  datas: AuditType;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/audit-types`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(auditType),
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const updateAuditTypes = async (
+  auditTypes: AuditType[],
+): Promise<{
+  status: string;
+  datas: string;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/audit-types`, {
+      method: 'PUT',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(auditTypes),
+    }); // Incluir token
     if (!response.ok) {
       throw new Error(networkErrorMsg);
     }
@@ -426,4 +617,52 @@ export const deleteTemplate = async (
 
 export const downloadTemplate = (templateId: string, window: Window): void => {
   window.open(`${API_URL}templates/download/${templateId}`, '_blank');
+};
+
+export const createCustomSection = async (
+  section: NewCustomSection,
+): Promise<{
+  status: string;
+  datas: { field: string; name: string; icon?: string };
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/sections`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(section),
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const updateCustomSection = async (
+  section: NewCustomSection[],
+): Promise<{
+  status: string;
+  datas: string;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/sections`, {
+      method: 'PUT',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(section),
+    });
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
 };
