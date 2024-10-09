@@ -2,11 +2,13 @@ import {
   BarElement,
   CategoryScale,
   Chart as ChartJS,
+  ChartOptions,
   Legend,
   LinearScale,
   Title,
   Tooltip,
 } from 'chart.js';
+import annotationPlugin from 'chartjs-plugin-annotation';
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 
@@ -17,9 +19,12 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
+  annotationPlugin,
 );
 
 const AverageCVSS: React.FC = () => {
+  const averageCVSS = 6.1;
+
   const data = {
     labels: [
       'CWE-01: NOMBRE',
@@ -36,10 +41,15 @@ const AverageCVSS: React.FC = () => {
     ],
   };
 
-  const options = {
-    indexAxis: 'y' as const,
+  const options: ChartOptions<'bar'> = {
+    indexAxis: 'y',
     responsive: true,
     maintainAspectRatio: false,
+    layout: {
+      padding: {
+        top: 30,
+      },
+    },
     scales: {
       x: {
         beginAtZero: true,
@@ -69,15 +79,11 @@ const AverageCVSS: React.FC = () => {
         annotations: {
           line1: {
             type: 'line',
-            yMin: 6.1,
-            yMax: 6.1,
+            xMin: averageCVSS,
+            xMax: averageCVSS,
             borderColor: '#2ecc71',
             borderWidth: 2,
-            label: {
-              content: 'Average CVSS: 6.1',
-              enabled: true,
-              position: 'end',
-            },
+            borderDash: [5, 5],
           },
         },
       },
@@ -86,8 +92,13 @@ const AverageCVSS: React.FC = () => {
 
   return (
     <div className="bg-gray-800 rounded-lg p-6">
-      <div className="chart-container" style={{ height: '400px' }}>
-        <Bar data={data} options={options} />
+      <div className="relative">
+        <div className="absolute top-0 left-0 w-full text-right pr-4 text-green-400 text-sm">
+          Average CVSS: {averageCVSS}
+        </div>
+        <div className="chart-container" style={{ height: '400px' }}>
+          <Bar data={data} options={options} />
+        </div>
       </div>
     </div>
   );

@@ -137,7 +137,7 @@ export const AuditRoot = () => {
         sortOrder={sortOrder}
         sortOrderOptions={sortOrderOptions}
       />
-      <div className="flex-1 ml-64 overflow-auto">
+      <div className="flex-1 overflow-auto">
         <Outlet />
       </div>
       <div className="m-2">
