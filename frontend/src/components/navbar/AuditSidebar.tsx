@@ -110,7 +110,7 @@ const AuditSidebar = ({
         </h2>
         <button
           aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-          className="text-gray-400 hover:text-gray-100 hover:bg-gray-800 p-2 rounded-full transition-colors duration-200"
+          className="text-gray-400 hover:text-gray-100 hover:bg-gray-800 p-2 rounded-full transition-colors duration-200 z-10"
           onClick={() => setIsCollapsed(!isCollapsed)}
           type="button"
         >
