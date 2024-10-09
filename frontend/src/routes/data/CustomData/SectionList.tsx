@@ -7,7 +7,6 @@ import SimpleInput from '../../../components/input/SimpleInput';
 import DraggableList from '../../../components/table/DraggableTable';
 
 type Section = {
-  _id: string;
   name: string;
   field: string;
   icon: string;
@@ -50,7 +49,6 @@ const SectionList: React.FC<SectionListProps> = ({
 
   const handleRemoveRow = (id: string) => {
     setRows(prevRows => prevRows.filter(row => row._id !== id));
-    data = data.filter(row => row._id !== id);
   };
   /**
    * Renderiza la fila del DnD
