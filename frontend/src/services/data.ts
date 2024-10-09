@@ -427,3 +427,55 @@ export const deleteTemplate = async (
 export const downloadTemplate = (templateId: string, window: Window): void => {
   window.open(`${API_URL}templates/download/${templateId}`, '_blank');
 };
+
+export type AuditType = {
+  _id: string;
+  name: string;
+  hidden: string[];
+  sections: string[]; // temporal
+  stage: string;
+  templates: { template: string; locale: string }[];
+};
+
+export const getAuditTypes = async (): Promise<{
+  status: string;
+  datas: AuditType[];
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/audit-types`, {
+      credentials: 'include',
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const updateAuditTypes = async (
+  auditTypes: AuditType[],
+): Promise<{
+  status: string;
+  datas: string;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/audit-types`, {
+      method: 'PUT',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(auditTypes),
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};

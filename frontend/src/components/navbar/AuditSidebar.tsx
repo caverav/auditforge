@@ -1,7 +1,14 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 import clsx from 'clsx';
 import { t } from 'i18next';
-import { ChevronDown, ChevronUp, FilePlus2, Plus, Users } from 'lucide-react';
+import {
+  Check,
+  ChevronDown,
+  ChevronUp,
+  FilePlus2,
+  Plus,
+  Users,
+} from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 import { AuditSection, Section } from '../../services/audits';
@@ -204,21 +211,33 @@ const AuditSidebar = ({
               className="absolute z-10 mt-2 bg-gray-800 rounded-lg p-2 space-y-1 shadow-lg border border-gray-700"
               style={{ minWidth: '200px' }}
             >
-              {sections.map(section => (
-                <button
-                  className="w-full text-left text-gray-300 hover:bg-gray-700 rounded-md p-2 flex items-center gap-2"
-                  key={section.field}
-                  onClick={() => setIsListVisible(!isListVisible)}
-                  type="button"
-                >
-                  {section.icon.startsWith('fa-') ? (
-                    <i className={`fa ${section.icon}`} />
-                  ) : (
-                    <i className="material-icons">{section.icon}</i>
-                  )}
-                  <span>{section.name}</span>
-                </button>
-              ))}
+              {sections.map(section => {
+                const isSelected = auditSections.some(
+                  auditSection => auditSection.field === section.field,
+                );
+
+                return (
+                  <button
+                    className={clsx(
+                      'w-full text-left text-gray-300 hover:bg-gray-700 rounded-md p-2 flex items-center gap-2',
+                      isSelected && 'bg-gray-700 text-white',
+                    )}
+                    key={section.field}
+                    onClick={() => setIsListVisible(!isListVisible)}
+                    type="button"
+                  >
+                    {section.icon.startsWith('fa-') ? (
+                      <i className={`fa ${section.icon}`} />
+                    ) : (
+                      <i className="material-icons">{section.icon}</i>
+                    )}
+                    <span>{section.name}</span>
+                    {isSelected ? (
+                      <Check className="h-5 w-5 flex-shrink-0 ml-auto " />
+                    ) : null}
+                  </button>
+                );
+              })}
             </ul>
           ) : null}
         </div>

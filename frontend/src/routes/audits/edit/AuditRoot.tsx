@@ -14,6 +14,7 @@ import {
   getSections,
   Section,
 } from '../../../services/audits';
+import { AuditType, getAuditTypes } from '../../../services/data';
 
 export const AuditRoot = () => {
   const { t } = useTranslation();
@@ -43,6 +44,31 @@ export const AuditRoot = () => {
   const [auditSections, setAuditSections] = useState<AuditSection[]>([]);
   const [sections, setSections] = useState<Section[]>([]);
   const [isListVisible, setIsListVisible] = useState(false);
+  const [auditTypeName, setAuditTypeName] = useState('');
+
+  const handleSectionListButton = async (newSection: string) => {
+    try {
+      const response = await getAuditTypes();
+      const updatedAuditTypes: AuditType[] = response.datas.map(
+        (auditType: AuditType) => {
+          if (auditType.name === auditTypeName) {
+            auditType.sections.push(newSection);
+          }
+
+          return {
+            _id: auditType._id || '',
+            name: auditType.name,
+            hidden: auditType.hidden,
+            sections: auditType.sections,
+            stage: auditType.stage,
+            templates: auditType.templates,
+          };
+        },
+      );
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   useEffect(() => {
     getSections()
@@ -86,6 +112,7 @@ export const AuditRoot = () => {
             };
           }),
         );
+        setAuditTypeName(audit.datas.auditType);
       })
       .catch(console.error);
   }, [auditId, sections]);
