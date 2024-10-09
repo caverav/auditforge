@@ -44,8 +44,8 @@ export const Languages: React.FC = () => {
     let resp: { datas: { language: string; locale: string }; status?: string };
     if (!newLanguage.trim()) {
       // eslint-disable-next-line sonarjs/no-duplicate-string
-      setError(`${t('err.createEmptyField')}: ${t('name')}`);
-      toast.error(`${t('err.createEmptyField')}: ${t('name')}`);
+      setError(`${t('err.createEmptyField')}: ${t('language')}`);
+      toast.error(`${t('err.createEmptyField')}: ${t('language')}`);
       return;
     }
 
