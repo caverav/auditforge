@@ -129,8 +129,8 @@ export const Languages: React.FC = () => {
         />
         <div>
           <PrimaryButton
-            onClick={handleAddLanguage}
             aria-label={t('addLanguage')}
+            onClick={handleAddLanguage}
           >
             +
           </PrimaryButton>
