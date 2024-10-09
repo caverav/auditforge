@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 import DefaultRadioGroup from '../button/DefaultRadioGroup';
 import SelectDropdown from '../dropdown/SelectDropdown';
+import DropdownButton, { ListItem } from '../button/DropdownButton';
 
 type MenuItem = {
   name: string;
@@ -51,6 +52,7 @@ type AuditSidebarProps = {
   sortOptions: SortOption[];
   sortOrderOptions: SortOrderOption[];
   connectedUsers: ConnectedUser[];
+  fileTypes: ListItem[];
 };
 
 const AuditSidebar = ({
@@ -67,6 +69,7 @@ const AuditSidebar = ({
   sortOptions,
   sortOrderOptions,
   connectedUsers,
+  fileTypes,
 }: AuditSidebarProps) => (
   <div
     className={clsx(
@@ -83,6 +86,9 @@ const AuditSidebar = ({
       >
         {t('audit')}
       </h2>
+      <div className={clsx('m-2', isCollapsed && 'sr-only')}>
+        <DropdownButton items={fileTypes} placeholder={t('export')} />
+      </div>
       <button
         aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         className="text-gray-400 hover:text-gray-100 hover:bg-gray-800 p-2 rounded-full transition-colors duration-200"

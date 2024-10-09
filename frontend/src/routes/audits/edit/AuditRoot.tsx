@@ -3,9 +3,7 @@ import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useParams } from 'react-router-dom';
 
-import DropdownButton, {
-  ListItem,
-} from '../../../components/button/DropdownButton';
+import { ListItem } from '../../../components/button/DropdownButton';
 import AuditSidebar from '../../../components/navbar/AuditSidebar';
 import { Finding, getAuditById } from '../../../services/audits';
 
@@ -130,6 +128,7 @@ export const AuditRoot = () => {
       <AuditSidebar
         activeItem={activeItem}
         connectedUsers={connectedUsers}
+        fileTypes={fileTypes}
         findings={findings}
         isCollapsed={isCollapsed}
         menuItems={menuItems}
@@ -144,9 +143,6 @@ export const AuditRoot = () => {
       />
       <div className="flex-1 overflow-auto">
         <Outlet />
-      </div>
-      <div className="m-2">
-        <DropdownButton items={fileTypes} placeholder={t('export')} />
       </div>
     </div>
   );
