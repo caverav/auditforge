@@ -73,12 +73,12 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
-  const currentItems = currentCustomFields
-    .filter(field => {
-      return field.display === displayOptionSeleted.value;
-    })
-    .slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(currentItems.length / itemsPerPage);
+  const filteredItems = currentCustomFields.filter(field => {
+    return field.display === displayOptionSeleted.value;
+  });
+
+  const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredItems.length / itemsPerPage);
 
   const goToNextPage = () => {
     if (currentPage < totalPages) {
@@ -538,7 +538,9 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
                 <PrimaryButton color="blue" onClick={goToNextPage}>
                   {t('btn.next')}
                 </PrimaryButton>
-              ) : null}
+              ) : (
+                <div style={{ width: '70px' }} />
+              )}
             </div>
           </div>
         </div>
