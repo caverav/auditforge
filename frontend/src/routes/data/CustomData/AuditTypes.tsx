@@ -22,9 +22,9 @@ export const AuditTypes: React.FC = () => {
       try {
         const data = await getAuditTypes();
         setAuditTypes(data.datas);
-        setLoading(false);
       } catch (err) {
         setError('Error fetching auditTypes');
+      } finally {
         setLoading(false);
       }
     };
@@ -44,7 +44,16 @@ export const AuditTypes: React.FC = () => {
 
   const handleUpdateAuditList = useCallback(
     (data: AuditType[]) => {
-      setNewAuditTypeList(data);
+      /**
+       * Filtra aquellas templates no seleccionadas
+       */
+      const newData = data.map(at => {
+        return {
+          ...at,
+          templates: at.templates.filter(template => template.template !== ''),
+        };
+      });
+      setNewAuditTypeList(newData);
     },
     [setNewAuditTypeList],
   );

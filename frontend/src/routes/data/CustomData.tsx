@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import Card from '../../components/card/Card';
 import { AuditTypes } from './CustomData/AuditTypes';
 import { CustomFields } from './CustomData/CustomFields';
+import { CustomSections } from './CustomData/CustomSections';
 import { Languages } from './CustomData/Languages';
 
 export const CustomData: React.FC = () => {
@@ -44,7 +45,7 @@ export const CustomData: React.FC = () => {
       id: 7,
       title: t('customSections'),
       cardTitle: t('auditTypesUsedInAudits'),
-      cardChildren: <>{t('customSections')}</>,
+      cardChildren: <CustomSections />,
     },
   ];
 

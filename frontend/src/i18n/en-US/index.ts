@@ -144,6 +144,7 @@ export default {
     customFieldDeleteOk:
       'Custom Field {{0}} deleted successfully. {{1}} Vulnerabilities were affected.',
     customFieldUpdatedOk: 'Custom Field Updated Successfully!',
+    sectionCreatedOk: 'Custom Section Created Successfully!',
     auditTypeCreatedOk: 'Audit Type Created Successfully',
     clientEmailError: 'Client email already exists',
     collaboratorUsernameError: 'Collaborator username already exists',
@@ -184,6 +185,7 @@ export default {
     customFieldAlreadyExists: 'Custom Field already exists',
     failedCreateCustomField: 'Error creating custom field',
     failedDeleteCustomField: 'Failed to delete the custom field',
+    errorCreatingSection: 'Failed to create section',
     failedCreateAuditType: 'Failed To Create Audit Type',
     failedUpdateLanguages: 'Failed To Update Languages',
     createEmptyField: 'Failed to Create: Empty field',
