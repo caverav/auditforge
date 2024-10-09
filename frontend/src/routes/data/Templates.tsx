@@ -256,7 +256,7 @@ export const Templates: React.FC = () => {
   };
 
   const handleFileSelect = (ext: string, content: string) => {
-    const base64Content = content.split(',')[1];
+    const base64Content = content.split(',')[1] || '';
 
     setNewTemplate(prevState => {
       if (!prevState) {
@@ -265,7 +265,7 @@ export const Templates: React.FC = () => {
         return {
           ...prevState,
           ext,
-          file: base64Content,
+          file: base64Content.trim(),
         };
       }
     });
