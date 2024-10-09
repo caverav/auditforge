@@ -86,7 +86,7 @@ export const Languages: React.FC = () => {
     (data: { language: string; locale: string }[]) => {
       setNewLanguageList(data);
     },
-    [setNewLanguageList],
+    [],
   );
 
   const onClickSave = async () => {
