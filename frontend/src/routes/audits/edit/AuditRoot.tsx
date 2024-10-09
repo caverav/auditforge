@@ -42,19 +42,23 @@ export const AuditRoot = () => {
   ];
 
   const cvssStringToSeverity = (cvssScore: string) => {
-    const cvssVector = new Cvss3P1(cvssScore);
-    const score = cvssVector.calculateExactOverallScore();
-    if (score >= 9.0) {
-      return 'C';
-    }
-    if (score >= 7.0) {
-      return 'H';
-    }
-    if (score >= 4.0) {
-      return 'M';
-    }
-    if (score >= 0.1) {
-      return 'L';
+    try {
+      const cvssVector = new Cvss3P1(cvssScore);
+      const score = cvssVector.calculateExactOverallScore();
+      if (score >= 9.0) {
+        return 'C';
+      }
+      if (score >= 7.0) {
+        return 'H';
+      }
+      if (score >= 4.0) {
+        return 'M';
+      }
+      if (score >= 0.1) {
+        return 'L';
+      }
+    } catch (error) {
+      console.error('Invalid CVSS vector:', error);
     }
     return 'I';
   };
