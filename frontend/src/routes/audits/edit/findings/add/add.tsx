@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
@@ -114,18 +114,21 @@ export const Add = () => {
     fetchData().catch(console.error);
   }, [currentLanguage, setTableData]);
 
-  const handleAddVuln = (item: TableData) => {
-    addVuln(item.id, auditId ?? '')
-      .then(res => {
-        if (res.status === 'success') {
-          setNewVulnTitle('');
-          toast.success(t('msg.findingCreateOk'));
-        } else {
-          toast.error(t(res.datas));
-        }
-      })
-      .catch(console.error);
-  };
+  const handleAddVuln = useCallback(
+    (item: TableData) => {
+      addVuln(item.id, auditId ?? '')
+        .then(res => {
+          if (res.status === 'success') {
+            setNewVulnTitle('');
+            toast.success(t('msg.findingCreateOk'));
+          } else {
+            toast.error(t(res.datas));
+          }
+        })
+        .catch(console.error);
+    },
+    [auditId],
+  );
 
   const rowActions = [
     {
@@ -134,7 +137,7 @@ export const Add = () => {
     },
   ];
 
-  const handleAddFinding = () => {
+  const handleAddFinding = useCallback(() => {
     addFinding(newVulnTitle, auditId ?? '')
       .then(res => {
         if (res.status === 'success') {
@@ -145,7 +148,7 @@ export const Add = () => {
         }
       })
       .catch(console.error);
-  };
+  }, [newVulnTitle, auditId]);
 
   return (
     <DivWrapper>
@@ -165,7 +168,7 @@ export const Add = () => {
             id="title"
             label={t('title')}
             name="title"
-            onChange={e => setNewVulnTitle(e)}
+            onChange={setNewVulnTitle}
             placeholder={t('title')}
             type="text"
             value={newVulnTitle}
