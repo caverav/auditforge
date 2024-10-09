@@ -114,11 +114,13 @@ const SectionList: React.FC<SectionListProps> = ({
           value={row.icon}
         />
       </div>
-      {row.icon.startsWith('fa-') ? (
-        <i className={`fa ${row.icon}`} />
-      ) : (
-        <i className="material-icons">{row.icon}</i>
-      )}
+      {row.icon ? (
+        row.icon.startsWith('fa-') ? (
+          <i className={`fa ${row.icon}`} />
+        ) : (
+          <i className="material-icons">{row.icon}</i>
+        )
+      ) : null}
       {!isDisabled ? (
         <div>
           <PrimaryButton color="red" onClick={() => handleRemoveRow(row.id)}>

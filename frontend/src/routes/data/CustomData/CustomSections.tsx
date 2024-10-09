@@ -132,11 +132,13 @@ export const CustomSections: React.FC = () => {
           type="text"
           value={newIcon}
         />
-        {newIcon.startsWith('fa-') ? (
-          <i className={`fa ${newIcon}`} />
-        ) : (
-          <i className="material-icons">{newIcon}</i>
-        )}
+        {newIcon ? (
+          newIcon.startsWith('fa-') ? (
+            <i className={`fa ${newIcon}`} />
+          ) : (
+            <i className="material-icons">{newIcon}</i>
+          )
+        ) : null}
 
         <div className="mt-4 mx-auto">
           <PrimaryButton onClick={handleAddSection}>
