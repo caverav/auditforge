@@ -37,6 +37,10 @@ export default {
     accountEnabled: 'Account enabled',
     accountDisabled: 'Account disabled',
     all: 'All',
+    previous: 'Previous',
+    next: 'Next',
+    clear: 'Clear',
+    add: 'Add',
   },
   tooltip: {
     usersConnected: 'Users on the Audit:',
@@ -134,6 +138,12 @@ export default {
     recommendationSuboptimal: 'The recommendation is suboptimal',
     auditDeletedOk: 'Audit deleted successfully',
     auditDeleteNotice: 'Audit will be permanently deleted',
+    customFieldCreatedOk: 'Custom Field Created Successfully!',
+    customFieldDeleteNotice:
+      'Custom Field {{0}} will be permanently deleted.<br>This field will be removed from ALL Vulnerablities and associated data will be permanently LOST!',
+    customFieldDeleteOk:
+      'Custom Field {{0}} deleted successfully. {{1}} Vulnerabilities were affected.',
+    customFieldUpdatedOk: 'Custom Field Updated Successfully!',
     sectionCreatedOk: 'Custom Section Created Successfully!',
     auditTypeCreatedOk: 'Audit Type Created Successfully',
     clientEmailError: 'Client email already exists',
@@ -172,6 +182,9 @@ export default {
     failedDeleteAudit: 'Failed to delete the audit',
     failedUpdateProfile: 'Failed to update profile',
     failedUpdateAudit: 'Failed to update audit',
+    customFieldAlreadyExists: 'Custom Field already exists',
+    failedCreateCustomField: 'Error creating custom field',
+    failedDeleteCustomField: 'Failed to delete the custom field',
     errorCreatingSection: 'Failed to create section',
     failedCreateAuditType: 'Failed To Create Audit Type',
     failedUpdateLanguages: 'Failed To Update Languages',
@@ -685,4 +698,5 @@ export default {
   originalAudit: 'Original Audit',
   willBeRemoved: 'will be removed',
   auditPhase: 'Audit Phase',
+  manageCustomFields: 'Manage Custom Fields',
 };

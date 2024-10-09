@@ -88,6 +88,77 @@ export type AuditType = {
   templates: { template: string; locale: string }[];
 };
 
+type OptionData = {
+  locale: string;
+  value: string;
+};
+
+type TextData = {
+  locale: string;
+  value: string | string[];
+};
+
+export type AddCustomFieldType = {
+  label: string;
+  fieldType: string;
+  display: string;
+  displaySub: string;
+  size: number;
+  offset: number;
+  required: boolean;
+  description: string;
+  text: TextData[];
+  options: OptionData[];
+  position: number;
+};
+
+export type AddCustomFieldTypeResponse = {
+  label: string;
+  fieldType: string;
+  display: string;
+  displaySub: string;
+  size: number;
+  offset: number;
+  required: boolean;
+  description: string;
+  text: TextData[];
+  options: OptionData[];
+  position: number;
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+};
+
+export type GetCustomFieldType = {
+  _id: string;
+  label: string;
+  fieldType: string;
+  display: string;
+  displaySub: string;
+  size: number;
+  offset: number;
+  required: boolean;
+  description: string;
+  text: TextData[];
+  options: OptionData[];
+};
+
+export type UpdateCustomFieldType = {
+  _id: string;
+  label: string;
+  fieldType: string;
+  display: string;
+  displaySub: string;
+  size: number;
+  offset: number;
+  required: boolean;
+  description: string;
+  text: TextData[];
+  options: OptionData[];
+  position: number;
+};
+
 export type NewCustomSection = {
   _id?: string;
   name: string;
@@ -656,6 +727,103 @@ export const updateCustomSection = async (
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(section),
     });
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const getCustomField = async (): Promise<{
+  status: string;
+  datas: GetCustomFieldType[];
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/custom-fields`, {
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const addCustomField = async (
+  customField: AddCustomFieldType,
+): Promise<{
+  status: string;
+  datas: AddCustomFieldTypeResponse;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/custom-fields`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(customField),
+    });
+    if (!response.ok) {
+      const errorText = await response.text();
+      const errorData = JSON.parse(errorText).datas;
+      if (errorData === 'Custom Field already exists') {
+        throw new Error(errorData);
+      } else {
+        throw new Error(networkErrorMsg);
+      }
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const updateCustomField = async (
+  customFields: UpdateCustomFieldType[],
+): Promise<{
+  status: string;
+  datas: string;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/custom-fields/`, {
+      method: 'PUT',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(customFields),
+    });
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const deleteCustomField = async (
+  customFieldId: string,
+): Promise<{ status: string; datas: { msg: string; vulnCount: number } }> => {
+  try {
+    const response = await fetch(
+      `${API_URL}data/custom-fields/${customFieldId}`,
+      {
+        method: 'DELETE',
+        credentials: 'include',
+      },
+    );
     if (!response.ok) {
       throw new Error(networkErrorMsg);
     }
