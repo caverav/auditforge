@@ -22,6 +22,7 @@ export type AuditSection = {
   name: string;
   _id: string;
   customFields: string[];
+  icon?: string;
 };
 
 export type Section = {

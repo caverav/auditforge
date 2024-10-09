@@ -206,14 +206,17 @@ const AuditSidebar = ({
             >
               {sections.map(section => (
                 <button
-                  className="w-full text-left text-gray-300 hover:bg-gray-700 rounded-md p-2"
+                  className="w-full text-left text-gray-300 hover:bg-gray-700 rounded-md p-2 flex items-center gap-2"
                   key={section.field}
                   onClick={() => setIsListVisible(!isListVisible)}
                   type="button"
                 >
-                  <span className="flex items-center gap-2">
-                    {section.name}
-                  </span>
+                  {section.icon.startsWith('fa-') ? (
+                    <i className={`fa ${section.icon}`} />
+                  ) : (
+                    <i className="material-icons">{section.icon}</i>
+                  )}
+                  <span>{section.name}</span>
                 </button>
               ))}
             </ul>
@@ -238,6 +241,11 @@ const AuditSidebar = ({
                 }}
                 type="button"
               >
+                {section.icon && section.icon.startsWith('fa-') ? (
+                  <i className={`fa ${section.icon}`} />
+                ) : (
+                  <i className="material-icons">{section.icon}</i>
+                )}
                 <span className={clsx('flex-1 transition-opacity')}>
                   {section.name}
                 </span>

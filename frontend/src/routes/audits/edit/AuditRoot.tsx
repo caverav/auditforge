@@ -63,11 +63,16 @@ export const AuditRoot = () => {
       .then(audit => {
         setAuditSections(
           audit.datas.sections.map((section: AuditSection) => {
+            const matchingSection = sections.find(
+              s => s.field === section.field && s.name === section.name,
+            );
+
             return {
               field: section.field,
               name: section.name,
               _id: section._id,
               customFields: section.customFields,
+              icon: matchingSection?.icon ?? undefined,
             };
           }),
         );
@@ -83,7 +88,7 @@ export const AuditRoot = () => {
         );
       })
       .catch(console.error);
-  }, [auditId]);
+  }, [auditId, sections]);
 
   const sortOptions = [
     { id: 1, value: 'CVSS Score', label: t('cvssScore') },
