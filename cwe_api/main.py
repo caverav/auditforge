@@ -1,3 +1,4 @@
+import ssl
 from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
@@ -32,3 +33,14 @@ async def read_root():
     )
     result = classifier(example_vuln)
     return {"example_vuln": example_vuln, "result": result}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(
+        "main:app",
+        host="0.0.0.0",
+        port=8000,
+        ssl_keyfile="ssl/key.pem",
+        ssl_certfile="ssl/cert.pem",
+        ssl_version=ssl.PROTOCOL_TLS_SERVER
+    )

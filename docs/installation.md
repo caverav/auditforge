@@ -1,12 +1,12 @@
 # Installation
 
-> AuditForge uses 3 containers: the backend, the frontend and the database.
+> AuditForge uses 4 containers: the backend, the frontend, the database and the AI model.
 
 ## Production
 
-All 3 containers can be run at once using the docker-compose file in the root directory.
+All 4 containers can be run at once using the docker-compose file in the root directory.
 
-!> For production usage make sure to change the certificates in `backend/ssl` folder and optionnaly to set the JWT secret in `backend/src/lib/auth.js` (`jwtSecret` and `jwtRefreshSecret` in `backend/src/config/config.json`) if you don't want to use random ones.
+!> For production usage make sure to change the certificates in `backend/ssl` and `cwe_api/ssl` folders and optionally to set the JWT secret in `backend/src/lib/auth.js` (`jwtSecret` and `jwtRefreshSecret` in `backend/src/config/config.json`) if you don't want to use random ones.
 
 Build and run Docker containers
 

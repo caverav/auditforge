@@ -29,6 +29,7 @@ services:
       - mongodb
     networks:
       - backend
+      - cwe-api-network
 
   auditforge-frontend:
     build: ./frontend
@@ -47,14 +48,14 @@ services:
     image: auditforge-cwe-api
     container_name: auditforge-cwe-api
     restart: always
-    ports:
-      - 8000:8000
     networks:
-      - backend
+      - cwe-api-network
 
 volumes:
   mongo-data:
 
 networks:
   backend:
+    driver: bridge
+  cwe-api-network:
     driver: bridge

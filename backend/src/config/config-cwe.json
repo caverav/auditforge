@@ -1,0 +1,6 @@
+{
+  "cwe-container": {
+    "host": "auditforge-cwe-api",
+    "port": 8000
+  }
+}

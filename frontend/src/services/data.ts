@@ -337,7 +337,7 @@ export const deleteClient = async (
 
 export const getTemplates = async (): Promise<{
   status: string;
-  datas: { _id: string; name: string; ext: string }[];
+  datas: { _id: string; name: string; ext: string; file: string }[];
 }> => {
   try {
     const response = await fetch(`${API_URL}templates`, {
