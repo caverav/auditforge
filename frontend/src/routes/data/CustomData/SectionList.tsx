@@ -146,7 +146,7 @@ const SectionList: React.FC<SectionListProps> = ({
    * que cambió la lista.
    */
   useEffect(() => {
-    onUpdateList(rows.map(rest => rest));
+    onUpdateList(rows);
   }, [onUpdateList, rows]);
 
   /**
