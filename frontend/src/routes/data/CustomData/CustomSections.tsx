@@ -33,7 +33,7 @@ export const CustomSections: React.FC = () => {
         setSections(data.datas);
         setLoading(false);
       } catch (err) {
-        setError('Error fetching company');
+        setError('Error fetching sections');
         setLoading(false);
       }
     };
