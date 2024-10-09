@@ -86,7 +86,7 @@ const AuditSidebar = ({
   };
 
   findings.sort((a, b) => {
-    const orderMultiplier = sortOrder === 'Ascending' ? 1 : -1;
+    const orderMultiplier = sortOrder === 'Ascending' ? -1 : 1;
     return (
       orderMultiplier * (severityOrder[a.severity] - severityOrder[b.severity])
     );
