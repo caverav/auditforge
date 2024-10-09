@@ -17,6 +17,19 @@ export type Finding = {
   paragraphs: string[];
 };
 
+export type AuditSection = {
+  field: string;
+  name: string;
+  _id: string;
+  customFields: string[];
+};
+
+export type Section = {
+  field: string;
+  name: string;
+  icon: string;
+};
+
 export type Detail = {
   locale: string;
   title: string;
@@ -113,7 +126,7 @@ export type AuditById = {
     updatedAt: string;
     __v: number;
   } | null;
-  sections: string[];
+  sections: AuditSection[];
   customFields: string[];
   sortFindings: string[];
   scope: {
@@ -511,6 +524,25 @@ export const deleteAudit = async (
       method: 'DELETE',
       credentials: 'include',
     });
+    if (!response.ok) {
+      throw networkError;
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const getSections = async (): Promise<{
+  status: string;
+  datas: Section[];
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/sections`, {
+      credentials: 'include',
+    }); // Incluir token
     if (!response.ok) {
       throw networkError;
     }

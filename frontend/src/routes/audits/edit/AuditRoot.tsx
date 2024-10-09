@@ -7,7 +7,13 @@ import DropdownButton, {
   ListItem,
 } from '../../../components/button/DropdownButton';
 import AuditSidebar from '../../../components/navbar/AuditSidebar';
-import { Finding, getAuditById } from '../../../services/audits';
+import {
+  AuditSection,
+  Finding,
+  getAuditById,
+  getSections,
+  Section,
+} from '../../../services/audits';
 
 export const AuditRoot = () => {
   const { t } = useTranslation();
@@ -34,9 +40,37 @@ export const AuditRoot = () => {
     },
   ];
 
+  const [auditSections, setAuditSections] = useState<AuditSection[]>([]);
+  const [sections, setSections] = useState<Section[]>([]);
+  const [isListVisible, setIsListVisible] = useState(false);
+
+  useEffect(() => {
+    getSections()
+      .then(section => {
+        setSections(
+          section.datas.map((item: Section) => ({
+            field: item.field,
+            name: item.field,
+            icon: item.icon,
+          })),
+        );
+      })
+      .catch(console.error);
+  }, []);
+
   useEffect(() => {
     getAuditById(auditId)
       .then(audit => {
+        setAuditSections(
+          audit.datas.sections.map((section: AuditSection) => {
+            return {
+              field: section.field,
+              name: section.name,
+              _id: section._id,
+              customFields: section.customFields,
+            };
+          }),
+        );
         setFindings(
           audit.datas.findings.map((finding: Finding) => {
             return {
@@ -124,12 +158,16 @@ export const AuditRoot = () => {
     <div className="flex overflow-hidden">
       <AuditSidebar
         activeItem={activeItem}
+        auditSections={auditSections}
         connectedUsers={connectedUsers}
         findings={findings}
         isCollapsed={isCollapsed}
+        isListVisible={isListVisible}
         menuItems={menuItems}
+        sections={sections}
         setActiveItem={setActiveItem}
         setIsCollapsed={setIsCollapsed}
+        setIsListVisible={setIsListVisible}
         setSortBy={setSortBy}
         setSortOrder={setSortOrder}
         sortBy={sortBy}
