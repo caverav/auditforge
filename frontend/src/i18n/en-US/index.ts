@@ -465,6 +465,7 @@ export default {
   generalInformation: 'General Information',
   networkScan: 'Network Scan',
   findings: 'Findings',
+  dashboard: 'Dashboard',
   automaticSorting: 'Automatic Sorting',
   sortBy: 'Sort By',
   sortOrder: 'Sort Order',

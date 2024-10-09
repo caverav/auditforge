@@ -1,4 +1,4 @@
-import { Globe, List, Plus, Settings } from 'lucide-react';
+import { BarChart, Globe, List, Plus, Settings } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useParams } from 'react-router-dom';
@@ -25,6 +25,11 @@ export const AuditRoot = () => {
 
   const menuItems = [
     { name: t('generalInformation'), icon: Settings, value: 'general' },
+    {
+      name: t('dashboard'),
+      icon: BarChart,
+      value: 'dashboard',
+    },
     { name: t('networkScan'), icon: Globe, value: 'network' },
     {
       name: t('findings'),
