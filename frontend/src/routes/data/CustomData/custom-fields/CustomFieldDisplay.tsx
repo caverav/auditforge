@@ -394,9 +394,6 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
     if (name === 'confirm') {
       await confirmDeleteCustomField();
       fetchCustomFields();
-      /* if (currentItems.length === 1 && currentPage > 1) {
-        setCurrentPage(currentPage - 1);
-      } */
     }
     setDeletedCustomFieldId('');
     setDeletedCustomField('');
