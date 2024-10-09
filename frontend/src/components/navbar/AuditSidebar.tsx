@@ -53,23 +53,16 @@ type AuditSidebarProps = {
   connectedUsers: ConnectedUser[];
 };
 
+const severityColorMap: Record<string, string> = {
+  L: 'bg-green-600',
+  M: 'bg-yellow-500',
+  H: 'bg-orange-500',
+  C: 'bg-red-600',
+  default: 'bg-gray-600',
+};
+
 const getSeverityColor = (severity: string) => {
-  switch (severity) {
-    case 'L':
-      return 'bg-green-600';
-
-    case 'M':
-      return 'bg-yellow-500';
-
-    case 'H':
-      return 'bg-orange-500';
-
-    case 'C':
-      return 'bg-red-600';
-
-    default:
-      return 'bg-gray-600';
-  }
+  return severityColorMap[severity] ?? severityColorMap.default;
 };
 
 const AuditSidebar = ({
