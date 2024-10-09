@@ -90,6 +90,7 @@ export const CustomSections: React.FC = () => {
     try {
       await updateCustomSection(newSectionList);
       setIsEditing(false);
+      toast.success(t('msg.sectionUpdateOk'));
     } catch (error) {
       setError('Error updating sections');
       toast.error(t('err.errorUpdatingSections'));
