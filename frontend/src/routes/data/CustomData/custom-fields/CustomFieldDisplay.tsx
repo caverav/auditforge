@@ -104,7 +104,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
       : [text[languageIndex].value];
   };
 
-  const handlerInputChangeText = (id: string, name: string, value: string) => {
+  const handlerInputChangeText = (id: string, value: string) => {
     setCurrentCustomFields((prevFields: GetCustomFieldType[]) => {
       return prevFields.map((field: GetCustomFieldType) =>
         field._id === id
@@ -149,7 +149,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
         return (
           <div className="px-4 min-h-6">
             <span className="font-medium leading-6 text-gray-300">
-              offset: {offset}
+              {t('offset')}: {offset}
             </span>
             <div
               className="mt-1 rounded-lg"
@@ -170,7 +170,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
         return (
           <div className="px-4">
             <span className="font-medium leading-6 text-gray-300">
-              offset: {offset}
+              {t('offset')}: {offset}
             </span>
             <div
               className="bg-white w-full rounded-lg mt-1 h-28"
@@ -183,7 +183,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
         return (
           <div>
             <span className="font-medium leading-6 text-gray-300 mx-4">
-              offset: {offset}
+              {t('offset')}: {offset}
             </span>
             <div
               style={{
@@ -192,9 +192,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
             >
               <RichText
                 label=""
-                onChange={(value: string) =>
-                  handlerInputChangeText(_id, fieldType, value)
-                }
+                onChange={(value: string) => handlerInputChangeText(_id, value)}
                 placeholder=""
                 value={handlerTextString(text)}
               />
@@ -206,7 +204,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
         return (
           <div className="px-4">
             <span className="font-medium leading-6 text-gray-300">
-              offset: {offset}
+              {t('offset')}: {offset}
             </span>
             <div
               className="rounded-lg mt-1"
@@ -215,9 +213,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
               <SimpleInput
                 id={_id}
                 name={_id}
-                onChange={(value: string) =>
-                  handlerInputChangeText(_id, fieldType, value)
-                }
+                onChange={(value: string) => handlerInputChangeText(_id, value)}
                 placeholder=""
                 type="text"
                 value={handlerTextString(text)}
@@ -230,7 +226,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
         return (
           <div className="px-4 min-h-6">
             <span className="font-medium leading-6 text-gray-300">
-              offset: {offset}
+              {t('offset')}: {offset}
             </span>
             <div
               className="rounded-lg mt-1"
@@ -238,9 +234,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
             >
               <DefaultRadioGroup
                 name={_id}
-                onChange={(value: string) =>
-                  handlerInputChangeText(_id, fieldType, value)
-                }
+                onChange={(value: string) => handlerInputChangeText(_id, value)}
                 options={options.map((option, index) => ({
                   id: index.toString(),
                   label: option.value,
@@ -256,7 +250,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
         return (
           <div className="px-4 min-h-6">
             <span className="font-medium leading-6 text-gray-300">
-              offset: {offset}
+              {t('offset')}: {offset}
             </span>
             <div
               className="rounded-lg"
@@ -283,7 +277,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
         return (
           <div className="px-4 min-h-6">
             <span className="font-medium leading-6 text-gray-300">
-              offset: {offset}
+              {t('offset')}: {offset}
             </span>
             <div
               className="rounded-lg mt-1"
@@ -310,7 +304,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
         return (
           <div className="">
             <span className="font-medium leading-6 text-gray-300 mx-4">
-              offset: {offset}
+              {t('offset')}: {offset}
             </span>
             <div
               className="rounded-lg"
@@ -547,7 +541,6 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
               ) : null}
             </div>
           </div>
-          {JSON.stringify(currentItems)}
         </div>
       </Card>
     </div>
