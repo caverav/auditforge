@@ -33,10 +33,10 @@ export const CustomFieldType: React.FC<CustomFieldTypeProps> = ({
   requiredSelectComponentAlert,
 }) => {
   const cfDisplayOptions: ListItem[] = [
-    { id: 0, label: t('auditGeneral'), value: 'general' },
-    { id: 1, label: t('auditFinding'), value: 'finding' },
-    { id: 2, label: t('auditSection'), value: 'section' },
-    { id: 3, label: t('vulnerability'), value: 'vulnerability' },
+    { id: 1, label: t('auditGeneral'), value: 'general' },
+    { id: 2, label: t('auditFinding'), value: 'finding' },
+    { id: 3, label: t('auditSection'), value: 'section' },
+    { id: 4, label: t('vulnerability'), value: 'vulnerability' },
   ];
 
   const cfComponentOptions: ListItem[] = [
