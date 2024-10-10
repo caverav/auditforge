@@ -466,7 +466,7 @@ module.exports = function (app, io) {
               res.setHeader('Content-Type', 'application/pdf');
               res.send(reportPdf);
             } else {
-              console.error('Error generating PDF:', error);
+              console.error('Error generating PDF');
               Response.Internal(res, 'Error generating PDF');
             }
           } else {
