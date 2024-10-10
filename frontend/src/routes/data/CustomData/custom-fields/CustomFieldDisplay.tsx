@@ -38,7 +38,7 @@ type ListItem = {
 
 type CustomFieldProps = {
   currentCustomFields: GetCustomFieldType[];
-  displayOptionSeleted: ListItem;
+  displayOptionSelected: ListItem;
   languagesList: ListItem[];
   setCurrentCustomFields: React.Dispatch<
     React.SetStateAction<GetCustomFieldType[]>
@@ -48,7 +48,7 @@ type CustomFieldProps = {
 
 export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
   currentCustomFields,
-  displayOptionSeleted,
+  displayOptionSelected,
   languagesList,
   setCurrentCustomFields,
   fetchCustomFields,
@@ -74,7 +74,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
 
   const filteredItems = currentCustomFields.filter(field => {
-    return field.display === displayOptionSeleted.value;
+    return field.display === displayOptionSelected.value;
   });
 
   const currentItems = filteredItems.slice(indexOfFirstItem, indexOfLastItem);

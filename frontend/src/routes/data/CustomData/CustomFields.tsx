@@ -54,7 +54,7 @@ type CategoryData = {
 export const CustomFields: React.FC = () => {
   const optionsList = ['checkbox', 'radio', 'select', 'select-multiple'];
 
-  const [displayOptionSeleted, setDisplayOptionSeleted] = useState<ListItem>({
+  const [displayOptionSelected, setDisplayOptionSelected] = useState<ListItem>({
     id: 0,
     label: t('auditGeneral'),
     value: 'general',
@@ -173,7 +173,7 @@ export const CustomFields: React.FC = () => {
     const newCustomField: AddCustomFieldType = {
       label,
       fieldType: componentOptionSelected.value,
-      display: displayOptionSeleted.value,
+      display: displayOptionSelected.value,
       displaySub: categorySelected?.value ?? '',
       size: Number(sizeSelected.value),
       offset: Number(offsetSelected.value),
@@ -219,11 +219,11 @@ export const CustomFields: React.FC = () => {
               categorySelected={categorySelected}
               componentOptionSelected={componentOptionSelected}
               customSectionsList={customSectionsList}
-              displayOptionSeleted={displayOptionSeleted}
+              displayOptionSelected={displayOptionSelected}
               requiredSelectComponentAlert={requiredSelectComponentAlert}
               setCategorySelected={setCategorySelected}
               setComponentOptionSelected={setComponentOptionSelected}
-              setDisplayOptionSeleted={setDisplayOptionSeleted}
+              setDisplayOptionSelected={setDisplayOptionSelected}
             />
             <SettingsCustomFields
               componentOptionSelected={componentOptionSelected}
@@ -261,7 +261,7 @@ export const CustomFields: React.FC = () => {
       {currentCustomFields.length > 0 ? (
         <CustomFieldDisplay
           currentCustomFields={currentCustomFields}
-          displayOptionSeleted={displayOptionSeleted}
+          displayOptionSelected={displayOptionSelected}
           fetchCustomFields={fetchCustomFields}
           languagesList={languagesList}
           setCurrentCustomFields={setCurrentCustomFields}

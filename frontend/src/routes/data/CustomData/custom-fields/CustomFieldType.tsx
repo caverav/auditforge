@@ -10,9 +10,9 @@ type ListItem = {
 };
 
 type CustomFieldTypeProps = {
-  displayOptionSeleted: ListItem;
+  displayOptionSelected: ListItem;
   customSectionsList: ListItem[];
-  setDisplayOptionSeleted: (value: ListItem) => void;
+  setDisplayOptionSelected: (value: ListItem) => void;
   componentOptionSelected: ListItem | null;
   setComponentOptionSelected: (value: ListItem) => void;
   categorySelected: ListItem | null;
@@ -22,9 +22,9 @@ type CustomFieldTypeProps = {
 };
 
 export const CustomFieldType: React.FC<CustomFieldTypeProps> = ({
-  displayOptionSeleted,
+  displayOptionSelected,
   customSectionsList,
-  setDisplayOptionSeleted,
+  setDisplayOptionSelected,
   componentOptionSelected,
   setComponentOptionSelected,
   categorySelected,
@@ -61,7 +61,7 @@ export const CustomFieldType: React.FC<CustomFieldTypeProps> = ({
   ];
 
   const onChangeDisplayOption = (value: ListItem) => {
-    setDisplayOptionSeleted(value);
+    setDisplayOptionSelected(value);
     setCategorySelected(null);
   };
 
@@ -70,7 +70,7 @@ export const CustomFieldType: React.FC<CustomFieldTypeProps> = ({
       <SelectDropdown
         items={cfDisplayOptions}
         onChange={value => onChangeDisplayOption(value)}
-        selected={displayOptionSeleted}
+        selected={displayOptionSelected}
         title={t('selectView')}
       />
       <SelectDropdown
@@ -82,22 +82,22 @@ export const CustomFieldType: React.FC<CustomFieldTypeProps> = ({
         selected={componentOptionSelected}
         title={t('selectComponent')}
       />
-      {displayOptionSeleted.value !== 'general' ? (
+      {displayOptionSelected.value !== 'general' ? (
         <SelectDropdown
           items={
-            displayOptionSeleted.value === 'section'
+            displayOptionSelected.value === 'section'
               ? customSectionsList
               : categoriesList
           }
           onChange={value => setCategorySelected(value)}
           placeholder={
-            displayOptionSeleted.value === 'section'
+            displayOptionSelected.value === 'section'
               ? t('selectSection')
               : t('selectCategory')
           }
           selected={categorySelected}
           title={
-            displayOptionSeleted.value === 'section'
+            displayOptionSelected.value === 'section'
               ? t('selectSection')
               : t('selectCategory')
           }
