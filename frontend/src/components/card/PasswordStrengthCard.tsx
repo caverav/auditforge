@@ -91,7 +91,9 @@ export const PasswordStrengthCard: React.FC<PasswordStrengthCardProps> = ({
       <h1
         className={clsx('font-bold underline', {
           'text-black':
-            strength.value === 'Medium' || strength.value === 'Strong',
+            strength.value === 'Medium' ||
+            strength.value === 'Strong' ||
+            strength.value === 'Weak',
         })}
       >
         {cardText.title}
@@ -99,7 +101,9 @@ export const PasswordStrengthCard: React.FC<PasswordStrengthCardProps> = ({
       <p
         className={clsx('text-bold ', {
           'text-black':
-            strength.value === 'Medium' || strength.value === 'Strong',
+            strength.value === 'Medium' ||
+            strength.value === 'Strong' ||
+            strength.value === 'Weak',
         })}
       >
         {cardText.text}
@@ -111,7 +115,9 @@ export const PasswordStrengthCard: React.FC<PasswordStrengthCardProps> = ({
             <InformationCircleIcon
               className={clsx('absolute top-5 right-2 bottom-0 size-8 ', {
                 'text-black':
-                  strength.value === 'Medium' || strength.value === 'Strong',
+                  strength.value === 'Medium' ||
+                  strength.value === 'Strong' ||
+                  strength.value === 'Weak',
               })}
             />
           </HoverCardTrigger>
