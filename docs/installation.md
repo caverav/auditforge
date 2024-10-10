@@ -46,6 +46,8 @@ API is accessible through https://localhost:8443/api
 
 ## Development
 
+> Note: if you gonna be using the frontend separately (other origin) you need to change the `CORS_BYPASS` in `backend/.env` to `true`
+
 For development purposes, specific docker-compose file can be used in each folder (backend/frontend).
 
 > _Source code can be modified live and application will automatically reload on changes._
