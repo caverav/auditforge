@@ -56,55 +56,65 @@ export const SettingsCustomFields: React.FC<SettingsCustomFieldsProps> = ({
   setRequired,
   requiredLabelAlert,
 }) => {
+  const renderLabelAndDescription = () => (
+    <div>
+      <SimpleInput
+        id="label"
+        label={t('label')}
+        name="label"
+        onChange={setLabel}
+        placeholder={t('label')}
+        requiredAlert={requiredLabelAlert}
+        requiredField
+        type="text"
+        value={label}
+      />
+      <SimpleInput
+        id="description"
+        label={t('description')}
+        name="description"
+        onChange={setDescription}
+        placeholder={t('description')}
+        type="text"
+        value={description}
+      />
+    </div>
+  );
+
+  const renderSizeAndOffset = () => (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <SelectDropdown
+        items={sizes.slice(1)}
+        onChange={value => setSizeSelected(value)}
+        selected={sizeSelected}
+        title={t('size')}
+      />
+      <SelectDropdown
+        items={sizes}
+        onChange={value => setOffsetSelected(value)}
+        selected={offsetSelected}
+        title={t('offset')}
+      />
+    </div>
+  );
+
+  const renderRequiredSwitch = () => (
+    <PrimarySwitch
+      enabled={required}
+      label={t('required')}
+      onChange={setRequired}
+    />
+  );
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-1 gap-4 content-start">
-      {componentOptionSelected?.value !== 'space' ? (
-        <div>
-          <SimpleInput
-            id="label"
-            label={t('label')}
-            name="label"
-            onChange={setLabel}
-            placeholder={t('label')}
-            requiredAlert={requiredLabelAlert}
-            requiredField
-            type="text"
-            value={label}
-          />
-          <SimpleInput
-            id="description"
-            label={t('description')}
-            name="description"
-            onChange={setDescription}
-            placeholder={t('description')}
-            type="text"
-            value={description}
-          />
-        </div>
-      ) : null}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <SelectDropdown
-          items={sizes.slice(1)}
-          onChange={value => setSizeSelected(value)}
-          selected={sizeSelected}
-          title={t('size')}
-        />
-        <SelectDropdown
-          items={sizes}
-          onChange={value => setOffsetSelected(value)}
-          selected={offsetSelected}
-          title={t('offset')}
-        />
-      </div>
-      <div>
-        {componentOptionSelected?.value !== 'space' ? (
-          <PrimarySwitch
-            enabled={required}
-            label={t('required')}
-            onChange={setRequired}
-          />
-        ) : null}
-      </div>
+      {componentOptionSelected?.value !== 'space'
+        ? renderLabelAndDescription()
+        : null}
+      {renderSizeAndOffset()}
+      {componentOptionSelected?.value !== 'space'
+        ? renderRequiredSwitch()
+        : null}
     </div>
   );
 };
