@@ -6,17 +6,21 @@ import { toast } from 'sonner';
 
 import { PasswordStrengthCard } from '@/components/card/PasswordStrengthCard';
 import { PasswordInput } from '@/components/input/PasswordInput';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
+import clsx from 'clsx';
 
 type EncryptionModalProps = {
   isOpen: boolean;
   onCancel: () => void;
   handleSubmitEncrypt: (password: string) => void;
   auditName: string;
+  isGeneratingPDF: boolean;
 };
 
 export const EncryptionModal: React.FC<EncryptionModalProps> = ({
   auditName,
   isOpen,
+  isGeneratingPDF,
   onCancel,
   handleSubmitEncrypt,
 }) => {
@@ -89,6 +93,7 @@ export const EncryptionModal: React.FC<EncryptionModalProps> = ({
           <div className="mb-2 text-gray-200 py-4">
             <div className="flex flex-col">
               <PasswordInput
+                disabled={isGeneratingPDF}
                 id="password"
                 label={t('password')}
                 name="password"
@@ -100,6 +105,7 @@ export const EncryptionModal: React.FC<EncryptionModalProps> = ({
                 <PasswordStrengthCard password={password} />
               </div>
               <PasswordInput
+                disabled={isGeneratingPDF}
                 id="confirmPassword"
                 label={t('confirmPassword')}
                 name="confirmPassword"
@@ -129,30 +135,38 @@ export const EncryptionModal: React.FC<EncryptionModalProps> = ({
               {t('btn.cancel')}
             </button>
             <button
-              className="bg-green-500 text-white px-4 py-2 rounded mr-2"
+              className={clsx('text-white px-4 py-2 rounded mr-2', {
+                'bg-green-500': !isGeneratingPDF,
+                'bg-green-500/70': isGeneratingPDF,
+              })}
+              disabled={isGeneratingPDF}
               onClick={handlePasswordGen}
               type="button"
             >
               {t('btn.generatePassword')}
             </button>
-            <button
-              className={
-                !(password === confirmPassword) ||
-                password.length < 1 ||
-                confirmPassword.length < 1
-                  ? 'bg-blue-500/50 text-white/50 px-4 py-2 rounded'
-                  : 'bg-blue-500 text-white px-4 py-2 rounded'
-              }
-              disabled={
-                !(password === confirmPassword) ||
-                password.length < 1 ||
-                confirmPassword.length < 1
-              }
-              onClick={() => handleSubmitEncrypt(password)}
-              type="button"
-            >
-              {t('btn.submitEncryption')}
-            </button>
+            {!isGeneratingPDF ? (
+              <button
+                className={
+                  !(password === confirmPassword) ||
+                  password.length < 1 ||
+                  confirmPassword.length < 1
+                    ? 'bg-blue-500/50 text-white/50 px-4 py-2 rounded'
+                    : 'bg-blue-500 text-white px-4 py-2 rounded'
+                }
+                disabled={
+                  !(password === confirmPassword) ||
+                  password.length < 1 ||
+                  confirmPassword.length < 1
+                }
+                onClick={() => handleSubmitEncrypt(password)}
+                type="button"
+              >
+                {t('btn.submitEncryption')}
+              </button>
+            ) : (
+              <ArrowPathIcon className="h-8 w-8 animate-spin text-blue-500" />
+            )}
           </div>
         </div>
       </div>

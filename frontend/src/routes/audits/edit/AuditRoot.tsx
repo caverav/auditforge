@@ -87,6 +87,7 @@ export const AuditRoot = () => {
    */
 
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   const handleSubmitEncrypt = async (password: string) => {
     const bodyParam = {
@@ -94,6 +95,7 @@ export const AuditRoot = () => {
     };
 
     try {
+      setIsGeneratingPDF(true);
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate/pdf`,
         {
@@ -107,6 +109,8 @@ export const AuditRoot = () => {
       );
 
       if (!response.ok) {
+        setIsGeneratingPDF(false);
+
         throw new Error('Error generating PDF');
       }
 
@@ -117,9 +121,11 @@ export const AuditRoot = () => {
 
       setIsOpenModal(false);
     } catch (error) {
+      setIsGeneratingPDF(true);
       console.error('Error:', error);
       toast.error(t('err.errorGeneratingPdf'));
     }
+    setIsGeneratingPDF(false);
   };
 
   const fileTypes: ListItem[] = [
@@ -197,6 +203,7 @@ export const AuditRoot = () => {
       <EncryptionModal
         auditName={auditName}
         handleSubmitEncrypt={handleSubmitEncrypt}
+        isGeneratingPDF={isGeneratingPDF}
         isOpen={isOpenModal}
         onCancel={() => setIsOpenModal(false)}
       />
