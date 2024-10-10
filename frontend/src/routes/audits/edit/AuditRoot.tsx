@@ -133,7 +133,7 @@ export const AuditRoot = () => {
 
       setIsOpenModal(false);
     } catch (error) {
-      setIsGeneratingPDF(true);
+      setIsGeneratingPDF(false);
       console.error('Error:', error);
       toast.error(t('err.errorGeneratingPdf'));
     }
