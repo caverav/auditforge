@@ -88,10 +88,11 @@ export const OptionsCustomData: React.FC<OptionsCustomDataProps> = ({
             <div className="flex-grow mx-2">{option.value}</div>
             <div className="flex-shrink-0 p-1">
               <PrimaryButton
+                aria-label={t('deleteOption')}
                 color="red"
                 onClick={() => handlerDeleteOption(index)}
               >
-                x
+                <span aria-hidden="true">×</span>
               </PrimaryButton>
             </div>
           </div>
