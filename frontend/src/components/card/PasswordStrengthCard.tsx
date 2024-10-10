@@ -99,11 +99,9 @@ export const PasswordStrengthCard: React.FC<PasswordStrengthCardProps> = ({
         {cardText.title}
       </h1>
       <p
-        className={clsx('text-bold ', {
-          'text-black':
-            strength.value === 'Medium' ||
-            strength.value === 'Strong' ||
-            strength.value === 'Weak',
+        className={clsx({
+          'font-bold': true,
+          'text-black': password !== '' && strength.value !== 'Too weak',
         })}
       >
         {cardText.text}
