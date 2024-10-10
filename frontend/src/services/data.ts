@@ -738,7 +738,7 @@ export const updateCustomSection = async (
   }
 };
 
-export const getCustomField = async (): Promise<{
+export const getCustomFields = async (): Promise<{
   status: string;
   datas: GetCustomFieldType[];
 }> => {

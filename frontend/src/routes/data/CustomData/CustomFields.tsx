@@ -7,7 +7,7 @@ import Card from '../../../components/card/Card';
 import {
   addCustomField,
   AddCustomFieldType,
-  getCustomField,
+  getCustomFields,
   GetCustomFieldType,
   getCustomSections,
   getLanguages,
@@ -130,7 +130,7 @@ export const CustomFields: React.FC = () => {
 
   const fetchCustomFields = async () => {
     try {
-      const dataCustomFields = await getCustomField();
+      const dataCustomFields = await getCustomFields();
       setCurrentCustomFields(dataCustomFields.datas);
     } catch (error) {
       console.error('Error:', error);
