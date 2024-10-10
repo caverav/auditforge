@@ -3,17 +3,29 @@ import { useNavigate } from 'react-router-dom';
 
 const tokenUrl = `${import.meta.env.VITE_API_URL}/api/users/token`;
 const checktokenUrl = `${import.meta.env.VITE_API_URL}/api/users/checktoken`;
+const refreshTokenUrl = `${import.meta.env.VITE_API_URL}/api/users/refreshtoken`;
 
 export const checktoken = async (): Promise<boolean> => {
   try {
-    const response = await fetch(checktokenUrl, {
+    let response = await fetch(checktokenUrl, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
       credentials: 'include',
     });
-    const data = await response.json();
+    let data = await response.json();
+    if (data.status === 'success') {
+      return true;
+    }
+    response = await fetch(refreshTokenUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+    });
+    data = await response.json();
     return data.status === 'success';
   } catch (error) {
     console.error(error);
