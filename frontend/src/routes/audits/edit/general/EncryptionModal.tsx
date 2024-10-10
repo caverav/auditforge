@@ -36,7 +36,7 @@ export const EncryptionModal: React.FC<EncryptionModalProps> = ({
     const charset =
       // eslint-disable-next-line no-secrets/no-secrets
       'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()';
-    const passwordLength = 35;
+    const passwordLength = 32;
     let newPassword = '';
 
     const randomValues = new Uint32Array(passwordLength);
