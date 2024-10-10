@@ -55,7 +55,7 @@ export const CustomFields: React.FC = () => {
   const optionsList = ['checkbox', 'radio', 'select', 'select-multiple'];
 
   const [displayOptionSelected, setDisplayOptionSelected] = useState<ListItem>({
-    id: 0,
+    id: 1,
     label: t('auditGeneral'),
     value: 'general',
   });
