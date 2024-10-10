@@ -1,5 +1,9 @@
 import { t } from 'i18next';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { toast } from 'sonner';
+
+import SimpleInput from '@/components/input/SimpleInput';
 
 import SelectDropdown from '../../../../../components/dropdown/SelectDropdown';
 import UITable, { Column } from '../../../../../components/table/UITable';
@@ -7,6 +11,8 @@ import { useSortableTable } from '../../../../../hooks/useSortableTable';
 import { useTableFiltering } from '../../../../../hooks/useTableFiltering';
 import type { FindingByLocale } from '../../../../../services/audits';
 import {
+  addFinding,
+  addVuln,
   getLanguages,
   getVulnByLanguage,
 } from '../../../../../services/audits';
@@ -35,6 +41,8 @@ export const Add = () => {
   const [languages, setLanguages] = useState<ListItem[]>([]);
   const [currentLanguage, setCurrentLanguage] = useState<ListItem | null>(null);
   const [loadingLanguages, setLoadingLanguages] = useState<boolean>(true);
+  const [newVulnTitle, setNewVulnTitle] = useState<string>('');
+  const { auditId } = useParams();
 
   const columns: Column[] = [
     {
@@ -106,6 +114,46 @@ export const Add = () => {
     fetchData().catch(console.error);
   }, [currentLanguage, setTableData]);
 
+  const handleAddVuln = useCallback(
+    (item: TableData) => {
+      addVuln(
+        item.id,
+        auditId ?? '',
+        currentLanguage ? currentLanguage.value : 'en',
+      )
+        .then(res => {
+          if (res.status === 'success') {
+            setNewVulnTitle('');
+            toast.success(t('msg.findingCreateOk'));
+          } else {
+            toast.error(t(res.datas));
+          }
+        })
+        .catch(console.error);
+    },
+    [auditId, currentLanguage],
+  );
+
+  const rowActions = [
+    {
+      label: 'Add',
+      onClick: handleAddVuln,
+    },
+  ];
+
+  const handleAddFinding = useCallback(() => {
+    addFinding(newVulnTitle, auditId ?? '')
+      .then(res => {
+        if (res.status === 'success') {
+          setNewVulnTitle('');
+          toast.success(t('msg.findingCreateOk'));
+        } else {
+          toast.error(t(res.datas));
+        }
+      })
+      .catch(console.error);
+  }, [newVulnTitle, auditId]);
+
   return (
     <DivWrapper>
       <div className="flex justify-between">
@@ -119,7 +167,19 @@ export const Add = () => {
             />
           ) : null}
         </div>
-        <NewVulnButton />
+        <div className="w-1/4">
+          <SimpleInput
+            id="title"
+            label={t('title')}
+            name="title"
+            onChange={setNewVulnTitle}
+            placeholder={t('title')}
+            type="text"
+            value={newVulnTitle}
+          />
+          <div className="my-2" />
+          <NewVulnButton onClick={handleAddFinding} />
+        </div>
       </div>
 
       <div className="mt-5">
@@ -131,6 +191,7 @@ export const Add = () => {
           keyExtractor={item => item._id}
           onFilter={handleFilterChange}
           onSort={handleSorting}
+          rowActions={rowActions}
           sortable={true}
         />
       </div>

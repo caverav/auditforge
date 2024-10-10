@@ -1,3 +1,4 @@
+import { Cvss3P1 } from 'ae-cvss-calculator';
 import { Globe, List, Plus, Settings } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -20,7 +21,13 @@ export const AuditRoot = () => {
   const [sortOrder, setSortOrder] = useState('Descending');
 
   const [findings, setFindings] = useState<
-    { id: number; name: string; category: string; severity: string }[]
+    {
+      id: number;
+      name: string;
+      category: string;
+      severity: string;
+      identifier: string;
+    }[]
   >([]);
 
   const menuItems = [
@@ -34,6 +41,28 @@ export const AuditRoot = () => {
     },
   ];
 
+  const cvssStringToSeverity = (cvssScore: string) => {
+    try {
+      const cvssVector = new Cvss3P1(cvssScore);
+      const score = cvssVector.calculateExactOverallScore();
+      if (score >= 9.0) {
+        return 'C';
+      }
+      if (score >= 7.0) {
+        return 'H';
+      }
+      if (score >= 4.0) {
+        return 'M';
+      }
+      if (score >= 0.1) {
+        return 'L';
+      }
+    } catch (error) {
+      console.error('Invalid CVSS vector:', error);
+    }
+    return 'I';
+  };
+
   useEffect(() => {
     getAuditById(auditId)
       .then(audit => {
@@ -43,7 +72,8 @@ export const AuditRoot = () => {
               id: finding.identifier,
               name: finding.title,
               category: 'No Category',
-              severity: 'L', //TODO: it's harcoded
+              severity: cvssStringToSeverity(finding.cvssv3),
+              identifier: finding._id,
             };
           }),
         );
@@ -51,31 +81,14 @@ export const AuditRoot = () => {
       .catch(console.error);
   }, [auditId]);
 
-  const sortOptions = [
-    { id: 1, value: 'CVSS Score', label: t('cvssScore') },
-    { id: 2, value: 'CVSS Temporal Score', label: t('cvssTemporalScore') },
-    {
-      id: 3,
-      value: 'CVSS Environmental Score',
-      label: t('cvssEnvironmentalScore'),
-    },
-    { id: 4, value: 'Priority', label: t('priority') },
-    {
-      id: 5,
-      value: 'Remediation Difficulty',
-      label: t('remediationDifficulty'),
-    },
-  ];
+  const sortOptions = [{ id: 1, value: 'CVSS Score', label: t('cvssScore') }];
 
   const sortOrderOptions = [
-    { id: 'asc', label: t('ascending'), value: 'Ascending' },
     { id: 'desc', label: t('descending'), value: 'Descending' },
+    { id: 'asc', label: t('ascending'), value: 'Ascending' },
   ];
 
-  const connectedUsers = [
-    { id: 1, name: 'camilo (me)', online: true },
-    { id: 2, name: 'massi', online: false },
-  ];
+  const connectedUsers: { id: number; name: string; online: boolean }[] = [];
 
   const fileTypes: ListItem[] = [
     {
