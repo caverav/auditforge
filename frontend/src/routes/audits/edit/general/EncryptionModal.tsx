@@ -121,7 +121,7 @@ export const EncryptionModal: React.FC<EncryptionModalProps> = ({
                   : 'flex items-center justify-center text-red-500/75 pt-2'
               }
             >
-              <p>{t('err.passwordsDontMatch')}</p>
+              <p aria-live="polite">{t('err.passwordsDontMatch')}</p>
             </div>
           </div>
           <hr className="h-1 mb-3 bg-gray-600 border-0 rounded" />
