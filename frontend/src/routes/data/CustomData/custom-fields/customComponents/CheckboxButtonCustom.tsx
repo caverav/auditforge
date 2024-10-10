@@ -23,14 +23,14 @@ const CheckboxButtonCustom = ({
 }: CheckboxButtonProps) => {
   const [selectedBox, setSelectedBox] = useState<boolean[]>(
     options.map((option: string) =>
-      text.some((item: string) => (item === option ? true : false)),
+      text.some((item: string) => item === option),
     ),
   );
 
   useEffect(() => {
     setSelectedBox(
       options.map((option: string) =>
-        text.some((item: string) => (item === option ? true : false)),
+        text.some((item: string) => item === option),
       ),
     );
   }, [options, text]);
