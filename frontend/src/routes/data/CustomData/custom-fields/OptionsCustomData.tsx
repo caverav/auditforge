@@ -36,6 +36,7 @@ export const OptionsCustomData: React.FC<OptionsCustomDataProps> = ({
   setOptionsData,
 }) => {
   const handlerAddOption = () => {
+    if (addOptionField.trim() === '') return;
     setOptionsData([
       ...optionsData,
       {
@@ -43,6 +44,7 @@ export const OptionsCustomData: React.FC<OptionsCustomDataProps> = ({
         value: addOptionField,
       },
     ]);
+    setAddOptionField(''); // Limpia el campo después de agregar
   };
 
   const handlerDeleteOption = (index: number) => {
