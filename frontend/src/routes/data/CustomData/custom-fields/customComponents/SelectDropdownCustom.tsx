@@ -72,7 +72,7 @@ const SelectDropdownCustom: React.FC<SelectDropdownProps> = ({
   return (
     <Field>
       <Label className="block text-sm font-medium leading-6 mb-2 text-gray-300">
-        {title + ' '}
+        {`${title} `}
       </Label>
       <div className="relative">
         <Listbox onChange={onChange} value={selected}>
