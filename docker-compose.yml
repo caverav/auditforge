@@ -44,7 +44,11 @@ services:
       - backend
 
   auditforge-cwe-api:
-    build: ./cwe_api
+    build:
+      context: ./cwe_api
+      dockerfile: Dockerfile
+      args:
+        FILE_ID: ${FILE_ID}     
     image: auditforge-cwe-api
     container_name: auditforge-cwe-api
     restart: always

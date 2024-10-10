@@ -3,22 +3,23 @@ FROM python:3.12-slim
 WORKDIR /app
 
 COPY . .
+ARG FILE_ID
 
 RUN set -e \
     && apt-get update -y \
     && apt-get install -y --no-install-recommends \
-       wget=1.21.3-1+deb11u1 \
-       unzip=6.0-26+deb11u1 \
+       wget \
+       unzip \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* \
     || { echo "Error: Fallo en la instalación de paquetes"; exit 1; }
 
-RUN pip install --no-cache-dir torchvision==0.15.2 torchaudio==2.0.2 --index-url https://download.pytorch.org/whl/cpu \
+RUN pip install --no-cache-dir torchvision==0.17.0+cpu torchaudio==2.2.0+cpu --index-url https://download.pytorch.org/whl/cpu \
     && pip install --no-cache-dir -r requirements.txt
 
 RUN if [ ! -d modelo_cwe ]; then \
       echo "modelo_cwe not found. Downloading it..."; \
-      wget --progress=bar:force "https://drive.usercontent.google.com/download?id=1OtRNObv-Il2B5nDnpzMSGj_yBJAlskuS&export=download&confirm=" -O modelo_cwe.zip \
+      wget --progress=bar:force "https://drive.usercontent.google.com/download?id=$FILE_ID&export=download&confirm=" -O modelo_cwe.zip \
       && unzip modelo_cwe.zip && rm modelo_cwe.zip \
       || { echo "Failed to download or unzip model"; exit 1; } \
     fi
