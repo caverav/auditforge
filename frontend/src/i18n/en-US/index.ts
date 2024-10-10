@@ -145,7 +145,7 @@ export default {
       'Custom Field {{0}} deleted successfully. {{1}} Vulnerabilities were affected.',
     customFieldUpdatedOk: 'Custom Field Updated Successfully!',
     sectionCreatedOk: 'Custom Section Created Successfully!',
-    auditTypeCreatedOk: 'Audit Type Created Successfully',
+    auditTypeCreatedOk: 'Audit Type Created Successfully!',
     clientEmailError: 'Client email already exists',
     collaboratorUsernameError: 'Collaborator username already exists',
     companyNameError: 'Company name already exists',
