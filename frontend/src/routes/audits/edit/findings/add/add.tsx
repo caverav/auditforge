@@ -116,7 +116,11 @@ export const Add = () => {
 
   const handleAddVuln = useCallback(
     (item: TableData) => {
-      addVuln(item.id, auditId ?? '')
+      addVuln(
+        item.id,
+        auditId ?? '',
+        currentLanguage ? currentLanguage.value : 'en',
+      )
         .then(res => {
           if (res.status === 'success') {
             setNewVulnTitle('');
@@ -127,7 +131,7 @@ export const Add = () => {
         })
         .catch(console.error);
     },
-    [auditId],
+    [auditId, currentLanguage],
   );
 
   const rowActions = [

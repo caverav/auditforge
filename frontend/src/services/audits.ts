@@ -536,12 +536,14 @@ export const deleteAudit = async (
 export const addVuln = async (
   vulnId: string,
   auditId: string,
+  locale: string,
 ): Promise<{
   status: string;
   datas: string;
 }> => {
   try {
     let data;
+    console.log(locale);
 
     try {
       const res = await getVulnerabilities();
@@ -560,19 +562,26 @@ export const addVuln = async (
       throw new Error('Vulnerability has no details');
     }
 
+    const detailIndex = data.details.findIndex(
+      detail => detail.locale === locale,
+    );
+    if (detailIndex === -1) {
+      throw new Error('Locale not found in vulnerability details');
+    }
+
     const response2 = await fetch(`${API_URL}audits/${auditId}/findings`, {
       method: 'POST',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        title: data.details[0].title,
-        vulnType: data.details[0].vulnType,
-        description: data.details[0].description,
-        observation: data.details[0].observation,
-        remediation: data.details[0].remediation,
-        cwes: data.details[0].cwes,
-        references: data.details[0].references,
-        customFields: data.details[0].customFields,
+        title: data.details[detailIndex].title,
+        vulnType: data.details[detailIndex].vulnType,
+        description: data.details[detailIndex].description,
+        observation: data.details[detailIndex].observation,
+        remediation: data.details[detailIndex].remediation,
+        cwes: data.details[detailIndex].cwes,
+        references: data.details[detailIndex].references,
+        customFields: data.details[detailIndex].customFields,
         cvssv3: data.cvssv3,
       }),
     });
