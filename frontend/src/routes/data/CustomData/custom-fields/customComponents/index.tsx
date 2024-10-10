@@ -1,4 +1,4 @@
-import CheckboxButtonCustom from './CheckboxButton';
+import CheckboxButtonCustom from './CheckboxButtonCustom';
 import DayPickerCustom from './DayPickerCustom';
 import MultiSelectDropdownCustom from './MultiSelectDropdownCustom';
 import { PopOverEditCustomField } from './PopOverEditCustomField';
