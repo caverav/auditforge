@@ -108,42 +108,41 @@ export const AuditRoot = () => {
 
     try {
       setIsGeneratingPDF(true);
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate/pdf`,
-        {
-          credentials: 'include',
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
+      try {
+        const response = await fetch(
+          `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate/pdf`,
+          {
+            credentials: 'include',
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(bodyParam),
           },
-          body: JSON.stringify(bodyParam),
-        },
-      );
+        );
 
-      if (!response.ok) {
+        if (!response.ok) {
+          throw new Error('Error generating PDF');
+        }
+
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${auditName}.pdf`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        window.URL.revokeObjectURL(url);
+
+        setIsOpenModal(false);
+      } catch (error) {
+        console.error('Error al generar el PDF:', error);
+        toast.error(t('err.errorGeneratingPdf'));
+      } finally {
         setIsGeneratingPDF(false);
-
-        throw new Error('Error generating PDF');
       }
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `${auditName}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-
-      setIsOpenModal(false);
-    } catch (error) {
-      setIsGeneratingPDF(false);
-      console.error('Error:', error);
-      toast.error(t('err.errorGeneratingPdf'));
-    }
-    setIsGeneratingPDF(false);
-  };
+    };
 
   const fileTypes: ListItem[] = [
     {
