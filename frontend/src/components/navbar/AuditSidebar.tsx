@@ -160,7 +160,7 @@ const AuditSidebar = ({
           ))}
         </ul>
         <div className={clsx('mt-4 px-4', isCollapsed && 'px-2')}>
-          <div className={clsx('mb-4 font-thin', isCollapsed && 'sr-only')}>
+          <div className={clsx('mb-4 font-light', isCollapsed && 'sr-only')}>
             <p className="text-gray-400 text-lg">{t('sortBy')} CVSS</p>
             <DefaultRadioGroup
               name="sortOrder"

@@ -543,7 +543,6 @@ export const addVuln = async (
 }> => {
   try {
     let data;
-    console.log(locale);
 
     try {
       const res = await getVulnerabilities();

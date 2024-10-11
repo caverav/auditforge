@@ -126,7 +126,7 @@ export const Add = () => {
             setNewVulnTitle('');
             toast.success(t('msg.findingCreateOk'));
           } else {
-            toast.error(t(res.datas));
+            toast.error(res.datas);
           }
         })
         .catch(console.error);
@@ -148,7 +148,7 @@ export const Add = () => {
           setNewVulnTitle('');
           toast.success(t('msg.findingCreateOk'));
         } else {
-          toast.error(t(res.datas));
+          toast.error(res.datas);
         }
       })
       .catch(console.error);
