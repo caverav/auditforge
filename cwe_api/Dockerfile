@@ -3,7 +3,7 @@ FROM python:3.12-slim
 WORKDIR /app
 
 COPY . .
-ARG FILE_ID
+ARG CWE_MODEL_URL
 
 RUN set -e \
     && apt-get update -y \
