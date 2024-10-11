@@ -44,6 +44,7 @@
     "qrcode": "^1.5.4",
     "socket.io": "^4.7.5",
     "swagger-autogen": "^2.23.7",
+    "uuid": "^10.0.0",
     "winston": "^3.14.2",
     "xml": "^1.0.1"
   }
