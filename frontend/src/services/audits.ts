@@ -243,7 +243,7 @@ export type AuditFinding = {
   references: string[];
   cwes: string[];
   cvssv3: string;
-  category: string;
+  category?: string;
   customFields: string[];
 };
 
