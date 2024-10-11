@@ -16,6 +16,7 @@ var translate = require('../translate');
 var $t;
 const muhammara = require('muhammara');
 const path = require('path');
+const os = require('os');
 
 // Generate document with docxtemplater
 async function generateDoc(audit) {
@@ -139,12 +140,17 @@ async function generateEncryptedPdf(audit, password) {
         console.log(err);
         return reject(err);
       }
-      const os = require('os');
 
-      const tempPdfPath = path.join(os.tmpdir(), `documento_sin_contraseña_${Date.now()}.pdf`);
+      const tempPdfPath = path.join(
+        os.tmpdir(),
+        `documento_sin_contraseña_${Date.now()}.pdf`,
+      );
       fs.writeFileSync(tempPdfPath, pdf);
 
-      const protectedPdfPath = path.join(os.tmpdir(), `documento_protegido_${Date.now()}.pdf`);
+      const protectedPdfPath = path.join(
+        os.tmpdir(),
+        `documento_protegido_${Date.now()}.pdf`,
+      );
 
       try {
         const Recipe = muhammara.Recipe;
