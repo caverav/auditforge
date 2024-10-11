@@ -17,6 +17,7 @@ var $t;
 const muhammara = require('muhammara');
 const path = require('path');
 const os = require('os');
+const { v4: uuidv4 } = require('uuid');
 
 // Generate document with docxtemplater
 async function generateDoc(audit) {
@@ -143,13 +144,13 @@ async function generateEncryptedPdf(audit, password) {
 
       const tempPdfPath = path.join(
         os.tmpdir(),
-        `documento_sin_contraseña_${Date.now()}.pdf`,
+        `documento_sin_contraseña_${uuidv4()}.pdf`,
       );
       fs.writeFileSync(tempPdfPath, pdf);
 
       const protectedPdfPath = path.join(
         os.tmpdir(),
-        `documento_protegido_${Date.now()}.pdf`,
+        `documento_protegido_${uuidv4()}.pdf`,
       );
 
       try {
