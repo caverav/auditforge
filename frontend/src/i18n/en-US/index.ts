@@ -185,6 +185,7 @@ export default {
     customFieldAlreadyExists: 'Custom Field already exists',
     failedCreateCustomField: 'Error creating custom field',
     failedDeleteCustomField: 'Failed to delete the custom field',
+    failedUpdateCustomField: 'Failed to update the custom field',
     errorCreatingSection: 'Failed to create section',
     failedCreateAuditType: 'Failed To Create Audit Type',
     failedUpdateLanguages: 'Failed To Update Languages',

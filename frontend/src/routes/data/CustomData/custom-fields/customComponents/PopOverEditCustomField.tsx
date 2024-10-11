@@ -233,7 +233,7 @@ export const PopOverEditCustomField: React.FC<PopOverProps> = ({
                           color="red"
                           onClick={() => handlerDeleteOption(index)}
                         >
-                          x
+                          <span aria-hidden="true">×</span>
                         </PrimaryButton>
                       </div>
                     </div>

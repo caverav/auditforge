@@ -72,7 +72,7 @@ const MultiSelectDropdownCustom: React.FC<MultiSelectDropdownProps> = ({
   const ids = items.map(item => item.id);
   const hasDuplicateIds = new Set(ids).size !== ids.length;
   if (hasDuplicateIds) {
-    throw new Error('Los ids de los items deben ser únicos');
+    throw new Error('the item IDs must be unique.');
   }
   const handleChange = (items: ListItem[]) => {
     onChange(items);

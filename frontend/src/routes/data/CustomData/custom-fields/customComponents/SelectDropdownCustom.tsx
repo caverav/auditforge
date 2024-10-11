@@ -41,13 +41,11 @@ const SelectDropdownCustom: React.FC<SelectDropdownProps> = ({
   currentLanguage,
 }) => {
   const [selected, setSelected] = useState<ListItem | null>(
-    items.find(item => (item.value === text ? item : null)) ?? null,
+    items.find(item => item.value === text) ?? null,
   );
 
   useEffect(() => {
-    setSelected(
-      items.find(item => (item.value === text ? item : null)) ?? null,
-    );
+    setSelected(items.find(item => item.value === text) ?? null);
   }, [items, text]);
 
   const onChange = (item: ListItem) => {

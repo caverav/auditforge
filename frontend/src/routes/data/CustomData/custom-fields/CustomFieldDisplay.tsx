@@ -425,7 +425,7 @@ export const CustomFieldDisplay: React.FC<CustomFieldProps> = ({
         fetchCustomFields();
       }
     } catch (error) {
-      toast.error(t('err.failedDeleteCustomField'));
+      toast.error(t('err.failedUpdateCustomField'));
       console.error('Error:', error);
     }
   };
