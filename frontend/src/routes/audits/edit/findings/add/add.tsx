@@ -92,7 +92,7 @@ export const Add = () => {
         setLanguages(languagesName);
         setLoadingLanguages(false);
 
-        if (languagesName.length > 0) {
+        if (languagesName.length > 0 && currentLanguage === null) {
           setCurrentLanguage(languagesName[0]);
         }
 
