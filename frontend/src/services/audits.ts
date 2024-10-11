@@ -611,9 +611,6 @@ export const addFinding = async (
         title,
       }),
     });
-    if (!response.ok) {
-      throw networkError;
-    }
     return await response.json();
   } catch (error) {
     console.error(error);
