@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
@@ -82,13 +82,13 @@ export const Add = () => {
     setTableData,
   );
 
-  useMemo(
-    () =>
-      getLanguages().then(res => {
+  useEffect(() => {
+    getLanguages()
+      .then(res => {
         dataLanguage = res;
-      }),
-    [],
-  ).catch(console.error);
+      })
+      .catch(console.error);
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
