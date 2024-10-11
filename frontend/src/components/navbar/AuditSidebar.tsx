@@ -79,11 +79,7 @@ const AuditSidebar = ({
   findings,
   sortOrderOptions,
   connectedUsers,
-<<<<<<< HEAD
   fileTypes,
-=======
-<<<<<<< HEAD
->>>>>>> 52c237f0 (🔧 chore: Add fileTypes to AuditSidebar component and remove DropdownButton import from AuditRoot component)
 }: AuditSidebarProps) => {
   const severityOrder: Record<string, number> = {
     C: 1,
@@ -137,60 +133,6 @@ const AuditSidebar = ({
           {menuItems.map(item => (
             <li key={item.name}>
               <Link
-=======
-  fileTypes,
-}: AuditSidebarProps) => (
-  <div
-    className={clsx(
-      'flex flex-col h-screen bg-gray-900 text-gray-100 transition-all duration-300',
-      isCollapsed ? 'w-20' : 'w-64',
-    )}
-  >
-    <div className="flex items-center justify-between p-4 border-b border-gray-800">
-      <h2
-        className={clsx(
-          'font-semibold transition-opacity',
-          isCollapsed ? 'opacity-0 w-0' : 'opacity-100',
-        )}
-      >
-        {t('audit')}
-      </h2>
-      <div className={clsx('m-2', isCollapsed && 'sr-only')}>
-        <DropdownButton items={fileTypes} placeholder={t('export')} />
-      </div>
-      <button
-        aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-        className="text-gray-400 hover:text-gray-100 hover:bg-gray-800 p-2 rounded-full transition-colors duration-200"
-        onClick={() => setIsCollapsed(!isCollapsed)}
-        type="button"
-      >
-        {isCollapsed ? (
-          <ChevronDown className="h-5 w-5" />
-        ) : (
-          <ChevronUp className="h-5 w-5" />
-        )}
-      </button>
-    </div>
-    <nav className="flex-1 overflow-y-auto py-4">
-      <ul className="space-y-2">
-        {menuItems.map(item => (
-          <li key={item.name}>
-            <Link
-              className={clsx(
-                'w-full flex items-center justify-start gap-3 px-4 py-2 text-left text-sm font-medium rounded-lg transition-colors duration-200',
-                'hover:bg-gray-800',
-                activeItem === item.name
-                  ? 'bg-gray-800 text-white'
-                  : 'text-gray-400',
-              )}
-              onClick={() => {
-                setActiveItem(item.name);
-              }}
-              to={item.value}
-            >
-              <item.icon className="h-5 w-5 flex-shrink-0" />
-              <span
->>>>>>> 4cf83430 (🔧 chore: Add fileTypes to AuditSidebar component and remove DropdownButton import from AuditRoot component)
                 className={clsx(
                   'w-full flex items-center justify-start gap-3 px-4 py-2 text-left text-sm font-medium rounded-lg transition-colors duration-200',
                   'hover:bg-gray-800',
