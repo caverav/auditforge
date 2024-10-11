@@ -102,6 +102,7 @@ export const PopOverEditCustomField: React.FC<PopOverProps> = ({
       { locale: currentLanguage, value: addOptionField },
     ];
     setOptionsData(newOptions);
+    setAddOptionField('');
     setCurrentCustomFields((prevFields: GetCustomFieldType[]) => {
       return prevFields.map((field: GetCustomFieldType) =>
         field._id === currentCustomField._id
