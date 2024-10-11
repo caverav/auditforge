@@ -37,6 +37,7 @@ export default {
     accountEnabled: 'Account enabled',
     accountDisabled: 'Account disabled',
     all: 'All',
+    confirmSelection: 'Confirm Selection',
   },
   tooltip: {
     usersConnected: 'Users on the Audit:',
@@ -673,4 +674,8 @@ export default {
   originalAudit: 'Original Audit',
   willBeRemoved: 'will be removed',
   auditPhase: 'Audit Phase',
+  recommendedCwe: 'Recommended CWE',
+  recommendCwe: 'Recommend CWE',
+  showAncestors: 'Show Ancestors',
+  hideAncestors: 'Hide Ancestors',
 };
