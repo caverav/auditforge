@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
@@ -9,7 +9,7 @@ import SelectDropdown from '../../../../../components/dropdown/SelectDropdown';
 import UITable, { Column } from '../../../../../components/table/UITable';
 import { useSortableTable } from '../../../../../hooks/useSortableTable';
 import { useTableFiltering } from '../../../../../hooks/useTableFiltering';
-import type { FindingByLocale } from '../../../../../services/audits';
+import type { FindingByLocale, Language } from '../../../../../services/audits';
 import {
   addFinding,
   addVuln,
@@ -37,6 +37,10 @@ type TableData = {
   type: string;
 };
 
+let dataLanguage: { status: string; datas: Language[] } = {
+  status: '',
+  datas: [],
+};
 export const Add = () => {
   const [languages, setLanguages] = useState<ListItem[]>([]);
   const [currentLanguage, setCurrentLanguage] = useState<ListItem | null>(null);
@@ -78,10 +82,17 @@ export const Add = () => {
     setTableData,
   );
 
+  useMemo(
+    () =>
+      getLanguages().then(res => {
+        dataLanguage = res;
+      }),
+    [],
+  ).catch(console.error);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const dataLanguage = await getLanguages();
         const languagesName = dataLanguage.datas.map(
           (item: LanguagesData, index: number) => ({
             id: index,
@@ -116,7 +127,7 @@ export const Add = () => {
       }
     };
     fetchData().catch(console.error);
-  }, [currentLanguage, setTableData]);
+  }, [currentLanguage, setTableData, dataLanguage]);
 
   const handleAddVuln = useCallback(
     (item: TableData) => {
