@@ -9,6 +9,8 @@ export type Finding = {
   description: string;
   observation: string;
   remediation: string;
+  remediationComplexity: number;
+  priority: number;
   references: string[];
   cwes: string[];
   cvssv3: string;
