@@ -65,6 +65,7 @@ const CheckboxButtonCustom = ({
           key={index}
         >
           <Checkbox
+            aria-label={`Opción ${option}`}
             checked={selectedBox[index]}
             className="group flex items-center justify-center size-6 rounded-md bg-white/10 p-1 ring-1 ring-white/15 ring-inset data-[checked]:bg-white"
             onChange={() => onChange(index)}

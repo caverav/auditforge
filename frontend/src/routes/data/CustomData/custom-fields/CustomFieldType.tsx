@@ -69,13 +69,13 @@ export const CustomFieldType: React.FC<CustomFieldTypeProps> = ({
     <div className="grid grid-cols-1 md:grid-cols-1 gap-4 content-start">
       <SelectDropdown
         items={cfDisplayOptions}
-        onChange={value => onChangeDisplayOption(value)}
+        onChange={onChangeDisplayOption}
         selected={displayOptionSelected}
         title={t('selectView')}
       />
       <SelectDropdown
         items={cfComponentOptions}
-        onChange={value => setComponentOptionSelected(value)}
+        onChange={setComponentOptionSelected}
         placeholder={t('selectComponent')}
         requiredAlert={requiredSelectComponentAlert}
         requiredField
@@ -89,7 +89,7 @@ export const CustomFieldType: React.FC<CustomFieldTypeProps> = ({
               ? customSectionsList
               : categoriesList
           }
-          onChange={value => setCategorySelected(value)}
+          onChange={setCategorySelected}
           placeholder={
             displayOptionSelected.value === 'section'
               ? t('selectSection')
