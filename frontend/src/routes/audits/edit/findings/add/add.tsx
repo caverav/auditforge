@@ -92,6 +92,10 @@ export const Add = () => {
         setLanguages(languagesName);
         setLoadingLanguages(false);
 
+        if (languagesName.length > 0) {
+          setCurrentLanguage(languagesName[0]);
+        }
+
         const vulns = await getVulnByLanguage(
           currentLanguage ? currentLanguage.value : 'en',
         );
