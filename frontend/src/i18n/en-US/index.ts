@@ -140,7 +140,7 @@ export default {
     auditDeleteNotice: 'Audit will be permanently deleted',
     customFieldCreatedOk: 'Custom Field Created Successfully!',
     customFieldDeleteNotice:
-      'Custom Field {{0}} will be permanently deleted.<br>This field will be removed from ALL Vulnerablities and associated data will be permanently LOST!',
+      'Custom Field {{0}} will be permanently deleted. This field will be removed from ALL Vulnerabilities and associated data will be permanently LOST!',
     customFieldDeleteOk:
       'Custom Field {{0}} deleted successfully. {{1}} Vulnerabilities were affected.',
     customFieldUpdatedOk: 'Custom Field Updated Successfully!',
