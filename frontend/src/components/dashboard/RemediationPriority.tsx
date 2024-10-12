@@ -7,8 +7,11 @@ import {
   Title,
   Tooltip,
 } from 'chart.js';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
+import { useParams } from 'react-router-dom';
+
+import { getAuditById } from '../../services/audits';
 
 ChartJS.register(
   CategoryScale,
@@ -20,15 +23,46 @@ ChartJS.register(
 );
 
 const RemediationPriority: React.FC = () => {
+  const { auditId } = useParams();
+
+  const [priorityData, setPriorityData] = useState<number[]>([0, 0, 0, 0]);
+
+  useEffect(() => {
+    const fetchAuditData = async () => {
+      if (!auditId) {
+        return;
+      }
+
+      try {
+        const dataAudit = await getAuditById(auditId);
+        const findings = dataAudit.datas.findings;
+        const counts = [0, 0, 0, 0];
+        findings.forEach((finding: { priority: number }) => {
+          if (finding.priority >= 1 && finding.priority <= 4) {
+            counts[finding.priority - 1] += 1;
+          }
+        });
+        setPriorityData(counts);
+      } catch (error) {
+        console.error('Error fetching audit data:', error);
+      }
+    };
+    if (auditId) {
+      fetchAuditData().catch(console.error);
+    }
+  }, [auditId]);
+
   const data = {
     labels: ['Low', 'Medium', 'High', 'Urgent'],
     datasets: [
       {
-        data: [2, 4, 2, 3],
-        backgroundColor: ['#FFDC00', '#FF851B', '#FF4136', '#85144b'],
+        data: priorityData,
+        backgroundColor: ['#2ECC40', '#FFDC00', '#FF851B', '#FF4136'],
       },
     ],
   };
+
+  const maxCount = Math.max(...priorityData) + 2;
 
   const options = {
     responsive: true,
@@ -36,7 +70,7 @@ const RemediationPriority: React.FC = () => {
     scales: {
       y: {
         beginAtZero: true,
-        max: 10,
+        max: maxCount,
         ticks: {
           stepSize: 1,
           color: 'white',
