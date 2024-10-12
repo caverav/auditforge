@@ -88,12 +88,12 @@ export type AuditType = {
   templates: { template: string; locale: string }[];
 };
 
-type OptionData = {
+export type OptionData = {
   locale: string;
   value: string;
 };
 
-type TextData = {
+export type TextData = {
   locale: string;
   value: string | string[];
 };
