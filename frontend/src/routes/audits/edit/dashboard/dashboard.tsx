@@ -2,7 +2,6 @@ import { useState } from 'react';
 
 import AverageCVSS from '@/components/dashboard/AverageCVSS';
 import CIATriad from '@/components/dashboard/CIATriad';
-import Collaborators from '@/components/dashboard/Collaborators';
 import CVSSScore from '@/components/dashboard/CVSSScore';
 import RemediationPriority from '@/components/dashboard/RemediationPriority';
 import Sidebar from '@/components/dashboard/Sidebar';
@@ -17,9 +16,6 @@ export const Dashboard = () => {
 
       case 'remediation-priority':
         return <RemediationPriority />;
-
-      case 'collaborators':
-        return <Collaborators />;
 
       case 'average-cvss':
         return <AverageCVSS />;
