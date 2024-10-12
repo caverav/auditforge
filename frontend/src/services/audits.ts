@@ -9,6 +9,8 @@ export type Finding = {
   description: string;
   observation: string;
   remediation: string;
+  remediationComplexity: number;
+  priority: number;
   references: string[];
   cwes: string[];
   cvssv3: string;
@@ -578,6 +580,8 @@ export const addVuln = async (
         description: data.details[detailIndex].description,
         observation: data.details[detailIndex].observation,
         remediation: data.details[detailIndex].remediation,
+        remediationComplexity: data.remediationComplexity,
+        priority: data.priority,
         cwes: data.details[detailIndex].cwes,
         references: data.details[detailIndex].references,
         customFields: data.details[detailIndex].customFields,
