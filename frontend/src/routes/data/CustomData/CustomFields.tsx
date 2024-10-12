@@ -258,7 +258,7 @@ export const CustomFields: React.FC = () => {
           </div>
         </div>
       </Card>
-      {currentCustomFields.length > 0 ? (
+      {currentCustomFields.length > 0 && languagesList.length > 0 ? (
         <CustomFieldDisplay
           currentCustomFields={currentCustomFields}
           displayOptionSelected={displayOptionSelected}
