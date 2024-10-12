@@ -796,7 +796,7 @@ export const updateCustomField = async (
   datas: string;
 }> => {
   try {
-    const response = await fetch(`${API_URL}data/custom-fields/`, {
+    const response = await fetch(`${API_URL}data/custom-fields`, {
       method: 'PUT',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
