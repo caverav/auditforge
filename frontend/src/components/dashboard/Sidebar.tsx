@@ -11,7 +11,6 @@ const Sidebar: React.FC<SidebarProps> = ({ setActiveView, activeView }) => {
     { name: 'Remediation Priority', id: 'remediation-priority' },
     { name: 'Remediation Complexity', id: 'remediation-complexity' },
     { name: 'CWEs', id: 'cwes' },
-    { name: 'Collaborators', id: 'collaborators' },
     { name: 'Average CVSS', id: 'average-cvss' },
     { name: 'CIA Triad', id: 'cia-triad' },
   ];
