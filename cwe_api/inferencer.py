@@ -37,8 +37,8 @@ def inferencer(vuln):
     softmax_output = m(output[0])[0]
     ind = np.argpartition(softmax_output, -NUMBER_OF_PREDICTIONS)[-NUMBER_OF_PREDICTIONS:]
 
-    reversed = np.flip(ind.numpy(),0).copy()
-    score = softmax_output[reversed]
+    reversed_indices = np.flip(ind.numpy(),0).copy()
+    score = softmax_output[reversed_indices]
 
-    return [{'priority': i, 'label': id2label[str(reversed[i])], 'score': float(score[i].numpy())} for i in range(0, 3)]
+    return [{'priority': i, 'label': id2label[str(reversed_indices[i])], 'score': float(score[i].numpy())} for i in range(0, 3)]
 
