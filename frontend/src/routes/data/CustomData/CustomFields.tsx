@@ -51,9 +51,9 @@ type CategoryData = {
   sortAuto: boolean;
 };
 
-export const CustomFields: React.FC = () => {
-  const optionsList = ['checkbox', 'radio', 'select', 'select-multiple'];
+const optionsList = ['checkbox', 'radio', 'select', 'select-multiple'];
 
+export const CustomFields: React.FC = () => {
   const [displayOptionSelected, setDisplayOptionSelected] = useState<ListItem>({
     id: 1,
     label: t('auditGeneral'),

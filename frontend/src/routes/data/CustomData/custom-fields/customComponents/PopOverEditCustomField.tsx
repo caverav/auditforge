@@ -97,6 +97,10 @@ export const PopOverEditCustomField: React.FC<PopOverProps> = ({
   };
 
   const handlerAddOption = () => {
+    if (!addOptionField.trim()) {
+      // Opcional: Mostrar un mensaje de error al usuario
+      return;
+    }
     const newOptions = [
       ...optionsData,
       { locale: currentLanguage, value: addOptionField },

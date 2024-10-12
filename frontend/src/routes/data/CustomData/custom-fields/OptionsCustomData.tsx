@@ -36,7 +36,9 @@ export const OptionsCustomData: React.FC<OptionsCustomDataProps> = ({
   setOptionsData,
 }) => {
   const handlerAddOption = () => {
-    if (addOptionField.trim() === '') return;
+    if (addOptionField.trim() === '') {
+      return;
+    }
     setOptionsData([
       ...optionsData,
       {
