@@ -1,3 +1,4 @@
+import { Cvss3P1 } from 'ae-cvss-calculator';
 import {
   BarElement,
   CategoryScale,
@@ -9,8 +10,11 @@ import {
   Tooltip,
 } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
+import { useParams } from 'react-router-dom';
+
+import { getAuditById } from '@/services/audits';
 
 ChartJS.register(
   CategoryScale,
@@ -22,24 +26,64 @@ ChartJS.register(
   annotationPlugin,
 );
 
-const AverageCVSS: React.FC = () => {
-  const averageCVSS = 6.1;
+const cvssStringToScore = (cvssScore: string) => {
+  try {
+    const cvssVector = new Cvss3P1(cvssScore);
+    return cvssVector.calculateExactOverallScore();
+  } catch (error) {
+    console.error('Invalid CVSS vector:', error);
+  }
+  return 0;
+};
 
-  const data = {
-    labels: [
-      'CWE-01: NOMBRE',
-      'CWE-02: NOMBRE',
-      'CWE-03: NOMBRE',
-      'CWE-04: NOMBRE',
-      'CWE-05: NOMBRE',
-    ],
+const AverageCVSS: React.FC = () => {
+  const { auditId } = useParams();
+  const [averageCVSS, setAverageCVSS] = useState(0);
+  const [data, setData] = useState({
+    labels: [''],
     datasets: [
       {
-        data: [6.1, 2.3, 8, 10, 4],
+        data: [0],
         backgroundColor: '#3498db',
       },
     ],
-  };
+  });
+  useEffect(() => {
+    getAuditById(auditId)
+      .then(audit => {
+        setAverageCVSS(
+          Math.round(
+            (audit.datas.findings.reduce(
+              (acc, finding) => acc + cvssStringToScore(finding.cvssv3),
+              0,
+            ) /
+              audit.datas.findings.length) *
+              10,
+          ) / 10,
+        );
+        setData({
+          labels: audit.datas.findings.map(finding => finding.title),
+          datasets: [
+            {
+              data: audit.datas.findings.map(finding =>
+                cvssStringToScore(finding.cvssv3),
+              ),
+              // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+              backgroundColor: audit.datas.findings.map(finding =>
+                cvssStringToScore(finding.cvssv3) >= 9
+                  ? '#FF4136'
+                  : cvssStringToScore(finding.cvssv3) >= 7
+                    ? '#FF851B'
+                    : cvssStringToScore(finding.cvssv3) >= 4
+                      ? '#FFDC00'
+                      : '#2ECC40',
+              ) as unknown as string,
+            },
+          ],
+        });
+      })
+      .catch(console.error);
+  }, [auditId, averageCVSS]);
 
   const options: ChartOptions<'bar'> = {
     indexAxis: 'y',
