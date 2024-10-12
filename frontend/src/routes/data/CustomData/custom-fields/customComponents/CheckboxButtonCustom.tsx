@@ -50,7 +50,7 @@ const CheckboxButtonCustom = ({
       {options.map((option: string, index: number) => (
         <div
           className={`w-full flex items-center ${index !== 0 ? 'mt-2' : ''}`}
-          key={index}
+          key={`${option}-${index}`}
         >
           <Checkbox
             aria-label={`Opción ${option}`}
