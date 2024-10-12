@@ -7,8 +7,11 @@ import {
   RadialLinearScale,
   Tooltip,
 } from 'chart.js';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Radar } from 'react-chartjs-2';
+import { useParams } from 'react-router-dom';
+
+import { getAuditById } from '@/services/audits';
 
 ChartJS.register(
   RadialLinearScale,
@@ -19,33 +22,50 @@ ChartJS.register(
   Legend,
 );
 
+const cvssStringTo = (
+  field: 'integrity' | 'availability' | 'confidentiality',
+  cvssVector: string,
+) => {
+  const values: Record<string, number> = {
+    H: 3,
+    M: 2,
+    L: 1,
+  } as const;
+  const substrings = {
+    integrity: 35,
+    availability: 39,
+    confidentiality: 43,
+  } as const;
+  return values[cvssVector.substring(substrings[field], substrings[field] + 1)];
+};
 const CIATriad: React.FC = () => {
-  const data = {
+  const [data, setData] = useState({
     labels: ['Integrity', 'Availability', 'Confidentiality'],
-    datasets: [
-      {
-        label: 'Vulnerability 1',
-        data: [3, 2, 3],
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
-        borderColor: 'rgba(255, 99, 132, 1)',
-        borderWidth: 2,
-      },
-      {
-        label: 'Vulnerability 2',
-        data: [2, 3, 1],
-        backgroundColor: 'rgba(255, 206, 86, 0.2)',
-        borderColor: 'rgba(255, 206, 86, 1)',
-        borderWidth: 2,
-      },
-      {
-        label: 'Vulnerability 3',
-        data: [1, 1, 2],
-        backgroundColor: 'rgba(54, 162, 235, 0.2)',
-        borderColor: 'rgba(54, 162, 235, 1)',
-        borderWidth: 2,
-      },
-    ],
-  };
+    datasets: [],
+  });
+
+  const { auditId } = useParams();
+
+  useEffect(() => {
+    getAuditById(auditId)
+      .then(audit => {
+        setData({
+          labels: ['Integrity', 'Availability', 'Confidentiality'],
+          datasets: audit.datas.findings.map(finding => ({
+            label: finding.title,
+            data: [
+              cvssStringTo('integrity', finding.cvssv3),
+              cvssStringTo('availability', finding.cvssv3),
+              cvssStringTo('confidentiality', finding.cvssv3),
+            ],
+            backgroundColor: `rgba(${Math.floor(Math.random() * 155 + 100)}, ${Math.floor(Math.random() * 155 + 100)}, ${Math.floor(Math.random() * 155 + 100)}, 0.2)`,
+            borderColor: 'rgba(255, 255, 255, 0.2)',
+            borderWidth: 2,
+          })),
+        });
+      })
+      .catch(console.error);
+  }, [auditId]);
 
   const options = {
     responsive: true,
