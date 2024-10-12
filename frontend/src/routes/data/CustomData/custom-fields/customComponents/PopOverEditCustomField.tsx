@@ -230,7 +230,7 @@ export const PopOverEditCustomField: React.FC<PopOverProps> = ({
                   {optionsData.map((option, index) => (
                     <div
                       className={`flex items-center gap-2 ${index !== 0 ? 'border-t-gray-600 border-t' : ''}`}
-                      key={index}
+                      key={`${option.locale}-${index}`}
                     >
                       <div className="flex-grow mx-2">{option.value}</div>
                       <div className="flex-shrink-0 p-1">
