@@ -1,8 +1,10 @@
+/* eslint-disable import/extensions */
 import { useState } from 'react';
 
 import AverageCVSS from '@/components/dashboard/AverageCVSS';
 import CIATriad from '@/components/dashboard/CIATriad';
 import CVSSScore from '@/components/dashboard/CVSSScore';
+import RemediationComplexity from '@/components/dashboard/RemediationComplexity';
 import RemediationPriority from '@/components/dashboard/RemediationPriority';
 import Sidebar from '@/components/dashboard/Sidebar';
 
@@ -16,6 +18,9 @@ export const Dashboard = () => {
 
       case 'remediation-priority':
         return <RemediationPriority />;
+
+      case 'remediation-complexity':
+        return <RemediationComplexity />;
 
       case 'average-cvss':
         return <AverageCVSS />;
