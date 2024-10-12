@@ -40,7 +40,5 @@ def inferencer(vuln):
     reversed = np.flip(ind.numpy(),0).copy()
     score = softmax_output[reversed]
 
-    predicts = [{'priority': i, 'label': id2label[str(reversed[i])], 'score': float(score[i].numpy())} for i in range(0, 3)]
-
-    return predicts
+    return [{'priority': i, 'label': id2label[str(reversed[i])], 'score': float(score[i].numpy())} for i in range(0, 3)]
 
