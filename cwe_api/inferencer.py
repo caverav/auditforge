@@ -24,7 +24,6 @@ def inferencer(vuln):
         label2id = json.load(f)
 
     tokenizer = AutoTokenizer.from_pretrained("distilbert/distilbert-base-multilingual-cased")
-    print("tokenizer: ", tokenizer)
     model = AutoModelForSequenceClassification.from_pretrained(MODEL_PATH,
                                                                 num_labels=len(label2id),
                                                                 id2label=id2label,
