@@ -28,15 +28,12 @@ def inferencer(vuln):
                                                                 num_labels=len(label2id),
                                                                 id2label=id2label,
                                                                 label2id=label2id)
-    print("model: ", model)
-
+    
     m = nn.Softmax(dim=1)
 
     pipe = BestCweClassifications(model=model, tokenizer=tokenizer)
-    print("pipe: ", pipe)
     output = pipe(vuln, batch_size=2, truncation="only_first")
-    print("output: ",output)
-
+    
     softmax_output = m(output[0])[0]
     ind = np.argpartition(softmax_output, -NUMBER_OF_PREDICTIONS)[-NUMBER_OF_PREDICTIONS:]
 
