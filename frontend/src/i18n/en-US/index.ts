@@ -1,5 +1,9 @@
 /* eslint-disable sonarjs/no-duplicate-string */
 export default {
+  aria: {
+    showPassword: 'Show password',
+    hidePassword: 'Hide password',
+  },
   generalSettings: 'General Settings',
   changeDisplayLanguage: 'Display Language',
   changeDisplayLanguageInfo: 'Choose your preferred default language',
@@ -41,6 +45,8 @@ export default {
     next: 'Next',
     clear: 'Clear',
     add: 'Add',
+    generatePassword: 'Generate Password',
+    submitEncryption: 'Encrypt',
   },
   tooltip: {
     usersConnected: 'Users on the Audit:',
@@ -146,6 +152,7 @@ export default {
     customFieldUpdatedOk: 'Custom Field Updated Successfully!',
     sectionCreatedOk: 'Custom Section Created Successfully!',
     auditTypeCreatedOk: 'Audit Type Created Successfully!',
+    copiedToClipboard: 'Copied to clipboard',
     clientEmailError: 'Client email already exists',
     collaboratorUsernameError: 'Collaborator username already exists',
     companyNameError: 'Company name already exists',
@@ -190,6 +197,8 @@ export default {
     failedCreateAuditType: 'Failed To Create Audit Type',
     failedUpdateLanguages: 'Failed To Update Languages',
     createEmptyField: 'Failed to Create: Empty field',
+    passwordsDontMatch: 'Passwords do not match',
+    errorGeneratingPdf: 'Failed exporting audit to pdf',
   },
   cvss: {
     title: 'CVSS v3.1 Base Score',
@@ -700,4 +709,17 @@ export default {
   willBeRemoved: 'will be removed',
   auditPhase: 'Audit Phase',
   manageCustomFields: 'Manage Custom Fields',
+  encryption: 'Encryption',
+  strongPasswordTitle: 'Strong Password',
+  strongPasswordText: 'The entered password is strong enough.',
+  mediumPasswordTitle: 'Medium Strength Password',
+  mediumPasswordText: 'The entered password is strong, but can be better.',
+  weakPasswordTitle: 'Weak Password',
+  weakPasswordText: 'The entered password is still weak.',
+  tooWeakPasswordTitle: 'Too Weak Password',
+  tooWeakPasswordText: 'The entered password is too weak.',
+  noPasswordTitle: 'No Password',
+  noPasswordText: 'Start typing to check the password strength.',
+  passwordStrengthInfo:
+    'A password must have: at least an uppercase letter, a lowercase letter, a number, a special symbol, and a minimum length of 10 to be considered strong.',
 };
