@@ -21,19 +21,7 @@ const CheckboxButtonCustom = ({
   id,
   currentLanguage,
 }: CheckboxButtonProps) => {
-  const [selectedBox, setSelectedBox] = useState<boolean[]>(
-    options.map((option: string) =>
-      text.some((item: string) => item === option),
-    ),
-  );
-
-  useEffect(() => {
-    setSelectedBox(
-      options.map((option: string) =>
-        text.some((item: string) => item === option),
-      ),
-    );
-  }, [options, text]);
+  const selectedBox = options.map((option: string) => text.includes(option));
 
   const onChange = (index: number) => {
     const values = selectedBox.map((itemMap, i) =>
