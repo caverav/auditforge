@@ -50,11 +50,9 @@ export const OptionsCustomData: React.FC<OptionsCustomDataProps> = ({
   };
 
   const handlerDeleteOption = (index: number) => {
-    setOptionsData(prevOptionsData => {
-      const updatedOptionsData = [...prevOptionsData];
-      updatedOptionsData.splice(index, 1);
-      return updatedOptionsData;
-    });
+    setOptionsData(prevOptionsData =>
+      prevOptionsData.filter((_, i) => i !== index),
+    );
   };
 
   return (
