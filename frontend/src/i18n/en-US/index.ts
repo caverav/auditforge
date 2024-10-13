@@ -727,4 +727,7 @@ export default {
   noPasswordText: 'Start typing to check the password strength.',
   passwordStrengthInfo:
     'A password must have: at least an uppercase letter, a lowercase letter, a number, a special symbol, and a minimum length of 10 to be considered strong.',
+  recommendCVSS: 'Recommend CVSS',
+  cleanRecommendations: 'Clean Recommendations',
+  errorRecommendingCVSS: 'Error generating recommendation',
 };
