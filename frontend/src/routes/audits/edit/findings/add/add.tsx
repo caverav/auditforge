@@ -9,7 +9,7 @@ import SelectDropdown from '../../../../../components/dropdown/SelectDropdown';
 import UITable, { Column } from '../../../../../components/table/UITable';
 import { useSortableTable } from '../../../../../hooks/useSortableTable';
 import { useTableFiltering } from '../../../../../hooks/useTableFiltering';
-import type { FindingByLocale } from '../../../../../services/audits';
+import type { FindingByLocale, Language } from '../../../../../services/audits';
 import {
   addFinding,
   addVuln,
@@ -37,6 +37,10 @@ type TableData = {
   type: string;
 };
 
+let dataLanguage: { status: string; datas: Language[] } = {
+  status: '',
+  datas: [],
+};
 export const Add = () => {
   const [languages, setLanguages] = useState<ListItem[]>([]);
   const [currentLanguage, setCurrentLanguage] = useState<ListItem | null>(null);
@@ -79,9 +83,16 @@ export const Add = () => {
   );
 
   useEffect(() => {
+    getLanguages()
+      .then(res => {
+        dataLanguage = res;
+      })
+      .catch(console.error);
+  }, []);
+
+  useEffect(() => {
     const fetchData = async () => {
       try {
-        const dataLanguage = await getLanguages();
         const languagesName = dataLanguage.datas.map(
           (item: LanguagesData, index: number) => ({
             id: index,
@@ -91,6 +102,10 @@ export const Add = () => {
         );
         setLanguages(languagesName);
         setLoadingLanguages(false);
+
+        if (languagesName.length > 0 && currentLanguage === null) {
+          setCurrentLanguage(languagesName[0]);
+        }
 
         const vulns = await getVulnByLanguage(
           currentLanguage ? currentLanguage.value : 'en',
@@ -112,7 +127,47 @@ export const Add = () => {
       }
     };
     fetchData().catch(console.error);
-  }, [currentLanguage, setTableData]);
+  }, [currentLanguage, setTableData, dataLanguage]);
+
+  const handleAddVuln = useCallback(
+    (item: TableData) => {
+      addVuln(
+        item.id,
+        auditId ?? '',
+        currentLanguage ? currentLanguage.value : 'en',
+      )
+        .then(res => {
+          if (res.status === 'success') {
+            setNewVulnTitle('');
+            toast.success(t('msg.findingCreateOk'));
+          } else {
+            toast.error(res.datas);
+          }
+        })
+        .catch(console.error);
+    },
+    [auditId, currentLanguage],
+  );
+
+  const rowActions = [
+    {
+      label: 'Add',
+      onClick: handleAddVuln,
+    },
+  ];
+
+  const handleAddFinding = useCallback(() => {
+    addFinding(newVulnTitle, auditId ?? '')
+      .then(res => {
+        if (res.status === 'success') {
+          setNewVulnTitle('');
+          toast.success(t('msg.findingCreateOk'));
+        } else {
+          toast.error(res.datas);
+        }
+      })
+      .catch(console.error);
+  }, [newVulnTitle, auditId]);
 
   const handleAddVuln = useCallback(
     (item: TableData) => {
@@ -188,7 +243,7 @@ export const Add = () => {
           data={tableData}
           emptyState={t('err.noMatchingRecords')}
           filters={filters}
-          keyExtractor={item => item._id}
+          keyExtractor={item => item.id}
           onFilter={handleFilterChange}
           onSort={handleSorting}
           rowActions={rowActions}

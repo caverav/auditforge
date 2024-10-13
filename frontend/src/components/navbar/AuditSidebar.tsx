@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 
 import DefaultRadioGroup from '../button/DefaultRadioGroup';
 import DropdownButton, { ListItem } from '../button/DropdownButton';
-import SelectDropdown from '../dropdown/SelectDropdown';
 
 type MenuItem = {
   name: string;

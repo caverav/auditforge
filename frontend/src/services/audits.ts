@@ -9,6 +9,8 @@ export type Finding = {
   description: string;
   observation: string;
   remediation: string;
+  remediationComplexity: number;
+  priority: number;
   references: string[];
   cwes: string[];
   cvssv3: string;
@@ -243,7 +245,7 @@ export type AuditFinding = {
   references: string[];
   cwes: string[];
   cvssv3: string;
-  category: string;
+  category?: string;
   customFields: string[];
 };
 
@@ -543,7 +545,6 @@ export const addVuln = async (
 }> => {
   try {
     let data;
-    console.log(locale);
 
     try {
       const res = await getVulnerabilities();
@@ -579,6 +580,8 @@ export const addVuln = async (
         description: data.details[detailIndex].description,
         observation: data.details[detailIndex].observation,
         remediation: data.details[detailIndex].remediation,
+        remediationComplexity: data.remediationComplexity,
+        priority: data.priority,
         cwes: data.details[detailIndex].cwes,
         references: data.details[detailIndex].references,
         customFields: data.details[detailIndex].customFields,
@@ -612,9 +615,6 @@ export const addFinding = async (
         title,
       }),
     });
-    if (!response.ok) {
-      throw networkError;
-    }
     return await response.json();
   } catch (error) {
     console.error(error);

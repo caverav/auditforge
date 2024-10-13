@@ -3,12 +3,14 @@ import { BarChart, Globe, List, Plus, Settings } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
-import { ListItem } from '../../../components/button/DropdownButton';
+import DropdownButton, {
+  ListItem,
+} from '../../../components/button/DropdownButton';
 import AuditSidebar from '../../../components/navbar/AuditSidebar';
 import { Finding, getAuditById } from '../../../services/audits';
 import { EncryptionModal } from './general/EncryptionModal';
-import { toast } from 'sonner';
 
 export const AuditRoot = () => {
   const { t } = useTranslation();

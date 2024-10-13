@@ -160,6 +160,7 @@ export default {
     invalidEmailError:
       'Email must follow this format: example@example.something',
     passwordsDoNotMatch: 'Passwords do not match',
+    copiedToClipboard: 'Copied to clipboard',
   },
   err: {
     notDefinedLanguage: 'Not defined for this language',
