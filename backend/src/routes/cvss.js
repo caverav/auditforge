@@ -5,11 +5,11 @@ module.exports = function (app) {
   const errorClassify = new Error('Error classifying vulnerability');
   const networkError = new Error('Network response was not ok');
   const timeoutError = new Error('Request timed out');
-  const TIMEOUT_MS = 8000; // 9 segundos
+  const TIMEOUT_MS = 10000; // 10 segundos
 
-  // Get CWE classification from description
+  // Get CVSS string from description
   app.post(
-    '/api/classify_cvss',
+    '/api/cvss',
     acl.hasPermission('classify_cvss:all'),
     async function (req, res) {
       if (
@@ -32,7 +32,7 @@ module.exports = function (app) {
         //TODO: Change workaround to a proper solution for self-signed certificates
         process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
         const response = await fetch(
-          `https://${cweConfig.host}:${cweConfig.port}/classify_cvss`,
+          `https://${cweConfig.host}:${cweConfig.port}/cvss`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
