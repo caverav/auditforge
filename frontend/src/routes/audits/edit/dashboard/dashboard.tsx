@@ -1,6 +1,6 @@
 /* eslint-disable import/extensions */
 import { t } from 'i18next';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import PrimaryButton from '@/components/button/PrimaryButton';
@@ -11,6 +11,7 @@ import ExportModal from '@/components/dashboard/ExportModal';
 import RemediationComplexity from '@/components/dashboard/RemediationComplexity';
 import RemediationPriority from '@/components/dashboard/RemediationPriority';
 import Sidebar from '@/components/dashboard/Sidebar';
+import { getAuditById } from '@/services/audits';
 import { exportToPDF } from '@/services/exportToPDF';
 
 export const Dashboard = () => {
@@ -18,7 +19,16 @@ export const Dashboard = () => {
   const [activeView, setActiveView] = useState('cvss-score');
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [selectedDisplays, setSelectedDisplays] = useState<string[]>([]);
-  const [auditName, setAuditName] = useState('AuditForge Report');
+  const [auditName, setAuditName] = useState('');
+
+  useEffect(() => {
+    getAuditById(auditId)
+      .then(audit => {
+        setAuditName(audit.datas.name);
+      })
+      .catch(console.error);
+  }, [auditId]);
+
   const displays = [
     { id: 'cvss-score', name: 'CVSS Score', component: CVSSScore },
     {
