@@ -2,15 +2,19 @@
 import { Cvss3P1 } from 'ae-cvss-calculator';
 import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
+import { toast } from 'sonner';
 
 import PrimaryButton from '@/components/button/PrimaryButton';
+import { postDescriptionCVSS } from '@/services/vulnerabilities';
 
 import MetricGroup from './metricGroup';
 import ScoreBox from './scoreBox';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 
 type CVSSProp = {
   handleCvssChange: (value: string) => void;
   cvssStringInitial?: string;
+  handleCvssRecomendation: () => string;
 };
 
 const generateCVSSVector = (
@@ -75,6 +79,7 @@ const generateCVSSVector = (
 const CVSSCalculator: React.FC<CVSSProp> = ({
   cvssStringInitial,
   handleCvssChange,
+  handleCvssRecomendation,
 }) => {
   const [AV, setAV] = useState('');
   const [AC, setAC] = useState('');
@@ -262,10 +267,24 @@ const CVSSCalculator: React.FC<CVSSProp> = ({
     setRecomendedA('');
   };
 
-  const recommendCVSS = () => {
-    parseCVSSRecommendationVector(
-      'CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:H/I:H/A:L',
-    );
+  const [isLoadingRecommendation, setIsLoadingRecommendation] = useState(false);
+
+  const recommendCVSS = async () => {
+    const vulnDescription = handleCvssRecomendation();
+    if (vulnDescription === '') {
+      return;
+    }
+    setIsLoadingRecommendation(true);
+
+    try {
+      const cvssString = (await postDescriptionCVSS({ vuln: vulnDescription }))
+        .result;
+      parseCVSSRecommendationVector(cvssString);
+    } catch (err) {
+      toast.error('errorRecommendingCVSS');
+    } finally {
+      setIsLoadingRecommendation(false);
+    }
   };
 
   return (
@@ -341,9 +360,14 @@ const CVSSCalculator: React.FC<CVSSProp> = ({
         <PrimaryButton onClick={cleanRecommendations}>
           {t('cleanRecommendations')}
         </PrimaryButton>
-        <PrimaryButton onClick={recommendCVSS}>
-          {t('recommendCVSS')}
-        </PrimaryButton>
+        <div className="flex items-center space-x-4">
+          {isLoadingRecommendation ? (
+            <ArrowPathIcon className="h-8 w-8 animate-spin text-blue-500" />
+          ) : null}
+          <PrimaryButton onClick={recommendCVSS}>
+            {t('recommendCVSS')}
+          </PrimaryButton>
+        </div>
       </div>
     </div>
   );
