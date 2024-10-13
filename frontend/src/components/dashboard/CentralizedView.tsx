@@ -15,7 +15,7 @@ const CentralizedView: React.FC<CentralizedViewProps> = ({
   selectedDisplays,
   auditId,
 }) => {
-  const components: Record<string, React.ComponentType> = {
+  const components: Record<string, React.FC<{ auditId?: string }>> = {
     'cvss-score': CVSSScore,
     'remediation-priority': RemediationPriority,
     'remediation-complexity': RemediationComplexity,
