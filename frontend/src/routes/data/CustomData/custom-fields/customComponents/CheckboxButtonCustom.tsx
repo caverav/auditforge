@@ -1,6 +1,5 @@
 import { Checkbox } from '@headlessui/react';
 import { CheckIcon } from '@heroicons/react/16/solid';
-import { useEffect, useState } from 'react';
 
 import { GetCustomFieldType } from '../../../../../services/data';
 
