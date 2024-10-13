@@ -11,7 +11,6 @@ const Sidebar: React.FC<SidebarProps> = ({ setActiveView, activeView }) => {
     { name: t('cvssScore'), id: 'cvss-score' },
     { name: t('remediationPriority'), id: 'remediation-priority' },
     { name: t('remediationComplexity'), id: 'remediation-complexity' },
-    { name: 'CWEs', id: 'cwes' },
     { name: 'Average CVSS', id: 'average-cvss' },
     { name: 'CIA Triad', id: 'cia-triad' },
   ];
