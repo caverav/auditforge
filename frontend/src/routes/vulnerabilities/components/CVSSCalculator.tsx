@@ -357,17 +357,17 @@ const CVSSCalculator: React.FC<CVSSProp> = ({
       </div>
       <hr />
       <div className="flex justify-between pt-4">
-        <PrimaryButton onClick={cleanRecommendations}>
-          {t('cleanRecommendations')}
-        </PrimaryButton>
         <div className="flex items-center space-x-4">
-          {isLoadingRecommendation ? (
-            <ArrowPathIcon className="h-8 w-8 animate-spin text-blue-500" />
-          ) : null}
           <PrimaryButton onClick={recommendCVSS}>
             {t('recommendCVSS')}
           </PrimaryButton>
+          {isLoadingRecommendation ? (
+            <ArrowPathIcon className="h-8 w-8 animate-spin text-blue-500" />
+          ) : null}
         </div>
+        <PrimaryButton onClick={cleanRecommendations}>
+          {t('cleanRecommendations')}
+        </PrimaryButton>
       </div>
     </div>
   );
