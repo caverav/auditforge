@@ -30,7 +30,7 @@ var AuditTypeSchema = new Schema(
 AuditTypeSchema.statics.getAll = () => {
   return new Promise((resolve, reject) => {
     var query = AuditType.find();
-    query.select('-_id name templates sections hidden stage');
+    query.select('_id name templates sections hidden stage');
     query
       .exec()
       .then(rows => {
