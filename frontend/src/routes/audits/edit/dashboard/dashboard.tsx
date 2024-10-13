@@ -2,51 +2,36 @@
 import { t } from 'i18next';
 import { useState } from 'react';
 
-import CheckboxButton from '@/components/button/CheckboxButton';
 import PrimaryButton from '@/components/button/PrimaryButton';
 import AverageCVSS from '@/components/dashboard/AverageCVSS';
 import CIATriad from '@/components/dashboard/CIATriad';
 import CVSSScore from '@/components/dashboard/CVSSScore';
+import ExportModal from '@/components/dashboard/ExportModal';
 import RemediationComplexity from '@/components/dashboard/RemediationComplexity';
 import RemediationPriority from '@/components/dashboard/RemediationPriority';
 import Sidebar from '@/components/dashboard/Sidebar';
-import Modal from '@/components/modal/Modal';
+import { exportToPDF } from '@/services/exportToPDF';
 
 export const Dashboard = () => {
   const [activeView, setActiveView] = useState('cvss-score');
-
-  const [isOpenExportModal, setIsOpenExportModal] = useState(false);
-
-  const [dashboardCheckboxs, setDashboardCheckboxs] = useState({
-    cvssScore: false,
-    remediationPriority: false,
-    remediationComplexity: false,
-    averageCvss: false,
-    ciaTriad: false,
-  });
-
-  const handleSubmitExport = async () => {};
-
-  const handleCancelExport = () => {
-    setDashboardCheckboxs({
-      cvssScore: false,
-      remediationPriority: false,
-      remediationComplexity: false,
-      averageCvss: false,
-      ciaTriad: false,
-    });
-    setIsOpenExportModal(false);
-  };
-
-  const handleCheckboxChange = (
-    key: string,
-    value: React.SetStateAction<boolean>,
-  ) => {
-    setDashboardCheckboxs(prev => ({
-      ...prev,
-      [key]: value,
-    }));
-  };
+  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
+  const [selectedDisplays, setSelectedDisplays] = useState<string[]>([]);
+  const [auditName, setAuditName] = useState('AuditForge Report');
+  const displays = [
+    { id: 'cvss-score', name: 'CVSS Score', component: CVSSScore },
+    {
+      id: 'remediation-priority',
+      name: 'Remediation Priority',
+      component: RemediationPriority,
+    },
+    {
+      id: 'remediation-complexity',
+      name: 'Remediation Complexity',
+      component: RemediationComplexity,
+    },
+    { id: 'average-cvss', name: 'Average CVSS', component: AverageCVSS },
+    { id: 'cia-triad', name: 'CIA Triad', component: CIATriad },
+  ];
 
   const renderView = () => {
     switch (activeView) {
@@ -66,6 +51,15 @@ export const Dashboard = () => {
         return <CIATriad />;
     }
   };
+  const handleExportClick = () => {
+    setSelectedDisplays(displays.map(d => d.id));
+    setIsExportModalOpen(true);
+  };
+
+  const handleExportConfirm = async () => {
+    setIsExportModalOpen(false);
+    await exportToPDF(auditName, selectedDisplays, displays);
+  };
 
   return (
     <>
@@ -74,9 +68,7 @@ export const Dashboard = () => {
         <div className="flex-1 overflow-hidden p-6">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-3xl font-bold">{t('dashboard')}</h1>
-            <PrimaryButton
-              onClick={() => setIsOpenExportModal(!isOpenExportModal)}
-            >
+            <PrimaryButton onClick={handleExportClick}>
               {t('export')}
             </PrimaryButton>
           </div>
@@ -99,56 +91,16 @@ export const Dashboard = () => {
           </div>
         </div>
       </div>
-      <Modal
-        cancelText={t('btn.cancel')}
-        isOpen={isOpenExportModal}
-        onCancel={handleCancelExport}
-        onSubmit={handleSubmitExport}
-        submitText={t('btn.confirm')}
-        title="Select the data visualization you want to export:"
-      >
-        <>
-          <div className="mb-4">
-            <CheckboxButton
-              checked={dashboardCheckboxs.cvssScore}
-              onChange={value => handleCheckboxChange('cvssScore', value)}
-              text={t('cvssScore')}
-            />
-          </div>
-          <div className="mb-4">
-            <CheckboxButton
-              checked={dashboardCheckboxs.remediationPriority}
-              onChange={value =>
-                handleCheckboxChange('remediationPriority', value)
-              }
-              text={t('remediationPriority')}
-            />
-          </div>
-          <div className="mb-4">
-            <CheckboxButton
-              checked={dashboardCheckboxs.remediationComplexity}
-              onChange={value =>
-                handleCheckboxChange('remediationComplexity', value)
-              }
-              text={t('remediationComplexity')}
-            />
-          </div>
-          <div className="mb-4">
-            <CheckboxButton
-              checked={dashboardCheckboxs.averageCvss}
-              onChange={value => handleCheckboxChange('averageCvss', value)}
-              text="Average CVSS"
-            />
-          </div>
-          <div className="mb-4">
-            <CheckboxButton
-              checked={dashboardCheckboxs.ciaTriad}
-              onChange={value => handleCheckboxChange('ciaTriad', value)}
-              text="CIA Triad"
-            />
-          </div>
-        </>
-      </Modal>
+      <ExportModal
+        auditName={auditName}
+        displays={displays}
+        isOpen={isExportModalOpen}
+        onClose={() => setIsExportModalOpen(false)}
+        onConfirm={handleExportConfirm}
+        selectedDisplays={selectedDisplays}
+        setAuditName={setAuditName}
+        setSelectedDisplays={setSelectedDisplays}
+      />
     </>
   );
 };
