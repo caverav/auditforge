@@ -69,6 +69,103 @@ type NewTemplate = {
   file: string;
 };
 
+type NewLanguage = { language: string; locale: string };
+
+export type NewAuditType = {
+  name: string;
+  hidden: string[];
+  sections: string[]; // temporal
+  stage: string;
+  templates: { template: string; locale: string }[];
+};
+
+export type AuditType = {
+  _id: string;
+  name: string;
+  hidden: string[];
+  sections: string[]; // temporal
+  stage: string;
+  templates: { template: string; locale: string }[];
+};
+
+export type OptionData = {
+  locale: string;
+  value: string;
+};
+
+export type TextData = {
+  locale: string;
+  value: string | string[];
+};
+
+export type AddCustomFieldType = {
+  label: string;
+  fieldType: string;
+  display: string;
+  displaySub: string;
+  size: number;
+  offset: number;
+  required: boolean;
+  description: string;
+  text: TextData[];
+  options: OptionData[];
+  position: number;
+};
+
+export type AddCustomFieldTypeResponse = {
+  label: string;
+  fieldType: string;
+  display: string;
+  displaySub: string;
+  size: number;
+  offset: number;
+  required: boolean;
+  description: string;
+  text: TextData[];
+  options: OptionData[];
+  position: number;
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+};
+
+export type GetCustomFieldType = {
+  _id: string;
+  label: string;
+  fieldType: string;
+  display: string;
+  displaySub: string;
+  size: number;
+  offset: number;
+  required: boolean;
+  description: string;
+  text: TextData[];
+  options: OptionData[];
+};
+
+export type UpdateCustomFieldType = {
+  _id: string;
+  label: string;
+  fieldType: string;
+  display: string;
+  displaySub: string;
+  size: number;
+  offset: number;
+  required: boolean;
+  description: string;
+  text: TextData[];
+  options: OptionData[];
+  position: number;
+};
+
+export type NewCustomSection = {
+  _id?: string;
+  name: string;
+  field: string;
+  icon?: string;
+};
+
 const networkErrorMsg = 'Network response was not ok';
 
 export const getRoles = async (): Promise<{
@@ -337,7 +434,7 @@ export const deleteClient = async (
 
 export const getTemplates = async (): Promise<{
   status: string;
-  datas: { _id: string; name: string; ext: string }[];
+  datas: { _id: string; name: string; ext: string; file: string }[];
 }> => {
   try {
     const response = await fetch(`${API_URL}templates`, {
@@ -379,6 +476,77 @@ export const createTemplate = async (
   }
 };
 
+/**
+ * Custom data: Languages
+ */
+
+export const getLanguages = async (): Promise<{
+  status: string;
+  datas: NewLanguage[];
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/languages`, {
+      credentials: 'include',
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const createLanguage = async (
+  language: NewLanguage,
+): Promise<{
+  status: string;
+  datas: { language: string; locale: string; _id: string };
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/languages`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(language),
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const updateLanguages = async (
+  language: NewLanguage[],
+): Promise<{
+  status: string;
+  datas: string;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/languages`, {
+      method: 'PUT',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(language),
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
 export const updateTemplate = async (
   template: NewTemplate,
 ): Promise<{ status: string; datas: string }> => {
@@ -392,6 +560,100 @@ export const updateTemplate = async (
       body: JSON.stringify(TemplateWithoutId),
     });
 
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+/**
+ * Custom data: Custom sections
+ */
+
+export const getCustomSections = async (): Promise<{
+  status: string;
+  datas: { field: string; name: string; icon: string }[];
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/sections`, {
+      credentials: 'include',
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+/**
+ * Custom data: Audit types
+ */
+
+export const getAuditTypes = async (): Promise<{
+  status: string;
+  datas: AuditType[];
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/audit-types`, {
+      credentials: 'include',
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const createAuditType = async (
+  auditType: NewAuditType,
+): Promise<{
+  status: string;
+  datas: AuditType;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/audit-types`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(auditType),
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const updateAuditTypes = async (
+  auditTypes: AuditType[],
+): Promise<{
+  status: string;
+  datas: string;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/audit-types`, {
+      method: 'PUT',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(auditTypes),
+    }); // Incluir token
     if (!response.ok) {
       throw new Error(networkErrorMsg);
     }
@@ -426,4 +688,149 @@ export const deleteTemplate = async (
 
 export const downloadTemplate = (templateId: string, window: Window): void => {
   window.open(`${API_URL}templates/download/${templateId}`, '_blank');
+};
+
+export const createCustomSection = async (
+  section: NewCustomSection,
+): Promise<{
+  status: string;
+  datas: { field: string; name: string; icon?: string };
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/sections`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(section),
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const updateCustomSection = async (
+  section: NewCustomSection[],
+): Promise<{
+  status: string;
+  datas: string;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/sections`, {
+      method: 'PUT',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(section),
+    });
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const getCustomFields = async (): Promise<{
+  status: string;
+  datas: GetCustomFieldType[];
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/custom-fields`, {
+      credentials: 'include',
+    });
+
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const addCustomField = async (
+  customField: AddCustomFieldType,
+): Promise<{
+  status: string;
+  datas: AddCustomFieldTypeResponse;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/custom-fields`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(customField),
+    });
+    if (!response.ok) {
+      const errorText = await response.text();
+      const errorData = JSON.parse(errorText).datas;
+      if (errorData === 'Custom Field already exists') {
+        throw new Error(errorData);
+      } else {
+        throw new Error(networkErrorMsg);
+      }
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const updateCustomField = async (
+  customFields: UpdateCustomFieldType[],
+): Promise<{
+  status: string;
+  datas: string;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/custom-fields`, {
+      method: 'PUT',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(customFields),
+    });
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const deleteCustomField = async (
+  customFieldId: string,
+): Promise<{ status: string; datas: { msg: string; vulnCount: number } }> => {
+  try {
+    const response = await fetch(
+      `${API_URL}data/custom-fields/${customFieldId}`,
+      {
+        method: 'DELETE',
+        credentials: 'include',
+      },
+    );
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
 };
