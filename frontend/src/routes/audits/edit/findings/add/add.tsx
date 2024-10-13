@@ -169,46 +169,6 @@ export const Add = () => {
       .catch(console.error);
   }, [newVulnTitle, auditId]);
 
-  const handleAddVuln = useCallback(
-    (item: TableData) => {
-      addVuln(
-        item.id,
-        auditId ?? '',
-        currentLanguage ? currentLanguage.value : 'en',
-      )
-        .then(res => {
-          if (res.status === 'success') {
-            setNewVulnTitle('');
-            toast.success(t('msg.findingCreateOk'));
-          } else {
-            toast.error(t(res.datas));
-          }
-        })
-        .catch(console.error);
-    },
-    [auditId, currentLanguage],
-  );
-
-  const rowActions = [
-    {
-      label: 'Add',
-      onClick: handleAddVuln,
-    },
-  ];
-
-  const handleAddFinding = useCallback(() => {
-    addFinding(newVulnTitle, auditId ?? '')
-      .then(res => {
-        if (res.status === 'success') {
-          setNewVulnTitle('');
-          toast.success(t('msg.findingCreateOk'));
-        } else {
-          toast.error(t(res.datas));
-        }
-      })
-      .catch(console.error);
-  }, [newVulnTitle, auditId]);
-
   return (
     <DivWrapper>
       <div className="flex justify-between">

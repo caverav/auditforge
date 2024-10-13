@@ -152,7 +152,6 @@ export default {
     customFieldUpdatedOk: 'Custom Field Updated Successfully!',
     sectionCreatedOk: 'Custom Section Created Successfully!',
     auditTypeCreatedOk: 'Audit Type Created Successfully!',
-    copiedToClipboard: 'Copied to clipboard',
     clientEmailError: 'Client email already exists',
     collaboratorUsernameError: 'Collaborator username already exists',
     companyNameError: 'Company name already exists',
