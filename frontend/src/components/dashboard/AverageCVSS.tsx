@@ -45,7 +45,6 @@ const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId }) => {
   if (!auditId) {
     auditId = paramId;
   }
-  console.log(auditId);
   const [averageCVSS, setAverageCVSS] = useState(0);
   const [data, setData] = useState({
     labels: [''],
