@@ -4,6 +4,7 @@ WORKDIR /app
 
 COPY . .
 ARG CWE_MODEL_URL
+ARG CVSS_MODEL_URL
 
 RUN set -e \
     && apt-get update -y \
@@ -21,6 +22,13 @@ RUN if [ ! -d modelo_cwe ]; then \
       echo "modelo_cwe not found. Downloading it..."; \
       wget --progress=bar:force "$CWE_MODEL_URL" -O modelo_cwe.zip \
       && unzip modelo_cwe.zip && rm modelo_cwe.zip \
+      || { echo "Failed to download or unzip model"; exit 1; } \
+    fi
+
+RUN if [ ! -d utils ]; then \
+      echo "modelo_cvss not found. Downloading it..."; \
+      wget --progress=bar:force "$CVSS_MODEL_URL" -O modelo_cvss.zip \
+      && unzip modelo_cvss.zip && rm modelo_cvss.zip \
       || { echo "Failed to download or unzip model"; exit 1; } \
     fi
 
