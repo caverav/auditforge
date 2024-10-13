@@ -51,17 +51,28 @@ const CIATriad: React.FC = () => {
       .then(audit => {
         setData({
           labels: ['Integrity', 'Availability', 'Confidentiality'],
-          datasets: audit.datas.findings.map(finding => ({
-            label: finding.title,
-            data: [
-              cvssStringTo('integrity', finding.cvssv3),
-              cvssStringTo('availability', finding.cvssv3),
-              cvssStringTo('confidentiality', finding.cvssv3),
-            ],
-            backgroundColor: `rgba(${Math.floor(Math.random() * 155 + 100)}, ${Math.floor(Math.random() * 155 + 100)}, ${Math.floor(Math.random() * 155 + 100)}, 0.2)`,
-            borderColor: 'rgba(255, 255, 255, 0.2)',
-            borderWidth: 2,
-          })),
+          datasets: audit.datas.findings.map(finding => {
+            if (!finding.cvssv3) {
+              return {
+                label: finding.title,
+                data: [0, 0, 0],
+                backgroundColor: `rgba(${Math.floor(Math.random() * 155 + 100)}, ${Math.floor(Math.random() * 155 + 100)}, ${Math.floor(Math.random() * 155 + 100)}, 0.2)`,
+                borderColor: 'rgba(255, 255, 255, 0.2)',
+                borderWidth: 2,
+              };
+            }
+            return {
+              label: finding.title,
+              data: [
+                cvssStringTo('integrity', finding.cvssv3),
+                cvssStringTo('availability', finding.cvssv3),
+                cvssStringTo('confidentiality', finding.cvssv3),
+              ],
+              backgroundColor: `rgba(${Math.floor(Math.random() * 155 + 100)}, ${Math.floor(Math.random() * 155 + 100)}, ${Math.floor(Math.random() * 155 + 100)}, 0.2)`,
+              borderColor: 'rgba(255, 255, 255, 0.2)',
+              borderWidth: 2,
+            };
+          }),
         });
       })
       .catch(console.error);
@@ -95,12 +106,19 @@ const CIATriad: React.FC = () => {
     },
     plugins: {
       legend: {
-        position: 'right' as const,
+        position: 'bottom' as const,
         labels: {
           color: 'white',
           boxWidth: 20,
           padding: 20,
         },
+      },
+      tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        titleColor: 'white',
+        bodyColor: 'white',
+        borderColor: 'white',
+        borderWidth: 1,
       },
     },
   };
