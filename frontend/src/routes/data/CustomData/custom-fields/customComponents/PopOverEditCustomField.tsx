@@ -167,25 +167,29 @@ export const PopOverEditCustomField: React.FC<PopOverProps> = ({
         </PopoverTrigger>
         <PopoverContent className="bg-gray-700">
           <div className="text-white flex flex-col">
-            <SimpleInput
-              id="labelEdit"
-              label={t('label')}
-              name="labelEdit"
-              onChange={value => handlerTextChange('label', value)}
-              placeholder=""
-              type="text"
-              value={currentCustomField.label}
-            />
-            <span className="mt-4" />
-            <SimpleInput
-              id="descriptionEdit"
-              label={t('description')}
-              name="descriptionEdit"
-              onChange={value => handlerTextChange('description', value)}
-              placeholder=""
-              type="text"
-              value={currentCustomField.description}
-            />
+            {currentCustomField.fieldType !== 'space' ? (
+              <div>
+                <SimpleInput
+                  id="labelEdit"
+                  label={t('label')}
+                  name="labelEdit"
+                  onChange={value => handlerTextChange('label', value)}
+                  placeholder=""
+                  type="text"
+                  value={currentCustomField.label}
+                />
+                <span className="mt-4" />
+                <SimpleInput
+                  id="descriptionEdit"
+                  label={t('description')}
+                  name="descriptionEdit"
+                  onChange={value => handlerTextChange('description', value)}
+                  placeholder=""
+                  type="text"
+                  value={currentCustomField.description}
+                />
+              </div>
+            ) : null}
             <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
               <SelectDropdown
                 items={sizes.slice(1)}
@@ -200,13 +204,15 @@ export const PopOverEditCustomField: React.FC<PopOverProps> = ({
                 title={t('offset')}
               />
             </div>
-            <div className="mt-4 flex justify-center text-gray-300">
-              <PrimarySwitch
-                enabled={required}
-                label={t('required')}
-                onChange={setRequired}
-              />
-            </div>
+            {currentCustomField.fieldType !== 'space' ? (
+              <div className="mt-4 flex justify-center text-gray-300">
+                <PrimarySwitch
+                  enabled={required}
+                  label={t('required')}
+                  onChange={setRequired}
+                />
+              </div>
+            ) : null}
             {optionsList.includes(currentCustomField.fieldType) ? (
               <div className="grid grid-cols-1 md:grid-cols-1 gap-4">
                 <div className="flex items-center gap-2">
