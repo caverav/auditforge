@@ -1,6 +1,5 @@
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
-import React from 'react';
 import ReactDOM from 'react-dom/client';
 
 import CentralizedView from '../components/dashboard/CentralizedView';
@@ -9,7 +8,6 @@ export const exportToPDF = async (
   auditName: string,
   selectedDisplays: string[],
   auditId: string,
-  displays: { id: string; name: string; component: React.ComponentType }[],
 ) => {
   const container = document.createElement('div');
   container.style.position = 'absolute';
@@ -41,7 +39,9 @@ export const exportToPDF = async (
   const maxHeight = (pageHeight - yOffset - 3 * margin) / 2;
 
   const captureAndAddChart = async (displayId: string, index: number) => {
-    const element = container.querySelector(`#${displayId}`);
+    const element: HTMLElement | null = container.querySelector(
+      `#${displayId}`,
+    );
     if (element) {
       try {
         const canvas = await html2canvas(element, {

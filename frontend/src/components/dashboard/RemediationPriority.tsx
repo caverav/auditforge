@@ -12,7 +12,7 @@ import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { useParams } from 'react-router-dom';
 
-import { getAuditById } from '../../services/audits';
+import { Finding, getAuditById } from '../../services/audits';
 
 ChartJS.register(
   CategoryScale,
@@ -47,7 +47,7 @@ const RemediationPriority: React.FC<RemediationPriorityProps> = ({
         const dataAudit = await getAuditById(auditId);
         const findings = dataAudit.datas.findings;
         const counts = [0, 0, 0, 0];
-        findings.forEach((finding: { priority: number }) => {
+        findings.forEach((finding: Finding) => {
           if (finding.priority >= 1 && finding.priority <= 4) {
             counts[finding.priority - 1] += 1;
           }

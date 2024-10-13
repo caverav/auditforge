@@ -70,7 +70,7 @@ export const Dashboard = () => {
 
   const handleExportConfirm = async () => {
     setIsExportModalOpen(false);
-    await exportToPDF(auditName, selectedDisplays, auditId ?? '', displays);
+    await exportToPDF(auditName, selectedDisplays, auditId ?? '');
   };
 
   return (
