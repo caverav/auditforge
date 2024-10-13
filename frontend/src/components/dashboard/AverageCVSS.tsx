@@ -36,8 +36,16 @@ const cvssStringToScore = (cvssScore: string) => {
   return 0;
 };
 
-const AverageCVSS: React.FC = () => {
-  const { auditId } = useParams();
+type AverageCVSSProps = {
+  auditId?: string;
+};
+
+const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId }) => {
+  const paramId = useParams().auditId;
+  if (!auditId) {
+    auditId = paramId;
+  }
+  console.log(auditId);
   const [averageCVSS, setAverageCVSS] = useState(0);
   const [data, setData] = useState({
     labels: [''],
@@ -49,6 +57,9 @@ const AverageCVSS: React.FC = () => {
     ],
   });
   useEffect(() => {
+    if (auditId === undefined) {
+      auditId = paramId;
+    }
     getAuditById(auditId)
       .then(audit => {
         setAverageCVSS(

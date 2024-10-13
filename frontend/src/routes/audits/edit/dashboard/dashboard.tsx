@@ -1,6 +1,7 @@
 /* eslint-disable import/extensions */
 import { t } from 'i18next';
 import { useState } from 'react';
+import { useParams } from 'react-router-dom';
 
 import PrimaryButton from '@/components/button/PrimaryButton';
 import AverageCVSS from '@/components/dashboard/AverageCVSS';
@@ -13,6 +14,7 @@ import Sidebar from '@/components/dashboard/Sidebar';
 import { exportToPDF } from '@/services/exportToPDF';
 
 export const Dashboard = () => {
+  const { auditId } = useParams();
   const [activeView, setActiveView] = useState('cvss-score');
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [selectedDisplays, setSelectedDisplays] = useState<string[]>([]);
@@ -58,7 +60,7 @@ export const Dashboard = () => {
 
   const handleExportConfirm = async () => {
     setIsExportModalOpen(false);
-    await exportToPDF(auditName, selectedDisplays, displays);
+    await exportToPDF(auditName, selectedDisplays, auditId, displays);
   };
 
   return (

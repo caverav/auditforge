@@ -31,7 +31,15 @@ const cvssStringToSeverity = (cvssScore: string) => {
   return 'I';
 };
 
-const CVSSScore: React.FC = () => {
+type CVSSScoreProps = {
+  auditId?: string;
+};
+
+const CVSSScore: React.FC<CVSSScoreProps> = ({ auditId }) => {
+  const paramId = useParams().auditId;
+  if (!auditId) {
+    auditId = paramId;
+  }
   const [pieChartData, setPieChartData] = useState({
     labels: [
       t('critical'),
@@ -49,7 +57,6 @@ const CVSSScore: React.FC = () => {
       },
     ],
   });
-  const { auditId } = useParams();
   useEffect(() => {
     getAuditById(auditId)
       .then(audit => {

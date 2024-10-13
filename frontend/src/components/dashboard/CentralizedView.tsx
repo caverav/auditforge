@@ -8,10 +8,12 @@ import RemediationPriority from './RemediationPriority';
 
 type CentralizedViewProps = {
   selectedDisplays: string[];
+  auditId: string;
 };
 
 const CentralizedView: React.FC<CentralizedViewProps> = ({
   selectedDisplays,
+  auditId,
 }) => {
   const components: Record<string, React.ComponentType> = {
     'cvss-score': CVSSScore,
@@ -30,7 +32,7 @@ const CentralizedView: React.FC<CentralizedViewProps> = ({
             <h2 className="text-xl font-bold mb-4">
               {displayId.replace(/-/g, ' ').toUpperCase()}
             </h2>
-            <Component />
+            <Component auditId={auditId} />
           </div>
         );
       })}

@@ -38,13 +38,20 @@ const cvssStringTo = (
   } as const;
   return values[cvssVector.substring(substrings[field], substrings[field] + 1)];
 };
-const CIATriad: React.FC = () => {
+
+type CIATriadProps = {
+  auditId?: string;
+};
+
+const CIATriad: React.FC<CIATriadProps> = ({ auditId }) => {
+  const paramId = useParams().auditId;
+  if (!auditId) {
+    auditId = paramId;
+  }
   const [data, setData] = useState({
     labels: ['Integrity', 'Availability', 'Confidentiality'],
     datasets: [],
   });
-
-  const { auditId } = useParams();
 
   useEffect(() => {
     getAuditById(auditId)

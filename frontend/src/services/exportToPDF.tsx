@@ -8,6 +8,7 @@ import CentralizedView from '../components/dashboard/CentralizedView';
 export const exportToPDF = async (
   auditName: string,
   selectedDisplays: string[],
+  auditId: string,
   displays: { id: string; name: string; component: React.ComponentType }[],
 ) => {
   // Create a temporary container for rendering charts
@@ -19,7 +20,9 @@ export const exportToPDF = async (
 
   // Render the CentralizedView with selected displays
   const root = ReactDOM.createRoot(container);
-  root.render(<CentralizedView selectedDisplays={selectedDisplays} />);
+  root.render(
+    <CentralizedView auditId={auditId} selectedDisplays={selectedDisplays} />,
+  );
 
   // Wait for charts to render
   await new Promise(resolve => setTimeout(resolve, 2000));

@@ -23,8 +23,17 @@ ChartJS.register(
   Legend,
 );
 
-const RemediationPriority: React.FC = () => {
-  const { auditId } = useParams();
+type RemediationPriorityProps = {
+  auditId?: string;
+};
+
+const RemediationPriority: React.FC<RemediationPriorityProps> = ({
+  auditId,
+}) => {
+  const paramId = useParams().auditId;
+  if (!auditId) {
+    auditId = paramId;
+  }
 
   const [priorityData, setPriorityData] = useState<number[]>([0, 0, 0, 0]);
 

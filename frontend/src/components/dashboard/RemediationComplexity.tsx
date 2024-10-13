@@ -23,8 +23,17 @@ ChartJS.register(
   Legend,
 );
 
-const RemediationComplexity: React.FC = () => {
-  const { auditId } = useParams();
+type RemediationComplexityProps = {
+  auditId?: string;
+};
+
+const RemediationComplexity: React.FC<RemediationComplexityProps> = ({
+  auditId,
+}) => {
+  const paramId = useParams().auditId;
+  if (!auditId) {
+    auditId = paramId;
+  }
 
   const [complexityData, setComplexityData] = useState<number[]>([0, 0, 0]);
 
