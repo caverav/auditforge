@@ -30,15 +30,15 @@ export const Dashboard = () => {
   }, [auditId]);
 
   const displays = [
-    { id: 'cvss-score', name: 'CVSS Score', component: CVSSScore },
+    { id: 'cvss-score', name: t('cvssScore'), component: CVSSScore },
     {
       id: 'remediation-priority',
-      name: 'Remediation Priority',
+      name: t('remediationPriority'),
       component: RemediationPriority,
     },
     {
       id: 'remediation-complexity',
-      name: 'Remediation Complexity',
+      name: t('remediationComplexity'),
       component: RemediationComplexity,
     },
     { id: 'average-cvss', name: 'Average CVSS', component: AverageCVSS },
