@@ -3,12 +3,8 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from transformers import pipeline
-<<<<<<< HEAD
-from cvss_inferencer import inferencer as cvss_inferencer
-=======
 from inferencer import inferencer
 
->>>>>>> development
 app = FastAPI()
 
 app.add_middleware(
