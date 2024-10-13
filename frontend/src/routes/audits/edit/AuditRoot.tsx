@@ -7,6 +7,8 @@ import { Outlet, useParams } from 'react-router-dom';
 import { ListItem } from '../../../components/button/DropdownButton';
 import AuditSidebar from '../../../components/navbar/AuditSidebar';
 import { Finding, getAuditById } from '../../../services/audits';
+import { EncryptionModal } from './general/EncryptionModal';
+import { toast } from 'sonner';
 
 export const AuditRoot = () => {
   const { t } = useTranslation();
@@ -65,6 +67,7 @@ export const AuditRoot = () => {
     }
     return 'I';
   };
+  const [auditName, setAuditName] = useState('');
 
   useEffect(() => {
     getAuditById(auditId)
@@ -80,6 +83,7 @@ export const AuditRoot = () => {
             };
           }),
         );
+        setAuditName(audit.datas.name);
       })
       .catch(console.error);
   }, [auditId]);
@@ -92,6 +96,55 @@ export const AuditRoot = () => {
   ];
 
   const connectedUsers: { id: number; name: string; online: boolean }[] = [];
+
+  /**
+   * PDF Export encryption
+   */
+
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+
+  const handleSubmitEncrypt = async (password: string) => {
+    const bodyParam = {
+      password,
+    };
+    setIsGeneratingPDF(true);
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate/pdf`,
+        {
+          credentials: 'include',
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(bodyParam),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error('Error generating PDF');
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${auditName}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      setIsOpenModal(false);
+    } catch (error) {
+      console.error('Error al generar el PDF:', error);
+      toast.error(t('err.errorGeneratingPdf'));
+    } finally {
+      setIsGeneratingPDF(false);
+    }
+  };
 
   const fileTypes: ListItem[] = [
     {
@@ -134,6 +187,12 @@ export const AuditRoot = () => {
           '_blank',
         ),
     },
+    {
+      id: 5,
+      value: 'pdf/encrypted',
+      label: `pdf (${t('encrypted')})`,
+      onClick: () => setIsOpenModal(true),
+    },
   ];
 
   return (
@@ -157,6 +216,16 @@ export const AuditRoot = () => {
       <div className="flex-1 overflow-auto">
         <Outlet />
       </div>
+      <div className="m-3">
+        <DropdownButton items={fileTypes} placeholder={t('export')} />
+      </div>
+      <EncryptionModal
+        auditName={auditName}
+        handleSubmitEncrypt={handleSubmitEncrypt}
+        isGeneratingPDF={isGeneratingPDF}
+        isOpen={isOpenModal}
+        onCancel={() => setIsOpenModal(false)}
+      />
     </div>
   );
 };
