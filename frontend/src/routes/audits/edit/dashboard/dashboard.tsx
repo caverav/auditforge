@@ -75,22 +75,6 @@ export const Dashboard = () => {
             </PrimaryButton>
           </div>
           {renderView()}
-          <div className="mt-6">
-            <h2 className="text-xl font-bold mb-4">Filters:</h2>
-            <div className="flex space-x-4">
-              {['FILTRO 1', 'FILTRO 2', 'FILTRO 3', 'FILTRO 4'].map(
-                (filter, index) => (
-                  <button
-                    className="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
-                    key={index}
-                    type="button"
-                  >
-                    {filter}
-                  </button>
-                ),
-              )}
-            </div>
-          </div>
         </div>
       </div>
       <ExportModal
