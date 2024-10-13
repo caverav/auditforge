@@ -73,7 +73,7 @@ export const Dashboard = () => {
         <Sidebar activeView={activeView} setActiveView={setActiveView} />
         <div className="flex-1 overflow-hidden p-6">
           <div className="flex justify-between items-center mb-6">
-            <h1 className="text-3xl font-bold">Dashboard</h1>
+            <h1 className="text-3xl font-bold">{t('dashboard')}</h1>
             <PrimaryButton
               onClick={() => setIsOpenExportModal(!isOpenExportModal)}
             >

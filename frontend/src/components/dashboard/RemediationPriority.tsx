@@ -7,6 +7,7 @@ import {
   Title,
   Tooltip,
 } from 'chart.js';
+import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { useParams } from 'react-router-dom';
@@ -53,7 +54,7 @@ const RemediationPriority: React.FC = () => {
   }, [auditId]);
 
   const data = {
-    labels: ['Low', 'Medium', 'High', 'Urgent'],
+    labels: [t('low'), t('medium'), t('high'), t('urgent')],
     datasets: [
       {
         data: priorityData,

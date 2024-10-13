@@ -1,5 +1,6 @@
 import { Cvss3P1 } from 'ae-cvss-calculator';
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
+import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import { useParams } from 'react-router-dom';
@@ -32,7 +33,13 @@ const cvssStringToSeverity = (cvssScore: string) => {
 
 const CVSSScore: React.FC = () => {
   const [pieChartData, setPieChartData] = useState({
-    labels: ['Critical', 'High', 'Medium', 'Low', 'Informative'],
+    labels: [
+      t('critical'),
+      t('cvss.high'),
+      t('cvss.medium'),
+      t('cvss.low'),
+      'Informative',
+    ],
     datasets: [
       {
         data: [0, 0, 0, 0],
@@ -47,7 +54,13 @@ const CVSSScore: React.FC = () => {
     getAuditById(auditId)
       .then(audit => {
         setPieChartData({
-          labels: ['Critical', 'High', 'Medium', 'Low', 'Informative'],
+          labels: [
+            t('critical'),
+            t('cvss.high'),
+            t('cvss.medium'),
+            t('cvss.low'),
+            'Informative',
+          ],
           datasets: [
             {
               data: [

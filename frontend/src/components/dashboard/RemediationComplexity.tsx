@@ -7,6 +7,7 @@ import {
   Title,
   Tooltip,
 } from 'chart.js';
+import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { useParams } from 'react-router-dom';
@@ -56,7 +57,7 @@ const RemediationComplexity: React.FC = () => {
   }, [auditId]);
 
   const data = {
-    labels: ['Easy', 'Medium', 'Complex'],
+    labels: [t('easy'), t('medium'), t('complex')],
     datasets: [
       {
         data: complexityData,

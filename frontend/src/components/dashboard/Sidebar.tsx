@@ -1,3 +1,4 @@
+import { t } from 'i18next';
 import React from 'react';
 
 type SidebarProps = {
@@ -7,9 +8,9 @@ type SidebarProps = {
 
 const Sidebar: React.FC<SidebarProps> = ({ setActiveView, activeView }) => {
   const menuItems = [
-    { name: 'CVSS Score', id: 'cvss-score' },
-    { name: 'Remediation Priority', id: 'remediation-priority' },
-    { name: 'Remediation Complexity', id: 'remediation-complexity' },
+    { name: t('cvssScore'), id: 'cvss-score' },
+    { name: t('remediationPriority'), id: 'remediation-priority' },
+    { name: t('remediationComplexity'), id: 'remediation-complexity' },
     { name: 'CWEs', id: 'cwes' },
     { name: 'Average CVSS', id: 'average-cvss' },
     { name: 'CIA Triad', id: 'cia-triad' },
