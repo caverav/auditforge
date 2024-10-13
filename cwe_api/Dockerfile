@@ -26,7 +26,7 @@ RUN if [ ! -d modelo_cwe ]; then \
     fi
 
 RUN if [ ! -d utils ]; then \
-      echo "modelo_cvss not found. Downloading it..."; \
+      echo "utils folder (cvss model) not found. Downloading it..."; \
       wget --progress=bar:force "$CVSS_MODEL_URL" -O modelo_cvss.zip \
       && unzip modelo_cvss.zip && rm modelo_cvss.zip \
       || { echo "Failed to download or unzip model"; exit 1; } \

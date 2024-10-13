@@ -6,7 +6,7 @@ import logging
 import re
 import pickle
 
-DEVICE = 'cuda' if torch.cuda.is_available() else 'cpu'
+DEVICE = 'cpu'
 OUTPUTS_NAME = ['attackVector', 'attackComplexity', 'privilegesRequired', 'userInteraction', 
            'scope', 'confidentialityImpact', 'integrityImpact', 'availabilityImpact', 'baseSeverity']
 
@@ -122,7 +122,7 @@ def inferencer(vuln):
 
     model = MultiOutputBert(num_labels).to(DEVICE)
 
-    model.load_state_dict(torch.load(MODEL_PATH, weights_only=True))
+    model.load_state_dict(torch.load(MODEL_PATH, weights_only=False, map_location=torch.device('cpu')))
     model.eval()
 
     dataloader = generate_dataset(vuln)

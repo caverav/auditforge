@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from transformers import pipeline
 from inferencer import inferencer
-from utils import inferencer as cvss_inferencer
+from cvss_inferencer import inferencer as cvss_inferencer
 
 app = FastAPI()
 
