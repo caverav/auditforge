@@ -1,4 +1,5 @@
 /* eslint-disable import/extensions */
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { Cvss3P1 } from 'ae-cvss-calculator';
 import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
@@ -9,7 +10,6 @@ import { postDescriptionCVSS } from '@/services/vulnerabilities';
 
 import MetricGroup from './metricGroup';
 import ScoreBox from './scoreBox';
-import { ArrowPathIcon } from '@heroicons/react/24/outline';
 
 type CVSSProp = {
   handleCvssChange: (value: string) => void;
