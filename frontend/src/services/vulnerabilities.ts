@@ -274,3 +274,24 @@ export const mergeVulnerability = async (
     throw error;
   }
 };
+
+export const postDescriptionCVSS = async (
+  description: PostDescription,
+): Promise<{ result: string }> => {
+  try {
+    const response = await fetch(`${API_URL}cvss`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(description),
+    });
+    if (!response.ok) {
+      throw networkError;
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
