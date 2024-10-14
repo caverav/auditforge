@@ -40,7 +40,6 @@ module.exports = function (app) {
             signal: controller.signal,
           },
         );
-        clearTimeout(timeout);
 
         if (!response.ok) {
           throw networkError;
@@ -53,6 +52,8 @@ module.exports = function (app) {
         error.name === 'AbortError'
           ? Response.Internal(res, timeoutError)
           : Response.Internal(res, errorClassify);
+      } finally {
+        clearTimeout(timeout);
       }
       process.env.NODE_TLS_REJECT_UNAUTHORIZED = '1';
     },
