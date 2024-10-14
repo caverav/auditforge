@@ -281,7 +281,7 @@ const CVSSCalculator: React.FC<CVSSProp> = ({
         .result;
       parseCVSSRecommendationVector(cvssString);
     } catch (err) {
-      toast.error('errorRecommendingCVSS');
+      toast.error(t('errorRecommendingCVSS'));
     } finally {
       setIsLoadingRecommendation(false);
     }
