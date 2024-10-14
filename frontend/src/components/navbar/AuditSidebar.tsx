@@ -263,7 +263,7 @@ const AuditSidebar = ({
                 }}
                 to={`sections/${section._id}`}
               >
-                {section.icon && section.icon.startsWith('fa-') ? (
+                {section.icon?.startsWith('fa-') ? (
                   <i className={`fa ${section.icon}`} />
                 ) : (
                   <i className="material-icons">{section.icon}</i>

@@ -50,7 +50,7 @@ export const AuditRoot = () => {
         setSections(
           section.datas.map((item: Section) => ({
             field: item.field,
-            name: item.field,
+            name: item.name,
             icon: item.icon,
           })),
         );

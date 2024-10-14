@@ -82,10 +82,6 @@ export const Sections = () => {
   }, [auditId]);
 
   const fetchAuditSections = useCallback(async () => {
-    if (!currentLanguage) {
-      return;
-    }
-
     try {
       const auditSectionResponse = await getAuditSectionById(
         auditId,
@@ -96,7 +92,7 @@ export const Sections = () => {
     } catch (error) {
       console.error('Error:', error);
     }
-  }, [auditId, sectionId, currentLanguage]);
+  }, [auditId, sectionId]);
 
   useEffect(() => {
     if (dataAuditSection && currentLanguage) {
@@ -144,11 +140,13 @@ export const Sections = () => {
       const matchedLanguage = languagesList.find(
         language => language.label === auditLanguage,
       );
-      setCurrentLanguage(matchedLanguage);
+      if (matchedLanguage) {
+        setCurrentLanguage(matchedLanguage);
+      }
     }
   }, [auditLanguage, languagesList]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!dataAuditSection) {
       return;
     }
@@ -157,13 +155,17 @@ export const Sections = () => {
       const { text, ...customField } = field;
 
       const textValues = text.map(item => item.value).flat();
-      const formattedText =
+      let formattedText;
+      if (
         customField.fieldType === 'checkbox' ||
         customField.fieldType === 'select-multiple'
-          ? textValues
-          : textValues.length === 1
-            ? textValues[0]
-            : textValues;
+      ) {
+        formattedText = textValues;
+      } else if (textValues.length === 1) {
+        formattedText = textValues[0];
+      } else {
+        formattedText = textValues;
+      }
 
       return {
         customField,
@@ -178,7 +180,11 @@ export const Sections = () => {
       _id: dataAuditSection._id,
     };
 
-    void updateAuditSectionById(auditId, sectionId, payload);
+    try {
+      await updateAuditSectionById(auditId, sectionId, payload);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
