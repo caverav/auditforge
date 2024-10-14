@@ -5,7 +5,7 @@ module.exports = function (app) {
   const errorClassify = new Error('Error classifying vulnerability');
   const networkError = new Error('Network response was not ok');
   const timeoutError = new Error('Request timed out');
-  const TIMEOUT_MS = 10000; // 10 segundos
+  const TIMEOUT_MS = 47000; // 47 segundos (temporal)
 
   // Get CVSS string from description
   app.post(
