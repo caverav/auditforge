@@ -1,5 +1,11 @@
 import { useEffect, useState } from 'react';
 
+type CWERelated = {
+  cwe: string;
+  cweParent?: string;
+  cweGrandParent?: string;
+};
+
 type ListItem = {
   id: number;
   value: string;
@@ -74,8 +80,11 @@ export const useVulnState = ({
     types.filter(typeIter => typeIter.locale === currentVuln.details[0].locale),
   );
 
-  const [cweButtonChanged, setCweButtonChanged] = useState<boolean>(false);
-  const [cweRecommendation, setCweRecommendation] = useState('');
+  const [cweLoading, setCweLoading] = useState<boolean>(false);
+  const [cweRecommendationSelected, setCweRecommendationSelected] = useState<
+    string[]
+  >([]);
+  const [cweRecommended, setCweRecommended] = useState<CWERelated[]>([]);
 
   useEffect(() => {
     // Update filtered types when the language changes
@@ -99,9 +108,11 @@ export const useVulnState = ({
     setSelectedType,
     typesFiltered,
     setTypesFiltered,
-    cweButtonChanged,
-    setCweButtonChanged,
-    cweRecommendation,
-    setCweRecommendation,
+    cweLoading,
+    setCweLoading,
+    cweRecommendationSelected,
+    setCweRecommendationSelected,
+    cweRecommended,
+    setCweRecommended,
   };
 };

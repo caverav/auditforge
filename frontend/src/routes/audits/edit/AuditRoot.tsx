@@ -1,5 +1,5 @@
 import { Cvss3P1 } from 'ae-cvss-calculator';
-import { Globe, List, Plus, Settings } from 'lucide-react';
+import { BarChart, Globe, List, Plus, Settings } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useParams } from 'react-router-dom';
@@ -34,6 +34,11 @@ export const AuditRoot = () => {
 
   const menuItems = [
     { name: t('generalInformation'), icon: Settings, value: 'general' },
+    {
+      name: t('dashboard'),
+      icon: BarChart,
+      value: 'dashboard',
+    },
     { name: t('networkScan'), icon: Globe, value: 'network' },
     {
       name: t('findings'),
@@ -201,6 +206,7 @@ export const AuditRoot = () => {
       <AuditSidebar
         activeItem={activeItem}
         connectedUsers={connectedUsers}
+        fileTypes={fileTypes}
         findings={findings}
         isCollapsed={isCollapsed}
         menuItems={menuItems}
@@ -213,7 +219,7 @@ export const AuditRoot = () => {
         sortOrder={sortOrder}
         sortOrderOptions={sortOrderOptions}
       />
-      <div className="flex-1 ml-64 overflow-auto">
+      <div className="flex-1 overflow-auto">
         <Outlet />
       </div>
       <div className="m-3">

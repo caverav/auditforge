@@ -4,6 +4,7 @@ import { ChevronDown, ChevronUp, Users } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 import DefaultRadioGroup from '../button/DefaultRadioGroup';
+import DropdownButton, { ListItem } from '../button/DropdownButton';
 
 type MenuItem = {
   name: string;
@@ -51,6 +52,7 @@ type AuditSidebarProps = {
   sortOptions: SortOption[];
   sortOrderOptions: SortOrderOption[];
   connectedUsers: ConnectedUser[];
+  fileTypes: ListItem[];
 };
 
 const severityColorMap: Record<string, string> = {
@@ -76,6 +78,7 @@ const AuditSidebar = ({
   findings,
   sortOrderOptions,
   connectedUsers,
+  fileTypes,
 }: AuditSidebarProps) => {
   const severityOrder: Record<string, number> = {
     C: 1,
@@ -108,6 +111,9 @@ const AuditSidebar = ({
         >
           {t('audit')}
         </h2>
+        <div className={clsx('m-2', isCollapsed && 'sr-only')}>
+          <DropdownButton items={fileTypes} placeholder={t('export')} />
+        </div>
         <button
           aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           className="text-gray-400 hover:text-gray-100 hover:bg-gray-800 p-2 rounded-full transition-colors duration-200 z-10"
@@ -160,7 +166,7 @@ const AuditSidebar = ({
           ))}
         </ul>
         <div className={clsx('mt-4 px-4', isCollapsed && 'px-2')}>
-          <div className={clsx('mb-4 font-light', isCollapsed && 'sr-only')}>
+          <div className={clsx('mb-4 font-thin', isCollapsed && 'sr-only')}>
             <p className="text-gray-400 text-lg">{t('sortBy')} CVSS</p>
             <DefaultRadioGroup
               name="sortOrder"
