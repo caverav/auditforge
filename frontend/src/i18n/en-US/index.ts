@@ -153,7 +153,6 @@ export default {
     customFieldUpdatedOk: 'Custom Field Updated Successfully!',
     sectionCreatedOk: 'Custom Section Created Successfully!',
     auditTypeCreatedOk: 'Audit Type Created Successfully!',
-    copiedToClipboard: 'Copied to clipboard',
     clientEmailError: 'Client email already exists',
     collaboratorUsernameError: 'Collaborator username already exists',
     companyNameError: 'Company name already exists',
@@ -161,6 +160,7 @@ export default {
     invalidEmailError:
       'Email must follow this format: example@example.something',
     passwordsDoNotMatch: 'Passwords do not match',
+    copiedToClipboard: 'Copied to clipboard',
   },
   err: {
     notDefinedLanguage: 'Not defined for this language',
@@ -501,6 +501,7 @@ export default {
   generalInformation: 'General Information',
   networkScan: 'Network Scan',
   findings: 'Findings',
+  dashboard: 'Dashboard',
   automaticSorting: 'Automatic Sorting',
   sortBy: 'Sort By',
   sortOrder: 'Sort Order',

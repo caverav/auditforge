@@ -2,10 +2,10 @@ import { t } from 'i18next';
 
 import PrimaryButton from '../../../../../components/button/PrimaryButton';
 
-const NewVulnButton = () => {
+const NewVulnButton = ({ onClick }: { onClick: () => void }) => {
   return (
     <div className="">
-      <PrimaryButton onClick={() => {}}>{t('newVulnerability')}</PrimaryButton>
+      <PrimaryButton onClick={onClick}>{t('newVulnerability')}</PrimaryButton>
     </div>
   );
 };

@@ -1,3 +1,4 @@
+import { getVulnerabilities } from './vulnerabilities';
 const API_URL = `${import.meta.env.VITE_API_URL}/api/`;
 
 const networkError = new Error('Network response was not ok');
@@ -8,6 +9,8 @@ export type Finding = {
   description: string;
   observation: string;
   remediation: string;
+  remediationComplexity: number;
+  priority: number;
   references: string[];
   cwes: string[];
   cvssv3: string;
@@ -234,6 +237,16 @@ export type Client = {
   firstname: string;
   phone: string;
   title: string;
+};
+
+export type AuditFinding = {
+  title: string;
+  vulnType: string;
+  references: string[];
+  cwes: string[];
+  cvssv3: string;
+  category?: string;
+  customFields: string[];
 };
 
 export const createAudit = async (
@@ -514,6 +527,94 @@ export const deleteAudit = async (
     if (!response.ok) {
       throw networkError;
     }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const addVuln = async (
+  vulnId: string,
+  auditId: string,
+  locale: string,
+): Promise<{
+  status: string;
+  datas: string;
+}> => {
+  try {
+    let data;
+
+    try {
+      const res = await getVulnerabilities();
+      data = res.datas.find(item => item._id === vulnId);
+    } catch (error) {
+      console.error(error);
+
+      throw error;
+    }
+
+    if (!data) {
+      throw new Error('Vulnerability not found');
+    }
+
+    if (data.details.length === 0) {
+      throw new Error('Vulnerability has no details');
+    }
+
+    const detailIndex = data.details.findIndex(
+      detail => detail.locale === locale,
+    );
+    if (detailIndex === -1) {
+      throw new Error('Locale not found in vulnerability details');
+    }
+
+    const response2 = await fetch(`${API_URL}audits/${auditId}/findings`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title: data.details[detailIndex].title,
+        vulnType: data.details[detailIndex].vulnType,
+        description: data.details[detailIndex].description,
+        observation: data.details[detailIndex].observation,
+        remediation: data.details[detailIndex].remediation,
+        remediationComplexity: data.remediationComplexity,
+        priority: data.priority,
+        cwes: data.details[detailIndex].cwes,
+        references: data.details[detailIndex].references,
+        customFields: data.details[detailIndex].customFields,
+        cvssv3: data.cvssv3,
+      }),
+    });
+    if (!response2.ok) {
+      throw networkError;
+    }
+    return await response2.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const addFinding = async (
+  title: string,
+  auditId: string,
+): Promise<{
+  status: string;
+  datas: string;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}audits/${auditId}/findings`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        title,
+      }),
+    });
     return await response.json();
   } catch (error) {
     console.error(error);
