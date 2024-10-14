@@ -50,7 +50,7 @@ export const Sections = () => {
   >([]);
   const [languagesList, setLanguagesList] = useState<ListItem[]>([]);
   const [auditLanguage, setAuditLanguage] = useState<string | null>(null);
-  const [currentLanguage, setCurrentLanguage] = useState<ListItem>();
+  const [currentLanguage, setCurrentLanguage] = useState<ListItem | null>(null);
   const [dataAuditSection, setDataAuditSection] = useState<AuditSectionById>();
 
   const auditId = useParams().auditId;
