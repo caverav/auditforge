@@ -21,7 +21,14 @@ import {
   Settings,
   Vulnerabilities,
 } from './routes';
-import { Add, AuditRoot, Edit, General, Network } from './routes/audits';
+import {
+  Add,
+  AuditRoot,
+  Edit,
+  General,
+  Network,
+  Sections,
+} from './routes/audits';
 import {
   Clients,
   Collaborators,
@@ -65,6 +72,10 @@ const router = createBrowserRouter([
           {
             path: 'findings/:findingId',
             element: <Edit />,
+          },
+          {
+            path: 'sections/:sectionId',
+            element: <Sections />,
           },
         ],
       },

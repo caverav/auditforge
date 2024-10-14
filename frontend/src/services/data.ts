@@ -166,6 +166,12 @@ export type NewCustomSection = {
   icon?: string;
 };
 
+export type Section = {
+  field: string;
+  name: string;
+  icon: string;
+};
+
 const networkErrorMsg = 'Network response was not ok';
 
 export const getRoles = async (): Promise<{
@@ -577,7 +583,7 @@ export const updateTemplate = async (
 
 export const getCustomSections = async (): Promise<{
   status: string;
-  datas: { field: string; name: string; icon: string }[];
+  datas: Section[];
 }> => {
   try {
     const response = await fetch(`${API_URL}data/sections`, {

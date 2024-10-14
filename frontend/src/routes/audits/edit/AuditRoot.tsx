@@ -1,15 +1,18 @@
+/* eslint-disable import/extensions */
 import { Globe, List, Plus, Settings } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useParams } from 'react-router-dom';
+import { toast } from 'sonner';
+
+import { getCustomSections, Section } from '@/services/data';
 
 import DropdownButton, {
   ListItem,
 } from '../../../components/button/DropdownButton';
 import AuditSidebar from '../../../components/navbar/AuditSidebar';
-import { Finding, getAuditById } from '../../../services/audits';
+import { AuditSection, Finding, getAuditById } from '../../../services/audits';
 import { EncryptionModal } from './general/EncryptionModal';
-import { toast } from 'sonner';
 
 export const AuditRoot = () => {
   const { t } = useTranslation();
@@ -37,10 +40,42 @@ export const AuditRoot = () => {
   ];
 
   const [auditName, setAuditName] = useState('');
+  const [auditSections, setAuditSections] = useState<AuditSection[]>([]);
+  const [sections, setSections] = useState<Section[]>([]);
+  const [isListVisible, setIsListVisible] = useState(false);
+
+  useEffect(() => {
+    getCustomSections()
+      .then(section => {
+        setSections(
+          section.datas.map((item: Section) => ({
+            field: item.field,
+            name: item.field,
+            icon: item.icon,
+          })),
+        );
+      })
+      .catch(console.error);
+  }, []);
 
   useEffect(() => {
     getAuditById(auditId)
       .then(audit => {
+        setAuditSections(
+          audit.datas.sections.map((section: AuditSection) => {
+            const matchingSection = sections.find(
+              s => s.field === section.field && s.name === section.name,
+            );
+
+            return {
+              field: section.field,
+              name: section.name,
+              _id: section._id,
+              customFields: section.customFields,
+              icon: matchingSection?.icon ?? undefined,
+            };
+          }),
+        );
         setFindings(
           audit.datas.findings.map((finding: Finding) => {
             return {
@@ -54,7 +89,7 @@ export const AuditRoot = () => {
         setAuditName(audit.datas.name);
       })
       .catch(console.error);
-  }, [auditId]);
+  }, [auditId, sections]);
 
   const sortOptions = [
     { id: 1, value: 'CVSS Score', label: t('cvssScore') },
@@ -184,12 +219,16 @@ export const AuditRoot = () => {
     <div className="flex overflow-hidden">
       <AuditSidebar
         activeItem={activeItem}
+        auditSections={auditSections}
         connectedUsers={connectedUsers}
         findings={findings}
         isCollapsed={isCollapsed}
+        isListVisible={isListVisible}
         menuItems={menuItems}
+        sections={sections}
         setActiveItem={setActiveItem}
         setIsCollapsed={setIsCollapsed}
+        setIsListVisible={setIsListVisible}
         setSortBy={setSortBy}
         setSortOrder={setSortOrder}
         sortBy={sortBy}
