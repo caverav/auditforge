@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { t } from 'i18next';
 import { ChevronDown, ChevronUp, Users } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 import DefaultRadioGroup from '../button/DefaultRadioGroup';
