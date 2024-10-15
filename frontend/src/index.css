@@ -1,6 +1,18 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.sidebar-item {
+  @apply px-4 py-2 rounded-md hover:bg-gray-700 transition-colors duration-200;
+}
+
+.sidebar-item.active {
+  @apply bg-blue-600;
+}
+
+.chart-container {
+  height: 300px;
+}
 .tooltip {
   position: relative;
   display: inline-block;
