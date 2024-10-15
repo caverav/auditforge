@@ -90,6 +90,27 @@ const AuditSidebar = ({
 
   const [isOpenModal, setIsOpenModal] = useState(false);
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+
+  const [auditName, setAuditName] = useState('');
+
+  useEffect(() => {
+    getAuditById(auditId)
+      .then(audit => {
+        setFindings(
+          audit.datas.findings.map((finding: Finding) => {
+            return {
+              id: finding.identifier,
+              name: finding.title,
+              category: 'No Category',
+              severity: cvssStringToSeverity(finding.cvssv3),
+              identifier: finding._id,
+            };
+          }),
+        );
+        setAuditName(audit.datas.name);
+      })
+      .catch(console.error);
+  }, [auditId]);
   const { auditId } = useParams();
 
   const fileTypes: ListItem[] = [
