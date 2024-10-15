@@ -92,6 +92,7 @@ const AuditSidebar = ({
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   const [auditName, setAuditName] = useState('');
+  const { auditId } = useParams();
 
   useEffect(() => {
     getAuditById(auditId)
@@ -111,7 +112,6 @@ const AuditSidebar = ({
       })
       .catch(console.error);
   }, [auditId]);
-  const { auditId } = useParams();
 
   const fileTypes: ListItem[] = [
     {
