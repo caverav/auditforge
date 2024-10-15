@@ -627,14 +627,10 @@ export const addFinding = async (
 export const encryptPDF = async (
   password: string,
   auditId: string,
-  auditName: string,
-  setIsOpenModal: React.Dispatch<React.SetStateAction<boolean>>,
-  setIsGeneratingPDF: React.Dispatch<React.SetStateAction<boolean>>,
-) => {
+): Promise<Blob | null> => {
   const bodyParam = {
     password,
   };
-  setIsGeneratingPDF(true);
 
   try {
     const response = await fetch(
@@ -652,21 +648,9 @@ export const encryptPDF = async (
     if (!response.ok) {
       throw new Error('Error generating PDF');
     }
-
-    const blob = await response.blob();
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = `${auditName}.pdf`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-    window.URL.revokeObjectURL(url);
-
-    setIsOpenModal(false);
+    return await response.blob();
   } catch (error) {
     console.error('Error generating PDF:', error);
-  } finally {
-    setIsGeneratingPDF(false);
+    return null;
   }
 };

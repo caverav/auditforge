@@ -174,17 +174,26 @@ const AuditSidebar = ({
   });
 
   const handleSubmitEncrypt = async (password: string) => {
-    try {
-      await encryptPDF(
-        password,
-        auditId ?? '',
-        auditName,
-        setIsOpenModal,
-        setIsGeneratingPDF,
-      );
-    } catch (_) {
-      toast.error(t('err.errorGeneratingPdf'));
+    setIsGeneratingPDF(true);
+
+    const blob = await encryptPDF(password, auditId ?? '').catch(
+      (error: Error) => {
+        toast.error(t('err.errorGeneratingPdf'));
+        console.error('Error generating PDF:', error);
+      },
+    );
+    if (blob) {
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${auditName}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
     }
+    setIsOpenModal(false);
+    setIsGeneratingPDF(false);
   };
 
   return (
