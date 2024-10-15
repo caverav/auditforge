@@ -223,14 +223,6 @@ const AuditSidebar = ({
       )}
     >
       <div className="flex items-center justify-between p-4 border-b border-gray-800">
-        <h2
-          className={clsx(
-            'font-semibold transition-opacity',
-            isCollapsed ? 'opacity-0 w-0' : 'opacity-100',
-          )}
-        >
-          {t('audit')}
-        </h2>
         <div className={clsx('m-2', isCollapsed && 'sr-only')}>
           <DropdownButton items={fileTypes} placeholder={t('export')} />
         </div>
