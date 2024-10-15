@@ -160,10 +160,8 @@ export const PopOverEditCustomField: React.FC<PopOverProps> = ({
   return (
     <div>
       <Popover>
-        <PopoverTrigger className="flex h-10">
-          <PrimaryButton color="blue">
-            <PencilSquareIcon className="h-5 w-5" />
-          </PrimaryButton>
+        <PopoverTrigger className="flex max-h-10 bg-blue-800 hover:bg-blue-700 mt-1 py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+          <PencilSquareIcon className="h-5 w-5" />
         </PopoverTrigger>
         <PopoverContent className="bg-gray-700">
           <div className="text-white flex flex-col">
