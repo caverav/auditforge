@@ -191,6 +191,8 @@ const AuditSidebar = ({
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
+    } else {
+      toast.error(t('err.errorGeneratingPdf'));
     }
     setIsOpenModal(false);
     setIsGeneratingPDF(false);

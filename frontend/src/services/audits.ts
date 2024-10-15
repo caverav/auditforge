@@ -627,7 +627,7 @@ export const addFinding = async (
 export const encryptPDF = async (
   password: string,
   auditId: string,
-): Promise<Blob | null> => {
+): Promise<Blob | undefined> => {
   const bodyParam = {
     password,
   };
@@ -651,6 +651,5 @@ export const encryptPDF = async (
     return await response.blob();
   } catch (error) {
     console.error('Error generating PDF:', error);
-    return null;
   }
 };
