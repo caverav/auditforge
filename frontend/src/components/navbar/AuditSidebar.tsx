@@ -6,9 +6,9 @@ import { Link, useParams } from 'react-router-dom';
 
 import DefaultRadioGroup from '../button/DefaultRadioGroup';
 import DropdownButton, { ListItem } from '../button/DropdownButton';
-import ExportModal from '../dashboard/ExportModal';
 import { getAuditById } from '@/services/audits';
 import { toast } from 'sonner';
+import { EncryptionModal } from '@/routes/audits/edit/general/EncryptionModal';
 
 type MenuItem = {
   name: string;
@@ -221,7 +221,7 @@ const AuditSidebar = ({
         <div className={clsx('m-2', isCollapsed && 'sr-only')}>
           <DropdownButton items={fileTypes} placeholder={t('export')} />
         </div>
-        <ExportModal
+        <EncryptionModal
           auditName={auditName}
           handleSubmitEncrypt={handleSubmitEncrypt}
           isGeneratingPDF={isGeneratingPDF}
