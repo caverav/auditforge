@@ -1,7 +1,9 @@
-import { Globe, List, Plus, Settings } from 'lucide-react';
+import { Cvss3P1 } from 'ae-cvss-calculator';
+import { BarChart, Globe, List, Plus, Settings } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import DropdownButton, {
   ListItem,
@@ -9,7 +11,6 @@ import DropdownButton, {
 import AuditSidebar from '../../../components/navbar/AuditSidebar';
 import { Finding, getAuditById } from '../../../services/audits';
 import { EncryptionModal } from './general/EncryptionModal';
-import { toast } from 'sonner';
 
 export const AuditRoot = () => {
   const { t } = useTranslation();
@@ -22,11 +23,22 @@ export const AuditRoot = () => {
   const [sortOrder, setSortOrder] = useState('Descending');
 
   const [findings, setFindings] = useState<
-    { id: number; name: string; category: string; severity: string }[]
+    {
+      id: number;
+      name: string;
+      category: string;
+      severity: string;
+      identifier: string;
+    }[]
   >([]);
 
   const menuItems = [
     { name: t('generalInformation'), icon: Settings, value: 'general' },
+    {
+      name: t('dashboard'),
+      icon: BarChart,
+      value: 'dashboard',
+    },
     { name: t('networkScan'), icon: Globe, value: 'network' },
     {
       name: t('findings'),
@@ -36,6 +48,27 @@ export const AuditRoot = () => {
     },
   ];
 
+  const cvssStringToSeverity = (cvssScore: string) => {
+    try {
+      const cvssVector = new Cvss3P1(cvssScore);
+      const score = cvssVector.calculateExactOverallScore();
+      if (score >= 9.0) {
+        return 'C';
+      }
+      if (score >= 7.0) {
+        return 'H';
+      }
+      if (score >= 4.0) {
+        return 'M';
+      }
+      if (score >= 0.1) {
+        return 'L';
+      }
+    } catch (error) {
+      console.error('Invalid CVSS vector:', error);
+    }
+    return 'I';
+  };
   const [auditName, setAuditName] = useState('');
 
   useEffect(() => {
@@ -47,7 +80,8 @@ export const AuditRoot = () => {
               id: finding.identifier,
               name: finding.title,
               category: 'No Category',
-              severity: 'L', //TODO: it's harcoded
+              severity: cvssStringToSeverity(finding.cvssv3),
+              identifier: finding._id,
             };
           }),
         );
@@ -56,31 +90,14 @@ export const AuditRoot = () => {
       .catch(console.error);
   }, [auditId]);
 
-  const sortOptions = [
-    { id: 1, value: 'CVSS Score', label: t('cvssScore') },
-    { id: 2, value: 'CVSS Temporal Score', label: t('cvssTemporalScore') },
-    {
-      id: 3,
-      value: 'CVSS Environmental Score',
-      label: t('cvssEnvironmentalScore'),
-    },
-    { id: 4, value: 'Priority', label: t('priority') },
-    {
-      id: 5,
-      value: 'Remediation Difficulty',
-      label: t('remediationDifficulty'),
-    },
-  ];
+  const sortOptions = [{ id: 1, value: 'CVSS Score', label: t('cvssScore') }];
 
   const sortOrderOptions = [
-    { id: 'asc', label: t('ascending'), value: 'Ascending' },
     { id: 'desc', label: t('descending'), value: 'Descending' },
+    { id: 'asc', label: t('ascending'), value: 'Ascending' },
   ];
 
-  const connectedUsers = [
-    { id: 1, name: 'camilo (me)', online: true },
-    { id: 2, name: 'massi', online: false },
-  ];
+  const connectedUsers: { id: number; name: string; online: boolean }[] = [];
 
   /**
    * PDF Export encryption
@@ -130,6 +147,10 @@ export const AuditRoot = () => {
       setIsGeneratingPDF(false);
     }
   };
+
+  /**
+   * PDF Export encryption
+   */
 
   const fileTypes: ListItem[] = [
     {
@@ -185,6 +206,7 @@ export const AuditRoot = () => {
       <AuditSidebar
         activeItem={activeItem}
         connectedUsers={connectedUsers}
+        fileTypes={fileTypes}
         findings={findings}
         isCollapsed={isCollapsed}
         menuItems={menuItems}
@@ -197,7 +219,7 @@ export const AuditRoot = () => {
         sortOrder={sortOrder}
         sortOrderOptions={sortOrderOptions}
       />
-      <div className="flex-1 ml-64 overflow-auto">
+      <div className="flex-1 overflow-auto">
         <Outlet />
       </div>
       <div className="m-3">
