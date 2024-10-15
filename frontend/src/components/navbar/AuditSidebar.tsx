@@ -88,6 +88,8 @@ const AuditSidebar = ({
     I: 5,
   };
 
+  const { auditId } = useParams();
+
   const fileTypes: ListItem[] = [
     {
       id: 1,
