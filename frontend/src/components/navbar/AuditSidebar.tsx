@@ -196,7 +196,7 @@ const AuditSidebar = ({
 
       setIsOpenModal(false);
     } catch (error) {
-      console.error('Error al generar el PDF:', error);
+      console.error('Error generating PDF:', error);
       toast.error(t('err.errorGeneratingPdf'));
     } finally {
       setIsGeneratingPDF(false);
