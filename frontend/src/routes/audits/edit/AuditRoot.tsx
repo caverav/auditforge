@@ -222,16 +222,6 @@ export const AuditRoot = () => {
       <div className="flex-1 overflow-auto">
         <Outlet />
       </div>
-      <div className="m-3">
-        <DropdownButton items={fileTypes} placeholder={t('export')} />
-      </div>
-      <EncryptionModal
-        auditName={auditName}
-        handleSubmitEncrypt={handleSubmitEncrypt}
-        isGeneratingPDF={isGeneratingPDF}
-        isOpen={isOpenModal}
-        onCancel={() => setIsOpenModal(false)}
-      />
     </div>
   );
 };
