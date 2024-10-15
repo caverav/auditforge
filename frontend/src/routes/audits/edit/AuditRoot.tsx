@@ -3,7 +3,6 @@ import { BarChart, Globe, List, Plus, Settings } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useParams } from 'react-router-dom';
-import { toast } from 'sonner';
 
 import AuditSidebar from '../../../components/navbar/AuditSidebar';
 import { Finding, getAuditById } from '../../../services/audits';
