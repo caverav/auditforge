@@ -584,6 +584,7 @@ export const addVuln = async (
         priority: data.priority,
         cwes: data.details[detailIndex].cwes,
         references: data.details[detailIndex].references,
+        category: data.details[detailIndex].category ?? 'No Category',
         customFields: data.details[detailIndex].customFields,
         cvssv3: data.cvssv3,
       }),

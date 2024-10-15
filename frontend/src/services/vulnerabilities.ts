@@ -9,6 +9,7 @@ type Details = {
   description?: string;
   observation?: string;
   remediation?: string;
+  category?: string;
   cwes: string[];
   references: string[];
   customFields: string[];

@@ -148,6 +148,10 @@ export const AuditRoot = () => {
     }
   };
 
+  /**
+   * PDF Export encryption
+   */
+
   const fileTypes: ListItem[] = [
     {
       id: 1,
