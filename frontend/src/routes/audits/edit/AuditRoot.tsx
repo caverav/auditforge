@@ -66,7 +66,6 @@ export const AuditRoot = () => {
     }
     return 'I';
   };
-  const [auditName, setAuditName] = useState('');
 
   useEffect(() => {
     getAuditById(auditId)
@@ -82,7 +81,6 @@ export const AuditRoot = () => {
             };
           }),
         );
-        setAuditName(audit.datas.name);
       })
       .catch(console.error);
   }, [auditId]);
