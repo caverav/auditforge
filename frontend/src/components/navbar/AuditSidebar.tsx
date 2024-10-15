@@ -221,7 +221,13 @@ const AuditSidebar = ({
         <div className={clsx('m-2', isCollapsed && 'sr-only')}>
           <DropdownButton items={fileTypes} placeholder={t('export')} />
         </div>
-        <ExportModal />
+        <ExportModal
+          auditName={auditName}
+          handleSubmitEncrypt={handleSubmitEncrypt}
+          isGeneratingPDF={isGeneratingPDF}
+          isOpen={isOpenModal}
+          onCancel={() => setIsOpenModal(false)}
+        />
         <button
           aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           className="text-gray-400 hover:text-gray-100 hover:bg-gray-800 p-2 rounded-full transition-colors duration-200 z-10"
