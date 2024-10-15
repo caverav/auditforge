@@ -8,7 +8,6 @@ import { toast } from 'sonner';
 import { ListItem } from '../../../components/button/DropdownButton';
 import AuditSidebar from '../../../components/navbar/AuditSidebar';
 import { Finding, getAuditById } from '../../../services/audits';
-import { EncryptionModal } from './general/EncryptionModal';
 
 export const AuditRoot = () => {
   const { t } = useTranslation();
