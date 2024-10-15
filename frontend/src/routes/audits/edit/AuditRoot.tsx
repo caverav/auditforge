@@ -150,7 +150,6 @@ export const AuditRoot = () => {
       <AuditSidebar
         activeItem={activeItem}
         connectedUsers={connectedUsers}
-        fileTypes={fileTypes}
         findings={findings}
         isCollapsed={isCollapsed}
         menuItems={menuItems}
