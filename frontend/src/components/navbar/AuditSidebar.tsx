@@ -79,7 +79,6 @@ const AuditSidebar = ({
   findings,
   sortOrderOptions,
   connectedUsers,
-  fileTypes,
 }: AuditSidebarProps) => {
   const severityOrder: Record<string, number> = {
     C: 1,
