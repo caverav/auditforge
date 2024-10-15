@@ -92,8 +92,6 @@ const AuditSidebar = ({
   isListVisible,
   setIsListVisible,
   sections,
-  sortBy,
-  setSortBy,
   sortOrder,
   setSortOrder,
   menuItems,
