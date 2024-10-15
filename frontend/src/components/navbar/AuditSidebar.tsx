@@ -88,6 +88,8 @@ const AuditSidebar = ({
     I: 5,
   };
 
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
   const { auditId } = useParams();
 
   const fileTypes: ListItem[] = [
@@ -145,9 +147,6 @@ const AuditSidebar = ({
       orderMultiplier * (severityOrder[a.severity] - severityOrder[b.severity])
     );
   });
-
-  const [isOpenModal, setIsOpenModal] = useState(false);
-  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   const handleSubmitEncrypt = async (password: string) => {
     const bodyParam = {
