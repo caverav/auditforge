@@ -83,6 +83,14 @@ const AuditSidebar = ({
   sortOrderOptions,
   connectedUsers,
 }: AuditSidebarProps) => {
+  const handleSetIsCollapsed = useCallback(
+    (collapsed: boolean) => setIsCollapsed(collapsed),
+    [setIsCollapsed],
+  );
+  const handleSetActiveItem = useCallback(
+    (item: string) => setActiveItem(item),
+    [setActiveItem],
+  );
   const severityOrder: Record<string, number> = {
     C: 1,
     H: 2,
@@ -92,6 +100,10 @@ const AuditSidebar = ({
   };
 
   const [isOpenModal, setIsOpenModal] = useState(false);
+  const handleSetIsOpenModal = useCallback(
+    (isOpen: boolean) => setIsOpenModal(isOpen),
+    [],
+  );
   const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
   const [auditName, setAuditName] = useState('');
@@ -227,12 +239,12 @@ const AuditSidebar = ({
           handleSubmitEncrypt={handleSubmitEncrypt}
           isGeneratingPDF={isGeneratingPDF}
           isOpen={isOpenModal}
-          onCancel={useCallback(() => setIsOpenModal(false), [])}
+          onCancel={() => handleSetIsOpenModal(false)}
         />
         <button
           aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           className="text-gray-400 hover:text-gray-100 hover:bg-gray-800 p-2 rounded-full transition-colors duration-200 z-10"
-          onClick={() => setIsCollapsed(!isCollapsed)}
+          onClick={() => handleSetIsCollapsed(!isCollapsed)}
           type="button"
         >
           {isCollapsed ? (
@@ -255,7 +267,7 @@ const AuditSidebar = ({
                     : 'text-gray-400',
                 )}
                 onClick={() => {
-                  setActiveItem(item.name);
+                  handleSetActiveItem(item.name);
                 }}
                 to={item.value}
               >
