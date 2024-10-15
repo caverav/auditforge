@@ -54,7 +54,6 @@ type AuditSidebarProps = {
   sortOptions: SortOption[];
   sortOrderOptions: SortOrderOption[];
   connectedUsers: ConnectedUser[];
-  fileTypes: ListItem[];
 };
 
 const severityColorMap: Record<string, string> = {
