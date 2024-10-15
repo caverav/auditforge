@@ -89,6 +89,55 @@ const AuditSidebar = ({
     I: 5,
   };
 
+  const fileTypes: ListItem[] = [
+    {
+      id: 1,
+      value: 'docx',
+      label: 'docx',
+      onClick: () =>
+        window.open(
+          `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate`,
+          '_blank',
+        ),
+    },
+    {
+      id: 2,
+      value: 'pdf',
+      label: 'pdf',
+      onClick: () =>
+        window.open(
+          `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate/pdf`,
+          '_blank',
+        ),
+    },
+    {
+      id: 3,
+      value: 'json',
+      label: 'json',
+      onClick: () =>
+        window.open(
+          `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate/json`,
+          '_blank',
+        ),
+    },
+    {
+      id: 4,
+      value: 'csv',
+      label: 'csv',
+      onClick: () =>
+        window.open(
+          `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate/csv`,
+          '_blank',
+        ),
+    },
+    {
+      id: 5,
+      value: 'pdf/encrypted',
+      label: `pdf (${t('encrypted')})`,
+      onClick: () => setIsOpenModal(true),
+    },
+  ];
+
   findings.sort((a, b) => {
     const orderMultiplier = sortOrder === 'Ascending' ? -1 : 1;
     return (
