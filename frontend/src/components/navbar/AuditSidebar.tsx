@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import { t } from 'i18next';
 import { ChevronDown, ChevronUp, Users } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
@@ -227,7 +227,7 @@ const AuditSidebar = ({
           handleSubmitEncrypt={handleSubmitEncrypt}
           isGeneratingPDF={isGeneratingPDF}
           isOpen={isOpenModal}
-          onCancel={() => setIsOpenModal(false)}
+          onCancel={useCallback(() => setIsOpenModal(false), [])}
         />
         <button
           aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
