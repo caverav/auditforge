@@ -100,8 +100,6 @@ export const AuditRoot = () => {
    * PDF Export encryption
    */
 
-  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
-
   const handleSubmitEncrypt = async (password: string) => {
     const bodyParam = {
       password,
