@@ -434,7 +434,58 @@ module.exports = function (app, io) {
     },
   );
 
-  // Generate Report as PDF if template is a word/powerpoint document
+  // POST to export an encrypted PDF.
+  app.post(
+    '/api/audits/:auditId/generate/pdf',
+    acl.hasPermission('audits:read'),
+    function (req, res) {
+      Audit.getAudit(
+        acl.isAllowed(req.decodedToken.role, 'audits:read-all'),
+        req.params.auditId,
+        req.decodedToken.id,
+      )
+        .then(async audit => {
+          if (
+            ['ppt', 'pptx', 'doc', 'docx', 'docm'].includes(audit.template.ext)
+          ) {
+            let reportPdf;
+            if (req.body.password) {
+              reportPdf = await reportGenerator.generateEncryptedPdf(
+                audit,
+                req.body.password,
+              );
+            } else {
+              Response.BadParameters(res, 'No password included');
+            }
+
+            if (reportPdf) {
+              res.setHeader(
+                'Content-Disposition',
+                `attachment; filename=${audit.name}.pdf`,
+              );
+              res.setHeader('Content-Type', 'application/pdf');
+              res.send(reportPdf);
+            } else {
+              console.error('Error generating PDF');
+              Response.Internal(res, 'Error generating PDF');
+            }
+          } else {
+            Response.BadParameters(
+              res,
+              'Template not in a Microsoft Word/Powerpoint format',
+            );
+          }
+        })
+        .catch(err => {
+          console.log(err);
+          if (err.code === 'ENOENT')
+            Response.BadParameters(res, 'Template File not found');
+          else Response.Internal(res, err);
+        });
+    },
+  );
+
+  // Generate report as PDF
   app.get(
     '/api/audits/:auditId/generate/pdf',
     acl.hasPermission('audits:read'),
