@@ -96,14 +96,6 @@ export const AuditRoot = () => {
 
   const connectedUsers: { id: number; name: string; online: boolean }[] = [];
 
-  /**
-   * PDF Export encryption
-   */
-
-  /**
-   * PDF Export encryption
-   */
-
   const fileTypes: ListItem[] = [
     {
       id: 1,
