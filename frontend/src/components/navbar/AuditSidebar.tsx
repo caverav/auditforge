@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 
 import DefaultRadioGroup from '../button/DefaultRadioGroup';
 import DropdownButton, { ListItem } from '../button/DropdownButton';
+import ExportModal from '../dashboard/ExportModal';
+import { useState } from 'react';
 
 type MenuItem = {
   name: string;
@@ -95,6 +97,51 @@ const AuditSidebar = ({
     );
   });
 
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+
+  const handleSubmitEncrypt = async (password: string) => {
+    const bodyParam = {
+      password,
+    };
+    setIsGeneratingPDF(true);
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate/pdf`,
+        {
+          credentials: 'include',
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(bodyParam),
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error('Error generating PDF');
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${auditName}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+
+      setIsOpenModal(false);
+    } catch (error) {
+      console.error('Error al generar el PDF:', error);
+      toast.error(t('err.errorGeneratingPdf'));
+    } finally {
+      setIsGeneratingPDF(false);
+    }
+  };
+
   return (
     <div
       className={clsx(
@@ -114,6 +161,7 @@ const AuditSidebar = ({
         <div className={clsx('m-2', isCollapsed && 'sr-only')}>
           <DropdownButton items={fileTypes} placeholder={t('export')} />
         </div>
+        <ExportModal />
         <button
           aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           className="text-gray-400 hover:text-gray-100 hover:bg-gray-800 p-2 rounded-full transition-colors duration-200 z-10"
