@@ -5,9 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Outlet, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
-import DropdownButton, {
-  ListItem,
-} from '../../../components/button/DropdownButton';
+import { ListItem } from '../../../components/button/DropdownButton';
 import AuditSidebar from '../../../components/navbar/AuditSidebar';
 import { Finding, getAuditById } from '../../../services/audits';
 import { EncryptionModal } from './general/EncryptionModal';
