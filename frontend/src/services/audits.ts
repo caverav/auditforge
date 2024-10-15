@@ -623,3 +623,50 @@ export const addFinding = async (
     throw error;
   }
 };
+
+export const encryptPDF = async (
+  password: string,
+  auditId: string,
+  auditName: string,
+  setIsOpenModal: React.Dispatch<React.SetStateAction<boolean>>,
+  setIsGeneratingPDF: React.Dispatch<React.SetStateAction<boolean>>,
+) => {
+  const bodyParam = {
+    password,
+  };
+  setIsGeneratingPDF(true);
+
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate/pdf`,
+      {
+        credentials: 'include',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bodyParam),
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error('Error generating PDF');
+    }
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `${auditName}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+
+    setIsOpenModal(false);
+  } catch (error) {
+    console.error('Error generating PDF:', error);
+  } finally {
+    setIsGeneratingPDF(false);
+  }
+};
