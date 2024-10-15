@@ -24,6 +24,7 @@ import {
 import {
   Add,
   AuditRoot,
+  Dashboard,
   Edit,
   General,
   Network,
@@ -68,6 +69,10 @@ const router = createBrowserRouter([
           {
             path: 'findings/add',
             element: <Add />,
+          },
+          {
+            path: 'dashboard',
+            element: <Dashboard />,
           },
           {
             path: 'findings/:findingId',

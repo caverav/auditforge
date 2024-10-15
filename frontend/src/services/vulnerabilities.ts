@@ -9,6 +9,7 @@ type Details = {
   description?: string;
   observation?: string;
   remediation?: string;
+  category?: string;
   cwes: string[];
   references: string[];
   customFields: string[];
@@ -71,12 +72,11 @@ type CreatedData = {
 };
 
 type CWEData = {
-  result: [
-    {
-      label: string;
-      score: number;
-    },
-  ];
+  result: {
+    priority: number;
+    label: string;
+    score: number;
+  }[];
 };
 
 export const getLanguages = async (): Promise<{
@@ -231,7 +231,6 @@ export const updateVulnerability = async (
   }
 };
 
-// Agregar el endpoint al backend https://localhost:8000/classify
 export const postDescriptionCWE = async (
   description: PostDescription,
 ): Promise<CWEData> => {
