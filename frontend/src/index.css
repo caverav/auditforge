@@ -1,6 +1,54 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.sidebar-item {
+  @apply px-4 py-2 rounded-md hover:bg-gray-700 transition-colors duration-200;
+}
+
+.sidebar-item.active {
+  @apply bg-blue-600;
+}
+
+.chart-container {
+  height: 300px;
+}
+.tooltip {
+  position: relative;
+  display: inline-block;
+}
+
+.tooltip .tooltiptext {
+  visibility: hidden;
+  width: 120px;
+  background-color: #555;
+  color: #fff;
+  text-align: center;
+  border-radius: 6px;
+  padding: 5px 0;
+  position: absolute;
+  z-index: 1;
+  bottom: 125%;
+  left: 50%;
+  margin-left: -60px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+  opacity: 1;
+}
+
+body {
+  overflow: hidden;
+}
+
+#root {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -27,7 +75,7 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.5rem
+    --radius: 0.5rem;
   }
   .dark {
     --background: 240 10% 3.9%;
@@ -53,7 +101,7 @@
     --chart-2: 160 60% 45%;
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
-    --chart-5: 340 75% 55%
+    --chart-5: 340 75% 55%;
   }
 }
 @layer base {

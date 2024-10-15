@@ -13,17 +13,20 @@ const ScoreBox: React.FC<ScoreBoxProps> = ({ score, isComplete }) => {
   if (!isComplete) {
     rating = t('cvss.infoWhenNoScore');
     bgColor = 'bg-gray-500';
+  } else if (score === 0) {
+    rating = t('cvss.none');
+    bgColor = 'bg-[#53AA33]';
   } else if (score < 4) {
-    rating = 'Low';
+    rating = t('low');
     bgColor = 'bg-yellow-500';
   } else if (score < 7) {
-    rating = 'Medium';
+    rating = t('medium');
     bgColor = 'bg-orange-500';
   } else if (score < 9) {
-    rating = 'High';
+    rating = t('high');
     bgColor = 'bg-red-500';
   } else {
-    rating = 'Critical';
+    rating = t('critical');
     bgColor = 'bg-red-700';
   }
 

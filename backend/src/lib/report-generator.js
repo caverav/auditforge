@@ -14,6 +14,10 @@ var Settings = require('mongoose').model('Settings');
 var CVSS31 = require('./cvsscalc31.js');
 var translate = require('../translate');
 var $t;
+const muhammara = require('muhammara');
+const path = require('path');
+const os = require('os');
+const { v4: uuidv4 } = require('uuid');
 
 // Generate document with docxtemplater
 async function generateDoc(audit) {
@@ -122,6 +126,59 @@ async function generatePdf(audit) {
   );
 }
 exports.generatePdf = generatePdf;
+
+// Generates a encrypted PDF using libreoffice-convert
+// and muhammara to encrypt it with a given password.
+// https://www.npmjs.com/package/muhammara
+
+async function generateEncryptedPdf(audit, password) {
+  // Genera el archivo DOCX
+  var docxReport = await generateDoc(audit);
+
+  return new Promise((resolve, reject) => {
+    libre.convert(docxReport, '.pdf', undefined, (err, pdf) => {
+      if (err) {
+        console.log(err);
+        return reject(err);
+      }
+
+      const tempPdfPath = path.join(
+        os.tmpdir(),
+        `documento_sin_contraseña_${uuidv4()}.pdf`,
+      );
+      fs.writeFileSync(tempPdfPath, pdf);
+
+      const protectedPdfPath = path.join(
+        os.tmpdir(),
+        `documento_protegido_${uuidv4()}.pdf`,
+      );
+
+      try {
+        const Recipe = muhammara.Recipe;
+        const pdfDoc = new Recipe(tempPdfPath, protectedPdfPath);
+
+        pdfDoc
+          .encrypt({
+            userPassword: password,
+            ownerPassword: password,
+            userProtectionFlag: 4,
+          })
+          .endPDF();
+
+        const protectedPdf = fs.readFileSync(protectedPdfPath);
+
+        fs.unlinkSync(tempPdfPath);
+        fs.unlinkSync(protectedPdfPath);
+
+        resolve(protectedPdf);
+      } catch (error) {
+        console.error('Error protecting PDF:', error);
+        reject(error);
+      }
+    });
+  });
+}
+exports.generateEncryptedPdf = generateEncryptedPdf;
 
 // Generates a csv from the json data
 // Leverages json2csv
