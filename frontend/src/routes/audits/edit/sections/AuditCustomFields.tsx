@@ -92,7 +92,7 @@ const AuditCustomFields: React.FC<AuditCustomFieldsProps> = ({
     <div>
       <div className="flex justify-end mt-4">
         <button
-          className="bg-blue-500 text-white rounded-md px-4 py-2"
+          className="bg-green-600 text-white rounded-md px-4 py-2"
           onClick={onSave}
           type="button"
         >
