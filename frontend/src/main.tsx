@@ -28,6 +28,7 @@ import {
   Edit,
   General,
   Network,
+  Sections,
 } from './routes/audits';
 import {
   Clients,
@@ -76,6 +77,10 @@ const router = createBrowserRouter([
           {
             path: 'findings/:findingId',
             element: <Edit />,
+          },
+          {
+            path: 'sections/:sectionId',
+            element: <Sections />,
           },
         ],
       },

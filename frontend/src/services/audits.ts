@@ -39,6 +39,14 @@ export type FindingByLocale = {
   category?: string;
 };
 
+export type AuditSection = {
+  field: string;
+  name: string;
+  _id: string;
+  customFields: string[];
+  icon?: string;
+};
+
 export type Audit = {
   _id: string;
   name: string;
@@ -116,7 +124,7 @@ export type AuditById = {
     updatedAt: string;
     __v: number;
   } | null;
-  sections: string[];
+  sections: AuditSection[];
   customFields: string[];
   sortFindings: string[];
   scope: {
@@ -126,6 +134,56 @@ export type AuditById = {
   findings: Finding[];
   date_end: string;
   date_start: string;
+};
+
+export type UpdateAuditCustomFields = {
+  customFields: {
+    customField: {
+      description: string;
+      display: string;
+      displaySub: string;
+      fieldType: string;
+      label: string;
+      offset: number;
+      options: {
+        locale: string;
+        value: string;
+      }[];
+      required: boolean;
+      size: number;
+      _id: string;
+    };
+    text: string | string[];
+  }[];
+  field: string;
+  name: string;
+  _id: string;
+};
+
+export type SectionCustomField = {
+  description: string;
+  display: string;
+  displaySub: string;
+  fieldType: string;
+  label: string;
+  offset: number;
+  options: {
+    locale: string;
+    value: string;
+  }[];
+  required: boolean;
+  size: number;
+  _id: string;
+};
+
+export type AuditSectionById = {
+  _id: string;
+  field: string;
+  name: string;
+  customFields: {
+    customField: SectionCustomField;
+    text: string | string[];
+  }[];
 };
 
 export type NewAudit = {
@@ -396,6 +454,54 @@ export const getAuditById = async (
   }
 };
 
+export const getAuditSectionById = async (
+  auditId: string | undefined,
+  sectionId: string | undefined,
+): Promise<{ status: string; datas: AuditSectionById }> => {
+  try {
+    const response = await fetch(
+      `${API_URL}audits/${auditId}/sections/${sectionId}`,
+      {
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+      },
+    );
+    if (!response.ok) {
+      throw networkError;
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const updateAuditSectionById = async (
+  auditId: string | undefined,
+  sectionId: string | undefined,
+  auditSections: UpdateAuditCustomFields,
+): Promise<{ status: string; datas: AuditSectionById }> => {
+  try {
+    const response = await fetch(
+      `${API_URL}audits/${auditId}/sections/${sectionId}`,
+      {
+        method: 'PUT',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(auditSections),
+      },
+    );
+    if (!response.ok) {
+      throw networkError;
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
 export const getAuditColumns = async (): Promise<
   {
     header: string;
