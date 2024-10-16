@@ -729,3 +729,33 @@ export const addFinding = async (
     throw error;
   }
 };
+
+export const encryptPDF = async (
+  password: string,
+  auditId: string,
+): Promise<Blob | undefined> => {
+  const bodyParam = {
+    password,
+  };
+
+  try {
+    const response = await fetch(
+      `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate/pdf`,
+      {
+        credentials: 'include',
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(bodyParam),
+      },
+    );
+
+    if (!response.ok) {
+      throw new Error('Error generating PDF');
+    }
+    return await response.blob();
+  } catch (error) {
+    console.error('Error generating PDF:', error);
+  }
+};

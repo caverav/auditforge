@@ -10,9 +10,12 @@ import {
   Plus,
   Users,
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { useCallback, useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
-import { AuditSection } from '@/services/audits';
+import { EncryptionModal } from '@/routes/audits/edit/general/EncryptionModal';
+import { AuditSection, encryptPDF, getAuditById } from '@/services/audits';
 
 import { Section } from '../../services/data';
 import DefaultRadioGroup from '../button/DefaultRadioGroup';
@@ -68,7 +71,6 @@ type AuditSidebarProps = {
   sortOptions: SortOption[];
   sortOrderOptions: SortOrderOption[];
   connectedUsers: ConnectedUser[];
-  fileTypes: ListItem[];
 };
 
 const severityColorMap: Record<string, string> = {
@@ -98,8 +100,15 @@ const AuditSidebar = ({
   findings,
   sortOrderOptions,
   connectedUsers,
-  fileTypes,
 }: AuditSidebarProps) => {
+  const handleSetIsCollapsed = useCallback(
+    (collapsed: boolean) => setIsCollapsed(collapsed),
+    [setIsCollapsed],
+  );
+  const handleSetActiveItem = useCallback(
+    (item: string) => setActiveItem(item),
+    [setActiveItem],
+  );
   const severityOrder: Record<string, number> = {
     C: 1,
     H: 2,
@@ -108,12 +117,104 @@ const AuditSidebar = ({
     I: 5,
   };
 
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const handleSetIsOpenModal = useCallback(
+    (isOpen: boolean) => setIsOpenModal(isOpen),
+    [],
+  );
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+
+  const [auditName, setAuditName] = useState('');
+  const { auditId } = useParams();
+
+  useEffect(() => {
+    getAuditById(auditId)
+      .then(audit => {
+        setAuditName(audit.datas.name);
+      })
+      .catch(console.error);
+  }, [auditId]);
+
+  const fileTypes: ListItem[] = [
+    {
+      id: 1,
+      value: 'docx',
+      label: 'docx',
+      onClick: () =>
+        window.open(
+          `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate`,
+          '_blank',
+        ),
+    },
+    {
+      id: 2,
+      value: 'pdf',
+      label: 'pdf',
+      onClick: () =>
+        window.open(
+          `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate/pdf`,
+          '_blank',
+        ),
+    },
+    {
+      id: 3,
+      value: 'json',
+      label: 'json',
+      onClick: () =>
+        window.open(
+          `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate/json`,
+          '_blank',
+        ),
+    },
+    {
+      id: 4,
+      value: 'csv',
+      label: 'csv',
+      onClick: () =>
+        window.open(
+          `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate/csv`,
+          '_blank',
+        ),
+    },
+    {
+      id: 5,
+      value: 'pdf/encrypted',
+      label: `pdf (${t('encrypted')})`,
+      onClick: () => setIsOpenModal(true),
+    },
+  ];
+
   findings.sort((a, b) => {
     const orderMultiplier = sortOrder === 'Ascending' ? -1 : 1;
     return (
       orderMultiplier * (severityOrder[a.severity] - severityOrder[b.severity])
     );
   });
+
+  const handleSubmitEncrypt = async (password: string) => {
+    setIsGeneratingPDF(true);
+
+    const blob = await encryptPDF(password, auditId ?? '').catch(
+      (error: Error) => {
+        toast.error(t('err.errorGeneratingPdf'));
+        console.error('Error generating PDF:', error);
+      },
+    );
+    if (blob) {
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${auditName}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } else {
+      toast.error(t('err.errorGeneratingPdf'));
+    }
+    setIsOpenModal(false);
+    setIsGeneratingPDF(false);
+  };
 
   return (
     <div
@@ -123,21 +224,20 @@ const AuditSidebar = ({
       )}
     >
       <div className="flex items-center justify-between p-4 border-b border-gray-800">
-        <h2
-          className={clsx(
-            'font-semibold transition-opacity',
-            isCollapsed ? 'opacity-0 w-0' : 'opacity-100',
-          )}
-        >
-          {t('audit')}
-        </h2>
         <div className={clsx('m-2', isCollapsed && 'sr-only')}>
           <DropdownButton items={fileTypes} placeholder={t('export')} />
         </div>
+        <EncryptionModal
+          auditName={auditName}
+          handleSubmitEncrypt={handleSubmitEncrypt}
+          isGeneratingPDF={isGeneratingPDF}
+          isOpen={isOpenModal}
+          onCancel={() => handleSetIsOpenModal(false)}
+        />
         <button
           aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           className="text-gray-400 hover:text-gray-100 hover:bg-gray-800 p-2 rounded-full transition-colors duration-200 z-10"
-          onClick={() => setIsCollapsed(!isCollapsed)}
+          onClick={() => handleSetIsCollapsed(!isCollapsed)}
           type="button"
         >
           {isCollapsed ? (
@@ -160,7 +260,7 @@ const AuditSidebar = ({
                     : 'text-gray-400',
                 )}
                 onClick={() => {
-                  setActiveItem(item.name);
+                  handleSetActiveItem(item.name);
                 }}
                 to={item.value}
               >
