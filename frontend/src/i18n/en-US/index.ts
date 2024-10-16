@@ -160,6 +160,8 @@ export default {
     invalidEmailError:
       'Email must follow this format: example@example.something',
     passwordsDoNotMatch: 'Passwords do not match',
+    auditCustomSectionsSaveSuccess:
+      'The custom sections have been saved successfully',
   },
   err: {
     notDefinedLanguage: 'Not defined for this language',
@@ -199,6 +201,7 @@ export default {
     createEmptyField: 'Failed to Create: Empty field',
     passwordsDontMatch: 'Passwords do not match',
     errorGeneratingPdf: 'Failed exporting audit to pdf',
+    errorSavingAuditCustomSections: 'Failed saving the audit custom sections',
   },
   cvss: {
     title: 'CVSS v3.1 Base Score',

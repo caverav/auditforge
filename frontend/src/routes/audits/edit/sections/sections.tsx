@@ -1,6 +1,8 @@
 /* eslint-disable import/extensions */
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import {
   AuditSectionById,
@@ -45,6 +47,8 @@ type TransformedField = {
 };
 
 export const Sections = () => {
+  const { t } = useTranslation();
+
   const [currentCustomFields, setCurrentCustomFields] = useState<
     TransformedField[]
   >([]);
@@ -182,8 +186,10 @@ export const Sections = () => {
 
     try {
       await updateAuditSectionById(auditId, sectionId, payload);
+      toast.success(t('msg.auditCustomSectionsSaveSuccess'));
     } catch (error) {
       console.error(error);
+      toast.error(t('err.errorSavingAuditCustomSections'));
     }
   };
 
