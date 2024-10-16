@@ -11,6 +11,7 @@ type MetricGroupProps = {
   label: string;
   options: Option[];
   selectedOption: string;
+  highlightedOption?: string;
   onSelect: (option: string) => void;
 };
 
@@ -18,6 +19,7 @@ const MetricGroup: React.FC<MetricGroupProps> = ({
   label,
   options,
   selectedOption,
+  highlightedOption = '',
   onSelect,
 }) => {
   return (
@@ -26,6 +28,7 @@ const MetricGroup: React.FC<MetricGroupProps> = ({
       <div className="flex flex-wrap gap-2">
         {options.map(option => (
           <MetricButton
+            isHighlighted={option.value === highlightedOption}
             key={option.value}
             label={option.label}
             onClick={() => onSelect(option.value)}
