@@ -366,9 +366,9 @@ export const General = () => {
 
     try {
       await updateAudit(auditId, updatedAudit);
-      toast.success(t('auditUpdatedOk'));
+      toast.success(t('msg.auditUpdatedOk'));
     } catch (error) {
-      toast.error(t('failedUpdateAudit'));
+      toast.error(t('err.failedUpdateAudit'));
     }
   };
 
