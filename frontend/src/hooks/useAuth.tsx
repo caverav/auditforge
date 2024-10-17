@@ -60,7 +60,9 @@ const useAuth = () => {
       if (responseData.status === 'success') {
         setIsAuthenticated(true);
         navigate('/audits', { replace: true });
+        return true;
       }
+      return false;
     } catch (error) {
       console.error(error);
     }
