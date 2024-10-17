@@ -1,6 +1,10 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Toaster } from 'sonner';
+
+import PrimaryButton from '@/components/button/PrimaryButton';
+import SimpleInput from '@/components/input/SimpleInput';
 
 import LoginForm from '../components/login/LoginForm';
 import { checktoken } from '../hooks/useAuth';
@@ -8,6 +12,8 @@ import { checktoken } from '../hooks/useAuth';
 export const Login = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
 
   checktoken()
     .then(result => {
@@ -20,25 +26,30 @@ export const Login = () => {
   return (
     <>
       <LoginForm>
-        <input
-          className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded"
+        <SimpleInput
           id="email"
-          placeholder={t('username')}
+          label={t('email')}
+          name="email"
+          onChange={setEmail}
+          placeholder={t('email')}
+          requiredField
           type="text"
+          value={email}
         />
-        <input
-          className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded mt-4"
+        <SimpleInput
           id="password"
+          label={t('password')}
+          name="password"
+          onChange={setPassword}
           placeholder={t('password')}
+          requiredField
           type="password"
+          value={password}
         />
-        <div className="text-center md:text-left">
-          <button
-            className="mt-4 bg-black hover:bg-gray-100 hover:text-black px-4 py-2 text-white uppercase rounded text-xs tracking-wider"
-            type="submit"
-          >
+        <div className="text-center md:text-left mt-4">
+          <PrimaryButton color="blue" onClick={() => {}} type="submit">
             {t('login')}
-          </button>
+          </PrimaryButton>
         </div>
       </LoginForm>
       <Toaster
