@@ -1,5 +1,10 @@
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
+import { Toaster } from 'sonner';
+
+import PrimaryButton from '@/components/button/PrimaryButton';
+import SimpleInput from '@/components/input/SimpleInput';
 
 import LoginForm from '../components/login/LoginForm';
 import { checktoken } from '../hooks/useAuth';
@@ -7,6 +12,8 @@ import { checktoken } from '../hooks/useAuth';
 export const Login = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('');
 
   checktoken()
     .then(result => {
@@ -17,27 +24,44 @@ export const Login = () => {
     .catch(console.error);
 
   return (
-    <LoginForm>
-      <input
-        className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded"
-        id="email"
-        placeholder={t('username')}
-        type="text"
+    <>
+      <LoginForm>
+        <SimpleInput
+          id="email"
+          label={t('email')}
+          name="email"
+          onChange={setEmail}
+          placeholder={t('email')}
+          requiredField
+          type="text"
+          value={email}
+        />
+        <SimpleInput
+          id="password"
+          label={t('password')}
+          name="password"
+          onChange={setPassword}
+          placeholder={t('password')}
+          requiredField
+          type="password"
+          value={password}
+        />
+        <div className="text-center md:text-left mt-4">
+          <PrimaryButton color="blue" type="submit">
+            {t('login')}
+          </PrimaryButton>
+        </div>
+      </LoginForm>
+      <Toaster
+        toastOptions={{
+          classNames: {
+            error: 'bg-red-400 text-white',
+            success: 'bg-green-400 text-white',
+            warning: 'bg-yellow-400 text-white',
+            info: 'bg-blue-400 text-white',
+          },
+        }}
       />
-      <input
-        className="text-sm w-full px-4 py-2 border border-solid border-gray-300 rounded mt-4"
-        id="password"
-        placeholder={t('password')}
-        type="password"
-      />
-      <div className="text-center md:text-left">
-        <button
-          className="mt-4 bg-black hover:bg-gray-100 hover:text-black px-4 py-2 text-white uppercase rounded text-xs tracking-wider"
-          type="submit"
-        >
-          {t('login')}
-        </button>
-      </div>
-    </LoginForm>
+    </>
   );
 };
