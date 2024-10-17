@@ -116,10 +116,12 @@ const useAuth = () => {
       const responseData = await response.json();
       if (responseData.status === 'success') {
         navigate('/login', { replace: true });
+        return true;
       }
     } catch (error) {
       console.error(error);
     }
+    return false;
   };
 
   return {
