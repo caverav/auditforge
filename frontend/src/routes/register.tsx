@@ -1,8 +1,8 @@
 import { t } from 'i18next';
+import { useCallback } from 'react';
 import { toast, Toaster } from 'sonner';
 
 import useAuth from '../hooks/useAuth';
-import { useCallback } from 'react';
 
 const getValue = (id: string): string => {
   const element = document.getElementById(id);
