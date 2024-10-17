@@ -2,6 +2,7 @@ import { t } from 'i18next';
 import { toast, Toaster } from 'sonner';
 
 import useAuth from '../hooks/useAuth';
+import { useCallback } from 'react';
 
 const getValue = (id: string): string => {
   const element = document.getElementById(id);
@@ -9,28 +10,31 @@ const getValue = (id: string): string => {
 };
 export const Register = () => {
   const { register } = useAuth();
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const password = getValue('password');
-    const confirmPassword = getValue('confirmPassword');
-    if (password !== confirmPassword) {
-      toast.error(t('confirmPasswordDifferents'));
-      console.error('Passwords do not match');
-      return;
-    }
-    register(
-      getValue('username'),
-      getValue('firstname'),
-      getValue('lastname'),
-      password,
-    )
-      .then(result => {
-        if (!result) {
-          toast.error(t('err.createUser'));
-        }
-      })
-      .catch(console.error);
-  };
+  const handleSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      const password = getValue('password');
+      const confirmPassword = getValue('confirmPassword');
+      if (password !== confirmPassword) {
+        toast.error(t('confirmPasswordDifferents'));
+        console.error('Passwords do not match');
+        return;
+      }
+      register(
+        getValue('username'),
+        getValue('firstname'),
+        getValue('lastname'),
+        password,
+      )
+        .then(result => {
+          if (!result) {
+            toast.error(t('err.createUser'));
+          }
+        })
+        .catch(console.error);
+    },
+    [register],
+  );
   return (
     <>
       <section className="bg-gray-800 h-screen flex flex-col md:flex-row justify-center space-y-10 md:space-y-0 md:space-x-16 items-center my-2 mx-5 md:mx-0 md:my-0">
