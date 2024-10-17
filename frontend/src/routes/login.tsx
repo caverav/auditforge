@@ -47,7 +47,7 @@ export const Login = () => {
           value={password}
         />
         <div className="text-center md:text-left mt-4">
-          <PrimaryButton color="blue" onClick={() => {}} type="submit">
+          <PrimaryButton color="blue" type="submit">
             {t('login')}
           </PrimaryButton>
         </div>
