@@ -7,7 +7,7 @@ type CardProps = {
 
 const Card: React.FC<CardProps> = ({ title, children }) => {
   return (
-    <div className="border rounded-lg bg-gray-900">
+    <div className="rounded-lg bg-gray-900">
       <div className="py-3 mx-4">
         <h2 className="text-xl font-semibold">{title}</h2>
       </div>
