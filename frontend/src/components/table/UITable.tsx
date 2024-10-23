@@ -139,8 +139,8 @@ const UITable: React.FC<TableProps> = ({
         </div>
       ) : null}
       <div className="overflow-x-auto rounded-lg shadow-lg">
-        <table className="min-w-full divide-y divide-gray-600 rounded">
-          <thead className="bg-gray-700 border-separate">
+        <table className="min-w-full divide-y divide-gray-600 rounded" role="table">
+          <thead className="bg-gray-700">
             <tr>
               {columns.map(column => (
                 <th
