@@ -131,15 +131,15 @@ const UITable: React.FC<TableProps> = ({
   }, [currentPageNumber, data, totalValuesPerPage]);
 
   return (
-    <div className="overflow-x-auto bg-gray-900 p-2 shadow-2xl border rounded-lg">
+    <div className="overflow-x-auto p-2 shadow-2xl">
       {children ? (
         <div className="pb-4">
           <div className="py-3 mx-4">{children}</div>
           <hr className="h-1 mx-2 bg-gray-600 border-0 rounded" />
         </div>
       ) : null}
-      <div>
-        <table className="min-w-full divide-y divide-gray-600">
+      <div className="overflow-x-auto rounded-lg shadow-lg">
+        <table className="min-w-full divide-y divide-gray-600 rounded" role="table">
           <thead className="bg-gray-700">
             <tr>
               {columns.map(column => (
@@ -187,7 +187,7 @@ const UITable: React.FC<TableProps> = ({
               ) : null}
             </tr>
           </thead>
-          <tbody className="bg-gray-900 divide-y divide-gray-700">
+          <tbody className="bg-gray-800/50 divide-y divide-gray-700">
             {dataToDisplay.length === 0 && emptyState ? (
               <tr>
                 <td className="px-6 py-4 text-center" colSpan={columns.length}>
@@ -230,9 +230,9 @@ const UITable: React.FC<TableProps> = ({
           </tbody>
         </table>
         {data.length > 0 ? (
-          <div className="flex">
+          <div className="flex bg-gray-700/75 pb-2 pr-1">
             <div className="flex flex-wrap">
-              <div className="mt-4 bg-gray-700 rounded-xl">
+              <div className="mt-4 rounded-xl">
                 <button onClick={goOnPrevPage} type="button">
                   <ChevronLeftIcon className="size-4" />
                 </button>
@@ -247,7 +247,7 @@ const UITable: React.FC<TableProps> = ({
                 </button>
               </div>
             </div>
-            <div className="mt-4 bg-gray-700 rounded-xl px-1">
+            <div className="mt-4 rounded-xl px-1">
               <select
                 className="bg-gray-900 rounded-xl px-2"
                 onChange={e => setTotalValuesPerPage(Number(e.target.value))}

@@ -65,7 +65,7 @@ export const CustomData: React.FC = () => {
 
   return (
     <div>
-      <div className="resize bg-gray-900 rounded-lg border ">
+      <div className="resize bg-gray-900 rounded-lg ">
         <div className="flex justify-left overflow-x-auto py-3 mx-4">
           {cardOptions.map(option => (
             <button
