@@ -1,16 +1,14 @@
+/* eslint-disable import/extensions */
 import { Cvss3P1 } from 'ae-cvss-calculator';
 import { BarChart, Globe, List, Plus, Settings } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Outlet, useParams } from 'react-router-dom';
-import { toast } from 'sonner';
 
-import DropdownButton, {
-  ListItem,
-} from '../../../components/button/DropdownButton';
+import { getCustomSections, Section } from '@/services/data';
+
 import AuditSidebar from '../../../components/navbar/AuditSidebar';
-import { Finding, getAuditById } from '../../../services/audits';
-import { EncryptionModal } from './general/EncryptionModal';
+import { AuditSection, Finding, getAuditById } from '../../../services/audits';
 
 export const AuditRoot = () => {
   const { t } = useTranslation();
@@ -69,11 +67,42 @@ export const AuditRoot = () => {
     }
     return 'I';
   };
-  const [auditName, setAuditName] = useState('');
+  const [auditSections, setAuditSections] = useState<AuditSection[]>([]);
+  const [sections, setSections] = useState<Section[]>([]);
+  const [isListVisible, setIsListVisible] = useState(false);
+
+  useEffect(() => {
+    getCustomSections()
+      .then(section => {
+        setSections(
+          section.datas.map((item: Section) => ({
+            field: item.field,
+            name: item.name,
+            icon: item.icon,
+          })),
+        );
+      })
+      .catch(console.error);
+  }, []);
 
   useEffect(() => {
     getAuditById(auditId)
       .then(audit => {
+        setAuditSections(
+          audit.datas.sections.map((section: AuditSection) => {
+            const matchingSection = sections.find(
+              s => s.field === section.field && s.name === section.name,
+            );
+
+            return {
+              field: section.field,
+              name: section.name,
+              _id: section._id,
+              customFields: section.customFields,
+              icon: matchingSection?.icon ?? undefined,
+            };
+          }),
+        );
         setFindings(
           audit.datas.findings.map((finding: Finding) => {
             return {
@@ -85,10 +114,9 @@ export const AuditRoot = () => {
             };
           }),
         );
-        setAuditName(audit.datas.name);
       })
       .catch(console.error);
-  }, [auditId]);
+  }, [auditId, sections]);
 
   const sortOptions = [{ id: 1, value: 'CVSS Score', label: t('cvssScore') }];
 
@@ -99,119 +127,20 @@ export const AuditRoot = () => {
 
   const connectedUsers: { id: number; name: string; online: boolean }[] = [];
 
-  /**
-   * PDF Export encryption
-   */
-
-  const [isOpenModal, setIsOpenModal] = useState(false);
-  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
-
-  const handleSubmitEncrypt = async (password: string) => {
-    const bodyParam = {
-      password,
-    };
-    setIsGeneratingPDF(true);
-
-    try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate/pdf`,
-        {
-          credentials: 'include',
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(bodyParam),
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error('Error generating PDF');
-      }
-
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `${auditName}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-
-      setIsOpenModal(false);
-    } catch (error) {
-      console.error('Error al generar el PDF:', error);
-      toast.error(t('err.errorGeneratingPdf'));
-    } finally {
-      setIsGeneratingPDF(false);
-    }
-  };
-
-  /**
-   * PDF Export encryption
-   */
-
-  const fileTypes: ListItem[] = [
-    {
-      id: 1,
-      value: 'docx',
-      label: 'docx',
-      onClick: () =>
-        window.open(
-          `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate`,
-          '_blank',
-        ),
-    },
-    {
-      id: 2,
-      value: 'pdf',
-      label: 'pdf',
-      onClick: () =>
-        window.open(
-          `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate/pdf`,
-          '_blank',
-        ),
-    },
-    {
-      id: 3,
-      value: 'json',
-      label: 'json',
-      onClick: () =>
-        window.open(
-          `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate/json`,
-          '_blank',
-        ),
-    },
-    {
-      id: 4,
-      value: 'csv',
-      label: 'csv',
-      onClick: () =>
-        window.open(
-          `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate/csv`,
-          '_blank',
-        ),
-    },
-    {
-      id: 5,
-      value: 'pdf/encrypted',
-      label: `pdf (${t('encrypted')})`,
-      onClick: () => setIsOpenModal(true),
-    },
-  ];
-
   return (
     <div className="flex overflow-hidden">
       <AuditSidebar
         activeItem={activeItem}
+        auditSections={auditSections}
         connectedUsers={connectedUsers}
-        fileTypes={fileTypes}
         findings={findings}
         isCollapsed={isCollapsed}
+        isListVisible={isListVisible}
         menuItems={menuItems}
+        sections={sections}
         setActiveItem={setActiveItem}
         setIsCollapsed={setIsCollapsed}
+        setIsListVisible={setIsListVisible}
         setSortBy={setSortBy}
         setSortOrder={setSortOrder}
         sortBy={sortBy}
@@ -222,16 +151,6 @@ export const AuditRoot = () => {
       <div className="flex-1 overflow-auto">
         <Outlet />
       </div>
-      <div className="m-3">
-        <DropdownButton items={fileTypes} placeholder={t('export')} />
-      </div>
-      <EncryptionModal
-        auditName={auditName}
-        handleSubmitEncrypt={handleSubmitEncrypt}
-        isGeneratingPDF={isGeneratingPDF}
-        isOpen={isOpenModal}
-        onCancel={() => setIsOpenModal(false)}
-      />
     </div>
   );
 };

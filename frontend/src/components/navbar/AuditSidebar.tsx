@@ -1,8 +1,23 @@
+/* eslint-disable import/extensions */
+/* eslint-disable sonarjs/no-duplicate-string */
 import clsx from 'clsx';
 import { t } from 'i18next';
-import { ChevronDown, ChevronUp, Users } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import {
+  Check,
+  ChevronDown,
+  ChevronUp,
+  FilePlus2,
+  Plus,
+  Users,
+} from 'lucide-react';
+import { useCallback, useEffect, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
+import { EncryptionModal } from '@/routes/audits/edit/general/EncryptionModal';
+import { AuditSection, encryptPDF, getAuditById } from '@/services/audits';
+
+import { Section } from '../../services/data';
 import DefaultRadioGroup from '../button/DefaultRadioGroup';
 import DropdownButton, { ListItem } from '../button/DropdownButton';
 
@@ -43,6 +58,10 @@ type AuditSidebarProps = {
   setActiveItem: (item: string) => void;
   isCollapsed: boolean;
   setIsCollapsed: (collapsed: boolean) => void;
+  isListVisible: boolean;
+  setIsListVisible: (visible: boolean) => void;
+  auditSections: AuditSection[];
+  sections: Section[];
   sortBy: SortOption | null;
   setSortBy: (option: SortOption | null) => void;
   sortOrder: string;
@@ -52,7 +71,6 @@ type AuditSidebarProps = {
   sortOptions: SortOption[];
   sortOrderOptions: SortOrderOption[];
   connectedUsers: ConnectedUser[];
-  fileTypes: ListItem[];
 };
 
 const severityColorMap: Record<string, string> = {
@@ -70,16 +88,27 @@ const getSeverityColor = (severity: string) => {
 const AuditSidebar = ({
   activeItem,
   setActiveItem,
+  auditSections,
   isCollapsed,
   setIsCollapsed,
+  isListVisible,
+  setIsListVisible,
+  sections,
   sortOrder,
   setSortOrder,
   menuItems,
   findings,
   sortOrderOptions,
   connectedUsers,
-  fileTypes,
 }: AuditSidebarProps) => {
+  const handleSetIsCollapsed = useCallback(
+    (collapsed: boolean) => setIsCollapsed(collapsed),
+    [setIsCollapsed],
+  );
+  const handleSetActiveItem = useCallback(
+    (item: string) => setActiveItem(item),
+    [setActiveItem],
+  );
   const severityOrder: Record<string, number> = {
     C: 1,
     H: 2,
@@ -88,12 +117,104 @@ const AuditSidebar = ({
     I: 5,
   };
 
+  const [isOpenModal, setIsOpenModal] = useState(false);
+  const handleSetIsOpenModal = useCallback(
+    (isOpen: boolean) => setIsOpenModal(isOpen),
+    [],
+  );
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
+
+  const [auditName, setAuditName] = useState('');
+  const { auditId } = useParams();
+
+  useEffect(() => {
+    getAuditById(auditId)
+      .then(audit => {
+        setAuditName(audit.datas.name);
+      })
+      .catch(console.error);
+  }, [auditId]);
+
+  const fileTypes: ListItem[] = [
+    {
+      id: 1,
+      value: 'docx',
+      label: 'docx',
+      onClick: () =>
+        window.open(
+          `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate`,
+          '_blank',
+        ),
+    },
+    {
+      id: 2,
+      value: 'pdf',
+      label: 'pdf',
+      onClick: () =>
+        window.open(
+          `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate/pdf`,
+          '_blank',
+        ),
+    },
+    {
+      id: 3,
+      value: 'json',
+      label: 'json',
+      onClick: () =>
+        window.open(
+          `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate/json`,
+          '_blank',
+        ),
+    },
+    {
+      id: 4,
+      value: 'csv',
+      label: 'csv',
+      onClick: () =>
+        window.open(
+          `${import.meta.env.VITE_API_URL}/api/audits/${auditId}/generate/csv`,
+          '_blank',
+        ),
+    },
+    {
+      id: 5,
+      value: 'pdf/encrypted',
+      label: `pdf (${t('encrypted')})`,
+      onClick: () => setIsOpenModal(true),
+    },
+  ];
+
   findings.sort((a, b) => {
     const orderMultiplier = sortOrder === 'Ascending' ? -1 : 1;
     return (
       orderMultiplier * (severityOrder[a.severity] - severityOrder[b.severity])
     );
   });
+
+  const handleSubmitEncrypt = async (password: string) => {
+    setIsGeneratingPDF(true);
+
+    const blob = await encryptPDF(password, auditId ?? '').catch(
+      (error: Error) => {
+        toast.error(t('err.errorGeneratingPdf'));
+        console.error('Error generating PDF:', error);
+      },
+    );
+    if (blob) {
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${auditName}.pdf`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } else {
+      toast.error(t('err.errorGeneratingPdf'));
+    }
+    setIsOpenModal(false);
+    setIsGeneratingPDF(false);
+  };
 
   return (
     <div
@@ -103,21 +224,20 @@ const AuditSidebar = ({
       )}
     >
       <div className="flex items-center justify-between p-4 border-b border-gray-800">
-        <h2
-          className={clsx(
-            'font-semibold transition-opacity',
-            isCollapsed ? 'opacity-0 w-0' : 'opacity-100',
-          )}
-        >
-          {t('audit')}
-        </h2>
         <div className={clsx('m-2', isCollapsed && 'sr-only')}>
           <DropdownButton items={fileTypes} placeholder={t('export')} />
         </div>
+        <EncryptionModal
+          auditName={auditName}
+          handleSubmitEncrypt={handleSubmitEncrypt}
+          isGeneratingPDF={isGeneratingPDF}
+          isOpen={isOpenModal}
+          onCancel={() => handleSetIsOpenModal(false)}
+        />
         <button
           aria-label={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
           className="text-gray-400 hover:text-gray-100 hover:bg-gray-800 p-2 rounded-full transition-colors duration-200 z-10"
-          onClick={() => setIsCollapsed(!isCollapsed)}
+          onClick={() => handleSetIsCollapsed(!isCollapsed)}
           type="button"
         >
           {isCollapsed ? (
@@ -140,7 +260,7 @@ const AuditSidebar = ({
                     : 'text-gray-400',
                 )}
                 onClick={() => {
-                  setActiveItem(item.name);
+                  handleSetActiveItem(item.name);
                 }}
                 to={item.value}
               >
@@ -199,6 +319,100 @@ const AuditSidebar = ({
           </ul>
         </div>
       </nav>
+      <div className="p-4 border-t border-gray-800">
+        <div className="mb-2 flex gap-2">
+          <button
+            className="w-full flex items-center justify-start gap-3 text-gray-400 hover:text-gray-100 hover:bg-gray-800 px-4 py-2 rounded-lg transition-colors duration-200 whitespace-nowrap"
+            type="button"
+          >
+            <FilePlus2 className="h-5 w-5 flex-shrink-0" />
+            <span
+              className={clsx(
+                'transition-opacity',
+                isCollapsed && 'opacity-0 w-0 overflow-hidden',
+              )}
+            >
+              {t('customSections')}
+            </span>
+          </button>
+          {!isCollapsed ? (
+            <button
+              className="flex items-center justify-center text-gray-400 hover:text-gray-100 hover:bg-gray-800 rounded-full transition-colors duration-200 w-10 h-10"
+              onClick={() => setIsListVisible(!isListVisible)}
+              type="button"
+            >
+              <Plus className="h-5 w-5 flex-shrink-0" />
+            </button>
+          ) : null}
+          <div className="relative">
+            {isListVisible ? (
+              <ul
+                className="absolute z-10 mt-2 bg-gray-800 rounded-lg p-2 space-y-1 shadow-lg border border-gray-700"
+                style={{ minWidth: '200px' }}
+              >
+                {sections.map(section => {
+                  const isSelected = auditSections.some(
+                    auditSection => auditSection.field === section.field,
+                  );
+
+                  return (
+                    <button
+                      className={clsx(
+                        'w-full text-left text-gray-300 hover:bg-gray-700 rounded-md p-2 flex items-center gap-2',
+                        isSelected && 'bg-gray-700 text-white',
+                      )}
+                      key={section.field}
+                      onClick={() => setIsListVisible(!isListVisible)}
+                      type="button"
+                    >
+                      {section.icon.startsWith('fa-') ? (
+                        <i className={`fa ${section.icon}`} />
+                      ) : (
+                        <i className="material-icons">{section.icon}</i>
+                      )}
+                      <span>{section.name}</span>
+                      {isSelected ? (
+                        <Check className="h-5 w-5 flex-shrink-0 ml-auto " />
+                      ) : null}
+                    </button>
+                  );
+                })}
+              </ul>
+            ) : null}
+          </div>
+        </div>
+
+        {!isCollapsed ? (
+          <ul className="space-y-2">
+            {auditSections.map(section => (
+              <li key={section.name}>
+                <Link
+                  className={clsx(
+                    'flex items-center gap-2 text-sm w-full justify-start px-4 py-2 text-left font-medium rounded-lg transition-colors duration-200',
+                    activeItem === section.name
+                      ? 'bg-gray-800 text-white'
+                      : 'text-gray-400',
+                    'hover:bg-gray-800',
+                  )}
+                  onClick={() => {
+                    setActiveItem(section.name);
+                  }}
+                  to={`sections/${section._id}`}
+                >
+                  {section.icon?.startsWith('fa-') ? (
+                    <i className={`fa ${section.icon}`} />
+                  ) : (
+                    <i className="material-icons">{section.icon}</i>
+                  )}
+                  <span className={clsx('flex-1 transition-opacity')}>
+                    {section.name}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : null}
+      </div>
       <div className="p-4 border-t border-gray-800">
         <div className="mb-2">
           <button

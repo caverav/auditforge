@@ -49,6 +49,7 @@ services:
       dockerfile: Dockerfile
       args:
         CWE_MODEL_URL: ${CWE_MODEL_URL}
+        CVSS_MODEL_URL: ${CVSS_MODEL_URL}
     image: auditforge-cwe-api
     container_name: auditforge-cwe-api
     restart: always

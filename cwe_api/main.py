@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from transformers import pipeline
 from inferencer import inferencer
+from cvss_inferencer import inferencer as cvss_inferencer
 
 app = FastAPI()
 
@@ -22,6 +23,12 @@ class VulnerabilityRequest(BaseModel):
 async def classify_vulnerability(vuln_request: VulnerabilityRequest):
     vuln = vuln_request.vuln
     result = inferencer(vuln)
+    return {"result": result}
+
+@app.post("/cvss")
+async def classify_vulnerability(vuln_request: VulnerabilityRequest):
+    vuln = vuln_request.vuln
+    result = cvss_inferencer(vuln)
     return {"result": result}
 
 @app.get("/")

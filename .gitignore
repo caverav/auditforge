@@ -27,3 +27,4 @@ package-lock.json
 
 # modelo
 cwe_api/modelo_cwe
+cwe_api/utils
