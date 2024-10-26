@@ -1,3 +1,3 @@
-import { ClientDashboard } from './Dashboard';
+import { ClientDashboard } from './dashboard';
 
 export { ClientDashboard };
