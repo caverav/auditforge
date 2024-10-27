@@ -58,7 +58,13 @@
 - [Audits](audits.md)
 - [Templating](docxtemplate.md)
 
-## Our Team
+## Activity
+
+<p align="center">
+    <img src="https://repobeats.axiom.co/api/embed/9bc253cd7dda10f05535c3c8177f0166f0fd215b.svg" />
+</p>
+
+## Contributors
 
 <p align="center">
   <a href="https://github.com/caverav/auditforge/graphs/contributors">
