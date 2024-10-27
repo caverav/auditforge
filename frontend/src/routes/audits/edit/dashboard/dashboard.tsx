@@ -16,6 +16,7 @@ import { exportToPDF } from '@/services/exportToPDF';
 
 export const Dashboard = () => {
   const { auditId } = useParams();
+  // eslint-disable-next-line sonarjs/no-duplicate-string
   const [activeView, setActiveView] = useState('cvss-score');
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [selectedDisplays, setSelectedDisplays] = useState<string[]>([]);
