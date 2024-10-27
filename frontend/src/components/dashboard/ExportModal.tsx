@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 
 type ExportModalProps = {
   isOpen: boolean;
@@ -9,6 +10,7 @@ type ExportModalProps = {
   setSelectedDisplays: React.Dispatch<React.SetStateAction<string[]>>;
   auditName: string;
   setAuditName: React.Dispatch<React.SetStateAction<string>>;
+  type: string;
 };
 
 const ExportModal: React.FC<ExportModalProps> = ({
@@ -20,7 +22,10 @@ const ExportModal: React.FC<ExportModalProps> = ({
   setSelectedDisplays,
   auditName,
   setAuditName,
+  type,
 }) => {
+  const { t } = useTranslation();
+
   if (!isOpen) {
     return null;
   }
@@ -34,7 +39,7 @@ const ExportModal: React.FC<ExportModalProps> = ({
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-gray-800 p-6 rounded-lg">
-        <h2 className="text-2xl font-bold mb-4">Export Dashboard</h2>
+        <h2 className="text-2xl font-bold mb-4">{`${t('exportDashboard')} (${type})`}</h2>
         <div className="mb-4">
           <label className="block mb-2" htmlFor="auditName">
             Audit Name:
