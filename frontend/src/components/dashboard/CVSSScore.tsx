@@ -1,35 +1,15 @@
-import { Cvss3P1 } from 'ae-cvss-calculator';
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable import/extensions */
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
 import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import { useParams } from 'react-router-dom';
 
+import { cvssStringToSeverity } from '@/lib/utils';
 import { getAuditById } from '@/services/audits';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
-
-const cvssStringToSeverity = (cvssScore: string) => {
-  try {
-    const cvssVector = new Cvss3P1(cvssScore);
-    const score = cvssVector.calculateExactOverallScore();
-    if (score >= 9.0) {
-      return 'C';
-    }
-    if (score >= 7.0) {
-      return 'H';
-    }
-    if (score >= 4.0) {
-      return 'M';
-    }
-    if (score >= 0.1) {
-      return 'L';
-    }
-  } catch (error) {
-    console.error('Invalid CVSS vector:', error);
-  }
-  return 'I';
-};
 
 type CVSSScoreProps = {
   auditId?: string;
