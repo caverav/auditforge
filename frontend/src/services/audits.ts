@@ -20,6 +20,26 @@ export type Finding = {
   paragraphs: string[];
 };
 
+type EditFinding = {
+  identifier: number;
+  title: string;
+  references: string[];
+  cwes: string[];
+  status: number;
+  _id: string;
+  paragraphs: string[];
+  customFields: string[];
+  description?: string;
+  observation?: string;
+  poc?: string;
+  remediation?: string;
+  cvssv3?: string;
+  remediationComplexity?: number;
+  priority?: number;
+  scope?: string;
+  vulnType?: string;
+};
+
 export type Detail = {
   locale: string;
   title: string;
@@ -757,5 +777,30 @@ export const encryptPDF = async (
     return await response.blob();
   } catch (error) {
     console.error('Error generating PDF:', error);
+  }
+};
+
+export const getFinding = async (
+  auditID: string,
+  findingId: string,
+): Promise<{
+  status: string;
+  datas: EditFinding;
+}> => {
+  try {
+    const response = await fetch(
+      `${API_URL}audits/${auditID}/findings/${findingId}`,
+      {
+        credentials: 'include',
+      },
+    );
+    if (!response.ok) {
+      throw networkError;
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
   }
 };
