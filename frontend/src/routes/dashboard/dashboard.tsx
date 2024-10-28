@@ -18,7 +18,9 @@ export const ClientDashboard = () => {
   const [activeView, setActiveView] = useState('cvss-score');
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [selectedDisplays, setSelectedDisplays] = useState<string[]>([]);
-  const [auditName, setAuditName] = useState('');
+  const [clientName, setClientName] = useState('test');
+
+  setUrlSearchParams({ clientName });
 
   const displays = [
     { id: 'cvss-score', name: t('cvssScore'), component: CVSSScore },
@@ -48,7 +50,7 @@ export const ClientDashboard = () => {
         return <RemediationComplexity />;
 
       case 'average-cvss':
-        return <AverageCVSS />;
+        return <AverageCVSS clientName={urlSearchParams.get('clientName')} />;
 
       case 'cia-triad':
         return <CIATriad />;
@@ -79,13 +81,13 @@ export const ClientDashboard = () => {
         </div>
       </div>
       <ExportModal
-        auditName={auditName}
+        auditName={clientName}
         displays={displays}
         isOpen={isExportModalOpen}
         onClose={() => setIsExportModalOpen(false)}
         onConfirm={handleExportConfirm}
         selectedDisplays={selectedDisplays}
-        setAuditName={setAuditName}
+        setAuditName={setClientName}
         setSelectedDisplays={setSelectedDisplays}
       />
     </>
