@@ -35,3 +35,20 @@ export const cvssStringToScore = (cvssScore: string) => {
   }
   return 0;
 };
+
+export const cvssStringToCIA = (
+  field: 'integrity' | 'availability' | 'confidentiality',
+  cvssVector: string,
+) => {
+  const values: Record<string, number> = {
+    H: 3,
+    M: 2,
+    L: 1,
+  } as const;
+  const substrings = {
+    integrity: 35,
+    availability: 39,
+    confidentiality: 43,
+  } as const;
+  return values[cvssVector.substring(substrings[field], substrings[field] + 1)];
+};

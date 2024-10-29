@@ -11,6 +11,7 @@ import React, { useEffect, useState } from 'react';
 import { Radar } from 'react-chartjs-2';
 import { useParams } from 'react-router-dom';
 
+import { cvssStringToCIA } from '@/lib/utils';
 import { getAuditById } from '@/services/audits';
 
 ChartJS.register(
@@ -21,23 +22,6 @@ ChartJS.register(
   Tooltip,
   Legend,
 );
-
-const cvssStringTo = (
-  field: 'integrity' | 'availability' | 'confidentiality',
-  cvssVector: string,
-) => {
-  const values: Record<string, number> = {
-    H: 3,
-    M: 2,
-    L: 1,
-  } as const;
-  const substrings = {
-    integrity: 35,
-    availability: 39,
-    confidentiality: 43,
-  } as const;
-  return values[cvssVector.substring(substrings[field], substrings[field] + 1)];
-};
 
 type Dataset = {
   label: string;
@@ -82,9 +66,9 @@ const CIATriad: React.FC<CIATriadProps> = ({ auditId }) => {
             return {
               label: finding.title,
               data: [
-                cvssStringTo('integrity', finding.cvssv3),
-                cvssStringTo('availability', finding.cvssv3),
-                cvssStringTo('confidentiality', finding.cvssv3),
+                cvssStringToCIA('integrity', finding.cvssv3),
+                cvssStringToCIA('availability', finding.cvssv3),
+                cvssStringToCIA('confidentiality', finding.cvssv3),
               ],
               backgroundColor: `rgba(${Math.floor(Math.random() * 155 + 100)}, ${Math.floor(Math.random() * 155 + 100)}, ${Math.floor(Math.random() * 155 + 100)}, 0.2)`,
               borderColor: 'rgba(255, 255, 255, 0.2)',
