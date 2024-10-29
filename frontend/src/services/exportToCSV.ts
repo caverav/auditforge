@@ -1,6 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-condition */
 /* eslint-disable import/extensions */
-import { cvssStringToScore, cvssStringToSeverity } from '@/lib/utils';
+import {
+  cvssStringToCIA,
+  cvssStringToScore,
+  cvssStringToSeverity,
+} from '@/lib/utils';
 
 import { Finding, getAuditById } from './audits';
 
@@ -132,6 +136,20 @@ export const exportToCSV = (
           csvRows.push(`cvssScore,M,${cvssScore.M}`);
           csvRows.push(`cvssScore,L,${cvssScore.L}`);
           csvRows.push(`cvssScore,I,${cvssScore.I}`);
+        }
+        if (selectedDisplays.find(item => item === 'cia-triad')) {
+          const data = findings.map(finding => ({
+            label: finding.title,
+            C: cvssStringToCIA('confidentiality', finding.cvssv3),
+            I: cvssStringToCIA('integrity', finding.cvssv3),
+            A: cvssStringToCIA('availability', finding.cvssv3),
+          }));
+
+          data.map(cia =>
+            csvRows.push(
+              `cia-triad,${cia.label},C${cia.C ?? 0} I${cia.I ?? 0} A${cia.A ?? 0}`,
+            ),
+          );
         }
         if (RP) {
           csvRows.push(`remediationPriority,LOW,${priorityData.low}`);
