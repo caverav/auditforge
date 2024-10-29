@@ -1,95 +1,100 @@
-/* eslint-disable import/extensions */
-import { t } from 'i18next';
-import { useEffect, useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import DropdownButton from '@/components/button/DropdownButton';
+import { Client, getClients } from '../../services/audits';
 
-import PrimaryButton from '@/components/button/PrimaryButton';
-import AverageCVSS from '@/components/dashboard/AverageCVSS';
-import CIATriad from '@/components/dashboard/CIATriad';
-import CVSSScore from '@/components/dashboard/CVSSScore';
-import ExportModal from '@/components/dashboard/ExportModal';
-import RemediationComplexity from '@/components/dashboard/RemediationComplexity';
-import RemediationPriority from '@/components/dashboard/RemediationPriority';
-import Sidebar from '@/components/dashboard/Sidebar';
-import { exportToPDF } from '@/services/exportToPDF';
+import Card from '../../components/card/Card';
+import { useEffect, useState } from 'react';
+
+import { getAuditsByClientName } from '../../services/clients'
+
+import { t } from 'i18next';
+import SelectDropdown from '@/components/dropdown/SelectDropdown';
+
+type ClientData = {
+  status: string;
+  datas: Client[];
+};
+
+type ClientsInfo = {
+  id: number;
+  value: { id: string; nombre: string };
+};
+
+type ListItem = {
+  id: number;
+  value: string;
+  label?: string;
+};
 
 export const ClientDashboard = () => {
-  const [urlSearchParams, setUrlSearchParams] = useSearchParams();
-  const [activeView, setActiveView] = useState('cvss-score');
-  const [isExportModalOpen, setIsExportModalOpen] = useState(false);
-  const [selectedDisplays, setSelectedDisplays] = useState<string[]>([]);
-  const [clientName, setClientName] = useState('test');
 
-  setUrlSearchParams({ clientName });
+  const [audits, setAudits] = useState<any[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [clientInfo, setClientInfo] = useState<ClientsInfo[]>([]);
+  const [clientName, setClientName] = useState<ListItem[]>([]);
+  const [currentClient, setCurrentClient] = useState<ListItem>({
+    id: 0,
+    value: '',
+  });
 
-  const displays = [
-    { id: 'cvss-score', name: t('cvssScore'), component: CVSSScore },
-    {
-      id: 'remediation-priority',
-      name: t('remediationPriority'),
-      component: RemediationPriority,
-    },
-    {
-      id: 'remediation-complexity',
-      name: t('remediationComplexity'),
-      component: RemediationComplexity,
-    },
-    { id: 'average-cvss', name: 'Average CVSS', component: AverageCVSS },
-    { id: 'cia-triad', name: 'CIA Triad', component: CIATriad },
-  ];
+  const fetchClients = async () => {
+    setLoading(true);
 
-  const renderView = () => {
-    switch (activeView) {
-      case 'cvss-score':
-        return <CVSSScore />;
-
-      case 'remediation-priority':
-        return <RemediationPriority />;
-
-      case 'remediation-complexity':
-        return <RemediationComplexity />;
-
-      case 'average-cvss':
-        return <AverageCVSS clientName={urlSearchParams.get('clientName')} />;
-
-      case 'cia-triad':
-        return <CIATriad />;
+    try {
+      const data = await getClients();
+      const listItems: ClientsInfo[] = data.datas.map((cliente, index) => ({
+        id: index,
+        value: {
+          id: cliente._id,
+          nombre: cliente.firstname + ' ' + cliente.lastname,
+        },
+      }));
+      setClientInfo(listItems);
+      const clientName: ListItem[] = data.datas.map((cliente, index) => ({
+        id: index,
+        value: cliente.firstname + ' ' + cliente.lastname,
+      }));
+      setClientName(clientName);
+    } catch (error) {
+      console.error('Error fetching audits:', error);
+    } finally {
+      setLoading(false);
     }
   };
-  const handleExportClick = () => {
-    setSelectedDisplays(displays.map(d => d.id));
-    setIsExportModalOpen(true);
-  };
 
-  const handleExportConfirm = async () => {
-    setIsExportModalOpen(false);
-    //await exportToPDF(auditName, selectedDisplays, auditId ?? '');
-  };
+  useEffect(() => {
+    fetchClients()
+      .then(() => {})
+      .catch(console.error);
+
+    const fetchAuditsbyClient = async () => {
+      setLoading(true);
+
+      try {
+        const data = await getAuditsByClientName(currentClient.value);
+        setAudits(data);
+      } catch (error) {
+        console.error('Error fetching audits:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAuditsbyClient()
+      .then(() => {})
+      .catch(console.error);
+  }, [currentClient]);
 
   return (
-    <>
-      <div className="flex h-screen bg-gray-900 text-white">
-        <Sidebar activeView={activeView} setActiveView={setActiveView} />
-        <div className="flex-1 overflow-hidden p-6">
-          <div className="flex justify-between items-center mb-6">
-            <h1 className="text-3xl font-bold">{t('dashboard')}</h1>
-            <PrimaryButton onClick={handleExportClick}>
-              {t('export')}
-            </PrimaryButton>
-          </div>
-          {renderView()}
-        </div>
-      </div>
-      <ExportModal
-        auditName={clientName}
-        displays={displays}
-        isOpen={isExportModalOpen}
-        onClose={() => setIsExportModalOpen(false)}
-        onConfirm={handleExportConfirm}
-        selectedDisplays={selectedDisplays}
-        setAuditName={setClientName}
-        setSelectedDisplays={setSelectedDisplays}
-      />
-    </>
+    <div className="m-10">
+      <Card title="Client">
+        <SelectDropdown
+          items={clientName}
+          onChange={setCurrentClient}
+          placeholder={t('Select your client')}
+          selected={currentClient}
+          title=""
+        />
+      </Card>
+    </div>
   );
 };
