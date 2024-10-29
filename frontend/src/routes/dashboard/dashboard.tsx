@@ -1,5 +1,5 @@
 import DropdownButton from '@/components/button/DropdownButton';
-import { Company } from '../../services/audits';
+import { Audit, Company } from '../../services/audits';
 
 import Card from '../../components/card/Card';
 import { useEffect, useState } from 'react';
@@ -28,7 +28,7 @@ type ListItem = {
 
 export const ClientDashboard = () => {
 
-  const [audits, setAudits] = useState<any[]>([]);
+  const [audits, setAudits] = useState<Audit[]>([]);
   const [loading, setLoading] = useState(false);
   const [clientInfo, setClientInfo] = useState<ClientsInfo[]>([]);
   const [clientName, setClientName] = useState<ListItem[]>([]);
