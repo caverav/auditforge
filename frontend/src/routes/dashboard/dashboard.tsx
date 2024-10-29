@@ -1,5 +1,5 @@
 import DropdownButton from '@/components/button/DropdownButton';
-import { Client, getClients } from '../../services/audits';
+import { Company } from '../../services/audits';
 
 import Card from '../../components/card/Card';
 import { useEffect, useState } from 'react';
@@ -8,10 +8,11 @@ import { getAuditsByClientName } from '../../services/clients'
 
 import { t } from 'i18next';
 import SelectDropdown from '@/components/dropdown/SelectDropdown';
+import { getCompanies } from '@/services/data';
 
 type ClientData = {
   status: string;
-  datas: Client[];
+  datas: Company[];
 };
 
 type ClientsInfo = {
@@ -40,18 +41,18 @@ export const ClientDashboard = () => {
     setLoading(true);
 
     try {
-      const data = await getClients();
+      const data = await getCompanies();
       const listItems: ClientsInfo[] = data.datas.map((cliente, index) => ({
         id: index,
         value: {
           id: cliente._id,
-          nombre: cliente.firstname + ' ' + cliente.lastname,
+          nombre: cliente.name,
         },
       }));
       setClientInfo(listItems);
       const clientName: ListItem[] = data.datas.map((cliente, index) => ({
         id: index,
-        value: cliente.firstname + ' ' + cliente.lastname,
+        value: cliente.name,
       }));
       setClientName(clientName);
     } catch (error) {
