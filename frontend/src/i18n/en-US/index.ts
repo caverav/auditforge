@@ -162,6 +162,7 @@ export default {
     passwordsDoNotMatch: 'Passwords do not match',
     auditCustomSectionsSaveSuccess:
       'The custom sections have been saved successfully',
+    exportDashboardCSVOk: 'Exported dashboard to CSV successfully',
   },
   err: {
     notDefinedLanguage: 'Not defined for this language',
@@ -202,6 +203,7 @@ export default {
     passwordsDontMatch: 'Passwords do not match',
     errorGeneratingPdf: 'Failed exporting audit to pdf',
     errorSavingAuditCustomSections: 'Failed saving the audit custom sections',
+    exportDashboardCSV: 'Error exporting dashboard to csv',
   },
   cvss: {
     title: 'CVSS v3.1 Base Score',

@@ -14,6 +14,7 @@ import Sidebar from '@/components/dashboard/Sidebar';
 import { getAuditById } from '@/services/audits';
 import { exportToCSV } from '@/services/exportToCSV';
 import { exportToPDF } from '@/services/exportToPDF';
+import { toast } from 'sonner';
 
 export const Dashboard = () => {
   const { auditId } = useParams();
@@ -80,7 +81,14 @@ export const Dashboard = () => {
       await exportToPDF(auditName, selectedDisplays, auditId ?? '');
     } else if (exportType === 'csv') {
       setIsExportModalOpen(false);
-      await exportToCSV(auditName, selectedDisplays, auditId ?? '');
+
+      try {
+        await exportToCSV(auditName, selectedDisplays, auditId ?? '');
+      } catch (err) {
+        toast.error(t('err.exportDashboardCSV'));
+        console.error(err);
+      }
+      toast.success(t('msg.exportDashboardCSVOk'));
     }
   };
 
