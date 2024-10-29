@@ -2,6 +2,7 @@
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
 import DropdownButton from '@/components/button/DropdownButton';
 import AverageCVSS from '@/components/dashboard/AverageCVSS';
@@ -14,7 +15,6 @@ import Sidebar from '@/components/dashboard/Sidebar';
 import { getAuditById } from '@/services/audits';
 import { exportToCSV } from '@/services/exportToCSV';
 import { exportToPDF } from '@/services/exportToPDF';
-import { toast } from 'sonner';
 
 export const Dashboard = () => {
   const { auditId } = useParams();
