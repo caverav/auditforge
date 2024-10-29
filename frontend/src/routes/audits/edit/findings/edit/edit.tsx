@@ -4,6 +4,9 @@ import { useParams } from 'react-router-dom';
 
 import SelectDropdown from '../../../../../components/dropdown/SelectDropdown';
 import SimpleInput from '../../../../../components/input/SimpleInput';
+import RichText from '../../../../../components/text/RichText';
+import TextArea from '../../../../../components/text/TextArea';
+
 import { getFinding } from '../../../../../services/audits';
 import { getTypes } from '../../../../../services/vulnerabilities';
 
@@ -172,28 +175,65 @@ export const Edit = () => {
   }, []);
 
   return (
-    <div className="p-4">
+    <div className="">
       {finding ? (
         <div>
-          <div className="flex flex-col md:flex-row md:gap-4 w-full">
-            <div className="w-1/2">
-              <SimpleInput
-                id="title"
-                label={t('title')}
-                name="title"
-                onChange={value => onChangeText(value, 'title')}
-                placeholder=""
-                type="text"
-                value={finding.title}
-              />
+          <div className="m-4 bg-gray-900 rounded-lg p-4">test</div>
+          <div className="m-4 bg-gray-900 rounded-lg">
+            <div className="flex flex-col md:flex-row md:gap-4 w-full p-4">
+              <div className="w-full md:w-1/2">
+                <SimpleInput
+                  id="title"
+                  label={t('title')}
+                  name="title"
+                  onChange={value => onChangeText(value, 'title')}
+                  placeholder=""
+                  type="text"
+                  value={finding.title}
+                />
+              </div>
+              <div className="w-full md:w-1/2">
+                <SelectDropdown
+                  items={typesList}
+                  onChange={value => onChangeListItem(value, 'vulnType')}
+                  selected={currentType}
+                  title={t('type')}
+                />
+              </div>
             </div>
-            <div className="w-1/2">
-              <SelectDropdown
-                items={typesList}
-                onChange={value => onChangeListItem(value, 'vulnType')}
-                selected={currentType}
-                title={t('type')}
+            <div className="">
+              <RichText
+                label={t('description')}
+                onChange={value => onChangeText(value, 'description')}
+                placeholder=""
+                value={finding.description ?? ''}
               />
+              <RichText
+                label={t('observation')}
+                onChange={value => onChangeText(value, 'observation')}
+                placeholder=""
+                value={finding.observation ?? ''}
+              />
+              <div className="mx-4 pb-4">
+                <TextArea
+                  id=""
+                  label={t('poc')}
+                  name="poc"
+                  onChange={value => onChangeText(value, 'poc')}
+                  placeholder=""
+                  rows={4}
+                  value={finding.poc ?? ''}
+                />
+                <TextArea
+                  id=""
+                  label={t('cwes')}
+                  name="cwes"
+                  onChange={value => onChangeText(value, 'cwes')}
+                  placeholder=""
+                  rows={4}
+                  value={finding.cwes}
+                />
+              </div>
             </div>
           </div>
         </div>
