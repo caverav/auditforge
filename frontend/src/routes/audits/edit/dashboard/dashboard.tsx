@@ -12,6 +12,7 @@ import RemediationComplexity from '@/components/dashboard/RemediationComplexity'
 import RemediationPriority from '@/components/dashboard/RemediationPriority';
 import Sidebar from '@/components/dashboard/Sidebar';
 import { getAuditById } from '@/services/audits';
+import { exportToCSV } from '@/services/exportToCSV';
 import { exportToPDF } from '@/services/exportToPDF';
 
 export const Dashboard = () => {
@@ -79,6 +80,7 @@ export const Dashboard = () => {
       await exportToPDF(auditName, selectedDisplays, auditId ?? '');
     } else if (exportType === 'csv') {
       setIsExportModalOpen(false);
+      await exportToCSV(auditName, selectedDisplays, auditId ?? '');
     }
   };
 
