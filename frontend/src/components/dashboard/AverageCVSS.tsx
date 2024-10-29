@@ -1,4 +1,3 @@
-import { Cvss3P1 } from 'ae-cvss-calculator';
 import {
   BarElement,
   CategoryScale,
@@ -15,6 +14,7 @@ import { Bar } from 'react-chartjs-2';
 import { useParams } from 'react-router-dom';
 
 import { getAuditById } from '@/services/audits';
+import { cvssStringToScore } from '@/lib/utils';
 
 ChartJS.register(
   CategoryScale,
@@ -25,16 +25,6 @@ ChartJS.register(
   Legend,
   annotationPlugin,
 );
-
-const cvssStringToScore = (cvssScore: string) => {
-  try {
-    const cvssVector = new Cvss3P1(cvssScore);
-    return cvssVector.calculateExactOverallScore();
-  } catch (error) {
-    console.error('Invalid CVSS vector:', error);
-  }
-  return 0;
-};
 
 type AverageCVSSProps = {
   auditId?: string;

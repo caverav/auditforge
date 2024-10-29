@@ -25,3 +25,13 @@ export const cvssStringToSeverity = (cvssScore: string) => {
   }
   return 'I';
 };
+
+export const cvssStringToScore = (cvssScore: string) => {
+  try {
+    const cvssVector = new Cvss3P1(cvssScore);
+    return cvssVector.calculateExactOverallScore();
+  } catch (error) {
+    console.error('Invalid CVSS vector:', error);
+  }
+  return 0;
+};
