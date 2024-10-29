@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-condition */
 /* eslint-disable import/extensions */
-import { cvssStringToSeverity } from '@/lib/utils';
+import { cvssStringToScore, cvssStringToSeverity } from '@/lib/utils';
 
 import { Finding, getAuditById } from './audits';
 
@@ -88,59 +89,76 @@ export const exportToCSV = (
               }
             }
           }
-          if (selectedDisplays.find(item => item === 'cvss-score')) {
-            const cvssScore = {
-              C: findings.filter(
-                finding => cvssStringToSeverity(finding.cvssv3) === 'C',
-              ).length,
-              H: findings.filter(
-                finding => cvssStringToSeverity(finding.cvssv3) === 'H',
-              ).length,
-              M: findings.filter(
-                finding => cvssStringToSeverity(finding.cvssv3) === 'M',
-              ).length,
-              L: findings.filter(
-                finding => cvssStringToSeverity(finding.cvssv3) === 'L',
-              ).length,
-              I: findings.filter(
-                finding => cvssStringToSeverity(finding.cvssv3) === 'I',
-              ).length,
-            };
-            csvRows.push(`cvssScore,C,${cvssScore.C}`);
-            csvRows.push(`cvssScore,H,${cvssScore.H}`);
-            csvRows.push(`cvssScore,M,${cvssScore.M}`);
-            csvRows.push(`cvssScore,L,${cvssScore.L}`);
-            csvRows.push(`cvssScore,I,${cvssScore.I}`);
-          }
-          if (RP) {
-            csvRows.push(`remediationPriority,LOW,${priorityData.low}`);
-            csvRows.push(`remediationPriority,MEDIUM,${priorityData.medium}`);
-            csvRows.push(`remediationPriority,HIGH,${priorityData.high}`);
-            csvRows.push(`remediationPriority,URGENT,${priorityData.urgent}`);
-          }
-          if (RC) {
-            csvRows.push(`remediationComplexity,EASY,${complexityData.easy}`);
-            csvRows.push(
-              `remediationComplexity,MEDIUM,${complexityData.medium}`,
-            );
-            csvRows.push(
-              `remediationComplexity,COMPLEX,${complexityData.complex}`,
-            );
-          }
-
-          const csvString = csvRows.join('\n');
-          const blob = new Blob([csvString], { type: 'csv' });
-          const url = URL.createObjectURL(blob);
-
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = `${auditName}_dashboard.csv`;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-
-          URL.revokeObjectURL(url);
         });
+        if (selectedDisplays.find(item => item === 'average-cvss')) {
+          const AVERAGE_CVSS =
+            Math.round(
+              (findings.reduce(
+                (acc, finding) => acc + cvssStringToScore(finding.cvssv3),
+                0,
+              ) /
+                findings.length) *
+                10,
+            ) / 10;
+          const findingScores = findings.map(finding => ({
+            label: finding.title,
+            value: cvssStringToScore(finding.cvssv3),
+          }));
+          csvRows.push(`average-cvss,average,${AVERAGE_CVSS}`);
+          findingScores.map(fs =>
+            csvRows.push(`average-cvss,${fs.label},${fs.value}`),
+          );
+        }
+        if (selectedDisplays.find(item => item === 'cvss-score')) {
+          const cvssScore = {
+            C: findings.filter(
+              finding => cvssStringToSeverity(finding.cvssv3) === 'C',
+            ).length,
+            H: findings.filter(
+              finding => cvssStringToSeverity(finding.cvssv3) === 'H',
+            ).length,
+            M: findings.filter(
+              finding => cvssStringToSeverity(finding.cvssv3) === 'M',
+            ).length,
+            L: findings.filter(
+              finding => cvssStringToSeverity(finding.cvssv3) === 'L',
+            ).length,
+            I: findings.filter(
+              finding => cvssStringToSeverity(finding.cvssv3) === 'I',
+            ).length,
+          };
+          csvRows.push(`cvssScore,C,${cvssScore.C}`);
+          csvRows.push(`cvssScore,H,${cvssScore.H}`);
+          csvRows.push(`cvssScore,M,${cvssScore.M}`);
+          csvRows.push(`cvssScore,L,${cvssScore.L}`);
+          csvRows.push(`cvssScore,I,${cvssScore.I}`);
+        }
+        if (RP) {
+          csvRows.push(`remediationPriority,LOW,${priorityData.low}`);
+          csvRows.push(`remediationPriority,MEDIUM,${priorityData.medium}`);
+          csvRows.push(`remediationPriority,HIGH,${priorityData.high}`);
+          csvRows.push(`remediationPriority,URGENT,${priorityData.urgent}`);
+        }
+        if (RC) {
+          csvRows.push(`remediationComplexity,EASY,${complexityData.easy}`);
+          csvRows.push(`remediationComplexity,MEDIUM,${complexityData.medium}`);
+          csvRows.push(
+            `remediationComplexity,COMPLEX,${complexityData.complex}`,
+          );
+        }
+
+        const csvString = csvRows.join('\n');
+        const blob = new Blob([csvString], { type: 'csv' });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `${auditName}_dashboard.csv`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+
+        URL.revokeObjectURL(url);
       });
   }
 };
