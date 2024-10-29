@@ -166,7 +166,7 @@ export const exportToCSV = (
         }
 
         const csvString = csvRows.join('\n');
-        const blob = new Blob([csvString], { type: 'csv' });
+        const blob = new Blob([csvString], { type: 'text/csv' });
         const url = URL.createObjectURL(blob);
 
         const link = document.createElement('a');
