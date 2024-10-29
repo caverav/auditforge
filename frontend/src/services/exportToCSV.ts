@@ -3,7 +3,7 @@ import { cvssStringToSeverity } from '@/lib/utils';
 
 import { Finding, getAuditById } from './audits';
 
-export const exportToCSV = async (
+export const exportToCSV = (
   auditName: string,
   selectedDisplays: string[],
   auditId: string,
