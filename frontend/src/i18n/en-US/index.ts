@@ -733,4 +733,5 @@ export default {
   recommendCVSS: 'Recommend CVSS',
   cleanRecommendations: 'Clean Recommendations',
   errorRecommendingCVSS: 'Error generating recommendation',
+  exportDashboard: 'Export Dashboard',
 };
