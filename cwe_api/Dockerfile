@@ -21,7 +21,7 @@ RUN pip install --no-cache-dir torchvision==0.17.0+cpu torchaudio==2.2.0+cpu --i
 RUN if [ ! -d modelo_cwe ]; then \
       echo "modelo_cwe not found. Downloading it..."; \
       wget --progress=bar:force "$CWE_MODEL_URL" -O modelo_cwe.zip \
-      && unzip modelo_cwe.zip && rm modelo_cwe.zip \
+      && unzip modelo_cwe.zip \
       || { echo "Failed to download or unzip model"; exit 1; } \
     fi
 
