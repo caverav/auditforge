@@ -6,9 +6,9 @@ import SelectDropdown from '../../../../../components/dropdown/SelectDropdown';
 import SimpleInput from '../../../../../components/input/SimpleInput';
 import RichText from '../../../../../components/text/RichText';
 import TextArea from '../../../../../components/text/TextArea';
-
 import { getFinding } from '../../../../../services/audits';
 import { getTypes } from '../../../../../services/vulnerabilities';
+import { DefinitionTab } from './DefinitionTab';
 
 type CWERelated = {
   cwe: string;
@@ -99,10 +99,17 @@ type VulnerabilityData = {
   updatedAt?: string;
 };
 
+type Tab = {
+  label: string;
+  content: React.ReactNode;
+};
+
 // TODO: add language prop
 export const Edit = () => {
   const findingId = useParams().findingId ?? '';
   const auditId = useParams().auditId ?? '';
+
+  const [activeTab, setActiveTab] = useState(0);
 
   const [finding, setFinding] = useState<EditFinding | null>(null);
   //TODO: Add language filter
@@ -174,67 +181,76 @@ export const Edit = () => {
     void fetchFinding();
   }, []);
 
+  const tabs: Tab[] = [
+    {
+      label: 'DEFINITION',
+      content: (
+        <div>
+          {finding ? (
+            <DefinitionTab
+              currentType={currentType}
+              finding={finding}
+              onChangeListItem={onChangeListItem}
+              onChangeText={onChangeText}
+              typesList={typesList}
+            />
+          ) : null}
+        </div>
+      ),
+    },
+    {
+      label: 'PROOFS',
+      content: (
+        <div>
+          {finding ? (
+            <DefinitionTab
+              currentType={currentType}
+              finding={finding}
+              onChangeListItem={onChangeListItem}
+              onChangeText={onChangeText}
+              typesList={typesList}
+            />
+          ) : null}
+        </div>
+      ),
+    },
+    { label: 'DETAILS', content: <p>Content for Details</p> },
+  ];
+
   return (
     <div className="">
       {finding ? (
         <div>
-          <div className="m-4 bg-gray-900 rounded-lg p-4">test</div>
+          <div className="m-4 bg-gray-900 rounded-lg p-4 flex flex-col gap-4">
+            <span className="w-full">{finding.title}</span>
+            <div className="w-full">
+              <div className="flex space-x-4 border-b">
+                {tabs.map((tab, index) => (
+                  <button
+                    className={`py-2 px-4 font-semibold text-gray-600 ${
+                      activeTab === index
+                        ? 'border-b-2 border-gray-800 text-black'
+                        : 'text-gray-500'
+                    }`}
+                    key={index}
+                    onClick={() => setActiveTab(index)}
+                    type="button"
+                  >
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+              <div className="p-4">{tabs[activeTab].content}</div>
+            </div>
+          </div>
           <div className="m-4 bg-gray-900 rounded-lg">
-            <div className="flex flex-col md:flex-row md:gap-4 w-full p-4">
-              <div className="w-full md:w-1/2">
-                <SimpleInput
-                  id="title"
-                  label={t('title')}
-                  name="title"
-                  onChange={value => onChangeText(value, 'title')}
-                  placeholder=""
-                  type="text"
-                  value={finding.title}
-                />
-              </div>
-              <div className="w-full md:w-1/2">
-                <SelectDropdown
-                  items={typesList}
-                  onChange={value => onChangeListItem(value, 'vulnType')}
-                  selected={currentType}
-                  title={t('type')}
-                />
-              </div>
-            </div>
-            <div className="">
-              <RichText
-                label={t('description')}
-                onChange={value => onChangeText(value, 'description')}
-                placeholder=""
-                value={finding.description ?? ''}
-              />
-              <RichText
-                label={t('observation')}
-                onChange={value => onChangeText(value, 'observation')}
-                placeholder=""
-                value={finding.observation ?? ''}
-              />
-              <div className="mx-4 pb-4">
-                <TextArea
-                  id=""
-                  label={t('poc')}
-                  name="poc"
-                  onChange={value => onChangeText(value, 'poc')}
-                  placeholder=""
-                  rows={4}
-                  value={finding.poc ?? ''}
-                />
-                <TextArea
-                  id=""
-                  label={t('cwes')}
-                  name="cwes"
-                  onChange={value => onChangeText(value, 'cwes')}
-                  placeholder=""
-                  rows={4}
-                  value={finding.cwes}
-                />
-              </div>
-            </div>
+            <DefinitionTab
+              currentType={currentType}
+              finding={finding}
+              onChangeListItem={onChangeListItem}
+              onChangeText={onChangeText}
+              typesList={typesList}
+            />
           </div>
         </div>
       ) : (
