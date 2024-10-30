@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import { getFinding } from '../../../../../services/audits';
 import { getTypes } from '../../../../../services/vulnerabilities';
 import { DefinitionTab } from './DefinitionTab';
+import { ProofsTab } from './ProofsTab';
 
 type CWERelated = {
   cwe: string;
@@ -199,7 +200,7 @@ export const Edit = () => {
       content: (
         <div>
           {finding ? (
-            <DefinitionTab
+            <ProofsTab
               currentType={currentType}
               finding={finding}
               onChangeListItem={onChangeListItem}
