@@ -1,8 +1,11 @@
 import ssl
 import hashlib
 import requests
+import os
+import shutil
+import zipfile
 from pathlib import Path
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 from transformers import pipeline
@@ -21,6 +24,9 @@ app.add_middleware(
 
 LOCAL_FILE_PATH = Path("/app/modelo_cwe.zip")
 REMOTE_FILE_URL = "https://drive.usercontent.google.com/download?id=1OtRNObv-Il2B5nDnpzMSGj_yBJAlskuS&export=download&confirm="
+CWE_MODEL_FOLDER_PATH = Path("/app/modelo_cwe")
+APP_PATH = Path("/app")
+
 BYTE_RANGE = (0, 10485759)  # 10 MB
 
 def calculate_local_checksum(file_path, byte_limit):
@@ -70,6 +76,31 @@ async def check_cwe_update():
 
     match = local_checksum == remote_checksum
     return {"checksum_match": match}
+
+@app.post("/update_cwe_model")
+async def update_cwe_model():
+    try:
+        if os.path.exists(LOCAL_FILE_PATH):
+            os.remove(LOCAL_FILE_PATH)
+
+        response = requests.get(REMOTE_FILE_URL, stream=True)
+        if response.status_code == 200:
+            with open(LOCAL_FILE_PATH, "wb") as local_zip:
+                for chunk in response.iter_content(chunk_size=8192):
+                    local_zip.write(chunk)
+        else:
+            raise HTTPException(status_code=500, detail="Failed to download CWE model")
+
+        if os.path.exists(CWE_MODEL_FOLDER_PATH):
+            shutil.rmtree(CWE_MODEL_FOLDER_PATH)
+
+        with zipfile.ZipFile(LOCAL_FILE_PATH, 'r') as zip_ref:
+            zip_ref.extractall(APP_PATH)
+
+        return {"status": "success", "message": "Updated CWE model successfully"}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
     import uvicorn
