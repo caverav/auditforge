@@ -2,10 +2,6 @@ import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-import SelectDropdown from '../../../../../components/dropdown/SelectDropdown';
-import SimpleInput from '../../../../../components/input/SimpleInput';
-import RichText from '../../../../../components/text/RichText';
-import TextArea from '../../../../../components/text/TextArea';
 import { getFinding } from '../../../../../services/audits';
 import { getTypes } from '../../../../../services/vulnerabilities';
 import { DefinitionTab } from './DefinitionTab';
@@ -183,7 +179,7 @@ export const Edit = () => {
 
   const tabs: Tab[] = [
     {
-      label: 'DEFINITION',
+      label: t('definition'),
       content: (
         <div>
           {finding ? (
@@ -199,7 +195,7 @@ export const Edit = () => {
       ),
     },
     {
-      label: 'PROOFS',
+      label: t('proofs'),
       content: (
         <div>
           {finding ? (
@@ -214,7 +210,22 @@ export const Edit = () => {
         </div>
       ),
     },
-    { label: 'DETAILS', content: <p>Content for Details</p> },
+    {
+      label: t('details'),
+      content: (
+        <div>
+          {finding ? (
+            <DefinitionTab
+              currentType={currentType}
+              finding={finding}
+              onChangeListItem={onChangeListItem}
+              onChangeText={onChangeText}
+              typesList={typesList}
+            />
+          ) : null}
+        </div>
+      ),
+    },
   ];
 
   return (
@@ -224,33 +235,24 @@ export const Edit = () => {
           <div className="m-4 bg-gray-900 rounded-lg p-4 flex flex-col gap-4">
             <span className="w-full">{finding.title}</span>
             <div className="w-full">
-              <div className="flex space-x-4 border-b">
-                {tabs.map((tab, index) => (
-                  <button
-                    className={`py-2 px-4 font-semibold text-gray-600 ${
-                      activeTab === index
-                        ? 'border-b-2 border-gray-800 text-black'
-                        : 'text-gray-500'
-                    }`}
-                    key={index}
-                    onClick={() => setActiveTab(index)}
-                    type="button"
-                  >
-                    {tab.label}
-                  </button>
-                ))}
-              </div>
-              <div className="p-4">{tabs[activeTab].content}</div>
+              {tabs.map((tab, index) => (
+                <button
+                  className={`py-2 px-4 font-semibold text-gray-200 w-1/3 ${
+                    activeTab === index
+                      ? 'border-b-2 border-gray-400 text-black'
+                      : 'text-gray-400'
+                  }`}
+                  key={index}
+                  onClick={() => setActiveTab(index)}
+                  type="button"
+                >
+                  {tab.label}
+                </button>
+              ))}
             </div>
           </div>
           <div className="m-4 bg-gray-900 rounded-lg">
-            <DefinitionTab
-              currentType={currentType}
-              finding={finding}
-              onChangeListItem={onChangeListItem}
-              onChangeText={onChangeText}
-              typesList={typesList}
-            />
+            {tabs[activeTab].content}
           </div>
         </div>
       ) : (
