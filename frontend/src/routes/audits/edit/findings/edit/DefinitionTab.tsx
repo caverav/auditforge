@@ -115,6 +115,7 @@ type DefinitionTabProps = {
   currentType: ListItem | null;
   finding: EditFinding;
   handlerRecommendCWE: (value: string[]) => void;
+  onChangeArray: (value: string, field: string) => void;
   onChangeText: (value: string, field: string) => void;
   onChangeListItem: (value: ListItem, field: string) => void;
   typesList: ListItem[];
@@ -125,6 +126,7 @@ export const DefinitionTab: React.FC<DefinitionTabProps> = ({
   currentType,
   finding,
   handlerRecommendCWE,
+  onChangeArray,
   onChangeText,
   onChangeListItem,
   typesList,
@@ -208,21 +210,21 @@ export const DefinitionTab: React.FC<DefinitionTabProps> = ({
         <div className="mx-4 pb-4 flex flex-col gap-4">
           <TextArea
             id=""
-            label={t('poc')}
+            label={t('references')}
             name="poc"
-            onChange={value => onChangeText(value, 'poc')}
+            onChange={value => onChangeArray(value, 'references')}
             placeholder=""
             rows={4}
-            value={finding.poc ?? ''}
+            value={finding.references.join('\n')}
           />
           <TextArea
             id=""
             label={t('cwes')}
             name="cwes"
-            onChange={value => onChangeText(value, 'cwes')}
+            onChange={value => onChangeArray(value, 'cwes')}
             placeholder=""
             rows={4}
-            value={finding.cwes}
+            value={finding.cwes.join('\n')}
           />
         </div>
         <div className="mb-4 mx-4 flex">

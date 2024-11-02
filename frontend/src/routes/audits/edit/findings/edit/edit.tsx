@@ -136,6 +136,22 @@ export const Edit = () => {
     });
   };
 
+  const onChangeArray = (value: string, field: string) => {
+    setFinding(prevFinding => {
+      if (!prevFinding) {
+        return null;
+      }
+
+      return {
+        ...prevFinding,
+        [field]:
+          field === 'cwes' || field === 'references'
+            ? value.split('\n')
+            : value,
+      };
+    });
+  };
+
   const handlerRecommendCWE = (value: string[]) => {
     setFinding(prevFinding => {
       if (!prevFinding) {
@@ -237,6 +253,7 @@ export const Edit = () => {
               currentType={currentType}
               finding={finding}
               handlerRecommendCWE={handlerRecommendCWE}
+              onChangeArray={onChangeArray}
               onChangeListItem={onChangeListItem}
               onChangeText={onChangeText}
               typesList={typesList}
