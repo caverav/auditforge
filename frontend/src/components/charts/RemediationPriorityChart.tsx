@@ -51,21 +51,6 @@ export const RemediationPriorityChart: React.FC<Props> = ({ data }) => {
     scales: {
       y: {
         beginAtZero: true,
-        ticks: {
-          callback: (value: number | string) => {
-            if (value === 0) {
-              return 'Low';
-            }
-            if (value === 1) {
-              return 'Medium';
-            }
-            if (value === 2) {
-              return 'High';
-            } else {
-              return '';
-            }
-          },
-        },
       },
     },
   };
