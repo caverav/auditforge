@@ -64,7 +64,6 @@ export const CIATriadChart: React.FC<Props> = ({ data }) => {
 
   return (
     <div className="h-[300px] w-full">
-      <h3 className="text-lg font-semibold mb-4">Average CIA triad</h3>
       <Radar data={chartData} options={options} />
     </div>
   );

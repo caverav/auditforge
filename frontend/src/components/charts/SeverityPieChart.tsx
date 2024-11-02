@@ -40,9 +40,6 @@ export const SeverityPieChart: React.FC<Props> = ({ data, total }) => {
 
   return (
     <div className="h-[300px] w-full">
-      <h3 className="text-lg font-semibold mb-2">
-        Vulnerabilities by severity
-      </h3>
       <p className="text-sm text-gray-500 mb-4">{total} found in total</p>
       <Doughnut data={chartData} options={options} />
     </div>

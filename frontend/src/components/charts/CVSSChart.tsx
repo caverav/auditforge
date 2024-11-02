@@ -53,7 +53,6 @@ export const CVSSChart: React.FC<Props> = ({ data }) => {
 
   return (
     <div className="h-[300px] w-full">
-      <h3 className="text-lg font-semibold mb-4">Average CVSS</h3>
       <Bar data={chartData} options={options} />
     </div>
   );
