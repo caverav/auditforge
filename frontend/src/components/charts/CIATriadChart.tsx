@@ -34,7 +34,7 @@ export const CIATriadChart: React.FC<Props> = ({ data }) => {
     labels: data.map(d => d.subject),
     datasets: [
       {
-        label: 'Current',
+        label: 'Average',
         data: data.map(d => d.current),
         backgroundColor: 'rgba(130, 202, 157, 0.5)',
         borderColor: 'rgb(130, 202, 157)',
@@ -53,10 +53,23 @@ export const CIATriadChart: React.FC<Props> = ({ data }) => {
           color: 'rgba(255, 255, 255, 0.1)',
         },
         suggestedMin: 0,
-        suggestedMax: 3,
+        suggestedMax: 2,
         ticks: {
           stepSize: 1,
-          display: false,
+          callback: (value: number | string) => {
+            if (value === 0) {
+              return 'None';
+            }
+            if (value === 1) {
+              return 'Low';
+            }
+            if (value === 2) {
+              return 'High';
+            }
+            return value;
+          },
+          display: true,
+          color: 'black',
         },
         pointLabels: {
           font: {
