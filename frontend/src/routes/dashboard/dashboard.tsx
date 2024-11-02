@@ -124,9 +124,7 @@ export const ClientDashboard = () => {
   };
 
   useEffect(() => {
-    fetchClients()
-      .then(() => {})
-      .catch(console.error);
+    fetchClients().catch(console.error);
 
     const fetchAuditsbyClient = async () => {
       try {
@@ -264,9 +262,7 @@ export const ClientDashboard = () => {
       }
     };
 
-    fetchAuditsbyClient()
-      .then(() => {})
-      .catch(console.error);
+    fetchAuditsbyClient().catch(console.error);
   }, [currentClient]);
 
   return (
