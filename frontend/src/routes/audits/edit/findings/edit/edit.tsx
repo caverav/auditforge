@@ -1,5 +1,5 @@
 import { t } from 'i18next';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
@@ -150,10 +150,11 @@ export const Edit = () => {
     }
   };
 
-  const fetchFinding = async () => {
+  const fetchFinding = useCallback(async () => {
     try {
       const findingGet = await getFinding(auditId, findingId);
       const findingData = findingGet.datas;
+      //TODO: Fix vuln type if the type is not in the list
       if (findingData.vulnType) {
         setCurrentType({
           id: typesList.length + 1,
@@ -183,12 +184,13 @@ export const Edit = () => {
     } catch (error) {
       console.error('Error:', error);
     }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [auditId, findingId]);
 
   useEffect(() => {
     void fetchTypes();
     void fetchFinding();
-  }, []);
+  }, [fetchFinding]);
 
   const tabs: Tab[] = [
     {
