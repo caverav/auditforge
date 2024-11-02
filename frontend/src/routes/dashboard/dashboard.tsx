@@ -9,9 +9,10 @@ import { RemediationPriorityChart } from '@/components/charts/RemediationPriorit
 import { SeverityPieChart } from '@/components/charts/SeverityPieChart';
 import { TimePerAuditChart } from '@/components/charts/TimePerAuditChart';
 import SelectDropdown from '@/components/dropdown/SelectDropdown';
-import { Audit, Company } from '@/services/audits';
+import { Audit, Company, getAuditById } from '@/services/audits';
 import { getAuditsByClientName } from '@/services/clients';
 import { getCompanies } from '@/services/data';
+import { Cvss3P1 } from 'ae-cvss-calculator';
 
 type ClientData = {
   status: string;
@@ -29,20 +30,30 @@ type ListItem = {
   label?: string;
 };
 
-//const severityData = [
-//  { name: 'Critical', value: 4, color: '#dc3545' },
-//  { name: 'High', value: 6, color: '#fd7e14' },
-//  { name: 'Medium', value: 8, color: '#ffc107' },
-//  { name: 'Low', value: 5, color: '#28a745' },
-//];
-//
-//const cweItems = [
-//  { id: 'CWE-89', size: 15 },
-//  { id: 'CWE-79', size: 12 },
-//  { id: 'CWE-22', size: 10 },
-//  // ... more CWEs
-//];
-//
+const cvssStringToScore = (cvssScore: string) => {
+  try {
+    const cvssVector = new Cvss3P1(cvssScore);
+    return cvssVector.calculateExactOverallScore();
+  } catch (error) {
+    console.error('Invalid CVSS vector:', error);
+  }
+  return 0;
+};
+
+const severityByScore = (score: number) => {
+  if (score >= 9.0) {
+    return 0;
+  } else if (score >= 7.0) {
+    return 1;
+  } else if (score >= 4.0) {
+    return 2;
+  } else if (score >= 0.1) {
+    return 3;
+  } else {
+    return 4;
+  }
+};
+
 //const timeData = [
 //  { name: 'Audit 1', execution: 4, remediation: 2 },
 //  { name: 'Audit 2', execution: 3, remediation: 2.5 },
@@ -76,7 +87,52 @@ export const ClientDashboard = () => {
     id: 0,
     value: '',
   });
-
+  const [severityData, setSeverityData] = useState<
+    { name: string; value: number; color: string }[]
+  >([
+    { name: 'Critical', value: 0, color: '#dc3545' },
+    { name: 'High', value: 0, color: '#fd7e14' },
+    { name: 'Medium', value: 0, color: '#ffc107' },
+    { name: 'Low', value: 0, color: '#28a745' },
+    { name: 'Informative', value: 0, color: '#6c757d' },
+  ]);
+  const [cweItems, setCweItems] = useState<{ id: string; size: number }[]>([]);
+  const [timeData, setTimeData] = useState<
+    {
+      name: string;
+      execution: number;
+      remediation: number;
+    }[]
+  >([]);
+  const [ciaData, setCiaData] = useState<
+    {
+      subject: string;
+      current: number;
+      target: number;
+    }[]
+  >([
+    { subject: 'Confidentiality', current: 0, target: 0 },
+    { subject: 'Integrity', current: 0, target: 0 },
+    { subject: 'Availability', current: 0, target: 0 },
+  ]);
+  const [cvssData, setCvssData] = useState<
+    {
+      name: string;
+      score: number;
+    }[]
+  >([]);
+  const [priorityData, setPriorityData] = useState<
+    {
+      name: string;
+      count: number;
+      color: string;
+    }[]
+  >([
+    { name: 'Low', count: 0, color: '#28a745' },
+    { name: 'Medium', count: 0, color: '#ffc107' },
+    { name: 'High', count: 0, color: '#fd7e14' },
+    { name: 'Urgent', count: 0, color: '#dc3545' },
+  ]);
   const fetchClients = async () => {
     setLoading(true);
 
@@ -121,6 +177,37 @@ export const ClientDashboard = () => {
     };
 
     fetchAuditsbyClient()
+      .then(() => {})
+      .catch(console.error);
+    const fetchAuditData = async () => {
+      setLoading(true);
+
+      try {
+        for (const audit of audits) {
+          const auditData = await getAuditById(audit._id);
+          const tmpSeverityData = severityData;
+          for (const finding of auditData.datas.findings) {
+            const severity = severityByScore(cvssStringToScore(finding.cvssv3));
+            tmpSeverityData[severity].value += 1;
+
+            for (const cwe of finding.cwes) {
+              const cweItem = cweItems.find(item => item.id === cwe);
+              setCweItems(prev => [
+                ...prev,
+                { id: cwe, size: cweItem ? cweItem.size + 1 : 1 },
+              ]);
+            }
+          }
+          setSeverityData(tmpSeverityData);
+        }
+      } catch (error) {
+        console.error('Error fetching audits:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchAuditData()
       .then(() => {})
       .catch(console.error);
   }, [currentClient]);
