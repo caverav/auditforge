@@ -186,7 +186,7 @@ export const ClientDashboard = () => {
 
       try {
         const data = await getAuditsByClientName(currentClient.value);
-        const tmpCiaData: CIAData[] = [
+        const tmpCiaData = [
           { subject: 'Confidentiality', current: 0, target: 0 },
           { subject: 'Integrity', current: 0, target: 0 },
           { subject: 'Availability', current: 0, target: 0 },
@@ -323,7 +323,7 @@ export const ClientDashboard = () => {
         <Card title="CWEs found">
           <CWECloud
             items={cweItems}
-            mostCommon="CWE-20 'Improper Input Validation'"
+            mostCommon={cweItems.sort((a, b) => b.size - a.size)[0].id}
           />
         </Card>
         <Card title="Average CIA triad">
