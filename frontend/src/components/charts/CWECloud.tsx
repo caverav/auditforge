@@ -18,8 +18,8 @@ export const CWECloud: React.FC<Props> = ({ items, mostCommon }) => {
       <div className="flex flex-wrap gap-2 justify-center items-center">
         {items.map(item => (
           <span
-            key={item.id}
             className="text-blue-400 hover:text-blue-300 transition-colors cursor-pointer"
+            key={item.id}
             style={{
               fontSize: `${Math.max(0.8, Math.min(2, item.size / 10))}rem`,
             }}
