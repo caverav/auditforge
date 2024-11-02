@@ -1,6 +1,6 @@
+import { Text } from '@visx/text';
 import Wordcloud from '@visx/wordcloud/lib/Wordcloud';
 import React from 'react';
-import { Text } from '@visx/text';
 
 type CWEItem = {
   id: string;
@@ -27,8 +27,8 @@ const itemsToWordDatum = (items: CWEItem[]) => {
 
 export const CWECloud: React.FC<Props> = ({ items, mostCommon }) => {
   return (
-    <div className="bg-gray-900 p-6 rounded-lg h-[300px] overflow-hidden">
-      <p className="text-sm text-gray-400 mb-4">Most common: {mostCommon}</p>
+    <div className="bg-gray-900 rounded-lg h-[300px] overflow-hidden">
+      <p className="text-sm text-gray-400">Most common: {mostCommon}</p>
       <div className="flex flex-wrap gap-2 justify-center items-center">
         <Wordcloud
           font="Impact"
@@ -42,7 +42,7 @@ export const CWECloud: React.FC<Props> = ({ items, mostCommon }) => {
           words={itemsToWordDatum(items)}
         >
           {cloudWords =>
-            cloudWords.map((w, i) => (
+            cloudWords.map((w, _) => (
               <Text
                 fill="white"
                 fontFamily={w.font}
