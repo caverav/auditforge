@@ -1,10 +1,10 @@
 import { t } from 'i18next';
+import { useCallback } from 'react';
 import { toast } from 'sonner';
 
 import SelectDropdown from '../../../../../components/dropdown/SelectDropdown';
 import RichText from '../../../../../components/text/RichText';
 import CVSSCalculator from '../../../../vulnerabilities/components/CVSSCalculator';
-import { useCallback } from 'react';
 
 type ListItem = {
   id: number;
