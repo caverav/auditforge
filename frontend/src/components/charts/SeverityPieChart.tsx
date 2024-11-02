@@ -30,7 +30,7 @@ export const SeverityPieChart: React.FC<Props> = ({ data, total }) => {
 
   const options = {
     responsive: true,
-    maintainAspectRatio: false,
+    maintainAspectRatio: true,
     plugins: {
       legend: {
         position: 'bottom' as const,
@@ -39,9 +39,11 @@ export const SeverityPieChart: React.FC<Props> = ({ data, total }) => {
   };
 
   return (
-    <div className="h-[300px] w-full">
+    <>
       <p className="text-sm text-gray-500 mb-4">{total} found in total</p>
-      <Doughnut data={chartData} options={options} />
-    </div>
+      <div className="w-1/2 mx-auto">
+        <Doughnut data={chartData} options={options} />
+      </div>
+    </>
   );
 };
