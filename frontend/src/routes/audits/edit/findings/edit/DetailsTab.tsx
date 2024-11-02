@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import SelectDropdown from '../../../../../components/dropdown/SelectDropdown';
 import RichText from '../../../../../components/text/RichText';
 import CVSSCalculator from '../../../../vulnerabilities/components/CVSSCalculator';
+import { useCallback } from 'react';
 
 type ListItem = {
   id: number;
@@ -61,7 +62,6 @@ export const DetailsTab: React.FC<DetailTabProps> = ({
     { id: 4, value: t('urgent') },
   ];
 
-  // TODO: Fix issue with useEffect in CVSSCalculator
   const handleCvssRecomendation = () => {
     if (finding.description === '' || finding.description === '<p><br></p>') {
       toast.error(t('err.descriptionRequired'));
@@ -70,6 +70,11 @@ export const DetailsTab: React.FC<DetailTabProps> = ({
       return finding.description ?? '';
     }
   };
+
+  const handleCvssChange = useCallback((newCvssVector: string) => {
+    onChangeText(newCvssVector, 'cvssv3');
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="flex flex-col gap-4">
@@ -84,9 +89,7 @@ export const DetailsTab: React.FC<DetailTabProps> = ({
       <div className="mx-4 flex justify-center">
         <CVSSCalculator
           cvssStringInitial={finding.cvssv3}
-          handleCvssChange={newCvssVector =>
-            onChangeText(newCvssVector, 'cvssv3')
-          }
+          handleCvssChange={handleCvssChange}
           handleCvssRecomendation={handleCvssRecomendation}
         />
       </div>
