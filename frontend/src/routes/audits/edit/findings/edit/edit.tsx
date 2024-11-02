@@ -124,17 +124,18 @@ export const Edit = () => {
   const [priority, setPriority] = useState<ListItem | null>(null);
 
   const onChangeText = (value: string, field: string) => {
-    setFinding({ ...finding, [field]: value });
+    setFinding(prevFinding => {
+      if (!prevFinding) {
+        return null;
+      }
+
+      return {
+        ...prevFinding,
+        [field]: value,
+      };
+    });
   };
 
-  /* const onChangeArray = (value: string[], field: string) => {
-    if (field === 'cwes') {
-      setFinding({ ...finding, [field]: value });
-    } else if (field === 'references') {
-      setFinding({ ...finding, references: [value] });
-    }
-
-  }; */
   const handlerRecommendCWE = (value: string[]) => {
     setFinding(prevFinding => {
       if (!prevFinding) {
@@ -149,16 +150,26 @@ export const Edit = () => {
   };
 
   const onChangeListItem = (value: ListItem, field: string) => {
-    if (field === 'remediationComplexity') {
-      setFinding({ ...finding, [field]: value.id - 1 });
-      setRemediationComplexity(value);
-    } else if (field === 'priority') {
-      setFinding({ ...finding, [field]: value.id - 1 });
-      setPriority(value);
-    } else {
-      setFinding({ ...finding, [field]: value.value });
-      setCurrentType(value);
-    }
+    setFinding(prevFinding => {
+      if (!prevFinding) {
+        return null;
+      }
+      let newValue: string | number;
+      if (field === 'remediationComplexity') {
+        setRemediationComplexity(value);
+        newValue = value.id - 1;
+      } else if (field === 'priority') {
+        setPriority(value);
+        newValue = value.id - 1;
+      } else {
+        setCurrentType(value);
+        newValue = value.value;
+      }
+      return {
+        ...prevFinding,
+        [field]: newValue,
+      };
+    });
   };
 
   const fetchTypes = async () => {
