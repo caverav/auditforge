@@ -34,8 +34,8 @@ type EditFinding = {
   poc?: string;
   remediation?: string;
   cvssv3?: string;
-  remediationComplexity?: number;
-  priority?: number;
+  remediationComplexity?: number | '';
+  priority?: number | '';
   scope?: string;
   vulnType?: string;
 };
@@ -792,6 +792,32 @@ export const getFinding = async (
       `${API_URL}audits/${auditID}/findings/${findingId}`,
       {
         credentials: 'include',
+      },
+    );
+    if (!response.ok) {
+      throw networkError;
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const updateFinding = async (
+  auditId: string,
+  findingId: string,
+  finding: EditFinding,
+): Promise<{ status: string; datas: string }> => {
+  try {
+    const response = await fetch(
+      `${API_URL}audits/${auditId}/findings/${findingId}`,
+      {
+        method: 'PUT',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(finding),
       },
     );
     if (!response.ok) {
