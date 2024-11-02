@@ -6,6 +6,7 @@ import {
   Title,
   Tooltip,
 } from 'chart.js';
+import { t } from 'i18next';
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 
@@ -21,6 +22,11 @@ type Props = {
 };
 
 export const CVSSChart: React.FC<Props> = ({ data }) => {
+  if (!data.length) {
+    return (
+      <p className="text-sm text-gray-500">{t('err.noMatchingRecords')}</p>
+    );
+  }
   const chartData = {
     labels: data.map(d => d.name),
     datasets: [

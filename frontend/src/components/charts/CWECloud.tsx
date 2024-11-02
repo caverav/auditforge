@@ -1,5 +1,6 @@
 import { Text } from '@visx/text';
 import Wordcloud from '@visx/wordcloud/lib/Wordcloud';
+import { t } from 'i18next';
 import React from 'react';
 
 type CWEItem = {
@@ -26,6 +27,11 @@ const itemsToWordDatum = (items: CWEItem[]) => {
 };
 
 export const CWECloud: React.FC<Props> = ({ items, mostCommon }) => {
+  if (!items.length) {
+    return (
+      <p className="text-sm text-gray-500">{t('err.noMatchingRecords')}</p>
+    );
+  }
   return (
     <div className="bg-gray-900 rounded-lg h-[300px] overflow-hidden">
       <p className="text-sm text-gray-400">Most common: {mostCommon}</p>

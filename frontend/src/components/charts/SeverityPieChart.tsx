@@ -1,4 +1,5 @@
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
+import { t } from 'i18next';
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 
@@ -16,6 +17,11 @@ type Props = {
 };
 
 export const SeverityPieChart: React.FC<Props> = ({ data, total }) => {
+  if (!data.length) {
+    return (
+      <p className="text-sm text-gray-500">{t('err.noMatchingRecords')}</p>
+    );
+  }
   const chartData = {
     labels: data.map(d => d.name),
     datasets: [
@@ -24,6 +30,7 @@ export const SeverityPieChart: React.FC<Props> = ({ data, total }) => {
         backgroundColor: data.map(d => d.color),
         borderColor: data.map(d => d.color),
         borderWidth: 1,
+        hoverOffset: 4,
       },
     ],
   };
