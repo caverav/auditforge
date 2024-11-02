@@ -14,11 +14,6 @@ import { getAuditById } from '@/services/audits';
 import { getAuditsByClientName } from '@/services/clients';
 import { getCompanies } from '@/services/data';
 
-type ClientsInfo = {
-  id: number;
-  value: { id: string; nombre: string };
-};
-
 type ListItem = {
   id: number;
   value: string;
@@ -120,18 +115,8 @@ export const ClientDashboard = () => {
     { name: 'Urgent', count: 0, color: '#dc3545' },
   ]);
   const fetchClients = async () => {
-    setLoading(true);
-
     try {
       const data = await getCompanies();
-      const listItems: ClientsInfo[] = data.datas.map((cliente, index) => ({
-        id: index,
-        value: {
-          id: cliente._id,
-          nombre: cliente.name,
-        },
-      }));
-      setClientInfo(listItems);
       const clientName: ListItem[] = data.datas.map((cliente, index) => ({
         id: index,
         value: cliente.name,
@@ -139,8 +124,6 @@ export const ClientDashboard = () => {
       setClientName(clientName);
     } catch (error) {
       console.error('Error fetching audits:', error);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -150,8 +133,6 @@ export const ClientDashboard = () => {
       .catch(console.error);
 
     const fetchAuditsbyClient = async () => {
-      setLoading(true);
-
       try {
         const data = await getAuditsByClientName(currentClient.value);
         const tmpCiaData = [
@@ -284,8 +265,6 @@ export const ClientDashboard = () => {
         setCiaData(tmpCiaData);
       } catch (error) {
         console.error('Error fetching audits:', error);
-      } finally {
-        setLoading(false);
       }
     };
 
