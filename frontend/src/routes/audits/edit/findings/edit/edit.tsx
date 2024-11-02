@@ -127,6 +127,27 @@ export const Edit = () => {
     setFinding({ ...finding, [field]: value });
   };
 
+  /* const onChangeArray = (value: string[], field: string) => {
+    if (field === 'cwes') {
+      setFinding({ ...finding, [field]: value });
+    } else if (field === 'references') {
+      setFinding({ ...finding, references: [value] });
+    }
+
+  }; */
+  const handlerRecommendCWE = (value: string[]) => {
+    setFinding(prevFinding => {
+      if (!prevFinding) {
+        return null;
+      }
+
+      return {
+        ...prevFinding,
+        cwes: [...value, ...prevFinding.cwes], // Aseguramos que solo contenga `string[]`
+      };
+    });
+  };
+
   const onChangeListItem = (value: ListItem, field: string) => {
     if (field === 'remediationComplexity') {
       setFinding({ ...finding, [field]: value.id - 1 });
@@ -204,6 +225,7 @@ export const Edit = () => {
             <DefinitionTab
               currentType={currentType}
               finding={finding}
+              handlerRecommendCWE={handlerRecommendCWE}
               onChangeListItem={onChangeListItem}
               onChangeText={onChangeText}
               typesList={typesList}

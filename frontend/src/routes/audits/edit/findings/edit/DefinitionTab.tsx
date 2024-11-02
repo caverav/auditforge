@@ -114,6 +114,7 @@ type VulnerabilityData = {
 type DefinitionTabProps = {
   currentType: ListItem | null;
   finding: EditFinding;
+  handlerRecommendCWE: (value: string[]) => void;
   onChangeText: (value: string, field: string) => void;
   onChangeListItem: (value: ListItem, field: string) => void;
   typesList: ListItem[];
@@ -123,6 +124,7 @@ type DefinitionTabProps = {
 export const DefinitionTab: React.FC<DefinitionTabProps> = ({
   currentType,
   finding,
+  handlerRecommendCWE,
   onChangeText,
   onChangeListItem,
   typesList,
@@ -162,11 +164,7 @@ export const DefinitionTab: React.FC<DefinitionTabProps> = ({
   };
 
   const handlerSubmitCWE = () => {
-    //TODO: Change finding CWEs => handlerList must to be added
-    /* setDetail(prevDetail => ({
-      ...prevDetail,
-      cwes: [...cweRecommendationSelected, ...prevDetail.cwes],
-    })); */
+    handlerRecommendCWE(cweRecommendationSelected);
     setCweRecommendationSelected([]);
     setCweRecommended([]);
   };
