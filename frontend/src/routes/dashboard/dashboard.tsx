@@ -29,6 +29,44 @@ type ListItem = {
   label?: string;
 };
 
+//const severityData = [
+//  { name: 'Critical', value: 4, color: '#dc3545' },
+//  { name: 'High', value: 6, color: '#fd7e14' },
+//  { name: 'Medium', value: 8, color: '#ffc107' },
+//  { name: 'Low', value: 5, color: '#28a745' },
+//];
+//
+//const cweItems = [
+//  { id: 'CWE-89', size: 15 },
+//  { id: 'CWE-79', size: 12 },
+//  { id: 'CWE-22', size: 10 },
+//  // ... more CWEs
+//];
+//
+//const timeData = [
+//  { name: 'Audit 1', execution: 4, remediation: 2 },
+//  { name: 'Audit 2', execution: 3, remediation: 2.5 },
+//  { name: 'Audit 3', execution: 5, remediation: 1.5 },
+//];
+//
+//const ciaData = [
+//  { subject: 'Confidentiality', current: 80, target: 95 },
+//  { subject: 'Integrity', current: 85, target: 90 },
+//  { subject: 'Availability', current: 75, target: 85 },
+//];
+//
+//const cvssData = [
+//  { name: 'Audit 1', score: 7.5 },
+//  { name: 'Audit 2', score: 5.2 },
+//  { name: 'Audit 3', score: 8.1 },
+//];
+//
+//const priorityData = [
+//  { name: 'Low', count: 5, color: '#28a745' },
+//  { name: 'Medium', count: 8, color: '#ffc107' },
+//  { name: 'High', count: 6, color: '#fd7e14' },
+//  { name: 'Urgent', count: 4, color: '#dc3545' },
+//];
 export const ClientDashboard = () => {
   const [audits, setAudits] = useState<Audit[]>([]);
   const [loading, setLoading] = useState(false);
@@ -75,7 +113,6 @@ export const ClientDashboard = () => {
       try {
         const data = await getAuditsByClientName(currentClient.value);
         setAudits(data);
-        console.log(data);
       } catch (error) {
         console.error('Error fetching audits:', error);
       } finally {
@@ -87,44 +124,6 @@ export const ClientDashboard = () => {
       .then(() => {})
       .catch(console.error);
   }, [currentClient]);
-  const severityData = [
-    { name: 'Critical', value: 4, color: '#dc3545' },
-    { name: 'High', value: 6, color: '#fd7e14' },
-    { name: 'Medium', value: 8, color: '#ffc107' },
-    { name: 'Low', value: 5, color: '#28a745' },
-  ];
-
-  const cweItems = [
-    { id: 'CWE-89', size: 15 },
-    { id: 'CWE-79', size: 12 },
-    { id: 'CWE-22', size: 10 },
-    // ... more CWEs
-  ];
-
-  const timeData = [
-    { name: 'Audit 1', execution: 4, remediation: 2 },
-    { name: 'Audit 2', execution: 3, remediation: 2.5 },
-    { name: 'Audit 3', execution: 5, remediation: 1.5 },
-  ];
-
-  const ciaData = [
-    { subject: 'Confidentiality', current: 80, target: 95 },
-    { subject: 'Integrity', current: 85, target: 90 },
-    { subject: 'Availability', current: 75, target: 85 },
-  ];
-
-  const cvssData = [
-    { name: 'Audit 1', score: 7.5 },
-    { name: 'Audit 2', score: 5.2 },
-    { name: 'Audit 3', score: 8.1 },
-  ];
-
-  const priorityData = [
-    { name: 'Low', count: 5, color: '#28a745' },
-    { name: 'Medium', count: 8, color: '#ffc107' },
-    { name: 'High', count: 6, color: '#fd7e14' },
-    { name: 'Urgent', count: 4, color: '#dc3545' },
-  ];
 
   return (
     <div className="p-8">
