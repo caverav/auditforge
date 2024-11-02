@@ -71,6 +71,7 @@ export type Audit = {
   type: string;
   connected: string[];
   createdAt: string;
+  cvssv3: string;
 };
 
 export type AuditById = {
