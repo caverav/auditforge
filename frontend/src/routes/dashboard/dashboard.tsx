@@ -71,30 +71,6 @@ const severityByScore = (score: number) => {
   }
 };
 
-//const timeData = [
-//  { name: 'Audit 1', execution: 4, remediation: 2 },
-//  { name: 'Audit 2', execution: 3, remediation: 2.5 },
-//  { name: 'Audit 3', execution: 5, remediation: 1.5 },
-//];
-//
-//const ciaData = [
-//  { subject: 'Confidentiality', current: 80, target: 95 },
-//  { subject: 'Integrity', current: 85, target: 90 },
-//  { subject: 'Availability', current: 75, target: 85 },
-//];
-//
-//const cvssData = [
-//  { name: 'Audit 1', score: 7.5 },
-//  { name: 'Audit 2', score: 5.2 },
-//  { name: 'Audit 3', score: 8.1 },
-//];
-//
-//const priorityData = [
-//  { name: 'Low', count: 5, color: '#28a745' },
-//  { name: 'Medium', count: 8, color: '#ffc107' },
-//  { name: 'High', count: 6, color: '#fd7e14' },
-//  { name: 'Urgent', count: 4, color: '#dc3545' },
-//];
 export const ClientDashboard = () => {
   const [audits, setAudits] = useState<Audit[]>([]);
   const [loading, setLoading] = useState(false);
