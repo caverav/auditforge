@@ -36,13 +36,6 @@ export const CIATriadChart: React.FC<Props> = ({ data }) => {
       {
         label: 'Current',
         data: data.map(d => d.current),
-        backgroundColor: 'rgba(255, 77, 77, 0.5)',
-        borderColor: 'rgb(255, 77, 77)',
-        borderWidth: 1,
-      },
-      {
-        label: 'Target',
-        data: data.map(d => d.target),
         backgroundColor: 'rgba(130, 202, 157, 0.5)',
         borderColor: 'rgb(130, 202, 157)',
         borderWidth: 1,
