@@ -30,6 +30,23 @@ type ListItem = {
   label?: string;
 };
 
+const cvssStringTo = (
+  field: 'integrity' | 'availability' | 'confidentiality',
+  cvssVector: string,
+) => {
+  const values: Record<string, number> = {
+    H: 3,
+    M: 2,
+    L: 1,
+  } as const;
+  const substrings = {
+    integrity: 35,
+    availability: 39,
+    confidentiality: 43,
+  } as const;
+  return values[cvssVector.substring(substrings[field], substrings[field] + 1)];
+};
+
 const cvssStringToScore = (cvssScore: string) => {
   try {
     const cvssVector = new Cvss3P1(cvssScore);
@@ -83,6 +100,7 @@ export const ClientDashboard = () => {
   const [loading, setLoading] = useState(false);
   const [clientInfo, setClientInfo] = useState<ClientsInfo[]>([]);
   const [clientName, setClientName] = useState<ListItem[]>([]);
+  const [totalSeverity, setTotalSeverity] = useState(0);
   const [currentClient, setCurrentClient] = useState<ListItem>({
     id: 0,
     value: '',
@@ -168,7 +186,57 @@ export const ClientDashboard = () => {
 
       try {
         const data = await getAuditsByClientName(currentClient.value);
-        setAudits(data);
+        //setAudits(data);
+        const ciaData: CIAData[] = [];
+        const cvssData: CVSSData[] = [];
+        const priorityData: PriorityData[] = [];
+        for (const audit of data) {
+          const auditData = await getAuditById(audit._id);
+          const tmpSeverityData = [
+            { name: 'Critical', value: 0, color: '#dc3545' },
+            { name: 'High', value: 0, color: '#fd7e14' },
+            { name: 'Medium', value: 0, color: '#ffc107' },
+            { name: 'Low', value: 0, color: '#28a745' },
+            { name: 'Informative', value: 0, color: '#6c757d' },
+          ];
+          for (const finding of auditData.datas.findings) {
+            // severity data
+            const severity = severityByScore(cvssStringToScore(finding.cvssv3));
+            tmpSeverityData[severity].value += 1;
+            setSeverityData(tmpSeverityData);
+            setTotalSeverity(
+              tmpSeverityData.reduce((acc, item) => acc + item.value, 0),
+            );
+
+            // cwe data
+            for (const cwe of finding.cwes) {
+              const cweItem = cweItems.find(item => item.id === cwe);
+              setCweItems(prev => [
+                ...prev,
+                { id: cwe, size: cweItem ? cweItem.size + 1 : 1 },
+              ]);
+            }
+            // time data
+            // TODO: add time data
+
+            // cia data
+            ciaData.push({
+              subject: finding.title,
+              current: cvssStringTo('integrity', finding.cvssv3),
+              target: cvssStringTo('integrity', finding.cvssv3),
+            });
+            ciaData.push({
+              subject: finding.title,
+              current: cvssStringTo('availability', finding.cvssv3),
+              target: cvssStringTo('availability', finding.cvssv3),
+            });
+            ciaData.push({
+              subject: finding.title,
+              current: cvssStringTo('confidentiality', finding.cvssv3),
+              target: cvssStringTo('confidentiality', finding.cvssv3),
+            });
+          }
+        }
       } catch (error) {
         console.error('Error fetching audits:', error);
       } finally {
@@ -179,37 +247,9 @@ export const ClientDashboard = () => {
     fetchAuditsbyClient()
       .then(() => {})
       .catch(console.error);
-    const fetchAuditData = async () => {
-      setLoading(true);
-
-      try {
-        for (const audit of audits) {
-          const auditData = await getAuditById(audit._id);
-          const tmpSeverityData = severityData;
-          for (const finding of auditData.datas.findings) {
-            const severity = severityByScore(cvssStringToScore(finding.cvssv3));
-            tmpSeverityData[severity].value += 1;
-
-            for (const cwe of finding.cwes) {
-              const cweItem = cweItems.find(item => item.id === cwe);
-              setCweItems(prev => [
-                ...prev,
-                { id: cwe, size: cweItem ? cweItem.size + 1 : 1 },
-              ]);
-            }
-          }
-          setSeverityData(tmpSeverityData);
-        }
-      } catch (error) {
-        console.error('Error fetching audits:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchAuditData()
-      .then(() => {})
-      .catch(console.error);
+    //fetchAuditData()
+    //  .then(() => {})
+    //  .catch(console.error);
   }, [currentClient]);
 
   return (
@@ -226,7 +266,7 @@ export const ClientDashboard = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
         <Card title="Vulnerabilities by severity">
-          <SeverityPieChart data={severityData} total={23} />
+          <SeverityPieChart data={severityData} total={totalSeverity} />
         </Card>
         <Card title="Times per audit">
           <TimePerAuditChart data={timeData} />
