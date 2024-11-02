@@ -1,10 +1,14 @@
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
+import PrimaryButton from '../../../../../components/button/PrimaryButton';
+import Modal from '../../../../../components/modal/Modal';
 import { getFinding } from '../../../../../services/audits';
 import { getTypes } from '../../../../../services/vulnerabilities';
 import { DefinitionTab } from './DefinitionTab';
+import { DetailsTab } from './DetailsTab';
 import { ProofsTab } from './ProofsTab';
 
 type CWERelated = {
@@ -105,6 +109,7 @@ type Tab = {
 export const Edit = () => {
   const findingId = useParams().findingId ?? '';
   const auditId = useParams().auditId ?? '';
+  const [openModalDeleteFinding, setOpenModalDeleteFinding] = useState(false);
 
   const [activeTab, setActiveTab] = useState(0);
 
@@ -114,13 +119,25 @@ export const Edit = () => {
 
   const [typesList, setTypesList] = useState<ListItem[]>([]);
 
+  const [remediationComplexity, setRemediationComplexity] =
+    useState<ListItem | null>(null);
+  const [priority, setPriority] = useState<ListItem | null>(null);
+
   const onChangeText = (value: string, field: string) => {
     setFinding({ ...finding, [field]: value });
   };
 
   const onChangeListItem = (value: ListItem, field: string) => {
-    setFinding({ ...finding, [field]: value.value });
-    setCurrentType(value);
+    if (field === 'remediationComplexity') {
+      setFinding({ ...finding, [field]: value.id - 1 });
+      setRemediationComplexity(value);
+    } else if (field === 'priority') {
+      setFinding({ ...finding, [field]: value.id - 1 });
+      setPriority(value);
+    } else {
+      setFinding({ ...finding, [field]: value.value });
+      setCurrentType(value);
+    }
   };
 
   const fetchTypes = async () => {
@@ -216,12 +233,12 @@ export const Edit = () => {
       content: (
         <div>
           {finding ? (
-            <DefinitionTab
-              currentType={currentType}
+            <DetailsTab
               finding={finding}
               onChangeListItem={onChangeListItem}
               onChangeText={onChangeText}
-              typesList={typesList}
+              priority={priority}
+              remediationComplexity={remediationComplexity}
             />
           ) : null}
         </div>
@@ -229,12 +246,54 @@ export const Edit = () => {
     },
   ];
 
+  const confirmDeleteFinding = async () => {
+    try {
+      /* const response = await deleteVulnerability(itemDelete?._id ?? '');
+      if (response.status === 'success') {
+        handleSuccessToast(t('msg.vulnerabilityDeletedOk'));
+      } */
+    } catch (error) {
+      toast.error(t('err.failedDeleteVulnerability'));
+      console.error('Error:', error);
+    }
+    setOpenModalDeleteFinding(false);
+    // void fetchVulnerabilities();
+  };
+
   return (
     <div className="">
       {finding ? (
         <div>
+          <div className="fixed z-20">
+            <Modal
+              cancelText={t('btn.stay')}
+              disablehr
+              isOpen={openModalDeleteFinding}
+              onCancel={() => setOpenModalDeleteFinding(false)}
+              onSubmit={() => console.log('a')}
+              submitText={t('btn.confirm')}
+              title={t('msg.confirmSuppression')}
+            >
+              <span className="ml-3">
+                {t('msg.vulnerabilityWillBeDeleted')}
+              </span>
+            </Modal>
+          </div>
           <div className="m-4 bg-gray-900 rounded-lg p-4 flex flex-col gap-4">
-            <span className="w-full">{finding.title}</span>
+            <div className="flex justify-between">
+              <span className="">{finding.title}</span>
+              <div className="flex flex-col gap-4 md:flex-row">
+                <PrimaryButton
+                  color="red"
+                  onClick={() => setOpenModalDeleteFinding(true)}
+                >
+                  <span>{t('btn.delete')}</span>
+                </PrimaryButton>
+                <PrimaryButton onClick={() => console.log('a')}>
+                  <span>{t('btn.save')}</span>
+                </PrimaryButton>
+              </div>
+            </div>
             <div className="w-full">
               {tabs.map((tab, index) => (
                 <button

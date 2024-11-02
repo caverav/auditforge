@@ -1,19 +1,31 @@
+import { ArrowPathIcon } from '@heroicons/react/20/solid';
 import { t } from 'i18next';
-import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { toast } from 'sonner';
 
+import PrimaryButton from '../../../../../components/button/PrimaryButton';
 import SelectDropdown from '../../../../../components/dropdown/SelectDropdown';
 import SimpleInput from '../../../../../components/input/SimpleInput';
 import RichText from '../../../../../components/text/RichText';
 import TextArea from '../../../../../components/text/TextArea';
-import { getFinding } from '../../../../../services/audits';
-import { getTypes } from '../../../../../services/vulnerabilities';
-import { NavigatorTab } from './NavigatorTab';
+import GetCWENameByLanguage from '../../../../../services/getCWEName';
+import { postDescriptionCWE } from '../../../../../services/vulnerabilities';
+import MultiCheckboxButton from '../../../../vulnerabilities/components/MultiCheckboxButton';
 
 type CWERelated = {
   cwe: string;
   cweParent?: string;
   cweGrandParent?: string;
+};
+
+type CWEData = {
+  priority: number;
+  label: string;
+  score: number;
+};
+
+type PostDescription = {
+  vuln: string;
 };
 
 type TypeData = {
@@ -115,6 +127,50 @@ export const DefinitionTab: React.FC<DefinitionTabProps> = ({
   onChangeListItem,
   typesList,
 }) => {
+  const [cweLoading, setCweLoading] = useState<boolean>(false);
+  const [cweRecommendationSelected, setCweRecommendationSelected] = useState<
+    string[]
+  >([]);
+  const [cweRecommended, setCweRecommended] = useState<CWERelated[]>([]);
+
+  const handleCWERecomendation = async () => {
+    if (finding.description === '' || finding.description === '<p><br></p>') {
+      toast.error(t('err.descriptionRequired'));
+      // TODO: Cambiar el estado de required
+      return;
+    }
+    const descriptionCWE: PostDescription = {
+      vuln: finding.description ?? '',
+    };
+
+    try {
+      setCweLoading(true);
+      setCweRecommendationSelected([]);
+      const responseCWE = await postDescriptionCWE(descriptionCWE);
+      const sortedResult = responseCWE.result.sort(
+        (a: CWEData, b: CWEData) => b.score - a.score,
+      );
+      //TODO: Add current language to locale
+      const recommendedCWEs = GetCWENameByLanguage('es-ES', sortedResult);
+      setCweRecommended(recommendedCWEs);
+    } catch (error) {
+      console.error('Error:', error);
+      toast.error(t('err.failedCWERecommendation'));
+    } finally {
+      setCweLoading(false);
+    }
+  };
+
+  const handlerSubmitCWE = () => {
+    //TODO: Change finding CWEs => handlerList must to be added
+    /* setDetail(prevDetail => ({
+      ...prevDetail,
+      cwes: [...cweRecommendationSelected, ...prevDetail.cwes],
+    })); */
+    setCweRecommendationSelected([]);
+    setCweRecommended([]);
+  };
+
   return (
     <div className="">
       <div className="flex flex-col md:flex-row md:gap-4 w-full p-4">
@@ -138,7 +194,7 @@ export const DefinitionTab: React.FC<DefinitionTabProps> = ({
           />
         </div>
       </div>
-      <div className="">
+      <div className="flex flex-col">
         <RichText
           label={t('description')}
           onChange={value => onChangeText(value, 'description')}
@@ -151,7 +207,7 @@ export const DefinitionTab: React.FC<DefinitionTabProps> = ({
           placeholder=""
           value={finding.observation ?? ''}
         />
-        <div className="mx-4 pb-4">
+        <div className="mx-4 pb-4 flex flex-col gap-4">
           <TextArea
             id=""
             label={t('poc')}
@@ -171,6 +227,34 @@ export const DefinitionTab: React.FC<DefinitionTabProps> = ({
             value={finding.cwes}
           />
         </div>
+        <div className="mb-4 mx-4 flex">
+          <PrimaryButton onClick={() => handleCWERecomendation()}>
+            <span>{t('recommendCwe')}</span>
+          </PrimaryButton>
+          {cweLoading ? (
+            <span className="ml-2">
+              <ArrowPathIcon className="h-8 w-8 animate-spin text-blue-500" />
+            </span>
+          ) : null}
+        </div>
+        {cweRecommended.length > 0 ? (
+          <div className="mx-4 mb-4">
+            <MultiCheckboxButton
+              cweRecommendationSelected={cweRecommendationSelected}
+              cwesRecommended={cweRecommended}
+              setCweRecommendationSelected={setCweRecommendationSelected}
+            />
+            {cweRecommendationSelected.length > 0 ? (
+              <PrimaryButton
+                onClick={() => {
+                  handlerSubmitCWE();
+                }}
+              >
+                {t('btn.confirmSelection')}
+              </PrimaryButton>
+            ) : null}
+          </div>
+        ) : null}
       </div>
     </div>
   );
