@@ -39,7 +39,7 @@ export const TimePerAuditChart: React.FC<Props> = ({ data }) => {
         backgroundColor: '#82ca9d',
       },
       {
-        label: 'Time of remediation',
+        label: 'Time of reporting',
         data: data.map(d => d.remediation),
         backgroundColor: '#8884d8',
       },

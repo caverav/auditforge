@@ -182,8 +182,24 @@ export const ClientDashboard = () => {
           { name: 'Informative', value: 0, color: '#6c757d' },
         ];
         const tmpCweItems: { id: string; size: number }[] = [];
+        const tmpTimeData: {
+          name: string;
+          execution: number;
+          remediation: number;
+        }[] = [];
         for (const audit of data) {
           const auditData = await getAuditById(audit._id);
+          tmpTimeData.push({
+            name: auditData.datas.name,
+            execution:
+              (new Date(auditData.datas.date_end).getTime() -
+                new Date(auditData.datas.date_start).getTime()) /
+              (1000 * 60 * 60 * 24),
+            remediation:
+              (new Date(auditData.datas.date).getTime() -
+                new Date(auditData.datas.date_end).getTime()) /
+              (1000 * 60 * 60 * 24),
+          });
           for (const finding of auditData.datas.findings) {
             // severity data
             const severity = severityByScore(cvssStringToScore(finding.cvssv3));
@@ -242,6 +258,7 @@ export const ClientDashboard = () => {
           }
         }
 
+        setTimeData(tmpTimeData);
         setSeverityData(tmpSeverityData);
         setTotalSeverity(
           tmpSeverityData.reduce((acc, item) => acc + item.value, 0),
