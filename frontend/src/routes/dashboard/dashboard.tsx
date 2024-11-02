@@ -188,7 +188,7 @@ export const ClientDashboard = () => {
           remediation: number;
         }[] = [];
 
-        for (const audit of data) {
+        const auditPromises = data.map(async audit => {
           const auditData = await getAuditById(audit._id);
           tmpTimeData.push({
             name: auditData.datas.name,
@@ -201,16 +201,17 @@ export const ClientDashboard = () => {
                 new Date(auditData.datas.date_end).getTime()) /
               (1000 * 60 * 60 * 24),
           });
-          for (const finding of auditData.datas.findings) {
+
+          auditData.datas.findings.forEach(finding => {
             // severity data
             const severity = severityByScore(cvssStringToScore(finding.cvssv3));
             tmpSeverityData[severity].value += 1;
 
             // cwe data
-            for (const cwe of finding.cwes) {
+            finding.cwes.forEach(cwe => {
               const cweItem = tmpCweItems.find(item => item.id === cwe);
               if (cweItem) {
-                tmpCweItems.map(item => {
+                tmpCweItems.forEach(item => {
                   if (item.id === cwe) {
                     item.size += 1;
                   }
@@ -218,9 +219,7 @@ export const ClientDashboard = () => {
               } else {
                 tmpCweItems.push({ id: cwe, size: 1 });
               }
-            }
-            // time data
-            // TODO: add time data
+            });
 
             // cia data and cvss data and priority data
             if (finding.cvssv3) {
@@ -251,23 +250,31 @@ export const ClientDashboard = () => {
               }
 
               const priority = finding.priority;
-              if (priority) {
+              if (priority !== undefined) {
                 tmpPriorityData[priority].count += 1;
                 prioritycount += 1;
               }
             }
-          }
+          });
+        });
+
+        await Promise.all(auditPromises);
+
+        if (findingcount > 0) {
+          tmpCiaData.forEach(item => {
+            item.current /= findingcount;
+          });
+          tmpCvssData.forEach(item => {
+            item.score /= findingcount;
+          });
         }
 
-        tmpCiaData.forEach(item => {
-          item.current /= findingcount;
-        });
-        tmpCvssData.forEach(item => {
-          item.score /= findingcount;
-        });
-        tmpPriorityData.forEach(item => {
-          item.count /= prioritycount;
-        });
+        if (prioritycount > 0) {
+          tmpPriorityData.forEach(item => {
+            item.count /= prioritycount;
+          });
+        }
+
         setTimeData(tmpTimeData);
         setSeverityData(tmpSeverityData);
         setTotalSeverity(
