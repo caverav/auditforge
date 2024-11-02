@@ -67,8 +67,6 @@ const severityByScore = (score: number) => {
 };
 
 export const ClientDashboard = () => {
-  const [loading, setLoading] = useState(false);
-  const [clientInfo, setClientInfo] = useState<ClientsInfo[]>([]);
   const [clientName, setClientName] = useState<ListItem[]>([]);
   const [totalSeverity, setTotalSeverity] = useState(0);
   const [currentClient, setCurrentClient] = useState<ListItem>({
