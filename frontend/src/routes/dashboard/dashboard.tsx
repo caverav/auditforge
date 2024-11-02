@@ -186,8 +186,12 @@ export const ClientDashboard = () => {
 
       try {
         const data = await getAuditsByClientName(currentClient.value);
-        //setAudits(data);
-        const ciaData: CIAData[] = [];
+        const tmpCiaData: CIAData[] = [
+          { subject: 'Confidentiality', current: 0, target: 0 },
+          { subject: 'Integrity', current: 0, target: 0 },
+          { subject: 'Availability', current: 0, target: 0 },
+        ];
+        let findingcount = 0;
         const cvssData: CVSSData[] = [];
         const priorityData: PriorityData[] = [];
         for (const audit of data) {
@@ -220,23 +224,27 @@ export const ClientDashboard = () => {
             // TODO: add time data
 
             // cia data
-            ciaData.push({
-              subject: finding.title,
-              current: cvssStringTo('integrity', finding.cvssv3),
-              target: cvssStringTo('integrity', finding.cvssv3),
-            });
-            ciaData.push({
-              subject: finding.title,
-              current: cvssStringTo('availability', finding.cvssv3),
-              target: cvssStringTo('availability', finding.cvssv3),
-            });
-            ciaData.push({
-              subject: finding.title,
-              current: cvssStringTo('confidentiality', finding.cvssv3),
-              target: cvssStringTo('confidentiality', finding.cvssv3),
-            });
+            if (finding.cvssv3) {
+              tmpCiaData[0].current += cvssStringTo(
+                'confidentiality',
+                finding.cvssv3,
+              );
+              tmpCiaData[1].current += cvssStringTo(
+                'integrity',
+                finding.cvssv3,
+              );
+              tmpCiaData[2].current += cvssStringTo(
+                'availability',
+                finding.cvssv3,
+              );
+              findingcount += 1;
+            }
           }
         }
+        tmpCiaData.forEach(item => {
+          item.current /= findingcount;
+        });
+        setCiaData(tmpCiaData);
       } catch (error) {
         console.error('Error fetching audits:', error);
       } finally {
@@ -247,9 +255,6 @@ export const ClientDashboard = () => {
     fetchAuditsbyClient()
       .then(() => {})
       .catch(console.error);
-    //fetchAuditData()
-    //  .then(() => {})
-    //  .catch(console.error);
   }, [currentClient]);
 
   return (
