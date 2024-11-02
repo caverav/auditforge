@@ -283,29 +283,31 @@ export const ClientDashboard = () => {
         />
       </Card>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-        <Card title="Vulnerabilities by severity">
-          <SeverityPieChart data={severityData} total={totalSeverity} />
-        </Card>
-        <Card title="Times per audit">
-          <TimePerAuditChart data={timeData} />
-        </Card>
-        <Card title="CWEs found">
-          <CWECloud
-            items={cweItems}
-            mostCommon={cweItems.sort((a, b) => b.size - a.size)[0].id}
-          />
-        </Card>
-        <Card title="Average CIA triad">
-          <CIATriadChart data={ciaData} />
-        </Card>
-        <Card title="Average CVSS">
-          <CVSSChart data={cvssData} />
-        </Card>
-        <Card title="Average Remediation Priority">
-          <RemediationPriorityChart data={priorityData} />
-        </Card>
-      </div>
+      {currentClient.value === '' ? null : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+          <Card title="Vulnerabilities by severity">
+            <SeverityPieChart data={severityData} total={totalSeverity} />
+          </Card>
+          <Card title="Times per audit">
+            <TimePerAuditChart data={timeData} />
+          </Card>
+          <Card title="CWEs found">
+            <CWECloud
+              items={cweItems}
+              mostCommon={cweItems.sort((a, b) => b.size - a.size)[0]?.id}
+            />
+          </Card>
+          <Card title="Average CIA triad">
+            <CIATriadChart data={ciaData} />
+          </Card>
+          <Card title="Average CVSS">
+            <CVSSChart data={cvssData} />
+          </Card>
+          <Card title="Average Remediation Priority">
+            <RemediationPriorityChart data={priorityData} />
+          </Card>
+        </div>
+      )}
     </div>
   );
 };
