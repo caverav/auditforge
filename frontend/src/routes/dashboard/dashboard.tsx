@@ -29,7 +29,7 @@ type ListItem = {
   label?: string;
 };
 
-export const App = () => {
+export const ClientDashboard = () => {
   const [audits, setAudits] = useState<Audit[]>([]);
   const [loading, setLoading] = useState(false);
   const [clientInfo, setClientInfo] = useState<ClientsInfo[]>([]);
@@ -127,7 +127,7 @@ export const App = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-100 p-8">
+    <div className="p-8">
       <Card title="Client">
         <SelectDropdown
           items={clientName}
@@ -139,25 +139,25 @@ export const App = () => {
       </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-        <Card>
+        <Card title="Vulnerabilities by severity">
           <SeverityPieChart data={severityData} total={23} />
         </Card>
-        <Card>
+        <Card title="CWEs found">
           <CWECloud
             items={cweItems}
             mostCommon="CWE-20 'Improper Input Validation'"
           />
         </Card>
-        <Card>
+        <Card title="Times per audit">
           <TimePerAuditChart data={timeData} />
         </Card>
-        <Card>
+        <Card title="Average CIA triad">
           <CIATriadChart data={ciaData} />
         </Card>
-        <Card>
+        <Card title="Average CVSS">
           <CVSSChart data={cvssData} />
         </Card>
-        <Card>
+        <Card title="Average Remediation Priority">
           <RemediationPriorityChart data={priorityData} />
         </Card>
       </div>

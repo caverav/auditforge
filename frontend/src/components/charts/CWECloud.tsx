@@ -13,7 +13,6 @@ type Props = {
 export const CWECloud: React.FC<Props> = ({ items, mostCommon }) => {
   return (
     <div className="bg-gray-900 p-6 rounded-lg h-[300px]">
-      <h3 className="text-lg font-semibold text-white mb-2">CWEs found</h3>
       <p className="text-sm text-gray-400 mb-4">Most common: {mostCommon}</p>
       <div className="flex flex-wrap gap-2 justify-center items-center">
         {items.map(item => (

@@ -22,7 +22,6 @@ type Props = {
 export const CVSSChart: React.FC<Props> = ({ data }) => {
   return (
     <div className="h-[300px] w-full">
-      <h3 className="text-lg font-semibold mb-4">Average CVSS</h3>
       <ResponsiveContainer height="100%" width="100%">
         <BarChart data={data} layout="vertical">
           <CartesianGrid strokeDasharray="3 3" />
