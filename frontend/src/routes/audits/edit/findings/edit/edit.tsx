@@ -5,7 +5,7 @@ import { toast } from 'sonner';
 
 import PrimaryButton from '../../../../../components/button/PrimaryButton';
 import Modal from '../../../../../components/modal/Modal';
-import { getFinding } from '../../../../../services/audits';
+import { deleteFinding, getFinding } from '../../../../../services/audits';
 import { getTypes } from '../../../../../services/vulnerabilities';
 import { DefinitionTab } from './DefinitionTab';
 import { DetailsTab } from './DetailsTab';
@@ -241,16 +241,16 @@ export const Edit = () => {
 
   const confirmDeleteFinding = async () => {
     try {
-      /* const response = await deleteVulnerability(itemDelete?._id ?? '');
+      const response = await deleteFinding(auditId, findingId);
       if (response.status === 'success') {
-        handleSuccessToast(t('msg.vulnerabilityDeletedOk'));
-      } */
+        toast.success(t('msg.findingDeleteOk'));
+      }
     } catch (error) {
-      toast.error(t('err.failedDeleteVulnerability'));
+      toast.error(t('err.failedDeleteFinding'));
       console.error('Error:', error);
     }
     setOpenModalDeleteFinding(false);
-    // void fetchVulnerabilities();
+    // void fetchFindings();
   };
 
   return (
@@ -259,17 +259,15 @@ export const Edit = () => {
         <div>
           <div className="fixed z-20">
             <Modal
-              cancelText={t('btn.stay')}
+              cancelText={t('btn.cancel')}
               disablehr
               isOpen={openModalDeleteFinding}
               onCancel={() => setOpenModalDeleteFinding(false)}
-              onSubmit={() => console.log('a')}
+              onSubmit={confirmDeleteFinding}
               submitText={t('btn.confirm')}
-              title={t('msg.confirmSuppression')}
+              title={t('msg.deleteFindingConfirm')}
             >
-              <span className="ml-3">
-                {t('msg.vulnerabilityWillBeDeleted')}
-              </span>
+              <span className="ml-3">{t('msg.deleteFindingNotice')}</span>
             </Modal>
           </div>
           <div className="m-4 bg-gray-900 rounded-lg p-4 flex flex-col gap-4">

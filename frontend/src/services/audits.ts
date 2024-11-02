@@ -804,3 +804,26 @@ export const getFinding = async (
     throw error;
   }
 };
+
+export const deleteFinding = async (
+  auditId: string,
+  findingId: string,
+): Promise<{ status: string; datas: string }> => {
+  try {
+    const response = await fetch(
+      `${API_URL}audits/${auditId}/findings/${findingId}`,
+      {
+        method: 'DELETE',
+        credentials: 'include',
+      },
+    );
+    if (!response.ok) {
+      throw networkError;
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
