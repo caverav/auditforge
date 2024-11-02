@@ -10,14 +10,9 @@ import { RemediationPriorityChart } from '@/components/charts/RemediationPriorit
 import { SeverityPieChart } from '@/components/charts/SeverityPieChart';
 import { TimePerAuditChart } from '@/components/charts/TimePerAuditChart';
 import SelectDropdown from '@/components/dropdown/SelectDropdown';
-import { Audit, Company, getAuditById } from '@/services/audits';
+import { getAuditById } from '@/services/audits';
 import { getAuditsByClientName } from '@/services/clients';
 import { getCompanies } from '@/services/data';
-
-type ClientData = {
-  status: string;
-  datas: Company[];
-};
 
 type ClientsInfo = {
   id: number;
