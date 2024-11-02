@@ -5,7 +5,11 @@ import { toast } from 'sonner';
 
 import PrimaryButton from '../../../../../components/button/PrimaryButton';
 import Modal from '../../../../../components/modal/Modal';
-import { deleteFinding, getFinding } from '../../../../../services/audits';
+import {
+  deleteFinding,
+  getFinding,
+  updateFinding,
+} from '../../../../../services/audits';
 import { getTypes } from '../../../../../services/vulnerabilities';
 import { DefinitionTab } from './DefinitionTab';
 import { DetailsTab } from './DetailsTab';
@@ -65,6 +69,8 @@ export const Edit = () => {
   const [remediationComplexity, setRemediationComplexity] =
     useState<ListItem | null>(null);
   const [priority, setPriority] = useState<ListItem | null>(null);
+
+  // const [titleRequiredAlert, setTitleRequiredAlert] = useState<boolean>(false);
 
   const onChangeText = (value: string, field: string) => {
     setFinding(prevFinding => {
@@ -253,6 +259,60 @@ export const Edit = () => {
     // void fetchFindings();
   };
 
+  const submitUpdateFinding = async () => {
+    if (finding === null) {
+      return null;
+    }
+    if (finding.title === '') {
+      toast.error(t('err.titleRequired'));
+      //TODO: Add required title
+      // setTitleRequiredAlert(true);
+      return;
+    }
+
+    const {
+      paragraphs,
+      cwes,
+      references,
+      customFields,
+      identifier,
+      title,
+      status,
+      _id,
+      ...rest
+    } = finding;
+
+    const filteredRest = Object.fromEntries(
+      Object.entries(rest).filter(
+        ([_, value]) =>
+          value !== '' && value !== '<p><br></p>' && value !== 'CVSS:3.1/',
+      ),
+    );
+
+    const filteredFinding: EditFinding = {
+      paragraphs,
+      cwes,
+      references,
+      customFields,
+      identifier,
+      title,
+      status,
+      _id,
+      ...filteredRest,
+    };
+
+    try {
+      const response = await updateFinding(auditId, findingId, filteredFinding);
+      if (response.status === 'success') {
+        toast.success(t('msg.customFieldUpdatedOk'));
+        //TODO: FETCH FINDINGS
+      }
+    } catch (error) {
+      toast.error(t('err.failedUpdateCustomField'));
+      console.error('Error:', error);
+    }
+  };
+
   return (
     <div className="">
       {finding ? (
@@ -280,7 +340,7 @@ export const Edit = () => {
                 >
                   <span>{t('btn.delete')}</span>
                 </PrimaryButton>
-                <PrimaryButton onClick={() => console.log('a')}>
+                <PrimaryButton onClick={submitUpdateFinding}>
                   <span>{t('btn.save')}</span>
                 </PrimaryButton>
               </div>
