@@ -28,42 +28,11 @@ type PostDescription = {
   vuln: string;
 };
 
-type TypeData = {
-  name: string;
-  locale: string;
-};
-
 type ListItem = {
   id: number;
   value: string;
   label?: string;
   locale?: string;
-};
-
-type ListItemCategory = {
-  id: number;
-  value: string;
-  label?: string;
-  isNull?: boolean;
-};
-
-type GetFinding = {
-  identifier: number;
-  title: string;
-  references: string[];
-  cwes: string[];
-  status: number;
-  _id: string;
-  paragraphs: string[];
-  customFields: string[];
-  description?: string;
-  observation?: string;
-  poc?: string;
-  remediation?: string;
-  cvssv3?: string;
-  remediationComplexity?: number;
-  priority?: number;
-  scope?: string;
 };
 
 type EditFinding = {
@@ -84,31 +53,6 @@ type EditFinding = {
   priority?: number | '';
   scope?: string | '';
   vulnType?: string | '';
-};
-
-type Details = {
-  locale: string;
-  title?: string;
-  vulnType?: string;
-  description?: string;
-  observation?: string;
-  remediation?: string;
-  cwes: string[];
-  references: string[];
-  customFields: string[];
-};
-
-type VulnerabilityData = {
-  _id: string;
-  cvssv3: string | null;
-  priority?: number | '';
-  remediationComplexity?: number | '';
-  details: Details[];
-  status?: number;
-  category?: string | null;
-  __v: number;
-  createdAt?: string;
-  updatedAt?: string;
 };
 
 type DefinitionTabProps = {
