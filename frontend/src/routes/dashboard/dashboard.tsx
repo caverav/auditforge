@@ -211,6 +211,7 @@ export const ClientDashboard = () => {
           { name: 'Low', value: 0, color: '#28a745' },
           { name: 'Informative', value: 0, color: '#6c757d' },
         ];
+        const tmpCweItems: { id: string; size: number }[] = [];
         for (const audit of data) {
           const auditData = await getAuditById(audit._id);
           for (const finding of auditData.datas.findings) {
@@ -220,11 +221,16 @@ export const ClientDashboard = () => {
 
             // cwe data
             for (const cwe of finding.cwes) {
-              const cweItem = cweItems.find(item => item.id === cwe);
-              setCweItems(prev => [
-                ...prev,
-                { id: cwe, size: cweItem ? cweItem.size + 1 : 1 },
-              ]);
+              const cweItem = tmpCweItems.find(item => item.id === cwe);
+              if (cweItem) {
+                tmpCweItems.map(item => {
+                  if (item.id === cwe) {
+                    item.size += 1;
+                  }
+                });
+              } else {
+                tmpCweItems.push({ id: cwe, size: 1 });
+              }
             }
             // time data
             // TODO: add time data
@@ -281,6 +287,7 @@ export const ClientDashboard = () => {
         });
         setPriorityData(tmpPriorityData);
         setCvssData(tmpCvssData);
+        setCweItems(tmpCweItems);
         setCiaData(tmpCiaData);
       } catch (error) {
         console.error('Error fetching audits:', error);

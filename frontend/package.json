@@ -26,6 +26,8 @@
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-switch": "^1.1.0",
     "@types/react-router-dom": "^5.3.3",
+    "@visx/text": "^3.3.0",
+    "@visx/wordcloud": "^3.3.0",
     "ae-cvss-calculator": "^1.0.2",
     "chart.js": "^4.4.4",
     "chartjs-plugin-annotation": "^3.0.1",
