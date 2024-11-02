@@ -192,25 +192,25 @@ export const ClientDashboard = () => {
           { subject: 'Availability', current: 0, target: 0 },
         ];
         let findingcount = 0;
-        const cvssData: CVSSData[] = [];
-        const priorityData: PriorityData[] = [];
+        const tmpCvssData: { name: string; score: number }[] = [];
+        const tmpPriorityData: {
+          name: string;
+          count: number;
+          color: string;
+        }[] = [];
+        const tmpSeverityData = [
+          { name: 'Critical', value: 0, color: '#dc3545' },
+          { name: 'High', value: 0, color: '#fd7e14' },
+          { name: 'Medium', value: 0, color: '#ffc107' },
+          { name: 'Low', value: 0, color: '#28a745' },
+          { name: 'Informative', value: 0, color: '#6c757d' },
+        ];
         for (const audit of data) {
           const auditData = await getAuditById(audit._id);
-          const tmpSeverityData = [
-            { name: 'Critical', value: 0, color: '#dc3545' },
-            { name: 'High', value: 0, color: '#fd7e14' },
-            { name: 'Medium', value: 0, color: '#ffc107' },
-            { name: 'Low', value: 0, color: '#28a745' },
-            { name: 'Informative', value: 0, color: '#6c757d' },
-          ];
           for (const finding of auditData.datas.findings) {
             // severity data
             const severity = severityByScore(cvssStringToScore(finding.cvssv3));
             tmpSeverityData[severity].value += 1;
-            setSeverityData(tmpSeverityData);
-            setTotalSeverity(
-              tmpSeverityData.reduce((acc, item) => acc + item.value, 0),
-            );
 
             // cwe data
             for (const cwe of finding.cwes) {
@@ -223,7 +223,7 @@ export const ClientDashboard = () => {
             // time data
             // TODO: add time data
 
-            // cia data
+            // cia data and cvss data
             if (finding.cvssv3) {
               tmpCiaData[0].current += cvssStringTo(
                 'confidentiality',
@@ -238,12 +238,33 @@ export const ClientDashboard = () => {
                 finding.cvssv3,
               );
               findingcount += 1;
+
+              const item = tmpCvssData.find(
+                item => item.name === auditData.datas.name,
+              );
+              if (item) {
+                item.score += cvssStringToScore(finding.cvssv3);
+              } else {
+                tmpCvssData.push({
+                  name: auditData.datas.name,
+                  score: cvssStringToScore(finding.cvssv3),
+                });
+              }
             }
           }
         }
+
+        setSeverityData(tmpSeverityData);
+        setTotalSeverity(
+          tmpSeverityData.reduce((acc, item) => acc + item.value, 0),
+        );
         tmpCiaData.forEach(item => {
           item.current /= findingcount;
         });
+        tmpCvssData.forEach(item => {
+          item.score /= findingcount;
+        });
+        setCvssData(tmpCvssData);
         setCiaData(tmpCiaData);
       } catch (error) {
         console.error('Error fetching audits:', error);
