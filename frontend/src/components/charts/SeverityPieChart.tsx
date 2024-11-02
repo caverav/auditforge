@@ -22,8 +22,8 @@ type Props = {
 export const SeverityPieChart: React.FC<Props> = ({ data, total }) => {
   return (
     <div className="h-[300px] w-full">
-      <p className="text-sm text-gray-500 mb-4">{total} found in total</p>
-      <ResponsiveContainer height="100%" width="100%">
+      <p className="text-sm text-gray-500">{total} found in total</p>
+      <ResponsiveContainer height="90%" width="90%">
         <PieChart>
           <Pie
             cx="50%"
