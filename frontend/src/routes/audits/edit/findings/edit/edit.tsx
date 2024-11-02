@@ -145,52 +145,72 @@ export const Edit = () => {
         locale: item.locale,
       }));
       setTypesList([...typeNames]);
+      return typeNames;
     } catch (error) {
       console.error('Error:', error);
+      return [];
     }
   };
 
-  const fetchFinding = useCallback(async () => {
-    try {
-      const findingGet = await getFinding(auditId, findingId);
-      const findingData = findingGet.datas;
-      //TODO: Fix vuln type if the type is not in the list
-      if (findingData.vulnType) {
-        setCurrentType({
-          id: typesList.length + 1,
-          label: findingData.vulnType,
-          value: findingData.vulnType,
+  const fetchFinding = useCallback(
+    async (typeList: ListItem[]) => {
+      try {
+        const findingGet = await getFinding(auditId, findingId);
+        const findingData = findingGet.datas;
+        if (findingData.vulnType) {
+          const typeFound = typeList.find(
+            typeIter => typeIter.value === findingData.vulnType,
+          );
+          if (!typeFound) {
+            const newType = {
+              id: typeList.length + 1,
+              label: findingData.vulnType,
+              value: findingData.vulnType,
+            };
+            setTypesList([...typeList, newType]);
+            setCurrentType(newType);
+          } else {
+            setCurrentType(typeFound);
+          }
+        }
+        setFinding({
+          identifier: findingData.identifier,
+          title: findingData.title,
+          references: findingData.references,
+          cwes: findingData.cwes,
+          status: findingData.status,
+          _id: findingData._id,
+          paragraphs: findingData.paragraphs,
+          customFields: findingData.customFields,
+          description: findingData.description ?? '',
+          observation: findingData.observation ?? '',
+          poc: findingData.poc ?? '',
+          remediation: findingData.remediation ?? '',
+          cvssv3: findingData.cvssv3 ?? '',
+          remediationComplexity: findingData.remediationComplexity ?? '',
+          priority: findingData.priority ?? '',
+          scope: findingData.scope ?? '',
+          vulnType: findingData.vulnType ?? '',
         });
+      } catch (error) {
+        console.error('Error:', error);
       }
-      setFinding({
-        identifier: findingData.identifier,
-        title: findingData.title,
-        references: findingData.references,
-        cwes: findingData.cwes,
-        status: findingData.status,
-        _id: findingData._id,
-        paragraphs: findingData.paragraphs,
-        customFields: findingData.customFields,
-        description: findingData.description ?? '',
-        observation: findingData.observation ?? '',
-        poc: findingData.poc ?? '',
-        remediation: findingData.remediation ?? '',
-        cvssv3: findingData.cvssv3 ?? '',
-        remediationComplexity: findingData.remediationComplexity ?? '',
-        priority: findingData.priority ?? '',
-        scope: findingData.scope ?? '',
-        vulnType: findingData.vulnType ?? '',
-      });
+    },
+    [auditId, findingId],
+  );
+
+  const fetchTypesAndFinding = useCallback(async () => {
+    try {
+      const typesList = await fetchTypes();
+      await fetchFinding(typesList);
     } catch (error) {
       console.error('Error:', error);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [auditId, findingId]);
+  }, [fetchFinding]);
 
   useEffect(() => {
-    void fetchTypes();
-    void fetchFinding();
-  }, [fetchFinding]);
+    void fetchTypesAndFinding();
+  }, [fetchTypesAndFinding]);
 
   const tabs: Tab[] = [
     {
