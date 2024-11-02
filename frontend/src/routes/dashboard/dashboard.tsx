@@ -1,3 +1,4 @@
+import { Cvss3P1 } from 'ae-cvss-calculator';
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 
@@ -12,7 +13,6 @@ import SelectDropdown from '@/components/dropdown/SelectDropdown';
 import { Audit, Company, getAuditById } from '@/services/audits';
 import { getAuditsByClientName } from '@/services/clients';
 import { getCompanies } from '@/services/data';
-import { Cvss3P1 } from 'ae-cvss-calculator';
 
 type ClientData = {
   status: string;
@@ -192,12 +192,18 @@ export const ClientDashboard = () => {
           { subject: 'Availability', current: 0, target: 0 },
         ];
         let findingcount = 0;
+        let prioritycount = 0;
         const tmpCvssData: { name: string; score: number }[] = [];
         const tmpPriorityData: {
           name: string;
           count: number;
           color: string;
-        }[] = [];
+        }[] = [
+          { name: 'Low', count: 0, color: '#28a745' },
+          { name: 'Medium', count: 0, color: '#ffc107' },
+          { name: 'High', count: 0, color: '#fd7e14' },
+          { name: 'Urgent', count: 0, color: '#dc3545' },
+        ];
         const tmpSeverityData = [
           { name: 'Critical', value: 0, color: '#dc3545' },
           { name: 'High', value: 0, color: '#fd7e14' },
@@ -223,7 +229,7 @@ export const ClientDashboard = () => {
             // time data
             // TODO: add time data
 
-            // cia data and cvss data
+            // cia data and cvss data and priority data
             if (finding.cvssv3) {
               tmpCiaData[0].current += cvssStringTo(
                 'confidentiality',
@@ -250,6 +256,12 @@ export const ClientDashboard = () => {
                   score: cvssStringToScore(finding.cvssv3),
                 });
               }
+
+              const priority = finding.priority;
+              if (priority) {
+                tmpPriorityData[priority].count += 1;
+                prioritycount += 1;
+              }
             }
           }
         }
@@ -264,6 +276,10 @@ export const ClientDashboard = () => {
         tmpCvssData.forEach(item => {
           item.score /= findingcount;
         });
+        tmpPriorityData.forEach(item => {
+          item.count /= prioritycount;
+        });
+        setPriorityData(tmpPriorityData);
         setCvssData(tmpCvssData);
         setCiaData(tmpCiaData);
       } catch (error) {
