@@ -125,6 +125,8 @@ export const DefinitionTab: React.FC<DefinitionTabProps> = ({
             name="title"
             onChange={value => onChangeText(value, 'title')}
             placeholder=""
+            requiredAlert
+            requiredField
             type="text"
             value={finding.title}
           />

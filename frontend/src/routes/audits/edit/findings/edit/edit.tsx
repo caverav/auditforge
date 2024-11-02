@@ -70,8 +70,6 @@ export const Edit = () => {
     useState<ListItem | null>(null);
   const [priority, setPriority] = useState<ListItem | null>(null);
 
-  // const [titleRequiredAlert, setTitleRequiredAlert] = useState<boolean>(false);
-
   const onChangeText = (value: string, field: string) => {
     setFinding(prevFinding => {
       if (!prevFinding) {
@@ -261,12 +259,10 @@ export const Edit = () => {
 
   const submitUpdateFinding = async () => {
     if (finding === null) {
-      return null;
+      return;
     }
     if (finding.title === '') {
       toast.error(t('err.titleRequired'));
-      //TODO: Add required title
-      // setTitleRequiredAlert(true);
       return;
     }
 
