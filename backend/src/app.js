@@ -156,6 +156,8 @@ require('./routes/image')(app);
 require('./routes/settings')(app);
 require('./routes/cwe')(app);
 require('./routes/cvss')(app);
+require('./routes/check-cwe-update')(app);
+require('./routes/update-cwe-model')(app);
 
 app.get('*', function (req, res) {
   res.status(404).json({ status: 'error', data: 'Route undefined' });
