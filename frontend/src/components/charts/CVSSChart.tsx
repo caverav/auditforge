@@ -1,14 +1,15 @@
 import React from 'react';
 import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  ReferenceLine,
-  ResponsiveContainer,
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
   Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts';
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip);
 
 type CVSSData = {
   name: string;
@@ -20,18 +21,40 @@ type Props = {
 };
 
 export const CVSSChart: React.FC<Props> = ({ data }) => {
+  const chartData = {
+    labels: data.map(d => d.name),
+    datasets: [
+      {
+        data: data.map(d => d.score),
+        backgroundColor: '#8884d8',
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    indexAxis: 'y' as const,
+    plugins: {
+      legend: {
+        display: false,
+      },
+    },
+    scales: {
+      x: {
+        min: 0,
+        max: 10,
+        grid: {
+          drawOnChartArea: true,
+        },
+      },
+    },
+  };
+
   return (
     <div className="h-[300px] w-full">
-      <ResponsiveContainer height="100%" width="100%">
-        <BarChart data={data} layout="vertical">
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis domain={[0, 10]} type="number" />
-          <YAxis dataKey="name" type="category" />
-          <Tooltip />
-          <ReferenceLine label="Average CVSS 5.0" stroke="#666" x={5} />
-          <Bar dataKey="score" fill="#8884d8" />
-        </BarChart>
-      </ResponsiveContainer>
+      <h3 className="text-lg font-semibold mb-4">Average CVSS</h3>
+      <Bar data={chartData} options={options} />
     </div>
   );
 };

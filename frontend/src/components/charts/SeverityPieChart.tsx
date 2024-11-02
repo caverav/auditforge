@@ -1,12 +1,8 @@
 import React from 'react';
-import {
-  Cell,
-  Legend,
-  Pie,
-  PieChart,
-  ResponsiveContainer,
-  Tooltip,
-} from 'recharts';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Doughnut } from 'react-chartjs-2';
+
+ChartJS.register(ArcElement, Tooltip, Legend);
 
 type SeverityData = {
   name: string;
@@ -20,28 +16,35 @@ type Props = {
 };
 
 export const SeverityPieChart: React.FC<Props> = ({ data, total }) => {
+  const chartData = {
+    labels: data.map(d => d.name),
+    datasets: [
+      {
+        data: data.map(d => d.value),
+        backgroundColor: data.map(d => d.color),
+        borderColor: data.map(d => d.color),
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'bottom' as const,
+      },
+    },
+  };
+
   return (
     <div className="h-[300px] w-full">
-      <p className="text-sm text-gray-500">{total} found in total</p>
-      <ResponsiveContainer height="90%" width="90%">
-        <PieChart>
-          <Pie
-            cx="50%"
-            cy="50%"
-            data={data}
-            dataKey="value"
-            innerRadius={60}
-            outerRadius={80}
-            paddingAngle={5}
-          >
-            {data.map((entry, index) => (
-              <Cell fill={entry.color} key={`cell-${index}`} />
-            ))}
-          </Pie>
-          <Tooltip />
-          <Legend />
-        </PieChart>
-      </ResponsiveContainer>
+      <h3 className="text-lg font-semibold mb-2">
+        Vulnerabilities by severity
+      </h3>
+      <p className="text-sm text-gray-500 mb-4">{total} found in total</p>
+      <Doughnut data={chartData} options={options} />
     </div>
   );
 };

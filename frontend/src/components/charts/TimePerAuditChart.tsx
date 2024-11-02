@@ -1,14 +1,23 @@
 import React from 'react';
 import {
-  Bar,
-  BarChart,
-  CartesianGrid,
-  Legend,
-  ResponsiveContainer,
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
   Tooltip,
-  XAxis,
-  YAxis,
-} from 'recharts';
+  Legend,
+} from 'chart.js';
+import { Bar } from 'react-chartjs-2';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend,
+);
 
 type AuditTime = {
   name: string;
@@ -21,23 +30,44 @@ type Props = {
 };
 
 export const TimePerAuditChart: React.FC<Props> = ({ data }) => {
+  const chartData = {
+    labels: data.map(d => d.name),
+    datasets: [
+      {
+        label: 'Time of execution',
+        data: data.map(d => d.execution),
+        backgroundColor: '#82ca9d',
+      },
+      {
+        label: 'Time of remediation',
+        data: data.map(d => d.remediation),
+        backgroundColor: '#8884d8',
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        position: 'top' as const,
+      },
+    },
+    scales: {
+      x: {
+        stacked: true,
+      },
+      y: {
+        stacked: true,
+      },
+    },
+  };
+
   return (
     <div className="h-[300px] w-full">
-      <ResponsiveContainer height="100%" width="100%">
-        <BarChart data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip />
-          <Legend />
-          <Bar dataKey="execution" fill="#82ca9d" name="Time of execution" />
-          <Bar
-            dataKey="remediation"
-            fill="#8884d8"
-            name="Time of remediation"
-          />
-        </BarChart>
-      </ResponsiveContainer>
+      <h3 className="text-lg font-semibold mb-4">Times per audit</h3>
+      <Bar data={chartData} options={options} />
     </div>
   );
 };

@@ -1,11 +1,23 @@
 import React from 'react';
 import {
-  PolarAngleAxis,
-  PolarGrid,
-  Radar,
-  RadarChart,
-  ResponsiveContainer,
-} from 'recharts';
+  Chart as ChartJS,
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Radar } from 'react-chartjs-2';
+
+ChartJS.register(
+  RadialLinearScale,
+  PointElement,
+  LineElement,
+  Filler,
+  Tooltip,
+  Legend,
+);
 
 type CIAData = {
   subject: string;
@@ -18,28 +30,42 @@ type Props = {
 };
 
 export const CIATriadChart: React.FC<Props> = ({ data }) => {
+  const chartData = {
+    labels: data.map(d => d.subject),
+    datasets: [
+      {
+        label: 'Current',
+        data: data.map(d => d.current),
+        backgroundColor: 'rgba(255, 77, 77, 0.5)',
+        borderColor: 'rgb(255, 77, 77)',
+        borderWidth: 1,
+      },
+      {
+        label: 'Target',
+        data: data.map(d => d.target),
+        backgroundColor: 'rgba(130, 202, 157, 0.5)',
+        borderColor: 'rgb(130, 202, 157)',
+        borderWidth: 1,
+      },
+    ],
+  };
+
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      r: {
+        min: 0,
+        max: 100,
+        beginAtZero: true,
+      },
+    },
+  };
+
   return (
     <div className="h-[300px] w-full">
-      <ResponsiveContainer height="100%" width="100%">
-        <RadarChart cx="50%" cy="50%" data={data} outerRadius="80%">
-          <PolarGrid />
-          <PolarAngleAxis dataKey="subject" />
-          <Radar
-            dataKey="current"
-            fill="#ff4d4d"
-            fillOpacity={0.5}
-            name="Current"
-            stroke="#ff4d4d"
-          />
-          <Radar
-            dataKey="target"
-            fill="#82ca9d"
-            fillOpacity={0.5}
-            name="Target"
-            stroke="#82ca9d"
-          />
-        </RadarChart>
-      </ResponsiveContainer>
+      <h3 className="text-lg font-semibold mb-4">Average CIA triad</h3>
+      <Radar data={chartData} options={options} />
     </div>
   );
 };

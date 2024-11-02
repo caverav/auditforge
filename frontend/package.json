@@ -44,7 +44,6 @@
     "react-i18next": "^15.0.0",
     "react-quill-new": "^3.3.0",
     "react-router-dom": "^6.25.1",
-    "recharts": "^2.13.3",
     "sonner": "^1.5.0",
     "tailwind-merge": "^2.5.2",
     "tailwindcss-animate": "^1.0.7"
