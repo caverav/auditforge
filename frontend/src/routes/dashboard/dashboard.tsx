@@ -187,6 +187,7 @@ export const ClientDashboard = () => {
           execution: number;
           remediation: number;
         }[] = [];
+
         for (const audit of data) {
           const auditData = await getAuditById(audit._id);
           tmpTimeData.push({
@@ -258,11 +259,6 @@ export const ClientDashboard = () => {
           }
         }
 
-        setTimeData(tmpTimeData);
-        setSeverityData(tmpSeverityData);
-        setTotalSeverity(
-          tmpSeverityData.reduce((acc, item) => acc + item.value, 0),
-        );
         tmpCiaData.forEach(item => {
           item.current /= findingcount;
         });
@@ -272,6 +268,11 @@ export const ClientDashboard = () => {
         tmpPriorityData.forEach(item => {
           item.count /= prioritycount;
         });
+        setTimeData(tmpTimeData);
+        setSeverityData(tmpSeverityData);
+        setTotalSeverity(
+          tmpSeverityData.reduce((acc, item) => acc + item.value, 0),
+        );
         setPriorityData(tmpPriorityData);
         setCvssData(tmpCvssData);
         setCweItems(tmpCweItems);
