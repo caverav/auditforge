@@ -142,14 +142,14 @@ export const ClientDashboard = () => {
         <Card title="Vulnerabilities by severity">
           <SeverityPieChart data={severityData} total={23} />
         </Card>
+        <Card title="Times per audit">
+          <TimePerAuditChart data={timeData} />
+        </Card>
         <Card title="CWEs found">
           <CWECloud
             items={cweItems}
             mostCommon="CWE-20 'Improper Input Validation'"
           />
-        </Card>
-        <Card title="Times per audit">
-          <TimePerAuditChart data={timeData} />
         </Card>
         <Card title="Average CIA triad">
           <CIATriadChart data={ciaData} />

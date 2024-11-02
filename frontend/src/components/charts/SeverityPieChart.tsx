@@ -41,7 +41,7 @@ export const SeverityPieChart: React.FC<Props> = ({ data, total }) => {
   return (
     <>
       <p className="text-sm text-gray-500 mb-4">{total} found in total</p>
-      <div className="w-1/2 mx-auto">
+      <div className="h-auto w-fit mx-auto">
         <Doughnut data={chartData} options={options} />
       </div>
     </>
