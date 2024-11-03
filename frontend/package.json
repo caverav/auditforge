@@ -24,7 +24,7 @@
     "@radix-ui/react-label": "^2.1.0",
     "@radix-ui/react-popover": "^1.1.2",
     "@radix-ui/react-slot": "^1.1.0",
-    "@radix-ui/react-switch": "^1.1.0",
+    "@radix-ui/react-switch": "^1.1.1",
     "@types/react-router-dom": "^5.3.3",
     "ae-cvss-calculator": "^1.0.2",
     "chart.js": "^4.4.4",
