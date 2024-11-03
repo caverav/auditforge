@@ -165,7 +165,7 @@ export const DefinitionTab: React.FC<DefinitionTabProps> = ({
           />
           <TextArea
             id=""
-            label={t('cwes')}
+            label={t('CWEs')}
             name="cwes"
             onChange={value => onChangeArray(value, 'cwes')}
             placeholder=""
