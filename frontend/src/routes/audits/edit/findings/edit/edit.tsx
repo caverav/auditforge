@@ -54,6 +54,19 @@ type Tab = {
   content: React.ReactNode;
 };
 
+const complexityOptions = [
+  { id: 1, value: t('easy') },
+  { id: 2, value: t('medium') },
+  { id: 3, value: t('complex') },
+];
+
+const priorityOptions = [
+  { id: 1, value: t('low') },
+  { id: 2, value: t('medium') },
+  { id: 3, value: t('high') },
+  { id: 4, value: t('urgent') },
+];
+
 //TODO: fix update props if change in general
 export const Edit = () => {
   const { title, auditType, locale, handlerFindings } = useAuditContext();
@@ -194,8 +207,32 @@ export const Edit = () => {
           } else {
             setCurrentType(typeFound);
           }
+        } else {
+          setCurrentType(null);
         }
-        //TODO: Add remediationComplexity and priority
+        if (findingData.remediationComplexity) {
+          const remediationComplexityFound = complexityOptions.find(
+            (complexityIter: ListItem) =>
+              complexityIter.id === findingData.remediationComplexity,
+          );
+          if (remediationComplexityFound) {
+            setRemediationComplexity(remediationComplexityFound);
+          }
+        } else {
+          setRemediationComplexity(null);
+        }
+        if (findingData.priority) {
+          const priorityFound = priorityOptions.find(
+            (priorityIter: ListItem) =>
+              priorityIter.id === findingData.priority,
+          );
+          if (priorityFound) {
+            setPriority(priorityFound);
+          }
+        } else {
+          setPriority(null);
+        }
+
         if (findingData.status === 0) {
           setCurrentStatus(true);
         } else {
