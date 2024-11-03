@@ -291,7 +291,7 @@ export const ClientDashboard = () => {
               mostCommon={cweItems.sort((a, b) => b.size - a.size)[0]?.id}
             />
           </Card>
-          <Card title="Average CIA triad">
+          <Card title={t('averageCiaTriad')}>
             <CIATriadChart data={ciaData} />
           </Card>
           <Card title="Average CVSS">
