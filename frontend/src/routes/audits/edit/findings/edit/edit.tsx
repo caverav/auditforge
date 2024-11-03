@@ -5,6 +5,7 @@ import { toast } from 'sonner';
 
 import PrimaryButton from '../../../../../components/button/PrimaryButton';
 import Modal from '../../../../../components/modal/Modal';
+import PrimarySwitch from '../../../../../components/switch/PrimarySwitch';
 import {
   deleteFinding,
   getFinding,
@@ -74,6 +75,8 @@ export const Edit = () => {
     useState<ListItem | null>(null);
   const [priority, setPriority] = useState<ListItem | null>(null);
 
+  const [currentStatus, setCurrentStatus] = useState<boolean>(false);
+
   const onChangeText = (value: string, field: string) => {
     setFinding(prevFinding => {
       if (!prevFinding) {
@@ -103,19 +106,6 @@ export const Edit = () => {
     });
   };
 
-  const handlerRecommendCWE = (value: string[]) => {
-    setFinding(prevFinding => {
-      if (!prevFinding) {
-        return null;
-      }
-
-      return {
-        ...prevFinding,
-        cwes: [...value, ...prevFinding.cwes], // Aseguramos que solo contenga `string[]`
-      };
-    });
-  };
-
   const onChangeListItem = (value: ListItem, field: string) => {
     setFinding(prevFinding => {
       if (!prevFinding) {
@@ -138,6 +128,32 @@ export const Edit = () => {
       };
     });
   };
+
+  const handlerRecommendCWE = (value: string[]) => {
+    setFinding(prevFinding => {
+      if (!prevFinding) {
+        return null;
+      }
+
+      return {
+        ...prevFinding,
+        cwes: [...value, ...prevFinding.cwes], // Aseguramos que solo contenga `string[]`
+      };
+    });
+  };
+
+  useEffect(() => {
+    setFinding(prevFinding => {
+      if (!prevFinding) {
+        return null;
+      }
+
+      return {
+        ...prevFinding,
+        status: currentStatus ? 0 : 1,
+      };
+    });
+  }, [currentStatus]);
 
   const fetchTypes = useCallback(async () => {
     try {
@@ -178,6 +194,10 @@ export const Edit = () => {
           } else {
             setCurrentType(typeFound);
           }
+        }
+        //TODO: Add remediationComplexity and priority
+        if (findingData.status === 0) {
+          setCurrentStatus(true);
         }
         setFinding({
           identifier: findingData.identifier,
@@ -360,9 +380,20 @@ export const Edit = () => {
           </div>
           <div className="m-4 bg-gray-900 rounded-lg p-4 flex flex-col gap-4">
             <div className="flex justify-between">
-              <span className="font-bold">
-                {title} ({auditType})
-              </span>
+              <div className="flex flex-col gap-2 md:flex-row md:gap-4">
+                <span className="font-bold">
+                  {title} ({auditType})
+                </span>
+                <div className="w-full h-px md:w-0.5 md:h-full bg-gray-600" />
+                <div>
+                  <PrimarySwitch
+                    enabled={currentStatus}
+                    label={t('completed')}
+                    onChange={setCurrentStatus}
+                  />
+                </div>
+              </div>
+
               <div className="flex flex-col gap-4 md:flex-row">
                 <PrimaryButton
                   color="red"
