@@ -14,9 +14,9 @@ import { checkUpdateCWE, updateCWEModel } from '@/services/settings';
 import clsx from 'clsx';
 
 export const ModelUpdateContainer = () => {
-  const [isOpenModal, setIsOpenModal] = useState(false);
-  const [isUpdateAvailable, setIsUpdateAvailable] = useState(false);
-  const [isUpdating, setIsUpdating] = useState(false);
+  const [isOpenModal, setIsOpenModal] = useState<boolean>(false);
+  const [isUpdateAvailable, setIsUpdateAvailable] = useState<boolean>(false);
+  const [isUpdating, setIsUpdating] = useState<boolean>(false);
 
   const { t } = useTranslation();
 
