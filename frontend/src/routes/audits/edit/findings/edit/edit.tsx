@@ -139,7 +139,7 @@ export const Edit = () => {
     });
   };
 
-  const fetchTypes = async () => {
+  const fetchTypes = useCallback(async () => {
     try {
       const dataType = await getTypes();
       const typeNames = dataType.datas
@@ -156,7 +156,7 @@ export const Edit = () => {
       console.error('Error:', error);
       return [];
     }
-  };
+  }, [locale]);
 
   const fetchFinding = useCallback(
     async (typeList: ListItem[]) => {
@@ -212,7 +212,7 @@ export const Edit = () => {
     } catch (error) {
       console.error('Error:', error);
     }
-  }, [fetchFinding]);
+  }, [fetchFinding, fetchTypes]);
 
   useEffect(() => {
     void fetchTypesAndFinding();
@@ -288,7 +288,6 @@ export const Edit = () => {
       console.error('Error:', error);
     }
     setOpenModalDeleteFinding(false);
-    // void fetchFindings();
   };
 
   const submitUpdateFinding = async () => {
@@ -335,7 +334,6 @@ export const Edit = () => {
       const response = await updateFinding(auditId, findingId, filteredFinding);
       if (response.status === 'success') {
         toast.success(t('msg.customFieldUpdatedOk'));
-        //TODO: FETCH FINDINGS
       }
     } catch (error) {
       toast.error(t('err.failedUpdateCustomField'));
