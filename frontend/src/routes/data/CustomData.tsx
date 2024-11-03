@@ -6,6 +6,7 @@ import { AuditTypes } from './CustomData/AuditTypes';
 import { CustomFields } from './CustomData/CustomFields';
 import { CustomSections } from './CustomData/CustomSections';
 import { Languages } from './CustomData/Languages';
+import { VulnerabilityTypes } from './CustomData/VulnerabilityTypes';
 
 export const CustomData: React.FC = () => {
   const { t } = useTranslation();
@@ -26,8 +27,8 @@ export const CustomData: React.FC = () => {
     {
       id: 4,
       title: t('vulnerabilityTypes'),
-      cardTitle: t('auditTypesUsedInAudits'),
-      cardChildren: <>{t('vulnerabilityTypes')}</>,
+      cardTitle: t('createVulnerabilityTypes'),
+      cardChildren: <VulnerabilityTypes />,
     },
     {
       id: 5,
