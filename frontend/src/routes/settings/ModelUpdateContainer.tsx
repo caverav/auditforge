@@ -72,7 +72,9 @@ export const ModelUpdateContainer = () => {
               'bg-stone-500': isUpdating,
             },
           )}
-          onClick={() => setIsOpenModal(true)}
+          onClick={() => {
+            !isUpdating && setIsOpenModal(true);
+          }}
           type="button"
         >
           <HoverCard>
