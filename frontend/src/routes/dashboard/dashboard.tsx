@@ -24,7 +24,7 @@ const cvssStringTo = (
   field: 'integrity' | 'availability' | 'confidentiality',
   cvssVector: string,
 ) => {
-  const values: Record<string, number> = { H: 3, M: 2, L: 1, N: 0 } as const;
+  const values: Record<string, number> = { H: 3, L: 1, N: 0 } as const;
   const substrings = {
     integrity: 35,
     availability: 39,
