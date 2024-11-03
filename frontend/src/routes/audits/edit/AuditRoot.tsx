@@ -9,6 +9,7 @@ import { getCustomSections, Section } from '@/services/data';
 
 import AuditSidebar from '../../../components/navbar/AuditSidebar';
 import { AuditSection, Finding, getAuditById } from '../../../services/audits';
+import { AuditProvider } from './AuditContext';
 
 export const AuditRoot = () => {
   const { t } = useTranslation();
@@ -70,6 +71,9 @@ export const AuditRoot = () => {
   const [auditSections, setAuditSections] = useState<AuditSection[]>([]);
   const [sections, setSections] = useState<Section[]>([]);
   const [isListVisible, setIsListVisible] = useState(false);
+  const [nameAudit, setNameAudit] = useState<string>('');
+  const [auditType, setAuditType] = useState<string>('');
+  const [currentLanguage, setCurrentLanguage] = useState<string>('');
 
   useEffect(() => {
     getCustomSections()
@@ -114,6 +118,9 @@ export const AuditRoot = () => {
             };
           }),
         );
+        setNameAudit(audit.datas.name);
+        setAuditType(audit.datas.auditType);
+        setCurrentLanguage(audit.datas.language);
       })
       .catch(console.error);
   }, [auditId, sections]);
@@ -126,6 +133,12 @@ export const AuditRoot = () => {
   ];
 
   const connectedUsers: { id: number; name: string; online: boolean }[] = [];
+
+  const auditData = {
+    title: nameAudit,
+    auditType,
+    locale: currentLanguage,
+  };
 
   return (
     <div className="flex overflow-hidden">
@@ -149,7 +162,9 @@ export const AuditRoot = () => {
         sortOrderOptions={sortOrderOptions}
       />
       <div className="flex-1 overflow-auto">
-        <Outlet />
+        <AuditProvider value={auditData}>
+          <Outlet />
+        </AuditProvider>
       </div>
     </div>
   );
