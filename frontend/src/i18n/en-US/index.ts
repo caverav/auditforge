@@ -735,4 +735,5 @@ export default {
   recommendCVSS: 'Recommend CVSS',
   cleanRecommendations: 'Clean Recommendations',
   errorRecommendingCVSS: 'Error generating recommendation',
+  mostCommon: 'Most common',
 };
