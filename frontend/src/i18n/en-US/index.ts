@@ -13,6 +13,7 @@ export default {
     data: 'Data',
   },
   btn: {
+    dismiss: 'Dismiss',
     cancel: 'Cancel',
     confirm: 'Confirm',
     create: 'Create',
@@ -162,6 +163,7 @@ export default {
     passwordsDoNotMatch: 'Passwords do not match',
     auditCustomSectionsSaveSuccess:
       'The custom sections have been saved successfully',
+    updateCWEModelOk: 'CWE Model Updated Successfully',
   },
   err: {
     notDefinedLanguage: 'Not defined for this language',
@@ -202,6 +204,7 @@ export default {
     passwordsDontMatch: 'Passwords do not match',
     errorGeneratingPdf: 'Failed exporting audit to pdf',
     errorSavingAuditCustomSections: 'Failed saving the audit custom sections',
+    updateCWEModelFailed: 'Failed Updating CWE Model',
   },
   cvss: {
     title: 'CVSS v3.1 Base Score',
@@ -733,4 +736,8 @@ export default {
   recommendCVSS: 'Recommend CVSS',
   cleanRecommendations: 'Clean Recommendations',
   errorRecommendingCVSS: 'Error generating recommendation',
+  updatingCWEModel: 'Updating CWE Model',
+  CWEModelUpdateText:
+    'A new version of the CWE Model is available, do you want to upgrade?',
+  updateAvailable: 'Update Available',
 };
