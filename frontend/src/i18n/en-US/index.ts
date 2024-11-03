@@ -737,4 +737,5 @@ export default {
   errorRecommendingCVSS: 'Error generating recommendation',
   mostCommon: 'Most common',
   foundInTotal: 'Found in total',
+  vulnBySeverity: 'Vulnerabilities by severity',
 };
