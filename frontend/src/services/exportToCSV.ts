@@ -44,6 +44,7 @@ export const exportToCSV = (
           for (let i = 0; i < selectedDisplays.length; i++) {
             if (
               selectedDisplays[i] === 'remediation-complexity' &&
+              finding.remediationComplexity &&
               finding.remediationComplexity >= 1 &&
               finding.remediationComplexity <= 3
             ) {
@@ -66,6 +67,7 @@ export const exportToCSV = (
               }
             } else if (
               selectedDisplays[i] === 'remediation-priority' &&
+              finding.priority &&
               finding.priority >= 1 &&
               finding.priority <= 4
             ) {
