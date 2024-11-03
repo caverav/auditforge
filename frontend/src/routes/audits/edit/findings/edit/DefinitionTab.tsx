@@ -59,17 +59,18 @@ type DefinitionTabProps = {
   currentType: ListItem | null;
   finding: EditFinding;
   handlerRecommendCWE: (value: string[]) => void;
+  locale: string;
   onChangeArray: (value: string, field: string) => void;
   onChangeText: (value: string, field: string) => void;
   onChangeListItem: (value: ListItem, field: string) => void;
   typesList: ListItem[];
 };
 
-// TODO: add language prop
 export const DefinitionTab: React.FC<DefinitionTabProps> = ({
   currentType,
   finding,
   handlerRecommendCWE,
+  locale,
   onChangeArray,
   onChangeText,
   onChangeListItem,
@@ -98,8 +99,7 @@ export const DefinitionTab: React.FC<DefinitionTabProps> = ({
       const sortedResult = responseCWE.result.sort(
         (a: CWEData, b: CWEData) => b.score - a.score,
       );
-      //TODO: Add current language to locale
-      const recommendedCWEs = GetCWENameByLanguage('es-ES', sortedResult);
+      const recommendedCWEs = GetCWENameByLanguage(locale, sortedResult);
       setCweRecommended(recommendedCWEs);
     } catch (error) {
       console.error('Error:', error);
