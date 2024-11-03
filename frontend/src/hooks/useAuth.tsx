@@ -60,9 +60,12 @@ const useAuth = () => {
       if (responseData.status === 'success') {
         setIsAuthenticated(true);
         navigate('/audits', { replace: true });
+        return true;
       }
+      return false;
     } catch (error) {
       console.error(error);
+      return false;
     }
   };
 
@@ -113,10 +116,12 @@ const useAuth = () => {
       const responseData = await response.json();
       if (responseData.status === 'success') {
         navigate('/login', { replace: true });
+        return true;
       }
     } catch (error) {
       console.error(error);
     }
+    return false;
   };
 
   return {

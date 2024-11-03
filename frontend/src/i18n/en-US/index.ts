@@ -202,6 +202,8 @@ export default {
     passwordsDontMatch: 'Passwords do not match',
     errorGeneratingPdf: 'Failed exporting audit to pdf',
     errorSavingAuditCustomSections: 'Failed saving the audit custom sections',
+    createUser: 'Error creating user',
+    confirmPasswordDifferents: 'Passwords do not match',
   },
   cvss: {
     title: 'CVSS v3.1 Base Score',
