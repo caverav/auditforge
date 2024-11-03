@@ -279,7 +279,7 @@ export const ClientDashboard = () => {
 
       {currentClient.value === '' ? null : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
-          <Card title="Vulnerabilities by severity">
+          <Card title={t('vulnBySeverity')}>
             <SeverityPieChart data={severityData} total={totalSeverity} />
           </Card>
           <Card title="Times per audit">
