@@ -83,7 +83,7 @@ export const Dashboard = () => {
       setIsExportModalOpen(false);
 
       try {
-        await exportToCSV(auditName, selectedDisplays, auditId ?? '');
+        exportToCSV(auditName, selectedDisplays, auditId ?? '');
       } catch (err) {
         toast.error(t('err.exportDashboardCSV'));
         console.error(err);
