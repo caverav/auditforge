@@ -198,6 +198,8 @@ export const Edit = () => {
         //TODO: Add remediationComplexity and priority
         if (findingData.status === 0) {
           setCurrentStatus(true);
+        } else {
+          setCurrentStatus(false);
         }
         setFinding({
           identifier: findingData.identifier,
@@ -354,6 +356,7 @@ export const Edit = () => {
       const response = await updateFinding(auditId, findingId, filteredFinding);
       if (response.status === 'success') {
         toast.success(t('msg.customFieldUpdatedOk'));
+        await handlerFindings();
       }
     } catch (error) {
       toast.error(t('err.failedUpdateCustomField'));
