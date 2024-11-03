@@ -1,6 +1,6 @@
 import { t } from 'i18next';
 import { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'sonner';
 
 import PrimaryButton from '../../../../../components/button/PrimaryButton';
@@ -58,6 +58,8 @@ export const Edit = () => {
   const { title, auditType, locale, handlerFindings } = useAuditContext();
   const findingId = useParams().findingId ?? '';
   const auditId = useParams().auditId ?? '';
+  const navigate = useNavigate();
+
   const [openModalDeleteFinding, setOpenModalDeleteFinding] = useState(false);
 
   const [activeTab, setActiveTab] = useState(0);
@@ -275,6 +277,11 @@ export const Edit = () => {
       if (response.status === 'success') {
         toast.success(t('msg.findingDeleteOk'));
         const newFindings = await handlerFindings();
+        if (newFindings.length === 0) {
+          navigate(`/audits/${auditId}/findings/add`);
+        } else {
+          navigate(`/audits/${auditId}/findings/${newFindings[0].identifier}`);
+        }
       }
     } catch (error) {
       toast.error(t('err.failedDeleteFinding'));
