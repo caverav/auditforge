@@ -48,12 +48,12 @@ export const CWECloud: React.FC<Props> = ({ items, mostCommon }) => {
           words={itemsToWordDatum(items)}
         >
           {cloudWords =>
-            cloudWords.map((w, _) => (
+            cloudWords.map((w, i) => (
               <Text
                 fill="white"
                 fontFamily={w.font}
                 fontSize={w.size}
-                key={w.text}
+                key={`${w.text}-${i}`}
                 textAnchor="middle"
                 transform={`translate(${w.x}, ${w.y}) rotate(${w.rotate})`}
               >
