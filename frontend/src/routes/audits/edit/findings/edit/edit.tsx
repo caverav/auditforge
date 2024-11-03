@@ -1,3 +1,4 @@
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 import { t } from 'i18next';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -16,7 +17,6 @@ import { useAuditContext } from '../../useAuditContext';
 import { DefinitionTab } from './DefinitionTab';
 import { DetailsTab } from './DetailsTab';
 import { ProofsTab } from './ProofsTab';
-import { ArrowPathIcon } from '@heroicons/react/24/outline';
 
 type TypeData = {
   name: string;
