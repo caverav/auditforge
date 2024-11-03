@@ -738,4 +738,5 @@ export default {
   mostCommon: 'Most common',
   foundInTotal: 'Found in total',
   vulnBySeverity: 'Vulnerabilities by severity',
+  timesPerAudit: 'Times per audit',
 };
