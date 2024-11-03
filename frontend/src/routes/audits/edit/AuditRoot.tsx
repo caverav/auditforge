@@ -28,6 +28,7 @@ export const AuditRoot = () => {
       category: string;
       severity: string;
       identifier: string;
+      status: number;
     }[]
   >([]);
 
@@ -112,9 +113,11 @@ export const AuditRoot = () => {
             return {
               id: finding.identifier,
               name: finding.title,
+              //TODO: Change hardcoded category to the real category
               category: 'No Category',
               severity: cvssStringToSeverity(finding.cvssv3),
               identifier: finding._id,
+              status: finding.status,
             };
           }),
         );
