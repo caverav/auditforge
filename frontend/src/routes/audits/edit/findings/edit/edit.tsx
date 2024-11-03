@@ -127,10 +127,10 @@ export const Edit = () => {
       let newValue: string | number;
       if (field === 'remediationComplexity') {
         setRemediationComplexity(value);
-        newValue = value.id - 1;
+        newValue = value.id;
       } else if (field === 'priority') {
         setPriority(value);
-        newValue = value.id - 1;
+        newValue = value.id;
       } else {
         setCurrentType(value);
         newValue = value.value;
