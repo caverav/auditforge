@@ -55,7 +55,7 @@ type Tab = {
 
 //TODO: fix update props if change in general
 export const Edit = () => {
-  const { title, auditType, locale } = useAuditContext();
+  const { title, auditType, locale, handlerFindings } = useAuditContext();
   const findingId = useParams().findingId ?? '';
   const auditId = useParams().auditId ?? '';
   const [openModalDeleteFinding, setOpenModalDeleteFinding] = useState(false);
@@ -274,6 +274,7 @@ export const Edit = () => {
       const response = await deleteFinding(auditId, findingId);
       if (response.status === 'success') {
         toast.success(t('msg.findingDeleteOk'));
+        const newFindings = await handlerFindings();
       }
     } catch (error) {
       toast.error(t('err.failedDeleteFinding'));
@@ -354,7 +355,9 @@ export const Edit = () => {
           </div>
           <div className="m-4 bg-gray-900 rounded-lg p-4 flex flex-col gap-4">
             <div className="flex justify-between">
-              <span className="">{finding.title}</span>
+              <span className="font-bold">
+                {title} ({auditType})
+              </span>
               <div className="flex flex-col gap-4 md:flex-row">
                 <PrimaryButton
                   color="red"
