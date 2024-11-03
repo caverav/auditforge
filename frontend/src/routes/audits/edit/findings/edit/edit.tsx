@@ -11,6 +11,7 @@ import {
   updateFinding,
 } from '../../../../../services/audits';
 import { getTypes } from '../../../../../services/vulnerabilities';
+import { useAuditContext } from '../../useAuditContext';
 import { DefinitionTab } from './DefinitionTab';
 import { DetailsTab } from './DetailsTab';
 import { ProofsTab } from './ProofsTab';
@@ -54,6 +55,7 @@ type Tab = {
 
 // TODO: add language prop
 export const Edit = () => {
+  const { title, auditType, locale } = useAuditContext();
   const findingId = useParams().findingId ?? '';
   const auditId = useParams().auditId ?? '';
   const [openModalDeleteFinding, setOpenModalDeleteFinding] = useState(false);
@@ -387,6 +389,9 @@ export const Edit = () => {
       ) : (
         <div>Loading...</div>
       )}
+      <span>
+        TITLE: {title} ; Category: {auditType} ; Locale: {locale}
+      </span>
       {JSON.stringify(finding)}
     </div>
   );
