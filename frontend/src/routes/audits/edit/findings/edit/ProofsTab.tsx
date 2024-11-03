@@ -37,7 +37,6 @@ type ProofsTabProps = {
   typesList: ListItem[];
 };
 
-// TODO: add language prop
 export const ProofsTab: React.FC<ProofsTabProps> = ({
   finding,
   onChangeText,

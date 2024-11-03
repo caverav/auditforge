@@ -54,7 +54,6 @@ type DetailTabProps = {
   remediationComplexity: ListItem | null;
 };
 
-// TODO: add language prop
 export const DetailsTab: React.FC<DetailTabProps> = ({
   finding,
   onChangeText,

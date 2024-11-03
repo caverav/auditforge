@@ -357,6 +357,7 @@ export const Edit = () => {
               currentType={currentType}
               finding={finding}
               handlerRecommendCWE={handlerRecommendCWE}
+              locale={locale}
               onChangeArray={onChangeArray}
               onChangeListItem={onChangeListItem}
               onChangeText={onChangeText}
