@@ -23,7 +23,7 @@ export const ModelUpdateContainer = () => {
   useEffect(() => {
     const checkForUpdate = async () => {
       const result = await checkUpdateCWE();
-      setIsOpenModal(result);
+      setIsOpenModal(!result);
     };
     void checkForUpdate();
   }, []);
