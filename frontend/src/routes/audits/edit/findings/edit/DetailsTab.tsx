@@ -33,6 +33,19 @@ type EditFinding = {
   vulnType?: string | '';
 };
 
+const complexityOptions = [
+  { id: 1, value: t('easy') },
+  { id: 2, value: t('medium') },
+  { id: 3, value: t('complex') },
+];
+
+const priorityOptions = [
+  { id: 1, value: t('low') },
+  { id: 2, value: t('medium') },
+  { id: 3, value: t('high') },
+  { id: 4, value: t('urgent') },
+];
+
 type DetailTabProps = {
   finding: EditFinding;
   onChangeText: (value: string, field: string) => void;
@@ -49,19 +62,6 @@ export const DetailsTab: React.FC<DetailTabProps> = ({
   priority,
   remediationComplexity,
 }) => {
-  const complexityOptions = [
-    { id: 1, value: t('easy') },
-    { id: 2, value: t('medium') },
-    { id: 3, value: t('complex') },
-  ];
-
-  const priorityOptions = [
-    { id: 1, value: t('low') },
-    { id: 2, value: t('medium') },
-    { id: 3, value: t('high') },
-    { id: 4, value: t('urgent') },
-  ];
-
   const handleCvssRecomendation = () => {
     if (finding.description === '' || finding.description === '<p><br></p>') {
       toast.error(t('err.descriptionRequired'));
