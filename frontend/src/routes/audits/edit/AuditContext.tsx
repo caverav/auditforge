@@ -6,6 +6,7 @@ type FindingType = {
   category: string;
   severity: string;
   identifier: string;
+  status: number;
 };
 
 type AuditContextType = {
