@@ -91,6 +91,7 @@ export const DetailsTab: React.FC<DetailTabProps> = ({
           cvssStringInitial={finding.cvssv3}
           handleCvssChange={handleCvssChange}
           handleCvssRecomendation={handleCvssRecomendation}
+          key={finding.identifier}
         />
       </div>
       <span className="px-4 text-xl font-semibold pt-4">
