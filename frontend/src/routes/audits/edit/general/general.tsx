@@ -43,7 +43,6 @@ export const General = () => {
   const [nameAudit, setNameAudit] = useState<string>('');
   const [auditType, setAuditType] = useState<string>('');
 
-  const [, setLanguages] = useState<Language[]>([]);
   const [languageOptions, setLanguageOptions] = useState<ListItem[]>([]);
   const [currentLanguage, setCurrentLanguage] = useState<ListItem | null>(null);
   const [loadingLanguages, setLoadingLanguages] = useState<boolean>(true);
@@ -87,7 +86,6 @@ export const General = () => {
     const fetchData = async () => {
       try {
         const dataLanguages = await getLanguages();
-        setLanguages(dataLanguages.datas);
         const languageNames = dataLanguages.datas.map(
           (item: Language, index: number): ListItem => ({
             id: index,
