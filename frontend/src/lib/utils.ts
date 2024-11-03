@@ -44,6 +44,7 @@ export const cvssStringToCIA = (
     H: 3,
     M: 2,
     L: 1,
+    N: 0,
   } as const;
   const substrings = {
     integrity: 35,
