@@ -16,6 +16,7 @@ import { useAuditContext } from '../../useAuditContext';
 import { DefinitionTab } from './DefinitionTab';
 import { DetailsTab } from './DetailsTab';
 import { ProofsTab } from './ProofsTab';
+import { ArrowPathIcon } from '@heroicons/react/24/outline';
 
 type TypeData = {
   name: string;
@@ -75,19 +76,14 @@ export const Edit = () => {
   const navigate = useNavigate();
 
   const [openModalDeleteFinding, setOpenModalDeleteFinding] = useState(false);
-
   const [activeTab, setActiveTab] = useState(0);
 
   const [finding, setFinding] = useState<EditFinding | null>(null);
-
   const [currentType, setCurrentType] = useState<ListItem | null>(null);
-
   const [typesList, setTypesList] = useState<ListItem[]>([]);
-
   const [remediationComplexity, setRemediationComplexity] =
     useState<ListItem | null>(null);
   const [priority, setPriority] = useState<ListItem | null>(null);
-
   const [currentStatus, setCurrentStatus] = useState<boolean>(false);
 
   const onChangeText = (value: string, field: string) => {
@@ -280,59 +276,6 @@ export const Edit = () => {
     void fetchTypesAndFinding();
   }, [fetchTypesAndFinding]);
 
-  const tabs: Tab[] = [
-    {
-      label: t('definition'),
-      content: (
-        <div>
-          {finding ? (
-            <DefinitionTab
-              currentType={currentType}
-              finding={finding}
-              handlerRecommendCWE={handlerRecommendCWE}
-              onChangeArray={onChangeArray}
-              onChangeListItem={onChangeListItem}
-              onChangeText={onChangeText}
-              typesList={typesList}
-            />
-          ) : null}
-        </div>
-      ),
-    },
-    {
-      label: t('proofs'),
-      content: (
-        <div>
-          {finding ? (
-            <ProofsTab
-              currentType={currentType}
-              finding={finding}
-              onChangeListItem={onChangeListItem}
-              onChangeText={onChangeText}
-              typesList={typesList}
-            />
-          ) : null}
-        </div>
-      ),
-    },
-    {
-      label: t('details'),
-      content: (
-        <div>
-          {finding ? (
-            <DetailsTab
-              finding={finding}
-              onChangeListItem={onChangeListItem}
-              onChangeText={onChangeText}
-              priority={priority}
-              remediationComplexity={remediationComplexity}
-            />
-          ) : null}
-        </div>
-      ),
-    },
-  ];
-
   const confirmDeleteFinding = async () => {
     try {
       const response = await deleteFinding(auditId, findingId);
@@ -404,6 +347,59 @@ export const Edit = () => {
     }
   };
 
+  const tabs: Tab[] = [
+    {
+      label: t('definition'),
+      content: (
+        <div>
+          {finding ? (
+            <DefinitionTab
+              currentType={currentType}
+              finding={finding}
+              handlerRecommendCWE={handlerRecommendCWE}
+              onChangeArray={onChangeArray}
+              onChangeListItem={onChangeListItem}
+              onChangeText={onChangeText}
+              typesList={typesList}
+            />
+          ) : null}
+        </div>
+      ),
+    },
+    {
+      label: t('proofs'),
+      content: (
+        <div>
+          {finding ? (
+            <ProofsTab
+              currentType={currentType}
+              finding={finding}
+              onChangeListItem={onChangeListItem}
+              onChangeText={onChangeText}
+              typesList={typesList}
+            />
+          ) : null}
+        </div>
+      ),
+    },
+    {
+      label: t('details'),
+      content: (
+        <div>
+          {finding ? (
+            <DetailsTab
+              finding={finding}
+              onChangeListItem={onChangeListItem}
+              onChangeText={onChangeText}
+              priority={priority}
+              remediationComplexity={remediationComplexity}
+            />
+          ) : null}
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div className="">
       {finding ? (
@@ -471,12 +467,12 @@ export const Edit = () => {
           </div>
         </div>
       ) : (
-        <div>Loading...</div>
+        <div className="flex items-center justify-center min-h-screen">
+          <span className="flex">
+            <ArrowPathIcon className="h-8 w-8 animate-spin text-blue-500" />
+          </span>
+        </div>
       )}
-      <span>
-        TITLE: {title} ; Category: {auditType} ; Locale: {locale}
-      </span>
-      {JSON.stringify(finding)}
     </div>
   );
 };
