@@ -84,7 +84,6 @@ export const DefinitionTab: React.FC<DefinitionTabProps> = ({
   const handleCWERecomendation = async () => {
     if (finding.description === '' || finding.description === '<p><br></p>') {
       toast.error(t('err.descriptionRequired'));
-      // TODO: Cambiar el estado de required
       return;
     }
     const descriptionCWE: PostDescription = {
@@ -94,6 +93,7 @@ export const DefinitionTab: React.FC<DefinitionTabProps> = ({
     try {
       setCweLoading(true);
       setCweRecommendationSelected([]);
+      setCweRecommended([]);
       const responseCWE = await postDescriptionCWE(descriptionCWE);
       const sortedResult = responseCWE.result.sort(
         (a: CWEData, b: CWEData) => b.score - a.score,
