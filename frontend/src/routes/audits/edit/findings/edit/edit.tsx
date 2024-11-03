@@ -53,7 +53,7 @@ type Tab = {
   content: React.ReactNode;
 };
 
-// TODO: add language prop
+//TODO: fix update props if change in general
 export const Edit = () => {
   const { title, auditType, locale } = useAuditContext();
   const findingId = useParams().findingId ?? '';
@@ -63,7 +63,7 @@ export const Edit = () => {
   const [activeTab, setActiveTab] = useState(0);
 
   const [finding, setFinding] = useState<EditFinding | null>(null);
-  //TODO: Add language filter
+
   const [currentType, setCurrentType] = useState<ListItem | null>(null);
 
   const [typesList, setTypesList] = useState<ListItem[]>([]);
@@ -140,12 +140,14 @@ export const Edit = () => {
   const fetchTypes = async () => {
     try {
       const dataType = await getTypes();
-      const typeNames = dataType.datas.map((item: TypeData, index: number) => ({
-        id: index + 1,
-        value: item.name,
-        label: item.name,
-        locale: item.locale,
-      }));
+      const typeNames = dataType.datas
+        .filter((item: TypeData) => item.locale === locale)
+        .map((item: TypeData, index: number) => ({
+          id: index + 1,
+          value: item.name,
+          label: item.name,
+          locale: item.locale,
+        }));
       setTypesList([...typeNames]);
       return typeNames;
     } catch (error) {
