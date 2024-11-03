@@ -285,7 +285,7 @@ export const ClientDashboard = () => {
           <Card title={t('timesPerAudit')}>
             <TimePerAuditChart data={timeData} />
           </Card>
-          <Card title="CWEs found">
+          <Card title={t('cweFound')}>
             <CWECloud
               items={cweItems}
               mostCommon={cweItems.sort((a, b) => b.size - a.size)[0]?.id}
