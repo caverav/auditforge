@@ -1,15 +1,25 @@
 import React, { createContext } from 'react';
 
+type FindingType = {
+  id: number;
+  name: string;
+  category: string;
+  severity: string;
+  identifier: string;
+};
+
 type AuditContextType = {
   title: string;
   auditType: string;
   locale: string;
+  handlerFindings: () => Promise<FindingType[]>;
 };
 
 const defaultContextValue: AuditContextType = {
   title: '',
   auditType: '',
   locale: '',
+  handlerFindings: () => Promise.resolve([]),
 };
 
 type AuditContextProps = {
