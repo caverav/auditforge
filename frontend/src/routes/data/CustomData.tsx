@@ -6,6 +6,7 @@ import { AuditTypes } from './CustomData/AuditTypes';
 import { CustomFields } from './CustomData/CustomFields';
 import { CustomSections } from './CustomData/CustomSections';
 import { Languages } from './CustomData/Languages';
+import { VulnerabilityCategories } from './CustomData/VulnerabilityCategories';
 import { VulnerabilityTypes } from './CustomData/VulnerabilityTypes';
 
 export const CustomData: React.FC = () => {
@@ -34,7 +35,7 @@ export const CustomData: React.FC = () => {
       id: 5,
       title: t('vulnerabilityCategories'),
       cardTitle: t('auditTypesUsedInAudits'),
-      cardChildren: <>{t('vulnerabilityCategories')}</>,
+      cardChildren: <VulnerabilityCategories />,
     },
     {
       id: 6,
