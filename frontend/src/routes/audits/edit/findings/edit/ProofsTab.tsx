@@ -30,11 +30,8 @@ type EditFinding = {
 };
 
 type ProofsTabProps = {
-  currentType: ListItem | null;
   finding: EditFinding;
   onChangeText: (value: string, field: string) => void;
-  onChangeListItem: (value: ListItem, field: string) => void;
-  typesList: ListItem[];
 };
 
 export const ProofsTab: React.FC<ProofsTabProps> = ({

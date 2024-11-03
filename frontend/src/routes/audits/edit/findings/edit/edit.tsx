@@ -372,13 +372,7 @@ export const Edit = () => {
       content: (
         <div>
           {finding ? (
-            <ProofsTab
-              currentType={currentType}
-              finding={finding}
-              onChangeListItem={onChangeListItem}
-              onChangeText={onChangeText}
-              typesList={typesList}
-            />
+            <ProofsTab finding={finding} onChangeText={onChangeText} />
           ) : null}
         </div>
       ),
