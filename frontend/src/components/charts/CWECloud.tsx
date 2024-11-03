@@ -34,7 +34,9 @@ export const CWECloud: React.FC<Props> = ({ items, mostCommon }) => {
   }
   return (
     <div className="bg-gray-900 rounded-lg h-[300px] overflow-hidden">
-      <p className="text-sm text-gray-400">Most common: {mostCommon}</p>
+      <p className="text-sm text-gray-400">
+        {t('label.mostCommon')} {mostCommon}
+      </p>
       <div className="flex flex-wrap gap-2 justify-center items-center">
         <Wordcloud
           font="Impact"
