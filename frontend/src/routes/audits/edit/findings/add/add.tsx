@@ -16,6 +16,7 @@ import {
   getLanguages,
   getVulnByLanguage,
 } from '../../../../../services/audits';
+import { useAuditContext } from '../../useAuditContext';
 import DivWrapper from './DivWrapper';
 import NewVulnButton from './NewVulnButton';
 
@@ -42,6 +43,8 @@ let dataLanguage: { status: string; datas: Language[] } = {
   datas: [],
 };
 export const Add = () => {
+  const { handlerFindings } = useAuditContext();
+
   const [languages, setLanguages] = useState<ListItem[]>([]);
   const [currentLanguage, setCurrentLanguage] = useState<ListItem | null>(null);
   const [loadingLanguages, setLoadingLanguages] = useState<boolean>(true);
@@ -130,23 +133,26 @@ export const Add = () => {
   }, [currentLanguage, setTableData, dataLanguage]);
 
   const handleAddVuln = useCallback(
-    (item: TableData) => {
-      addVuln(
-        item.id,
-        auditId ?? '',
-        currentLanguage ? currentLanguage.value : 'en',
-      )
-        .then(res => {
-          if (res.status === 'success') {
-            setNewVulnTitle('');
-            toast.success(t('msg.findingCreateOk'));
-          } else {
-            toast.error(res.datas);
-          }
-        })
-        .catch(console.error);
+    async (item: TableData) => {
+      try {
+        const res = await addVuln(
+          item.id,
+          auditId ?? '',
+          currentLanguage ? currentLanguage.value : 'en',
+        );
+
+        if (res.status === 'success') {
+          setNewVulnTitle('');
+          toast.success(t('msg.findingCreateOk'));
+          await handlerFindings();
+        } else {
+          toast.error(res.datas);
+        }
+      } catch (error) {
+        console.error(error);
+      }
     },
-    [auditId, currentLanguage],
+    [auditId, currentLanguage, handlerFindings],
   );
 
   const rowActions = [
