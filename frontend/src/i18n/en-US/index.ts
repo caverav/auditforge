@@ -741,4 +741,5 @@ export default {
   timesPerAudit: 'Times per audit',
   cwesFound: 'CWEs found',
   averageCiaTriad: 'Average CIA triad',
+  averageCvss: 'Average CVSS',
 };
