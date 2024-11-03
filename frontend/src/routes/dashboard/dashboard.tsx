@@ -297,7 +297,7 @@ export const ClientDashboard = () => {
           <Card title={t('averageCvss')}>
             <CVSSChart data={cvssData} />
           </Card>
-          <Card title="Average Remediation Priority">
+          <Card title={t('averageRemediationPriority')}>
             <RemediationPriorityChart data={priorityData} />
           </Card>
         </div>
