@@ -38,8 +38,12 @@ def calculate_local_checksum(file_path, byte_limit):
 
 def calculate_remote_checksum(url, byte_range):
     headers = {'Range': f'bytes={byte_range[0]}-{byte_range[1]}'}
-    response = requests.get(url, headers=headers, stream=True)
-
+    try:
+        response = requests.get(url, headers=headers, stream=True)
+        response.raise_for_status()
+    except requests.exceptions.RequestException as e:
+        raise Exception(f"Error al obtener el archivo remoto: {e}")
+        
     sha256_hash = hashlib.sha256()
     for chunk in response.iter_content(chunk_size=8192):
         sha256_hash.update(chunk)
@@ -71,11 +75,15 @@ async def read_root():
 
 @app.get("/check_cwe_update")
 async def check_cwe_update():
-    local_checksum = calculate_local_checksum(LOCAL_FILE_PATH, byte_limit=BYTE_RANGE[1] + 1)
-    remote_checksum = calculate_remote_checksum(REMOTE_FILE_URL, BYTE_RANGE)
+    try:
+        local_checksum = calculate_local_checksum(LOCAL_FILE_PATH, byte_limit=BYTE_RANGE[1] + 1)
+        remote_checksum = calculate_remote_checksum(REMOTE_FILE_URL, BYTE_RANGE)
 
-    match = local_checksum == remote_checksum
-    return {"checksum_match": match}
+        match = local_checksum == remote_checksum
+        return {"checksum_match": match}
+
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 @app.post("/update_cwe_model")
 async def update_cwe_model():
@@ -100,7 +108,7 @@ async def update_cwe_model():
         return {"status": "success", "message": "Updated CWE model successfully"}
 
     except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
+        raise HTTPException(status_code=500, detail=str(e)) from e
 
 if __name__ == "__main__":
     import uvicorn

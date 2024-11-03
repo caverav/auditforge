@@ -1,10 +1,12 @@
 module.exports = function (app) {
   const Response = require('../lib/httpResponse.js');
   const acl = require('../lib/auth').acl;
-  const networkError = new Error('Network response was not ok');
-  const timeoutError = new Error('Request timed out');
-  const TIMEOUT_MS = 180000;
+  const networkError = new Error(
+    'Error updating CWE model: Network response was not ok',
+  );
+  const timeoutError = new Error('Error updating CWE model: Request timed out');
   const cweConfig = require('../config/config-cwe.json')['cwe-container'];
+  const TIMEOUT_MS = cweConfig.update_timeout_ms || 120000;
 
   app.post(
     '/api/update-cwe-model',
@@ -15,9 +17,15 @@ module.exports = function (app) {
 
       try {
         //TODO: Change workaround to a proper solution for self-signed certificates
+        if (!cweConfig.host || !cweConfig.port) {
+          return Response.BadRequest(
+            res,
+            new Error('Configuración del servicio CWE incompleta'),
+          );
+        }
         process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
         const response = await fetch(
-          `https://${cweConfig.host}:${cweConfig.port}/update_cwe_model`,
+          `https://${cweConfig.host}:${cweConfig.port}/${cweConfig.endpoints.update_cwe_endpoint}`,
           {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
