@@ -4,6 +4,7 @@ type PrimaryButtonProps = {
   children: React.ReactNode;
   onClick?: () => void;
   color?: 'blue' | 'red' | 'gray';
+  type?: 'submit' | 'button';
 };
 
 const colorToClassName = {
@@ -16,6 +17,7 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({
   children,
   onClick,
   color = 'blue',
+  type = 'button',
 }) => {
   const colorClassName = colorToClassName[color];
 
@@ -23,7 +25,7 @@ const PrimaryButton: React.FC<PrimaryButtonProps> = ({
     <button
       className={`${colorClassName} text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline`}
       onClick={onClick}
-      type="button"
+      type={type}
     >
       {children}
     </button>

@@ -315,6 +315,14 @@ module.exports = {
       },
     },
     {
+      // override for file extensions (ignore the rule)
+      files: ['*.{ts,tsx}'],
+      rules: {
+        'import/extensions': 'off',
+        'react/jsx-filename-extension': 'off',
+      },
+    },
+    {
       // override for storybook
       files: ['*.{stories,story}.{ts,tsx}'],
       rules: {
