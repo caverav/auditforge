@@ -16,7 +16,7 @@ export const Register = () => {
       const password = getValue('password');
       const confirmPassword = getValue('confirmPassword');
       if (password !== confirmPassword) {
-        toast.error(t('confirmPasswordDifferents'));
+        toast.error(t('err.confirmPasswordDifferents'));
         console.error('Passwords do not match');
         return;
       }
