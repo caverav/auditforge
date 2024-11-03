@@ -118,6 +118,7 @@ export const AuditRoot = () => {
             };
           }),
         );
+        // handlerFindings(audit.datas.findings);
         setNameAudit(audit.datas.name);
         setAuditType(audit.datas.auditType);
         setCurrentLanguage(audit.datas.language);
@@ -133,6 +134,24 @@ export const AuditRoot = () => {
   ];
 
   const connectedUsers: { id: number; name: string; online: boolean }[] = [];
+
+  const handlerFindings = async () => {
+    try {
+      const audit = await getAuditById(auditId);
+      const findingsData = audit.datas.findings.map((findingIter: Finding) => ({
+        id: findingIter.identifier,
+        name: findingIter.title,
+        category: 'No Category',
+        severity: cvssStringToSeverity(findingIter.cvssv3),
+        identifier: findingIter._id,
+      }));
+      setFindings(findingsData);
+      return findingsData;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  };
 
   const auditData = {
     title: nameAudit,
@@ -162,7 +181,7 @@ export const AuditRoot = () => {
         sortOrderOptions={sortOrderOptions}
       />
       <div className="flex-1 overflow-auto">
-        <AuditProvider value={auditData}>
+        <AuditProvider value={{ ...auditData, handlerFindings }}>
           <Outlet />
         </AuditProvider>
       </div>
