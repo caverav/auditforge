@@ -187,57 +187,60 @@ export const Edit = () => {
     }
   }, [locale]);
 
+  const changeFields = (findingData: EditFinding, typeList: ListItem[]) => {
+    if (findingData.vulnType) {
+      const typeFound = typeList.find(
+        typeIter => typeIter.value === findingData.vulnType,
+      );
+      if (!typeFound) {
+        const newType = {
+          id: typeList.length + 1,
+          label: findingData.vulnType,
+          value: findingData.vulnType,
+        };
+        setTypesList([...typeList, newType]);
+        setCurrentType(newType);
+      } else {
+        setCurrentType(typeFound);
+      }
+    } else {
+      setCurrentType(null);
+    }
+    if (findingData.remediationComplexity) {
+      const remediationComplexityFound = complexityOptions.find(
+        (complexityIter: ListItem) =>
+          complexityIter.id === findingData.remediationComplexity,
+      );
+      if (remediationComplexityFound) {
+        setRemediationComplexity(remediationComplexityFound);
+      }
+    } else {
+      setRemediationComplexity(null);
+    }
+    if (findingData.priority) {
+      const priorityFound = priorityOptions.find(
+        (priorityIter: ListItem) => priorityIter.id === findingData.priority,
+      );
+      if (priorityFound) {
+        setPriority(priorityFound);
+      }
+    } else {
+      setPriority(null);
+    }
+
+    if (findingData.status === 0) {
+      setCurrentStatus(true);
+    } else {
+      setCurrentStatus(false);
+    }
+  };
+
   const fetchFinding = useCallback(
     async (typeList: ListItem[]) => {
       try {
         const findingGet = await getFinding(auditId, findingId);
         const findingData = findingGet.datas;
-        if (findingData.vulnType) {
-          const typeFound = typeList.find(
-            typeIter => typeIter.value === findingData.vulnType,
-          );
-          if (!typeFound) {
-            const newType = {
-              id: typeList.length + 1,
-              label: findingData.vulnType,
-              value: findingData.vulnType,
-            };
-            setTypesList([...typeList, newType]);
-            setCurrentType(newType);
-          } else {
-            setCurrentType(typeFound);
-          }
-        } else {
-          setCurrentType(null);
-        }
-        if (findingData.remediationComplexity) {
-          const remediationComplexityFound = complexityOptions.find(
-            (complexityIter: ListItem) =>
-              complexityIter.id === findingData.remediationComplexity,
-          );
-          if (remediationComplexityFound) {
-            setRemediationComplexity(remediationComplexityFound);
-          }
-        } else {
-          setRemediationComplexity(null);
-        }
-        if (findingData.priority) {
-          const priorityFound = priorityOptions.find(
-            (priorityIter: ListItem) =>
-              priorityIter.id === findingData.priority,
-          );
-          if (priorityFound) {
-            setPriority(priorityFound);
-          }
-        } else {
-          setPriority(null);
-        }
-
-        if (findingData.status === 0) {
-          setCurrentStatus(true);
-        } else {
-          setCurrentStatus(false);
-        }
+        changeFields(findingData, typeList);
         setFinding({
           identifier: findingData.identifier,
           title: findingData.title,
