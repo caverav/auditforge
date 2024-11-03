@@ -739,4 +739,5 @@ export default {
   foundInTotal: 'Found in total',
   vulnBySeverity: 'Vulnerabilities by severity',
   timesPerAudit: 'Times per audit',
+  cwesFound: 'CWEs found',
 };
