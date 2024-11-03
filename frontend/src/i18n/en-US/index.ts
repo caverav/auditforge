@@ -736,4 +736,5 @@ export default {
   cleanRecommendations: 'Clean Recommendations',
   errorRecommendingCVSS: 'Error generating recommendation',
   mostCommon: 'Most common',
+  foundInTotal: 'Found in total',
 };
