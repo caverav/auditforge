@@ -282,7 +282,7 @@ export const ClientDashboard = () => {
           <Card title={t('vulnBySeverity')}>
             <SeverityPieChart data={severityData} total={totalSeverity} />
           </Card>
-          <Card title="Times per audit">
+          <Card title={t('timesPerAudit')}>
             <TimePerAuditChart data={timeData} />
           </Card>
           <Card title="CWEs found">
