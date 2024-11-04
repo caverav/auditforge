@@ -743,4 +743,5 @@ export default {
   averageCiaTriad: 'Average CIA triad',
   averageCvss: 'Average CVSS',
   averageRemediationPriority: 'Average Remediation Priority',
+  clientSelect: 'Select your client',
 };
