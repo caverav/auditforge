@@ -270,7 +270,7 @@ export const ClientDashboard = () => {
   }, [currentClient]);
 
   return (
-    <div className="p-8">
+    <div className="p-8 h-screen overflow-y-auto">
       <Card title="Client">
         <SelectDropdown
           items={clientName}
