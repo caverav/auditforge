@@ -71,7 +71,7 @@ export const CVSSChart: React.FC<Props> = ({ data }) => {
       annotation: {
         annotations: {
           line1: {
-            type: 'line',
+            type: 'line' as const,
             xMin: averageCVSS,
             xMax: averageCVSS,
             borderColor: '#2ecc71',
