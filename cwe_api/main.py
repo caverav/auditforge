@@ -42,13 +42,12 @@ def calculate_remote_checksum(url, byte_range):
         response = requests.get(url, headers=headers, stream=True)
         response.raise_for_status()
     except requests.exceptions.RequestException as e:
-        raise Exception(f"Error al obtener el archivo remoto: {e}")
+        raise Exception(f"Error al obtener el archivo remoto: {str(e)}") from e
         
     sha256_hash = hashlib.sha256()
     for chunk in response.iter_content(chunk_size=8192):
         sha256_hash.update(chunk)
     return sha256_hash.hexdigest()
-
 class VulnerabilityRequest(BaseModel):
     vuln: str
 
