@@ -36,7 +36,9 @@ export const CVSSChart: React.FC<Props> = ({ data }) => {
     );
   }
 
-  const averageCVSS = data.reduce((acc, d) => acc + d.score, 0) / data.length;
+  const averageCVSS = (
+    data.reduce((acc, d) => acc + d.score, 0) / data.length
+  ).toFixed(2);
 
   const chartData = {
     labels: data.map(d => d.name),
@@ -72,8 +74,8 @@ export const CVSSChart: React.FC<Props> = ({ data }) => {
         annotations: {
           line1: {
             type: 'line' as const,
-            xMin: averageCVSS,
-            xMax: averageCVSS,
+            xMin: parseFloat(averageCVSS),
+            xMax: parseFloat(averageCVSS),
             borderColor: '#2ecc71',
             borderWidth: 2,
             borderDash: [5, 5],
