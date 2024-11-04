@@ -32,7 +32,19 @@ export const CVSSChart: React.FC<Props> = ({ data }) => {
     datasets: [
       {
         data: data.map(d => d.score),
-        backgroundColor: '#8884d8',
+        backgroundColor: data.map(d => {
+          if (d.score >= 9.0) {
+            return '#dc3545';
+          } else if (d.score >= 7.0) {
+            return '#fd7e14';
+          } else if (d.score >= 4.0) {
+            return '#ffc107';
+          } else if (d.score >= 0.1) {
+            return '#28a745';
+          } else {
+            return '#6c757d';
+          }
+        }),
       },
     ],
   };
