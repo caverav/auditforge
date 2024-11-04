@@ -30,7 +30,7 @@ export const ModelUpdateContainer = () => {
 
   const onClickUpdate = () => {
     setIsOpenModal(false);
-
+    setIsUpdateAvailable(true);
     const updateCWEHandler = async () => {
       try {
         setIsUpdating(true);
