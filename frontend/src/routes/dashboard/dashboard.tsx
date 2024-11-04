@@ -291,7 +291,7 @@ export const ClientDashboard = () => {
               data={timeData.filter(d => d.execution > 0 || d.remediation > 0)}
             />
           </Card>
-          <Card title={t('cweFound')}>
+          <Card title={t('cwesFound')}>
             <CWECloud
               items={cweItems}
               mostCommon={cweItems.sort((a, b) => b.size - a.size)[0]?.id}
