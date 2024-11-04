@@ -157,7 +157,7 @@ export const DefinitionTab: React.FC<DefinitionTabProps> = ({
           <TextArea
             id=""
             label={t('references')}
-            name="poc"
+            name="references"
             onChange={value => onChangeArray(value, 'references')}
             placeholder=""
             rows={4}
