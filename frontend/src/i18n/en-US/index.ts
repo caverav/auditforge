@@ -742,4 +742,5 @@ export default {
   cwesFound: 'CWEs found',
   averageCiaTriad: 'Average CIA triad',
   averageCvss: 'Average CVSS',
+  averageRemediationPriority: 'Average Remediation Priority',
 };
