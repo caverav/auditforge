@@ -18,15 +18,15 @@ type EditFinding = {
   _id: string;
   paragraphs: string[];
   customFields: string[];
-  description?: string | '';
-  observation?: string | '';
-  poc?: string | '';
-  remediation?: string | '';
-  cvssv3?: string | '';
+  description?: string;
+  observation?: string;
+  poc?: string;
+  remediation?: string;
+  cvssv3?: string;
   remediationComplexity?: number | '';
   priority?: number | '';
-  scope?: string | '';
-  vulnType?: string | '';
+  scope?: string;
+  vulnType?: string;
 };
 
 type ProofsTabProps = {
