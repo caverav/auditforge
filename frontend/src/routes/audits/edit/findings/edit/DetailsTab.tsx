@@ -85,7 +85,7 @@ export const DetailsTab: React.FC<DetailTabProps> = ({
           value={finding.scope ?? ''}
         />
       </div>
-      <div className="mx-4 flex justify-center">
+      <div className="px-4 flex justify-center">
         <CVSSCalculator
           cvssStringInitial={finding.cvssv3}
           handleCvssChange={handleCvssChange}
