@@ -1,11 +1,12 @@
 import { t } from 'i18next';
 import React from 'react';
 import { FaBug } from 'react-icons/fa';
+
 import {
-  TooltipProvider,
   Tooltip,
-  TooltipTrigger,
   TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
 } from '../ui/tooltip';
 
 type CWEItem = {
