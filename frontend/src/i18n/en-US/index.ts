@@ -744,5 +744,5 @@ export default {
   averageCvss: 'Average CVSS',
   averageRemediationPriority: 'Average Remediation Priority',
   clientSelect: 'Select your client',
-  ocurrences: 'Ocurrences',
+  occurrences: 'Occurrences',
 };
