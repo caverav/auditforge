@@ -287,7 +287,9 @@ export const ClientDashboard = () => {
             <SeverityPieChart data={severityData} total={totalSeverity} />
           </Card>
           <Card title={t('timesPerAudit')}>
-            <TimePerAuditChart data={timeData} />
+            <TimePerAuditChart
+              data={timeData.filter(d => d.execution > 0 || d.remediation > 0)}
+            />
           </Card>
           <Card title={t('cweFound')}>
             <CWECloud
