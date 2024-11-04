@@ -129,7 +129,11 @@ export const ClientDashboard = () => {
     const fetchAuditsbyClient = async () => {
       try {
         const data = await getAuditsByClientName(currentClient.value);
-        const tmpCiaData = [
+        const tmpCiaData: {
+          subject: string;
+          current: 0 | 1 | 2;
+          target: 0 | 1 | 2;
+        }[] = [
           { subject: 'Confidentiality', current: 0, target: 0 },
           { subject: 'Integrity', current: 0, target: 0 },
           { subject: 'Availability', current: 0, target: 0 },
