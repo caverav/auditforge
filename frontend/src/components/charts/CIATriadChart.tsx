@@ -22,8 +22,8 @@ ChartJS.register(
 
 type CIAData = {
   subject: string;
-  current: number;
-  target: number;
+  current: 0 | 1 | 2;
+  target: 0 | 1 | 2;
 };
 
 type Props = {
