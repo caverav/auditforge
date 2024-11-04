@@ -13,7 +13,7 @@ export type Finding = {
   priority?: number;
   references: string[];
   cwes: string[];
-  cvssv3: string;
+  cvssv3?: string;
   status: number;
   customFields: string[];
   _id: string;
