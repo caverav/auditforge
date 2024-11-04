@@ -32,9 +32,9 @@ const cvssStringTo = (
     L: 1,
   } as const;
   const substrings = {
-    integrity: 35,
-    availability: 39,
-    confidentiality: 43,
+    confidentiality: 35,
+    integrity: 39,
+    availability: 43,
   } as const;
   return values[cvssVector.substring(substrings[field], substrings[field] + 1)];
 };
