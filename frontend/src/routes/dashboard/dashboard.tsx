@@ -60,10 +60,7 @@ const severityByScore = (score: number) => {
 export const ClientDashboard = () => {
   const [clientName, setClientName] = useState<ListItem[]>([]);
   const [totalSeverity, setTotalSeverity] = useState(0);
-  const [currentClient, setCurrentClient] = useState<ListItem>({
-    id: 0,
-    value: '',
-  });
+  const [currentClient, setCurrentClient] = useState<ListItem | null>(null);
   const [severityData, setSeverityData] = useState<
     { name: string; value: number; color: string }[]
   >([
@@ -125,6 +122,9 @@ export const ClientDashboard = () => {
 
   useEffect(() => {
     fetchClients().catch(console.error);
+    if (currentClient === null) {
+      return;
+    }
 
     const fetchAuditsbyClient = async () => {
       try {
@@ -278,7 +278,7 @@ export const ClientDashboard = () => {
         />
       </Card>
 
-      {currentClient.value === '' ? null : (
+      {currentClient === null ? null : (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
           <Card title={t('vulnBySeverity')}>
             <SeverityPieChart data={severityData} total={totalSeverity} />
