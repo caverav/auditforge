@@ -2,13 +2,6 @@ import { t } from 'i18next';
 
 import RichText from '../../../../../components/text/RichText';
 
-type ListItem = {
-  id: number;
-  value: string;
-  label?: string;
-  locale?: string;
-};
-
 type EditFinding = {
   identifier: number;
   title: string;
