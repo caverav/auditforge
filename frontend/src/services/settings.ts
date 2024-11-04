@@ -41,7 +41,12 @@ export const checkUpdateCWE = async (): Promise<boolean> => {
   }
 };
 
-export const updateCWEModel = async (): Promise<object> => {
+type UpdateResponse = {
+  status: 'success' | 'error';
+  error?: string;
+};
+
+export const updateCWEModel = async (): Promise<UpdateResponse> => {
   try {
     const response = await fetch(updateCWEModelUrl, {
       method: 'POST',
@@ -54,6 +59,6 @@ export const updateCWEModel = async (): Promise<object> => {
     return await response.json();
   } catch (error) {
     console.error(error);
-    return { status: 'error', error };
+    return { status: 'error', error: 'Error updating CWE Model' };
   }
 };
