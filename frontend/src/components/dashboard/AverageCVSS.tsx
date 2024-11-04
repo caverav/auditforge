@@ -68,7 +68,7 @@ const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId, clientName }) => {
           setAverageCVSS(
             Math.round(
               (audit.datas.findings.reduce(
-                (acc, finding) => acc + cvssStringToScore(finding.cvssv3),
+                (acc, finding) => acc + cvssStringToScore(finding.cvssv3 ?? ''),
                 0,
               ) /
                 audit.datas.findings.length) *
@@ -80,15 +80,15 @@ const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId, clientName }) => {
             datasets: [
               {
                 data: audit.datas.findings.map(finding =>
-                  cvssStringToScore(finding.cvssv3),
+                  cvssStringToScore(finding.cvssv3 ?? ''),
                 ),
                 // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
                 backgroundColor: audit.datas.findings.map(finding =>
-                  cvssStringToScore(finding.cvssv3) >= 9
+                  cvssStringToScore(finding.cvssv3 ?? '') >= 9
                     ? '#FF4136'
-                    : cvssStringToScore(finding.cvssv3) >= 7
+                    : cvssStringToScore(finding.cvssv3 ?? '') >= 7
                       ? '#FF851B'
-                      : cvssStringToScore(finding.cvssv3) >= 4
+                      : cvssStringToScore(finding.cvssv3 ?? '') >= 4
                         ? '#FFDC00'
                         : '#2ECC40',
                 ) as unknown as string,

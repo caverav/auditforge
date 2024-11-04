@@ -185,7 +185,9 @@ export const ClientDashboard = () => {
 
           auditData.datas.findings.forEach(finding => {
             // severity data
-            const severity = severityByScore(cvssStringToScore(finding.cvssv3));
+            const severity = severityByScore(
+              cvssStringToScore(finding.cvssv3 ?? ''),
+            );
             tmpSeverityData[severity].value += 1;
 
             // cwe data
