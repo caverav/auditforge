@@ -203,7 +203,7 @@ export const ClientDashboard = () => {
             });
 
             // cia data and cvss data and priority data
-            if (finding.cvssv3) {
+            if (finding.cvssv3?.length == 44) {
               tmpCiaData[0].current += cvssStringTo(
                 'confidentiality',
                 finding.cvssv3,
