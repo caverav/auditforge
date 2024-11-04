@@ -271,7 +271,7 @@ export const ClientDashboard = () => {
         <SelectDropdown
           items={clientName}
           onChange={setCurrentClient}
-          placeholder={t('Select your client')}
+          placeholder={t('clientSelect')}
           selected={currentClient}
           title=""
         />
