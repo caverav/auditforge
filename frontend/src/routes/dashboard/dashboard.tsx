@@ -165,8 +165,12 @@ export const ClientDashboard = () => {
           remediation: number;
         }[] = [];
 
+        let cvssCount = 0;
+        let cvssScores = 0;
         const auditPromises = data.map(async audit => {
           const auditData = await getAuditById(audit._id);
+          cvssCount = 0;
+          cvssScores = 0;
           tmpTimeData.push({
             name: auditData.datas.name,
             execution:
@@ -214,18 +218,8 @@ export const ClientDashboard = () => {
               );
               findingcount += 1;
 
-              const item = tmpCvssData.find(
-                item => item.name === auditData.datas.name,
-              );
-              if (item) {
-                item.score += cvssStringToScore(finding.cvssv3);
-              } else {
-                tmpCvssData.push({
-                  name: auditData.datas.name,
-                  score: cvssStringToScore(finding.cvssv3),
-                });
-              }
-
+              cvssScores += cvssStringToScore(finding.cvssv3);
+              cvssCount += 1;
               const priority = finding.priority;
               if (priority !== undefined) {
                 tmpPriorityData[priority - 1].count += 1;
@@ -233,6 +227,12 @@ export const ClientDashboard = () => {
               }
             }
           });
+          if (cvssCount > 0) {
+            tmpCvssData.push({
+              name: auditData.datas.name,
+              score: cvssScores / cvssCount,
+            });
+          }
         });
 
         await Promise.all(auditPromises);
@@ -240,9 +240,6 @@ export const ClientDashboard = () => {
         if (findingcount > 0) {
           tmpCiaData.forEach(item => {
             item.current /= findingcount;
-          });
-          tmpCvssData.forEach(item => {
-            item.score /= findingcount;
           });
         }
 
