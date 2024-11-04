@@ -228,7 +228,7 @@ export const ClientDashboard = () => {
 
               const priority = finding.priority;
               if (priority !== undefined) {
-                tmpPriorityData[priority].count += 1;
+                tmpPriorityData[priority - 1].count += 1;
                 prioritycount += 1;
               }
             }
