@@ -1,7 +1,6 @@
-import { Text } from '@visx/text';
-import Wordcloud from '@visx/wordcloud/lib/Wordcloud';
 import { t } from 'i18next';
 import React from 'react';
+import { FaBug } from 'react-icons/fa';
 
 type CWEItem = {
   id: string;
@@ -13,19 +12,6 @@ type Props = {
   mostCommon: string;
 };
 
-const fontByDatum = (datum: { value: number }) => {
-  return 10 + datum.value * 3;
-};
-
-const height = 300;
-
-const itemsToWordDatum = (items: CWEItem[]) => {
-  return items.map(item => ({
-    text: item.id,
-    value: item.size,
-  }));
-};
-
 export const CWECloud: React.FC<Props> = ({ items, mostCommon }) => {
   if (!items.length) {
     return (
@@ -33,37 +19,25 @@ export const CWECloud: React.FC<Props> = ({ items, mostCommon }) => {
     );
   }
   return (
-    <div className="bg-gray-900 rounded-lg h-[300px] overflow-hidden">
-      <p className="text-sm text-gray-400">
+    <div className="bg-gray-900 rounded-lg p-4">
+      <p className="text-sm text-gray-400 mb-4">
         {t('mostCommon')}: {mostCommon}
       </p>
-      <div className="flex flex-wrap gap-2 justify-center items-center">
-        <Wordcloud
-          font="Impact"
-          fontSize={fontByDatum}
-          height={height}
-          padding={6}
-          random={Math.random}
-          rotate={0}
-          spiral="rectangular"
-          width={100}
-          words={itemsToWordDatum(items)}
-        >
-          {cloudWords =>
-            cloudWords.map((w, i) => (
-              <Text
-                fill="white"
-                fontFamily={w.font}
-                fontSize={w.size}
-                key={`${w.text}-${i}`}
-                textAnchor="middle"
-                transform={`translate(${w.x}, ${w.y}) rotate(${w.rotate})`}
-              >
-                {w.text}
-              </Text>
-            ))
-          }
-        </Wordcloud>
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        {items.map(item => (
+          <div
+            key={item.id}
+            className="bg-gray-800 p-4 rounded-lg shadow-md flex items-center"
+          >
+            <FaBug className="text-red-500 mr-3" size={24} />
+            <div>
+              <p className="text-white text-lg font-semibold">{item.id}</p>
+              <p className="text-gray-400">
+                {t('occurrences')}: {item.size}
+              </p>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
