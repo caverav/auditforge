@@ -205,6 +205,8 @@ export default {
     errorGeneratingPdf: 'Failed exporting audit to pdf',
     errorSavingAuditCustomSections: 'Failed saving the audit custom sections',
     updateCWEModelFailed: 'Failed Updating CWE Model',
+    createUser: 'Error creating user',
+    confirmPasswordDifferents: 'Passwords do not match',
   },
   cvss: {
     title: 'CVSS v3.1 Base Score',
@@ -740,4 +742,14 @@ export default {
   CWEModelUpdateText:
     'A new version of the CWE Model is available, do you want to upgrade?',
   updateAvailable: 'Update Available',
+  mostCommon: 'Most common',
+  foundInTotal: 'Found in total',
+  vulnBySeverity: 'Vulnerabilities by severity',
+  timesPerAudit: 'Times per audit',
+  cwesFound: 'CWEs found',
+  averageCiaTriad: 'Average CIA triad',
+  averageCvss: 'Average CVSS',
+  averageRemediationPriority: 'Average Remediation Priority',
+  clientSelect: 'Select your client',
+  occurrences: 'Occurrences',
 };

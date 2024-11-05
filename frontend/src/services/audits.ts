@@ -9,11 +9,11 @@ export type Finding = {
   description: string;
   observation: string;
   remediation: string;
-  remediationComplexity: number;
-  priority: number;
+  remediationComplexity?: number;
+  priority?: number;
   references: string[];
   cwes: string[];
-  cvssv3: string;
+  cvssv3?: string;
   status: number;
   customFields: string[];
   _id: string;
@@ -71,6 +71,7 @@ export type Audit = {
   type: string;
   connected: string[];
   createdAt: string;
+  cvssv3: string;
 };
 
 export type AuditById = {

@@ -10,11 +10,12 @@ import {
   Tooltip,
 } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { useParams } from 'react-router-dom';
 
 import { getAuditById } from '@/services/audits';
+import { getAuditsByClientName } from '@/services/clients';
 
 ChartJS.register(
   CategoryScale,
@@ -38,13 +39,13 @@ const cvssStringToScore = (cvssScore: string) => {
 
 type AverageCVSSProps = {
   auditId?: string;
+  clientName?: string;
 };
 
-const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId }) => {
+const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId, clientName }) => {
   const paramId = useParams().auditId;
-  if (!auditId) {
-    auditId = paramId;
-  }
+  const auditIdRef = useRef(auditId ?? paramId);
+
   const [averageCVSS, setAverageCVSS] = useState(0);
   const [data, setData] = useState({
     labels: [''],
@@ -56,44 +57,82 @@ const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId }) => {
     ],
   });
   useEffect(() => {
-    if (auditId === undefined) {
-      auditId = paramId;
+    if (auditIdRef.current === undefined) {
+      auditIdRef.current = paramId;
     }
-    getAuditById(auditId)
-      .then(audit => {
-        setAverageCVSS(
-          Math.round(
-            (audit.datas.findings.reduce(
-              (acc, finding) => acc + cvssStringToScore(finding.cvssv3),
-              0,
-            ) /
-              audit.datas.findings.length) *
-              10,
-          ) / 10,
-        );
-        setData({
-          labels: audit.datas.findings.map(finding => finding.title),
-          datasets: [
-            {
-              data: audit.datas.findings.map(finding =>
-                cvssStringToScore(finding.cvssv3),
-              ),
-              // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-              backgroundColor: audit.datas.findings.map(finding =>
-                cvssStringToScore(finding.cvssv3) >= 9
-                  ? '#FF4136'
-                  : cvssStringToScore(finding.cvssv3) >= 7
-                    ? '#FF851B'
-                    : cvssStringToScore(finding.cvssv3) >= 4
-                      ? '#FFDC00'
-                      : '#2ECC40',
-              ) as unknown as string,
-            },
-          ],
-        });
-      })
-      .catch(console.error);
-  }, [auditId, averageCVSS]);
+
+    if (clientName === undefined) {
+      getAuditById(auditIdRef.current)
+        .then(audit => {
+          setAverageCVSS(
+            Math.round(
+              (audit.datas.findings.reduce(
+                (acc, finding) => acc + cvssStringToScore(finding.cvssv3 ?? ''),
+                0,
+              ) /
+                audit.datas.findings.length) *
+                10,
+            ) / 10,
+          );
+          setData({
+            labels: audit.datas.findings.map(finding => finding.title),
+            datasets: [
+              {
+                data: audit.datas.findings.map(finding =>
+                  cvssStringToScore(finding.cvssv3 ?? ''),
+                ),
+                backgroundColor: audit.datas.findings
+                  .map(finding =>
+                    cvssStringToScore(finding.cvssv3 ?? '') >= 9
+                      ? '#FF4136'
+                      : cvssStringToScore(finding.cvssv3 ?? '') >= 7
+                        ? '#FF851B'
+                        : cvssStringToScore(finding.cvssv3 ?? '') >= 4
+                          ? '#FFDC00'
+                          : '#2ECC40',
+                  )
+                  .join(', '),
+              },
+            ],
+          });
+        })
+        .catch(console.error);
+    } else {
+      getAuditsByClientName(clientName)
+        .then(audits => {
+          setAverageCVSS(
+            Math.round(
+              (audits.reduce(
+                (acc, audit) => acc + cvssStringToScore(audit.cvssv3),
+                0,
+              ) /
+                audits.length) *
+                10,
+            ) / 10,
+          );
+          setData({
+            labels: audits.map(audit => audit.name),
+            datasets: [
+              {
+                data: audits.map(audit => cvssStringToScore(audit.cvssv3)),
+                backgroundColor: audits
+                  .map(audit =>
+                    cvssStringToScore(audit.cvssv3) >= 9
+                      ? '#FF4136'
+                      : cvssStringToScore(audit.cvssv3) >= 7
+                        ? '#FF851B'
+                        : cvssStringToScore(audit.cvssv3) >= 4
+                          ? '#FFDC00'
+                          : '#2ECC40',
+                  )
+                  .join(', '),
+              },
+            ],
+          });
+        })
+        .catch(console.error);
+    }
+  }, [auditId, averageCVSS, clientName, paramId]);
 
   const options: ChartOptions<'bar'> = {
     indexAxis: 'y',

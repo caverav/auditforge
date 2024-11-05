@@ -27,14 +27,14 @@ const cvssStringTo = (
   cvssVector: string,
 ) => {
   const values: Record<string, number> = {
-    H: 3,
-    M: 2,
+    H: 2,
     L: 1,
+    N: 0,
   } as const;
   const substrings = {
-    integrity: 35,
-    availability: 39,
-    confidentiality: 43,
+    confidentiality: 35,
+    integrity: 39,
+    availability: 43,
   } as const;
   return values[cvssVector.substring(substrings[field], substrings[field] + 1)];
 };
@@ -106,7 +106,7 @@ const CIATriad: React.FC<CIATriadProps> = ({ auditId }) => {
           color: 'rgba(255, 255, 255, 0.1)',
         },
         suggestedMin: 0,
-        suggestedMax: 3,
+        suggestedMax: 2,
         ticks: {
           stepSize: 1,
           display: false,
