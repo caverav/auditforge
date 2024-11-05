@@ -164,8 +164,9 @@ export const Add = () => {
 
   const handleAddFinding = useCallback(() => {
     addFinding(newVulnTitle, auditId ?? '')
-      .then(res => {
+      .then(async res => {
         if (res.status === 'success') {
+          await handlerFindings();
           setNewVulnTitle('');
           toast.success(t('msg.findingCreateOk'));
         } else {
@@ -173,7 +174,7 @@ export const Add = () => {
         }
       })
       .catch(console.error);
-  }, [newVulnTitle, auditId]);
+  }, [newVulnTitle, auditId, handlerFindings]);
 
   return (
     <DivWrapper>
