@@ -28,6 +28,7 @@ const Navbar = (): JSX.Element => {
       current: false,
     },
     { name: t('nav.data'), href: '/data', current: false },
+    { name: t('dashboard'), href: '/dashboard', current: false },
   ];
   const location = useLocation();
 

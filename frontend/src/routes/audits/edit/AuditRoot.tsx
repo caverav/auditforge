@@ -115,7 +115,7 @@ export const AuditRoot = () => {
               name: finding.title,
               //TODO: Change hardcoded category to the real category
               category: 'No Category',
-              severity: cvssStringToSeverity(finding.cvssv3),
+              severity: cvssStringToSeverity(finding.cvssv3 ?? ''),
               identifier: finding._id,
               status: finding.status,
             };
