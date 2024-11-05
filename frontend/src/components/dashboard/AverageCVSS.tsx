@@ -10,7 +10,7 @@ import {
   Tooltip,
 } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { useParams } from 'react-router-dom';
 
@@ -44,9 +44,8 @@ type AverageCVSSProps = {
 
 const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId, clientName }) => {
   const paramId = useParams().auditId;
-  if (!auditId) {
-    auditId = paramId;
-  }
+  const auditIdRef = useRef(auditId ?? paramId);
+
   const [averageCVSS, setAverageCVSS] = useState(0);
   const [data, setData] = useState({
     labels: [''],
@@ -58,12 +57,12 @@ const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId, clientName }) => {
     ],
   });
   useEffect(() => {
-    if (auditId === undefined) {
-      auditId = paramId;
+    if (auditIdRef.current === undefined) {
+      auditIdRef.current = paramId;
     }
 
     if (clientName === undefined) {
-      getAuditById(auditId)
+      getAuditById(auditIdRef.current)
         .then(audit => {
           setAverageCVSS(
             Math.round(
@@ -82,16 +81,17 @@ const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId, clientName }) => {
                 data: audit.datas.findings.map(finding =>
                   cvssStringToScore(finding.cvssv3 ?? ''),
                 ),
-                // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-                backgroundColor: audit.datas.findings.map(finding =>
-                  cvssStringToScore(finding.cvssv3 ?? '') >= 9
-                    ? '#FF4136'
-                    : cvssStringToScore(finding.cvssv3 ?? '') >= 7
-                      ? '#FF851B'
-                      : cvssStringToScore(finding.cvssv3 ?? '') >= 4
-                        ? '#FFDC00'
-                        : '#2ECC40',
-                ) as unknown as string,
+                backgroundColor: audit.datas.findings
+                  .map(finding =>
+                    cvssStringToScore(finding.cvssv3 ?? '') >= 9
+                      ? '#FF4136'
+                      : cvssStringToScore(finding.cvssv3 ?? '') >= 7
+                        ? '#FF851B'
+                        : cvssStringToScore(finding.cvssv3 ?? '') >= 4
+                          ? '#FFDC00'
+                          : '#2ECC40',
+                  )
+                  .join(', '),
               },
             ],
           });
@@ -115,23 +115,24 @@ const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId, clientName }) => {
             datasets: [
               {
                 data: audits.map(audit => cvssStringToScore(audit.cvssv3)),
-                // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-                backgroundColor: audits.map(audit =>
-                  cvssStringToScore(audit.cvssv3) >= 9
-                    ? '#FF4136'
-                    : cvssStringToScore(audit.cvssv3) >= 7
-                      ? '#FF851B'
-                      : cvssStringToScore(audit.cvssv3) >= 4
-                        ? '#FFDC00'
-                        : '#2ECC40',
-                ) as unknown as string,
+                backgroundColor: audits
+                  .map(audit =>
+                    cvssStringToScore(audit.cvssv3) >= 9
+                      ? '#FF4136'
+                      : cvssStringToScore(audit.cvssv3) >= 7
+                        ? '#FF851B'
+                        : cvssStringToScore(audit.cvssv3) >= 4
+                          ? '#FFDC00'
+                          : '#2ECC40',
+                  )
+                  .join(', '),
               },
             ],
           });
         })
         .catch(console.error);
     }
-  }, [auditId, averageCVSS]);
+  }, [auditId, averageCVSS, clientName, paramId]);
 
   const options: ChartOptions<'bar'> = {
     indexAxis: 'y',
