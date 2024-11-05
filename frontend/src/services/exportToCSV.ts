@@ -100,7 +100,7 @@ export const exportToCSV = (
           const AVERAGE_CVSS =
             Math.round(
               (findings.reduce(
-                (acc, finding) => acc + cvssStringToScore(finding.cvssv3),
+                (acc, finding) => acc + cvssStringToScore(finding.cvssv3 ?? ''),
                 0,
               ) /
                 findings.length) *
@@ -108,7 +108,7 @@ export const exportToCSV = (
             ) / 10;
           const findingScores = findings.map(finding => ({
             label: finding.title,
-            value: cvssStringToScore(finding.cvssv3),
+            value: cvssStringToScore(finding.cvssv3 ?? ''),
           }));
           csvRows.push(`average-cvss,average,${AVERAGE_CVSS}`);
           findingScores.map(fs =>
@@ -118,19 +118,19 @@ export const exportToCSV = (
         if (selectedDisplays.find(item => item === 'cvss-score')) {
           const cvssScore = {
             C: findings.filter(
-              finding => cvssStringToSeverity(finding.cvssv3) === 'C',
+              finding => cvssStringToSeverity(finding.cvssv3 ?? '') === 'C',
             ).length,
             H: findings.filter(
-              finding => cvssStringToSeverity(finding.cvssv3) === 'H',
+              finding => cvssStringToSeverity(finding.cvssv3 ?? '') === 'H',
             ).length,
             M: findings.filter(
-              finding => cvssStringToSeverity(finding.cvssv3) === 'M',
+              finding => cvssStringToSeverity(finding.cvssv3 ?? '') === 'M',
             ).length,
             L: findings.filter(
-              finding => cvssStringToSeverity(finding.cvssv3) === 'L',
+              finding => cvssStringToSeverity(finding.cvssv3 ?? '') === 'L',
             ).length,
             I: findings.filter(
-              finding => cvssStringToSeverity(finding.cvssv3) === 'I',
+              finding => cvssStringToSeverity(finding.cvssv3 ?? '') === 'I',
             ).length,
           };
           csvRows.push(`cvssScore,C,${cvssScore.C}`);
@@ -142,9 +142,9 @@ export const exportToCSV = (
         if (selectedDisplays.find(item => item === 'cia-triad')) {
           const data = findings.map(finding => ({
             label: finding.title,
-            C: cvssStringToCIA('confidentiality', finding.cvssv3),
-            I: cvssStringToCIA('integrity', finding.cvssv3),
-            A: cvssStringToCIA('availability', finding.cvssv3),
+            C: cvssStringToCIA('confidentiality', finding.cvssv3 ?? ''),
+            I: cvssStringToCIA('integrity', finding.cvssv3 ?? ''),
+            A: cvssStringToCIA('availability', finding.cvssv3 ?? ''),
           }));
 
           data.map(cia =>
