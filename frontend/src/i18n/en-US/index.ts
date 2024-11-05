@@ -204,6 +204,8 @@ export default {
     errorGeneratingPdf: 'Failed exporting audit to pdf',
     errorSavingAuditCustomSections: 'Failed saving the audit custom sections',
     exportDashboardCSV: 'Error exporting dashboard to csv',
+    createUser: 'Error creating user',
+    confirmPasswordDifferents: 'Passwords do not match',
   },
   cvss: {
     title: 'CVSS v3.1 Base Score',
@@ -736,4 +738,14 @@ export default {
   cleanRecommendations: 'Clean Recommendations',
   errorRecommendingCVSS: 'Error generating recommendation',
   exportDashboard: 'Export Dashboard',
+  mostCommon: 'Most common',
+  foundInTotal: 'Found in total',
+  vulnBySeverity: 'Vulnerabilities by severity',
+  timesPerAudit: 'Times per audit',
+  cwesFound: 'CWEs found',
+  averageCiaTriad: 'Average CIA triad',
+  averageCvss: 'Average CVSS',
+  averageRemediationPriority: 'Average Remediation Priority',
+  clientSelect: 'Select your client',
+  occurrences: 'Occurrences',
 };

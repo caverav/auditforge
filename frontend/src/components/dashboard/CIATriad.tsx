@@ -90,7 +90,7 @@ const CIATriad: React.FC<CIATriadProps> = ({ auditId }) => {
           color: 'rgba(255, 255, 255, 0.1)',
         },
         suggestedMin: 0,
-        suggestedMax: 3,
+        suggestedMax: 2,
         ticks: {
           stepSize: 1,
           display: false,

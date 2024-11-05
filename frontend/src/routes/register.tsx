@@ -1,5 +1,6 @@
 import { t } from 'i18next';
-import { toast } from 'sonner';
+import { useCallback } from 'react';
+import { toast, Toaster } from 'sonner';
 
 import useAuth from '../hooks/useAuth';
 
@@ -9,22 +10,31 @@ const getValue = (id: string): string => {
 };
 export const Register = () => {
   const { register } = useAuth();
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const password = getValue('password');
-    const confirmPassword = getValue('confirmPassword');
-    if (password !== confirmPassword) {
-      toast.error(t('confirmPasswordDifferents'));
-      console.error('Passwords do not match');
-      return;
-    }
-    register(
-      getValue('username'),
-      getValue('firstname'),
-      getValue('lastname'),
-      password,
-    ).catch(console.error);
-  };
+  const handleSubmit = useCallback(
+    (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      const password = getValue('password');
+      const confirmPassword = getValue('confirmPassword');
+      if (password !== confirmPassword) {
+        toast.error(t('err.confirmPasswordDifferents'));
+        console.error('Passwords do not match');
+        return;
+      }
+      register(
+        getValue('username'),
+        getValue('firstname'),
+        getValue('lastname'),
+        password,
+      )
+        .then(result => {
+          if (!result) {
+            toast.error(t('err.createUser'));
+          }
+        })
+        .catch(console.error);
+    },
+    [register],
+  );
   return (
     <section className="bg-gray-800 h-screen flex flex-col md:flex-row justify-center space-y-10 md:space-y-0 md:space-x-16 items-center my-2 mx-5 md:mx-0 md:my-0">
       <div className="md:w-1/3 max-w-sm">
@@ -74,6 +84,16 @@ export const Register = () => {
           </button>
         </form>
       </div>
+      <Toaster
+        toastOptions={{
+          classNames: {
+            error: 'bg-red-400 text-white',
+            success: 'bg-green-400 text-white',
+            warning: 'bg-yellow-400 text-white',
+            info: 'bg-blue-400 text-white',
+          },
+        }}
+      />
     </section>
   );
 };

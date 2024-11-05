@@ -52,19 +52,19 @@ const CVSSScore: React.FC<CVSSScoreProps> = ({ auditId }) => {
             {
               data: [
                 audit.datas.findings.filter(
-                  finding => cvssStringToSeverity(finding.cvssv3) === 'C',
+                  finding => cvssStringToSeverity(finding.cvssv3 ?? '') === 'C',
                 ).length,
                 audit.datas.findings.filter(
-                  finding => cvssStringToSeverity(finding.cvssv3) === 'H',
+                  finding => cvssStringToSeverity(finding.cvssv3 ?? '') === 'H',
                 ).length,
                 audit.datas.findings.filter(
-                  finding => cvssStringToSeverity(finding.cvssv3) === 'M',
+                  finding => cvssStringToSeverity(finding.cvssv3 ?? '') === 'M',
                 ).length,
                 audit.datas.findings.filter(
-                  finding => cvssStringToSeverity(finding.cvssv3) === 'L',
+                  finding => cvssStringToSeverity(finding.cvssv3 ?? '') === 'L',
                 ).length,
                 audit.datas.findings.filter(
-                  finding => cvssStringToSeverity(finding.cvssv3) === 'I',
+                  finding => cvssStringToSeverity(finding.cvssv3 ?? '') === 'I',
                 ).length,
               ],
               backgroundColor: [

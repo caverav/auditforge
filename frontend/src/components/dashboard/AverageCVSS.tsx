@@ -15,6 +15,7 @@ import { useParams } from 'react-router-dom';
 
 import { getAuditById } from '@/services/audits';
 import { cvssStringToScore } from '@/lib/utils';
+import { getAuditsByClientName } from '@/services/clients';
 
 ChartJS.register(
   CategoryScale,
@@ -28,9 +29,10 @@ ChartJS.register(
 
 type AverageCVSSProps = {
   auditId?: string;
+  clientName?: string;
 };
 
-const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId }) => {
+const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId, clientName }) => {
   const paramId = useParams().auditId;
   if (!auditId) {
     auditId = paramId;
@@ -49,40 +51,76 @@ const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId }) => {
     if (auditId === undefined) {
       auditId = paramId;
     }
-    getAuditById(auditId)
-      .then(audit => {
-        setAverageCVSS(
-          Math.round(
-            (audit.datas.findings.reduce(
-              (acc, finding) => acc + cvssStringToScore(finding.cvssv3),
-              0,
-            ) /
-              audit.datas.findings.length) *
-              10,
-          ) / 10,
-        );
-        setData({
-          labels: audit.datas.findings.map(finding => finding.title),
-          datasets: [
-            {
-              data: audit.datas.findings.map(finding =>
-                cvssStringToScore(finding.cvssv3),
-              ),
-              // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-              backgroundColor: audit.datas.findings.map(finding =>
-                cvssStringToScore(finding.cvssv3) >= 9
-                  ? '#FF4136'
-                  : cvssStringToScore(finding.cvssv3) >= 7
-                    ? '#FF851B'
-                    : cvssStringToScore(finding.cvssv3) >= 4
-                      ? '#FFDC00'
-                      : '#2ECC40',
-              ) as unknown as string,
-            },
-          ],
-        });
-      })
-      .catch(console.error);
+
+    if (clientName === undefined) {
+      getAuditById(auditId)
+        .then(audit => {
+          setAverageCVSS(
+            Math.round(
+              (audit.datas.findings.reduce(
+                (acc, finding) => acc + cvssStringToScore(finding.cvssv3 ?? ''),
+                0,
+              ) /
+                audit.datas.findings.length) *
+                10,
+            ) / 10,
+          );
+          setData({
+            labels: audit.datas.findings.map(finding => finding.title),
+            datasets: [
+              {
+                data: audit.datas.findings.map(finding =>
+                  cvssStringToScore(finding.cvssv3 ?? ''),
+                ),
+                // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+                backgroundColor: audit.datas.findings.map(finding =>
+                  cvssStringToScore(finding.cvssv3 ?? '') >= 9
+                    ? '#FF4136'
+                    : cvssStringToScore(finding.cvssv3 ?? '') >= 7
+                      ? '#FF851B'
+                      : cvssStringToScore(finding.cvssv3 ?? '') >= 4
+                        ? '#FFDC00'
+                        : '#2ECC40',
+                ) as unknown as string,
+              },
+            ],
+          });
+        })
+        .catch(console.error);
+    } else {
+      getAuditsByClientName(clientName)
+        .then(audits => {
+          setAverageCVSS(
+            Math.round(
+              (audits.reduce(
+                (acc, audit) => acc + cvssStringToScore(audit.cvssv3),
+                0,
+              ) /
+                audits.length) *
+                10,
+            ) / 10,
+          );
+          setData({
+            labels: audits.map(audit => audit.name),
+            datasets: [
+              {
+                data: audits.map(audit => cvssStringToScore(audit.cvssv3)),
+                // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+                backgroundColor: audits.map(audit =>
+                  cvssStringToScore(audit.cvssv3) >= 9
+                    ? '#FF4136'
+                    : cvssStringToScore(audit.cvssv3) >= 7
+                      ? '#FF851B'
+                      : cvssStringToScore(audit.cvssv3) >= 4
+                        ? '#FFDC00'
+                        : '#2ECC40',
+                ) as unknown as string,
+              },
+            ],
+          });
+        })
+        .catch(console.error);
+    }
   }, [auditId, averageCVSS]);
 
   const options: ChartOptions<'bar'> = {

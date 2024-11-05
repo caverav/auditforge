@@ -109,7 +109,7 @@ export const AuditRoot = () => {
               id: finding.identifier,
               name: finding.title,
               category: 'No Category',
-              severity: cvssStringToSeverity(finding.cvssv3),
+              severity: cvssStringToSeverity(finding.cvssv3 ?? ''),
               identifier: finding._id,
             };
           }),
