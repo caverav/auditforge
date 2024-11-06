@@ -82,7 +82,11 @@ export const ModelUpdateContainer = () => {
         >
           <HoverCard>
             <HoverCardTrigger>
-              <ArrowPathIcon className="h-8 w-8 animate-spin text-gray-100" />
+              <ArrowPathIcon
+                className={clsx('h-8 w-8 text-gray-100', {
+                  'animate-spin': isUpdating,
+                })}
+              />
             </HoverCardTrigger>
             <HoverCardContent>
               {isUpdating ? t('updatingCWEModel') : t('updateAvailable')}
