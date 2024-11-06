@@ -74,7 +74,7 @@ export const Audits = () => {
 
   const [isOpenNewAuditModal, setIsOpenNewAuditModal] = useState(false);
 
-  const [selectedValue, setSelectedValue] = useState('');
+  const [selectedValue, setSelectedValue] = useState('1');
 
   const [nameAudit, setNameAudit] = useState<string>('');
 
