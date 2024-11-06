@@ -78,6 +78,10 @@ const builtInRoles = {
       'settings:read-public',
       // Classify
       'classify:all',
+      // Check CWE Update
+      'check-update:all',
+      // Update CWE Model
+      'update-model:all',
     ],
   },
   admin: {
