@@ -172,7 +172,11 @@ export const AuditRoot = () => {
         findings={findings}
         isCollapsed={isCollapsed}
         isListVisible={isListVisible}
-        menuItems={menuItems}
+        menuItems={
+          findings.length > 0
+            ? menuItems
+            : menuItems.filter(item => item.value !== 'dashboard')
+        }
         sections={sections}
         setActiveItem={setActiveItem}
         setIsCollapsed={setIsCollapsed}
