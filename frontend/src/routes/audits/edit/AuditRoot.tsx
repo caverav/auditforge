@@ -145,7 +145,7 @@ export const AuditRoot = () => {
         id: findingIter.identifier,
         name: findingIter.title,
         category: 'No Category',
-        severity: cvssStringToSeverity(findingIter.cvssv3),
+        severity: cvssStringToSeverity(findingIter.cvssv3 ?? ''),
         identifier: findingIter._id,
         status: findingIter.status,
       }));
