@@ -143,6 +143,10 @@ const CVSSCalculator: React.FC<CVSSProp> = ({
   const parseCVSSVector = (vector: string) => {
     const parts = vector.split('/').slice(1);
     parts.forEach(part => {
+      if (part === '') {
+        setChanged(true);
+        return;
+      }
       const [key, value] = part.split(':');
       const mappedValue = valueMappings[key][value] || '';
       switch (key) {

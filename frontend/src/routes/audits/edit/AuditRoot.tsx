@@ -9,6 +9,7 @@ import { getCustomSections, Section } from '@/services/data';
 
 import AuditSidebar from '../../../components/navbar/AuditSidebar';
 import { AuditSection, Finding, getAuditById } from '../../../services/audits';
+import { AuditProvider } from './AuditContext';
 
 export const AuditRoot = () => {
   const { t } = useTranslation();
@@ -27,6 +28,7 @@ export const AuditRoot = () => {
       category: string;
       severity: string;
       identifier: string;
+      status: number;
     }[]
   >([]);
 
@@ -70,6 +72,9 @@ export const AuditRoot = () => {
   const [auditSections, setAuditSections] = useState<AuditSection[]>([]);
   const [sections, setSections] = useState<Section[]>([]);
   const [isListVisible, setIsListVisible] = useState(false);
+  const [nameAudit, setNameAudit] = useState<string>('');
+  const [auditType, setAuditType] = useState<string>('');
+  const [currentLanguage, setCurrentLanguage] = useState<string>('');
 
   useEffect(() => {
     getCustomSections()
@@ -108,12 +113,18 @@ export const AuditRoot = () => {
             return {
               id: finding.identifier,
               name: finding.title,
+              //TODO: Change hardcoded category to the real category
               category: 'No Category',
               severity: cvssStringToSeverity(finding.cvssv3 ?? ''),
               identifier: finding._id,
+              status: finding.status,
             };
           }),
         );
+        // handlerFindings(audit.datas.findings);
+        setNameAudit(audit.datas.name);
+        setAuditType(audit.datas.auditType);
+        setCurrentLanguage(audit.datas.language);
       })
       .catch(console.error);
   }, [auditId, sections]);
@@ -126,6 +137,31 @@ export const AuditRoot = () => {
   ];
 
   const connectedUsers: { id: number; name: string; online: boolean }[] = [];
+
+  const handlerFindings = async () => {
+    try {
+      const audit = await getAuditById(auditId);
+      const findingsData = audit.datas.findings.map((findingIter: Finding) => ({
+        id: findingIter.identifier,
+        name: findingIter.title,
+        category: 'No Category',
+        severity: cvssStringToSeverity(findingIter.cvssv3 ?? ''),
+        identifier: findingIter._id,
+        status: findingIter.status,
+      }));
+      setFindings(findingsData);
+      return findingsData;
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
+  };
+
+  const auditData = {
+    title: nameAudit,
+    auditType,
+    locale: currentLanguage,
+  };
 
   return (
     <div className="flex overflow-hidden">
@@ -153,7 +189,9 @@ export const AuditRoot = () => {
         sortOrderOptions={sortOrderOptions}
       />
       <div className="flex-1 overflow-auto">
-        <Outlet />
+        <AuditProvider value={{ ...auditData, handlerFindings }}>
+          <Outlet />
+        </AuditProvider>
       </div>
     </div>
   );

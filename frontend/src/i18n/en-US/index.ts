@@ -205,6 +205,7 @@ export default {
     passwordsDontMatch: 'Passwords do not match',
     errorGeneratingPdf: 'Failed exporting audit to pdf',
     errorSavingAuditCustomSections: 'Failed saving the audit custom sections',
+    failedDeleteFinding: 'Failed to delete the finding',
     updateCWEModelFailed: 'Failed Updating CWE Model',
     exportDashboardCSV: 'Error exporting dashboard to csv',
     createUser: 'Error creating user',
