@@ -202,7 +202,8 @@ export const Audits = () => {
         const languageNames = dataLanguage.datas.map(
           (item: LanguageData, index: number) => ({
             id: index,
-            value: item.language,
+            value: item.locale,
+            label: item.language,
           }),
         );
         setLanguages(languageNames);
