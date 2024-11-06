@@ -414,7 +414,7 @@ export const Edit = () => {
           </div>
           <div className="m-4 bg-gray-900 rounded-lg p-4 flex flex-col gap-4">
             <div className="flex justify-between">
-              <div className="flex flex-col gap-2 md:flex-row md:gap-4">
+              <div className="flex flex-col gap-2 md:flex-row md:gap-4 md:items-center">
                 <span className="font-bold">
                   {title} ({auditType})
                 </span>
