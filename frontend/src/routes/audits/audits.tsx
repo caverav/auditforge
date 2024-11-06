@@ -231,7 +231,7 @@ export const Audits = () => {
   const handleCancelNewAudit = () => {
     setCurrentAuditType(null);
     setCurrentLanguage(null);
-    setSelectedValue('');
+    setSelectedValue('1');
     setNameAudit('');
     setIsOpenNewAuditModal(!isOpenNewAuditModal);
   };
@@ -252,7 +252,7 @@ export const Audits = () => {
       });
       setCurrentAuditType(null);
       setCurrentLanguage(null);
-      setSelectedValue('');
+      setSelectedValue('1');
       setNameAudit('');
       void fetchAndUpdateData();
     } catch (error) {
