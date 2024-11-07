@@ -99,6 +99,19 @@ const CVSSScore: React.FC<CVSSScoreProps> = ({ auditId }) => {
           color: 'white',
         },
       },
+      datalabels: {
+        formatter: (value: number) => {
+          let total = 0;
+          pieChartData.datasets[0].data.forEach(d => {
+            total += d;
+          });
+          if (value / total === 0) {
+            return '';
+          }
+          return ((value / total) * 100).toFixed(2) + '%';
+        },
+        color: '#eee' as const,
+      },
     },
   };
 
