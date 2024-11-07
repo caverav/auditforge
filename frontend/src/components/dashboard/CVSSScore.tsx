@@ -108,6 +108,20 @@ const CVSSScore: React.FC<CVSSScoreProps> = ({ auditId }) => {
           color: 'white',
         },
       },
+      datalabels: {
+        formatter: (value: number) => {
+          let total = 0;
+          pieChartData.datasets[0].data.forEach(d => {
+            total += d;
+          });
+          const percentage = ((value / total) * 100).toFixed(2);
+          if (percentage === '0.00' || percentage === 'NaN') {
+            return '';
+          }
+          return percentage + '%';
+        },
+        color: '#eee' as const,
+      },
     },
   };
 

@@ -1,9 +1,10 @@
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { t } from 'i18next';
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 
-ChartJS.register(ArcElement, Tooltip, Legend);
+ChartJS.register(ArcElement, Tooltip, Legend, ChartDataLabels);
 
 type SeverityData = {
   name: string;
@@ -53,6 +54,20 @@ export const SeverityPieChart: React.FC<Props> = ({ data, total }) => {
             size: 15,
           },
         },
+      },
+      datalabels: {
+        formatter: (value: number) => {
+          let total = 0;
+          data.forEach(d => {
+            total += d.value;
+          });
+          const percentage = ((value / total) * 100).toFixed(2);
+          if (percentage === '0.00' || percentage === 'NaN') {
+            return '';
+          }
+          return percentage + '%';
+        },
+        color: '#eee' as const,
       },
     },
   };

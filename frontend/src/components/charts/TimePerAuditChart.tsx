@@ -1,12 +1,15 @@
 import {
   BarElement,
+  BubbleDataPoint,
   CategoryScale,
   Chart as ChartJS,
   Legend,
   LinearScale,
+  Point,
   Title,
   Tooltip,
 } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { t } from 'i18next';
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
@@ -18,6 +21,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
+  ChartDataLabels,
 );
 
 type AuditTime = {
@@ -67,6 +71,35 @@ export const TimePerAuditChart: React.FC<Props> = ({ data }) => {
             size: 15,
           },
         },
+      },
+      datalabels: {
+        formatter: (
+          _: unknown,
+          context: {
+            chart: ChartJS;
+            dataIndex: number;
+            dataset: {
+              data: (
+                | number
+                | [number, number]
+                | Point
+                | BubbleDataPoint
+                | null
+              )[];
+            };
+          },
+        ) => {
+          const current = parseFloat(
+            (context.dataset.data[context.dataIndex] ?? '0').toString(),
+          );
+          let total = 0;
+          data.forEach(d => {
+            total += d.remediation;
+            total += d.execution;
+          });
+          return ((current / total) * 100).toFixed(2) + '%';
+        },
+        color: '#fff' as const,
       },
     },
     scales: {

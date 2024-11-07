@@ -32,6 +32,7 @@
     "ae-cvss-calculator": "^1.0.2",
     "chart.js": "^4.4.4",
     "chartjs-plugin-annotation": "^3.0.1",
+    "chartjs-plugin-datalabels": "^2.2.0",
     "check-password-strength": "^2.0.10",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",

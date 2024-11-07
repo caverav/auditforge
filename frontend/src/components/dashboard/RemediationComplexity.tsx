@@ -106,6 +106,9 @@ const RemediationComplexity: React.FC<RemediationComplexityProps> = ({
       legend: {
         display: false,
       },
+      datalabels: {
+        formatter: () => '',
+      },
     },
   };
 

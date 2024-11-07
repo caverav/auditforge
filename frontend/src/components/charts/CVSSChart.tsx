@@ -70,6 +70,9 @@ export const CVSSChart: React.FC<Props> = ({ data }) => {
       legend: {
         display: false,
       },
+      datalabels: {
+        formatter: () => '',
+      },
       annotation: {
         annotations: {
           line1: {
