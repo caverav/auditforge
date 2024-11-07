@@ -758,4 +758,5 @@ export default {
   averageRemediationPriority: 'Average Remediation Priority',
   clientSelect: 'Select your client',
   occurrences: 'Occurrences',
+  filters: 'Filters',
 };

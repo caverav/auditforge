@@ -123,7 +123,7 @@ const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId, clientName }) => {
   }, [auditId, averageCVSS, clientName, paramId]);
 
   const options: ChartOptions<'bar'> = {
-    indexAxis: 'y',
+    indexAxis: 'y' as const,
     responsive: true,
     maintainAspectRatio: false,
     layout: {
@@ -137,15 +137,15 @@ const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId, clientName }) => {
         max: 10,
         ticks: {
           stepSize: 2,
-          color: 'white',
+          color: 'white' as const,
         },
         grid: {
-          color: 'rgba(255, 255, 255, 0.1)',
+          color: 'rgba(255, 255, 255, 0.1)' as const,
         },
       },
       y: {
         ticks: {
-          color: 'white',
+          color: 'white' as const,
         },
         grid: {
           display: false,
@@ -162,10 +162,10 @@ const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId, clientName }) => {
       annotation: {
         annotations: {
           line1: {
-            type: 'line',
+            type: 'line' as const,
             xMin: averageCVSS,
             xMax: averageCVSS,
-            borderColor: '#2ecc71',
+            borderColor: '#2ecc71' as const,
             borderWidth: 2,
             borderDash: [5, 5],
           },

@@ -62,6 +62,15 @@ export const TimePerAuditChart: React.FC<Props> = ({ data }) => {
     plugins: {
       legend: {
         position: 'top' as const,
+        title: {
+          display: true,
+          text: t('filters'),
+          color: 'white' as const,
+          font: {
+            weight: 'bold' as const,
+            size: 15,
+          },
+        },
       },
       datalabels: {
         formatter: (

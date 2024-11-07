@@ -75,24 +75,33 @@ export const CIATriadChart: React.FC<Props> = ({ data }) => {
             return value;
           },
           display: true,
-          color: 'black',
+          color: 'black' as const,
         },
         pointLabels: {
           font: {
             size: 14,
           },
-          color: 'white',
+          color: 'white' as const,
         },
         grid: {
-          color: 'rgba(255, 255, 255, 0.1)',
+          color: 'rgba(255, 255, 255, 0.1)' as const,
         },
       },
     },
     plugins: {
       legend: {
         position: 'bottom' as const,
+        title: {
+          display: true,
+          text: t('filters'),
+          color: 'white' as const,
+          font: {
+            weight: 'bold' as const,
+            size: 15,
+          },
+        },
         labels: {
-          color: 'white',
+          color: 'white' as const,
           boxWidth: 20,
           padding: 20,
         },
@@ -101,10 +110,10 @@ export const CIATriadChart: React.FC<Props> = ({ data }) => {
         formatter: () => '',
       },
       tooltip: {
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        titleColor: 'white',
-        bodyColor: 'white',
-        borderColor: 'white',
+        backgroundColor: 'rgba(0, 0, 0, 0.8)' as const,
+        titleColor: 'white' as const,
+        bodyColor: 'white' as const,
+        borderColor: 'white' as const,
         borderWidth: 1,
       },
     },
