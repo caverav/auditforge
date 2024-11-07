@@ -211,6 +211,7 @@ const AuditSidebar = ({
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
+      toast.success(t('msg.auditEncryptedOk'));
     } else {
       toast.error(t('err.errorGeneratingPdf'));
     }
