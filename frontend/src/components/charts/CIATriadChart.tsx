@@ -91,6 +91,15 @@ export const CIATriadChart: React.FC<Props> = ({ data }) => {
     plugins: {
       legend: {
         position: 'bottom' as const,
+        title: {
+          display: true,
+          text: t('filters'),
+          color: 'white',
+          font: {
+            weight: 'bold',
+            size: 15,
+          },
+        },
         labels: {
           color: 'white',
           boxWidth: 20,

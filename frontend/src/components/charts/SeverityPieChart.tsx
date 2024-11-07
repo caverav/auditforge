@@ -41,6 +41,18 @@ export const SeverityPieChart: React.FC<Props> = ({ data, total }) => {
     plugins: {
       legend: {
         position: 'bottom' as const,
+        title: {
+          display: true,
+          text: t('filters'),
+          color: 'white',
+          padding: {
+            top: 20,
+          },
+          font: {
+            weight: 'bold',
+            size: 15,
+          },
+        },
       },
     },
   };

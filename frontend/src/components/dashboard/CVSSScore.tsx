@@ -95,6 +95,15 @@ const CVSSScore: React.FC<CVSSScoreProps> = ({ auditId }) => {
     plugins: {
       legend: {
         position: 'right' as const,
+        title: {
+          display: true,
+          text: t('filters'),
+          color: 'white',
+          font: {
+            weight: 'bold',
+            size: 15,
+          },
+        },
         labels: {
           color: 'white',
         },

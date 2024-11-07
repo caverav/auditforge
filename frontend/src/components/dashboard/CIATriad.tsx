@@ -7,6 +7,7 @@ import {
   RadialLinearScale,
   Tooltip,
 } from 'chart.js';
+import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
 import { Radar } from 'react-chartjs-2';
 import { useParams } from 'react-router-dom';
@@ -109,6 +110,15 @@ const CIATriad: React.FC<CIATriadProps> = ({ auditId }) => {
     plugins: {
       legend: {
         position: 'bottom' as const,
+        title: {
+          display: true,
+          text: t('filters'),
+          color: 'white',
+          font: {
+            weight: 'bold',
+            size: 15,
+          },
+        },
         labels: {
           color: 'white',
           boxWidth: 20,
