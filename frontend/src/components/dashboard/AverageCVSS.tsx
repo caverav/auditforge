@@ -71,17 +71,16 @@ const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId, clientName }) => {
                 data: audit.datas.findings.map(finding =>
                   cvssStringToScore(finding.cvssv3 ?? ''),
                 ),
-                backgroundColor: audit.datas.findings
-                  .map(finding =>
-                    cvssStringToScore(finding.cvssv3 ?? '') >= 9
-                      ? '#FF4136'
-                      : cvssStringToScore(finding.cvssv3 ?? '') >= 7
-                        ? '#FF851B'
-                        : cvssStringToScore(finding.cvssv3 ?? '') >= 4
-                          ? '#FFDC00'
-                          : '#2ECC40',
-                  )
-                  .join(', '),
+                // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+                backgroundColor: audit.datas.findings.map(finding =>
+                  cvssStringToScore(finding.cvssv3 ?? '') >= 9
+                    ? '#FF4136'
+                    : cvssStringToScore(finding.cvssv3 ?? '') >= 7
+                      ? '#FF851B'
+                      : cvssStringToScore(finding.cvssv3 ?? '') >= 4
+                        ? '#FFDC00'
+                        : '#2ECC40',
+                ) as string,
               },
             ],
           });
@@ -105,17 +104,15 @@ const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId, clientName }) => {
             datasets: [
               {
                 data: audits.map(audit => cvssStringToScore(audit.cvssv3)),
-                backgroundColor: audits
-                  .map(audit =>
-                    cvssStringToScore(audit.cvssv3) >= 9
-                      ? '#FF4136'
-                      : cvssStringToScore(audit.cvssv3) >= 7
-                        ? '#FF851B'
-                        : cvssStringToScore(audit.cvssv3) >= 4
-                          ? '#FFDC00'
-                          : '#2ECC40',
-                  )
-                  .join(', '),
+                backgroundColor: audits.map(audit =>
+                  cvssStringToScore(audit.cvssv3) >= 9
+                    ? '#FF4136'
+                    : cvssStringToScore(audit.cvssv3) >= 7
+                      ? '#FF851B'
+                      : cvssStringToScore(audit.cvssv3) >= 4
+                        ? '#FFDC00'
+                        : '#2ECC40',
+                ),
               },
             ],
           });
