@@ -45,15 +45,15 @@ export const SeverityPieChart: React.FC<Props> = ({ data, total }) => {
       },
       datalabels: {
         formatter: (value: number) => {
-          // count total number of findings
           let total = 0;
           data.forEach(d => {
             total += d.value;
           });
-          if (value / total === 0) {
+          const percentage = ((value / total) * 100).toFixed(2);
+          if (percentage === '0.00' || percentage === 'NaN') {
             return '';
           }
-          return ((value / total) * 100).toFixed(2) + '%';
+          return percentage + '%';
         },
         color: '#eee' as const,
       },
