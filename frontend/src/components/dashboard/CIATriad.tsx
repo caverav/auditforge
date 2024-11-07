@@ -45,7 +45,7 @@ const CIATriad: React.FC<CIATriadProps> = ({ auditId }) => {
     labels: string[];
     datasets: Dataset[];
   }>({
-    labels: ['Integrity', 'Availability', 'Confidentiality'],
+    labels: ['Integrity', 'Availability', 'Confidentiality'] as const,
     datasets: [],
   });
 
@@ -53,14 +53,14 @@ const CIATriad: React.FC<CIATriadProps> = ({ auditId }) => {
     getAuditById(auditId)
       .then(audit => {
         setData({
-          labels: ['Integrity', 'Availability', 'Confidentiality'],
+          labels: ['Integrity', 'Availability', 'Confidentiality'] as const,
           datasets: audit.datas.findings.map(finding => {
             if (!finding.cvssv3) {
               return {
                 label: finding.title,
                 data: [0, 0, 0],
                 backgroundColor: `rgba(${Math.floor(Math.random() * 155 + 100)}, ${Math.floor(Math.random() * 155 + 100)}, ${Math.floor(Math.random() * 155 + 100)}, 0.2)`,
-                borderColor: 'rgba(255, 255, 255, 0.2)',
+                borderColor: 'rgba(255, 255, 255, 0.2)' as const,
                 borderWidth: 2,
               };
             }
@@ -72,7 +72,7 @@ const CIATriad: React.FC<CIATriadProps> = ({ auditId }) => {
                 cvssStringToCIA('confidentiality', finding.cvssv3),
               ],
               backgroundColor: `rgba(${Math.floor(Math.random() * 155 + 100)}, ${Math.floor(Math.random() * 155 + 100)}, ${Math.floor(Math.random() * 155 + 100)}, 0.2)`,
-              borderColor: 'rgba(255, 255, 255, 0.2)',
+              borderColor: 'rgba(255, 255, 255, 0.2)' as const,
               borderWidth: 2,
             };
           }),
@@ -88,7 +88,7 @@ const CIATriad: React.FC<CIATriadProps> = ({ auditId }) => {
       r: {
         angleLines: {
           display: true,
-          color: 'rgba(255, 255, 255, 0.1)',
+          color: 'rgba(255, 255, 255, 0.1)' as const,
         },
         suggestedMin: 0,
         suggestedMax: 2,
@@ -100,10 +100,10 @@ const CIATriad: React.FC<CIATriadProps> = ({ auditId }) => {
           font: {
             size: 14,
           },
-          color: 'white',
+          color: 'white' as const,
         },
         grid: {
-          color: 'rgba(255, 255, 255, 0.1)',
+          color: 'rgba(255, 255, 255, 0.1)' as const,
         },
       },
     },
@@ -113,14 +113,14 @@ const CIATriad: React.FC<CIATriadProps> = ({ auditId }) => {
         title: {
           display: true,
           text: t('filters'),
-          color: 'white',
+          color: 'white' as const,
           font: {
-            weight: 'bold',
+            weight: 'bold' as const,
             size: 15,
           },
         },
         labels: {
-          color: 'white',
+          color: 'white' as const,
           boxWidth: 20,
           padding: 20,
         },
@@ -129,10 +129,10 @@ const CIATriad: React.FC<CIATriadProps> = ({ auditId }) => {
         formatter: () => '',
       },
       tooltip: {
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        titleColor: 'white',
-        bodyColor: 'white',
-        borderColor: 'white',
+        backgroundColor: 'rgba(0, 0, 0, 0.8)' as const,
+        titleColor: 'white' as const,
+        bodyColor: 'white' as const,
+        borderColor: 'white' as const,
         borderWidth: 1,
       },
     },

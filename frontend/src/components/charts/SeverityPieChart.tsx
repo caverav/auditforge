@@ -45,12 +45,12 @@ export const SeverityPieChart: React.FC<Props> = ({ data, total }) => {
         title: {
           display: true,
           text: t('filters'),
-          color: 'white',
+          color: 'white' as const,
           padding: {
             top: 20,
           },
           font: {
-            weight: 'bold',
+            weight: 'bold' as const,
             size: 15,
           },
         },

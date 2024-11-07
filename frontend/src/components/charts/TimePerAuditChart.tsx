@@ -65,9 +65,9 @@ export const TimePerAuditChart: React.FC<Props> = ({ data }) => {
         title: {
           display: true,
           text: t('filters'),
-          color: 'white',
+          color: 'white' as const,
           font: {
-            weight: 'bold',
+            weight: 'bold' as const,
             size: 15,
           },
         },
