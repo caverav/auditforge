@@ -13,8 +13,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { useParams } from 'react-router-dom';
 
-import { getAuditById } from '@/services/audits';
 import { cvssStringToScore } from '@/lib/utils';
+import { getAuditById } from '@/services/audits';
 import { getAuditsByClientName } from '@/services/clients';
 
 ChartJS.register(
@@ -71,7 +71,6 @@ const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId, clientName }) => {
                 data: audit.datas.findings.map(finding =>
                   cvssStringToScore(finding.cvssv3 ?? ''),
                 ),
-                // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
                 backgroundColor: audit.datas.findings.map(finding =>
                   cvssStringToScore(finding.cvssv3 ?? '') >= 9
                     ? '#FF4136'
@@ -80,7 +79,7 @@ const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId, clientName }) => {
                       : cvssStringToScore(finding.cvssv3 ?? '') >= 4
                         ? '#FFDC00'
                         : '#2ECC40',
-                ) as string,
+                ),
               },
             ],
           });
