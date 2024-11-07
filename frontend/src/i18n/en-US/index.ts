@@ -165,6 +165,8 @@ export default {
       'The custom sections have been saved successfully',
     updateCWEModelOk: 'CWE Model Updated Successfully',
     exportDashboardCSVOk: 'Exported dashboard to CSV successfully',
+    auditEncryptedOk: 'Encrypted Audit as PDF Successfully',
+    copiedToClipboard: 'Copied to clipboard',
   },
   err: {
     notDefinedLanguage: 'Not defined for this language',
