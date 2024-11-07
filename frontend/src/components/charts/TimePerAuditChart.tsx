@@ -7,6 +7,7 @@ import {
   Title,
   Tooltip,
 } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { t } from 'i18next';
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
@@ -18,6 +19,7 @@ ChartJS.register(
   Title,
   Tooltip,
   Legend,
+  ChartDataLabels,
 );
 
 type AuditTime = {
@@ -58,6 +60,9 @@ export const TimePerAuditChart: React.FC<Props> = ({ data }) => {
     plugins: {
       legend: {
         position: 'top' as const,
+      },
+      datalabels: {
+        formatter: () => '',
       },
     },
     scales: {
