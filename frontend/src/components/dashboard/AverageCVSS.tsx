@@ -71,6 +71,7 @@ const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId, clientName }) => {
                 data: audit.datas.findings.map(finding =>
                   cvssStringToScore(finding.cvssv3 ?? ''),
                 ),
+                // @ts-expect-error component accepts string[] to put multiple colors, but the type is string
                 backgroundColor: audit.datas.findings.map(finding =>
                   cvssStringToScore(finding.cvssv3 ?? '') >= 9
                     ? '#FF4136'
@@ -103,6 +104,7 @@ const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId, clientName }) => {
             datasets: [
               {
                 data: audits.map(audit => cvssStringToScore(audit.cvssv3)),
+                // @ts-expect-error component accepts string[] to put multiple colors, but the type is string
                 backgroundColor: audits.map(audit =>
                   cvssStringToScore(audit.cvssv3) >= 9
                     ? '#FF4136'
