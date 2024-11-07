@@ -53,6 +53,9 @@ export const RemediationPriorityChart: React.FC<Props> = ({ data }) => {
       legend: {
         display: false,
       },
+      datalabels: {
+        formatter: () => '',
+      },
     },
     scales: {
       y: {
