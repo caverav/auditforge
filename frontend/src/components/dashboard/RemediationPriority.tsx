@@ -106,6 +106,9 @@ const RemediationPriority: React.FC<RemediationPriorityProps> = ({
       legend: {
         display: false,
       },
+      datalabels: {
+        formatter: () => '',
+      },
     },
   };
 

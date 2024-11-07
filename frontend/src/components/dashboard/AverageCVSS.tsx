@@ -158,6 +158,9 @@ const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId, clientName }) => {
       legend: {
         display: false,
       },
+      datalabels: {
+        formatter: () => '',
+      },
       annotation: {
         annotations: {
           line1: {
