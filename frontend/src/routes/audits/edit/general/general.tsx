@@ -117,11 +117,7 @@ export const General = () => {
             label: item.name,
           }),
         );
-        setCompanyOptions(
-          companyNames.length > 0
-            ? companyNames
-            : [{ id: 0, value: '', label: t('unavailable') }],
-        );
+        setCompanyOptions(companyNames.length > 0 ? companyNames : []);
         setLoadingCompanies(false);
 
         const dataClients = await getClients();
@@ -133,11 +129,7 @@ export const General = () => {
             label: item.email,
           }),
         );
-        setClientOptions(
-          clientNames.length > 0
-            ? clientNames
-            : [{ id: 0, value: '', label: t('unavailable') }],
-        );
+        setClientOptions(clientNames.length > 0 ? clientNames : []);
         setLoadingClients(false);
 
         const dataCollaborators = await getCollaborators();
@@ -258,8 +250,6 @@ export const General = () => {
       auditId &&
       languageOptions.length > 0 &&
       templateOptions.length > 0 &&
-      companyOptions.length > 0 &&
-      clientOptions.length > 0 &&
       collaboratorOptions.length > 0
     ) {
       fetchAuditData().catch(console.error);
