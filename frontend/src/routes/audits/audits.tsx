@@ -74,7 +74,7 @@ export const Audits = () => {
 
   const [isOpenNewAuditModal, setIsOpenNewAuditModal] = useState(false);
 
-  const [selectedValue, setSelectedValue] = useState('');
+  const [selectedValue, setSelectedValue] = useState('1');
 
   const [nameAudit, setNameAudit] = useState<string>('');
 
@@ -202,7 +202,8 @@ export const Audits = () => {
         const languageNames = dataLanguage.datas.map(
           (item: LanguageData, index: number) => ({
             id: index,
-            value: item.language,
+            value: item.locale,
+            label: item.language,
           }),
         );
         setLanguages(languageNames);
@@ -230,7 +231,7 @@ export const Audits = () => {
   const handleCancelNewAudit = () => {
     setCurrentAuditType(null);
     setCurrentLanguage(null);
-    setSelectedValue('');
+    setSelectedValue('1');
     setNameAudit('');
     setIsOpenNewAuditModal(!isOpenNewAuditModal);
   };
@@ -251,7 +252,7 @@ export const Audits = () => {
       });
       setCurrentAuditType(null);
       setCurrentLanguage(null);
-      setSelectedValue('');
+      setSelectedValue('1');
       setNameAudit('');
       void fetchAndUpdateData();
     } catch (error) {
