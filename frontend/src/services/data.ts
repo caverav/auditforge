@@ -716,9 +716,15 @@ export const createVulnerabilityType = async (
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(vulnerabilityType),
-    }); // Incluir token
+    });
     if (!response.ok) {
-      throw new Error(networkErrorMsg);
+      const errorText = await response.text();
+      const errorData = JSON.parse(errorText).datas;
+      if (errorData === 'Vulnerability Type already exists') {
+        throw new Error(errorData);
+      } else {
+        throw new Error(networkErrorMsg);
+      }
     }
     return await response.json();
   } catch (error) {
@@ -740,7 +746,7 @@ export const updateVulnerabilityTypes = async (
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(vulnerabilityType),
-    }); // Incluir token
+    });
     if (!response.ok) {
       throw new Error(networkErrorMsg);
     }
