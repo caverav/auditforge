@@ -1,3 +1,5 @@
+import { VulnerabilityTypes } from '@/routes/data/CustomData/VulnerabilityTypes';
+
 /* eslint-disable sonarjs/no-duplicate-string */
 export default {
   aria: {
@@ -206,6 +208,7 @@ export default {
     errorSavingAuditCustomSections: 'Failed saving the audit custom sections',
     failedCreatingVulnerabilityType: 'Failed to create vulnerability type',
     failedUpdatingVulnerabilityTypes: 'Failed to update vulnerability types',
+    vulnerabilityTypeAlreadyExists: 'Vulnerability Type already exists',
   },
   cvss: {
     title: 'CVSS v3.1 Base Score',
