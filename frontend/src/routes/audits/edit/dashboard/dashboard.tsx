@@ -1,9 +1,9 @@
-/* eslint-disable import/extensions */
 import { t } from 'i18next';
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { toast } from 'sonner';
 
-import PrimaryButton from '@/components/button/PrimaryButton';
+import DropdownButton from '@/components/button/DropdownButton';
 import AverageCVSS from '@/components/dashboard/AverageCVSS';
 import CIATriad from '@/components/dashboard/CIATriad';
 import CVSSScore from '@/components/dashboard/CVSSScore';
@@ -12,10 +12,12 @@ import RemediationComplexity from '@/components/dashboard/RemediationComplexity'
 import RemediationPriority from '@/components/dashboard/RemediationPriority';
 import Sidebar from '@/components/dashboard/Sidebar';
 import { getAuditById } from '@/services/audits';
+import { exportToCSV } from '@/services/exportToCSV';
 import { exportToPDF } from '@/services/exportToPDF';
 
 export const Dashboard = () => {
   const { auditId } = useParams();
+  // eslint-disable-next-line sonarjs/no-duplicate-string
   const [activeView, setActiveView] = useState('cvss-score');
   const [isExportModalOpen, setIsExportModalOpen] = useState(false);
   const [selectedDisplays, setSelectedDisplays] = useState<string[]>([]);
@@ -63,15 +65,46 @@ export const Dashboard = () => {
         return <CIATriad />;
     }
   };
-  const handleExportClick = () => {
+
+  const [exportType, setExportType] = useState('');
+
+  const handleExportClick = (type: string) => {
+    setExportType(type);
     setSelectedDisplays(displays.map(d => d.id));
     setIsExportModalOpen(true);
   };
 
   const handleExportConfirm = async () => {
-    setIsExportModalOpen(false);
-    await exportToPDF(auditName, selectedDisplays, auditId ?? '');
+    if (exportType === 'pdf') {
+      setIsExportModalOpen(false);
+      await exportToPDF(auditName, selectedDisplays, auditId ?? '');
+    } else if (exportType === 'csv') {
+      setIsExportModalOpen(false);
+
+      try {
+        exportToCSV(auditName, selectedDisplays, auditId ?? '');
+      } catch (err) {
+        toast.error(t('err.exportDashboardCSV'));
+        console.error(err);
+      }
+      toast.success(t('msg.exportDashboardCSVOk'));
+    }
   };
+
+  const exportTypes = [
+    {
+      id: 1,
+      value: 'pdf',
+      label: 'pdf',
+      onClick: () => handleExportClick('pdf'),
+    },
+    {
+      id: 2,
+      value: 'csv',
+      label: 'csv',
+      onClick: () => handleExportClick('csv'),
+    },
+  ];
 
   return (
     <>
@@ -80,9 +113,10 @@ export const Dashboard = () => {
         <div className="flex-1 overflow-hidden p-6">
           <div className="flex justify-between items-center mb-6">
             <h1 className="text-3xl font-bold">{t('dashboard')}</h1>
-            <PrimaryButton onClick={handleExportClick}>
-              {t('export')}
-            </PrimaryButton>
+            <DropdownButton
+              items={exportTypes}
+              placeholder={t('exportDashboard')}
+            />
           </div>
           {renderView()}
         </div>
@@ -96,6 +130,7 @@ export const Dashboard = () => {
         selectedDisplays={selectedDisplays}
         setAuditName={setAuditName}
         setSelectedDisplays={setSelectedDisplays}
+        type={exportType}
       />
     </>
   );

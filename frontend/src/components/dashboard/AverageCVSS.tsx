@@ -1,4 +1,3 @@
-import { Cvss3P1 } from 'ae-cvss-calculator';
 import {
   BarElement,
   CategoryScale,
@@ -10,11 +9,13 @@ import {
   Tooltip,
 } from 'chart.js';
 import annotationPlugin from 'chartjs-plugin-annotation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { useParams } from 'react-router-dom';
 
+import { cvssStringToScore } from '@/lib/utils';
 import { getAuditById } from '@/services/audits';
+import { getAuditsByClientName } from '@/services/clients';
 
 ChartJS.register(
   CategoryScale,
@@ -26,25 +27,15 @@ ChartJS.register(
   annotationPlugin,
 );
 
-const cvssStringToScore = (cvssScore: string) => {
-  try {
-    const cvssVector = new Cvss3P1(cvssScore);
-    return cvssVector.calculateExactOverallScore();
-  } catch (error) {
-    console.error('Invalid CVSS vector:', error);
-  }
-  return 0;
-};
-
 type AverageCVSSProps = {
   auditId?: string;
+  clientName?: string;
 };
 
-const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId }) => {
+const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId, clientName }) => {
   const paramId = useParams().auditId;
-  if (!auditId) {
-    auditId = paramId;
-  }
+  const auditIdRef = useRef(auditId ?? paramId);
+
   const [averageCVSS, setAverageCVSS] = useState(0);
   const [data, setData] = useState({
     labels: [''],
@@ -56,47 +47,83 @@ const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId }) => {
     ],
   });
   useEffect(() => {
-    if (auditId === undefined) {
-      auditId = paramId;
+    if (auditIdRef.current === undefined) {
+      auditIdRef.current = paramId;
     }
-    getAuditById(auditId)
-      .then(audit => {
-        setAverageCVSS(
-          Math.round(
-            (audit.datas.findings.reduce(
-              (acc, finding) => acc + cvssStringToScore(finding.cvssv3),
-              0,
-            ) /
-              audit.datas.findings.length) *
-              10,
-          ) / 10,
-        );
-        setData({
-          labels: audit.datas.findings.map(finding => finding.title),
-          datasets: [
-            {
-              data: audit.datas.findings.map(finding =>
-                cvssStringToScore(finding.cvssv3),
-              ),
-              // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-              backgroundColor: audit.datas.findings.map(finding =>
-                cvssStringToScore(finding.cvssv3) >= 9
-                  ? '#FF4136'
-                  : cvssStringToScore(finding.cvssv3) >= 7
-                    ? '#FF851B'
-                    : cvssStringToScore(finding.cvssv3) >= 4
-                      ? '#FFDC00'
-                      : '#2ECC40',
-              ) as unknown as string,
-            },
-          ],
-        });
-      })
-      .catch(console.error);
-  }, [auditId, averageCVSS]);
+
+    if (clientName === undefined) {
+      getAuditById(auditIdRef.current)
+        .then(audit => {
+          setAverageCVSS(
+            Math.round(
+              (audit.datas.findings.reduce(
+                (acc, finding) => acc + cvssStringToScore(finding.cvssv3 ?? ''),
+                0,
+              ) /
+                audit.datas.findings.length) *
+                10,
+            ) / 10,
+          );
+          setData({
+            labels: audit.datas.findings.map(finding => finding.title),
+            datasets: [
+              {
+                data: audit.datas.findings.map(finding =>
+                  cvssStringToScore(finding.cvssv3 ?? ''),
+                ),
+                // @ts-expect-error component accepts string[] to put multiple colors, but the type is string
+                backgroundColor: audit.datas.findings.map(finding =>
+                  cvssStringToScore(finding.cvssv3 ?? '') >= 9
+                    ? '#FF4136'
+                    : cvssStringToScore(finding.cvssv3 ?? '') >= 7
+                      ? '#FF851B'
+                      : cvssStringToScore(finding.cvssv3 ?? '') >= 4
+                        ? '#FFDC00'
+                        : '#2ECC40',
+                ),
+              },
+            ],
+          });
+        })
+        .catch(console.error);
+    } else {
+      getAuditsByClientName(clientName)
+        .then(audits => {
+          setAverageCVSS(
+            Math.round(
+              (audits.reduce(
+                (acc, audit) => acc + cvssStringToScore(audit.cvssv3),
+                0,
+              ) /
+                audits.length) *
+                10,
+            ) / 10,
+          );
+          setData({
+            labels: audits.map(audit => audit.name),
+            datasets: [
+              {
+                data: audits.map(audit => cvssStringToScore(audit.cvssv3)),
+                // @ts-expect-error component accepts string[] to put multiple colors, but the type is string
+                backgroundColor: audits.map(audit =>
+                  cvssStringToScore(audit.cvssv3) >= 9
+                    ? '#FF4136'
+                    : cvssStringToScore(audit.cvssv3) >= 7
+                      ? '#FF851B'
+                      : cvssStringToScore(audit.cvssv3) >= 4
+                        ? '#FFDC00'
+                        : '#2ECC40',
+                ),
+              },
+            ],
+          });
+        })
+        .catch(console.error);
+    }
+  }, [auditId, averageCVSS, clientName, paramId]);
 
   const options: ChartOptions<'bar'> = {
-    indexAxis: 'y',
+    indexAxis: 'y' as const,
     responsive: true,
     maintainAspectRatio: false,
     layout: {
@@ -110,15 +137,15 @@ const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId }) => {
         max: 10,
         ticks: {
           stepSize: 2,
-          color: 'white',
+          color: 'white' as const,
         },
         grid: {
-          color: 'rgba(255, 255, 255, 0.1)',
+          color: 'rgba(255, 255, 255, 0.1)' as const,
         },
       },
       y: {
         ticks: {
-          color: 'white',
+          color: 'white' as const,
         },
         grid: {
           display: false,
@@ -129,13 +156,16 @@ const AverageCVSS: React.FC<AverageCVSSProps> = ({ auditId }) => {
       legend: {
         display: false,
       },
+      datalabels: {
+        formatter: () => '',
+      },
       annotation: {
         annotations: {
           line1: {
-            type: 'line',
+            type: 'line' as const,
             xMin: averageCVSS,
             xMax: averageCVSS,
-            borderColor: '#2ecc71',
+            borderColor: '#2ecc71' as const,
             borderWidth: 2,
             borderDash: [5, 5],
           },

@@ -1,6 +1,12 @@
 {
   "cwe-container": {
     "host": "auditforge-cwe-api",
-    "port": 8000
+    "port": 8000,
+    "check_timeout_ms": 30000,
+    "update_timeout_ms": 120000,
+    "endpoints": {
+      "check_update_endpoint": "check_cwe_update",
+      "update_cwe_endpoint": "update_cwe_model"
+    }
   }
 }

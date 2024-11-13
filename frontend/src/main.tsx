@@ -30,6 +30,7 @@ import {
   Network,
   Sections,
 } from './routes/audits';
+import { ClientDashboard } from './routes/dashboard';
 import {
   Clients,
   Collaborators,
@@ -129,6 +130,10 @@ const router = createBrowserRouter([
       {
         path: '/profile',
         element: <Profile />,
+      },
+      {
+        path: '/dashboard',
+        element: <ClientDashboard />,
       },
     ],
   },

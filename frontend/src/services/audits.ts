@@ -9,15 +9,35 @@ export type Finding = {
   description: string;
   observation: string;
   remediation: string;
-  remediationComplexity: number;
-  priority: number;
+  remediationComplexity?: number;
+  priority?: number;
   references: string[];
   cwes: string[];
-  cvssv3: string;
+  cvssv3?: string;
   status: number;
   customFields: string[];
   _id: string;
   paragraphs: string[];
+};
+
+type EditFinding = {
+  identifier: number;
+  title: string;
+  references: string[];
+  cwes: string[];
+  status: number;
+  _id: string;
+  paragraphs: string[];
+  customFields: string[];
+  description?: string;
+  observation?: string;
+  poc?: string;
+  remediation?: string;
+  cvssv3?: string;
+  remediationComplexity?: number | '';
+  priority?: number | '';
+  scope?: string;
+  vulnType?: string;
 };
 
 export type Detail = {
@@ -71,6 +91,7 @@ export type Audit = {
   type: string;
   connected: string[];
   createdAt: string;
+  cvssv3: string;
 };
 
 export type AuditById = {
@@ -757,5 +778,79 @@ export const encryptPDF = async (
     return await response.blob();
   } catch (error) {
     console.error('Error generating PDF:', error);
+  }
+};
+
+export const getFinding = async (
+  auditID: string,
+  findingId: string,
+): Promise<{
+  status: string;
+  datas: EditFinding;
+}> => {
+  try {
+    const response = await fetch(
+      `${API_URL}audits/${auditID}/findings/${findingId}`,
+      {
+        credentials: 'include',
+      },
+    );
+    if (!response.ok) {
+      throw networkError;
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const updateFinding = async (
+  auditId: string,
+  findingId: string,
+  finding: EditFinding,
+): Promise<{ status: string; datas: string }> => {
+  try {
+    const response = await fetch(
+      `${API_URL}audits/${auditId}/findings/${findingId}`,
+      {
+        method: 'PUT',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(finding),
+      },
+    );
+    if (!response.ok) {
+      throw networkError;
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const deleteFinding = async (
+  auditId: string,
+  findingId: string,
+): Promise<{ status: string; datas: string }> => {
+  try {
+    const response = await fetch(
+      `${API_URL}audits/${auditId}/findings/${findingId}`,
+      {
+        method: 'DELETE',
+        credentials: 'include',
+      },
+    );
+    if (!response.ok) {
+      throw networkError;
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
   }
 };

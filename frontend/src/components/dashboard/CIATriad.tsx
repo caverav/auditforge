@@ -7,10 +7,12 @@ import {
   RadialLinearScale,
   Tooltip,
 } from 'chart.js';
+import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
 import { Radar } from 'react-chartjs-2';
 import { useParams } from 'react-router-dom';
 
+import { cvssStringToCIA } from '@/lib/utils';
 import { getAuditById } from '@/services/audits';
 
 ChartJS.register(
@@ -21,23 +23,6 @@ ChartJS.register(
   Tooltip,
   Legend,
 );
-
-const cvssStringTo = (
-  field: 'integrity' | 'availability' | 'confidentiality',
-  cvssVector: string,
-) => {
-  const values: Record<string, number> = {
-    H: 3,
-    M: 2,
-    L: 1,
-  } as const;
-  const substrings = {
-    integrity: 35,
-    availability: 39,
-    confidentiality: 43,
-  } as const;
-  return values[cvssVector.substring(substrings[field], substrings[field] + 1)];
-};
 
 type Dataset = {
   label: string;
@@ -60,7 +45,7 @@ const CIATriad: React.FC<CIATriadProps> = ({ auditId }) => {
     labels: string[];
     datasets: Dataset[];
   }>({
-    labels: ['Integrity', 'Availability', 'Confidentiality'],
+    labels: ['Integrity', 'Availability', 'Confidentiality'] as const,
     datasets: [],
   });
 
@@ -68,26 +53,26 @@ const CIATriad: React.FC<CIATriadProps> = ({ auditId }) => {
     getAuditById(auditId)
       .then(audit => {
         setData({
-          labels: ['Integrity', 'Availability', 'Confidentiality'],
+          labels: ['Integrity', 'Availability', 'Confidentiality'] as const,
           datasets: audit.datas.findings.map(finding => {
             if (!finding.cvssv3) {
               return {
                 label: finding.title,
                 data: [0, 0, 0],
                 backgroundColor: `rgba(${Math.floor(Math.random() * 155 + 100)}, ${Math.floor(Math.random() * 155 + 100)}, ${Math.floor(Math.random() * 155 + 100)}, 0.2)`,
-                borderColor: 'rgba(255, 255, 255, 0.2)',
+                borderColor: 'rgba(255, 255, 255, 0.2)' as const,
                 borderWidth: 2,
               };
             }
             return {
               label: finding.title,
               data: [
-                cvssStringTo('integrity', finding.cvssv3),
-                cvssStringTo('availability', finding.cvssv3),
-                cvssStringTo('confidentiality', finding.cvssv3),
+                cvssStringToCIA('integrity', finding.cvssv3),
+                cvssStringToCIA('availability', finding.cvssv3),
+                cvssStringToCIA('confidentiality', finding.cvssv3),
               ],
               backgroundColor: `rgba(${Math.floor(Math.random() * 155 + 100)}, ${Math.floor(Math.random() * 155 + 100)}, ${Math.floor(Math.random() * 155 + 100)}, 0.2)`,
-              borderColor: 'rgba(255, 255, 255, 0.2)',
+              borderColor: 'rgba(255, 255, 255, 0.2)' as const,
               borderWidth: 2,
             };
           }),
@@ -103,10 +88,10 @@ const CIATriad: React.FC<CIATriadProps> = ({ auditId }) => {
       r: {
         angleLines: {
           display: true,
-          color: 'rgba(255, 255, 255, 0.1)',
+          color: 'rgba(255, 255, 255, 0.1)' as const,
         },
         suggestedMin: 0,
-        suggestedMax: 3,
+        suggestedMax: 2,
         ticks: {
           stepSize: 1,
           display: false,
@@ -115,27 +100,39 @@ const CIATriad: React.FC<CIATriadProps> = ({ auditId }) => {
           font: {
             size: 14,
           },
-          color: 'white',
+          color: 'white' as const,
         },
         grid: {
-          color: 'rgba(255, 255, 255, 0.1)',
+          color: 'rgba(255, 255, 255, 0.1)' as const,
         },
       },
     },
     plugins: {
       legend: {
         position: 'bottom' as const,
+        title: {
+          display: true,
+          text: t('filters'),
+          color: 'white' as const,
+          font: {
+            weight: 'bold' as const,
+            size: 15,
+          },
+        },
         labels: {
-          color: 'white',
+          color: 'white' as const,
           boxWidth: 20,
           padding: 20,
         },
       },
+      datalabels: {
+        formatter: () => '',
+      },
       tooltip: {
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-        titleColor: 'white',
-        bodyColor: 'white',
-        borderColor: 'white',
+        backgroundColor: 'rgba(0, 0, 0, 0.8)' as const,
+        titleColor: 'white' as const,
+        bodyColor: 'white' as const,
+        borderColor: 'white' as const,
         borderWidth: 1,
       },
     },

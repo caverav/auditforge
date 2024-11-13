@@ -48,7 +48,11 @@ const RemediationPriority: React.FC<RemediationPriorityProps> = ({
         const findings = dataAudit.datas.findings;
         const counts = [0, 0, 0, 0];
         findings.forEach((finding: Finding) => {
-          if (finding.priority >= 1 && finding.priority <= 4) {
+          if (
+            finding.priority &&
+            finding.priority >= 1 &&
+            finding.priority <= 4
+          ) {
             counts[finding.priority - 1] += 1;
           }
         });
@@ -101,6 +105,9 @@ const RemediationPriority: React.FC<RemediationPriorityProps> = ({
     plugins: {
       legend: {
         display: false,
+      },
+      datalabels: {
+        formatter: () => '',
       },
     },
   };

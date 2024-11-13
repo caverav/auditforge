@@ -1,5 +1,6 @@
 /* eslint-disable import/extensions */
 /* eslint-disable sonarjs/no-duplicate-string */
+import { CheckIcon } from '@heroicons/react/20/solid';
 import clsx from 'clsx';
 import { t } from 'i18next';
 import {
@@ -34,6 +35,7 @@ type Finding = {
   category: string;
   severity: string;
   identifier: string;
+  status: number;
 };
 
 type SortOption = {
@@ -209,6 +211,7 @@ const AuditSidebar = ({
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
+      toast.success(t('msg.auditEncryptedOk'));
     } else {
       toast.error(t('err.errorGeneratingPdf'));
     }
@@ -313,6 +316,11 @@ const AuditSidebar = ({
                   >
                     {finding.name}
                   </span>
+                  {finding.status === 0 && !isCollapsed ? (
+                    <span>
+                      <CheckIcon className="h-6 w-6 text-gray-500" />
+                    </span>
+                  ) : null}
                 </li>
               </Link>
             ))}

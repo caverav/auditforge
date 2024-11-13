@@ -1,35 +1,15 @@
-import { Cvss3P1 } from 'ae-cvss-calculator';
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable import/extensions */
 import { ArcElement, Chart as ChartJS, Legend, Tooltip } from 'chart.js';
 import { t } from 'i18next';
 import React, { useEffect, useState } from 'react';
 import { Pie } from 'react-chartjs-2';
 import { useParams } from 'react-router-dom';
 
+import { cvssStringToSeverity } from '@/lib/utils';
 import { getAuditById } from '@/services/audits';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
-
-const cvssStringToSeverity = (cvssScore: string) => {
-  try {
-    const cvssVector = new Cvss3P1(cvssScore);
-    const score = cvssVector.calculateExactOverallScore();
-    if (score >= 9.0) {
-      return 'C';
-    }
-    if (score >= 7.0) {
-      return 'H';
-    }
-    if (score >= 4.0) {
-      return 'M';
-    }
-    if (score >= 0.1) {
-      return 'L';
-    }
-  } catch (error) {
-    console.error('Invalid CVSS vector:', error);
-  }
-  return 'I';
-};
 
 type CVSSScoreProps = {
   auditId?: string;
@@ -72,19 +52,19 @@ const CVSSScore: React.FC<CVSSScoreProps> = ({ auditId }) => {
             {
               data: [
                 audit.datas.findings.filter(
-                  finding => cvssStringToSeverity(finding.cvssv3) === 'C',
+                  finding => cvssStringToSeverity(finding.cvssv3 ?? '') === 'C',
                 ).length,
                 audit.datas.findings.filter(
-                  finding => cvssStringToSeverity(finding.cvssv3) === 'H',
+                  finding => cvssStringToSeverity(finding.cvssv3 ?? '') === 'H',
                 ).length,
                 audit.datas.findings.filter(
-                  finding => cvssStringToSeverity(finding.cvssv3) === 'M',
+                  finding => cvssStringToSeverity(finding.cvssv3 ?? '') === 'M',
                 ).length,
                 audit.datas.findings.filter(
-                  finding => cvssStringToSeverity(finding.cvssv3) === 'L',
+                  finding => cvssStringToSeverity(finding.cvssv3 ?? '') === 'L',
                 ).length,
                 audit.datas.findings.filter(
-                  finding => cvssStringToSeverity(finding.cvssv3) === 'I',
+                  finding => cvssStringToSeverity(finding.cvssv3 ?? '') === 'I',
                 ).length,
               ],
               backgroundColor: [
@@ -115,9 +95,32 @@ const CVSSScore: React.FC<CVSSScoreProps> = ({ auditId }) => {
     plugins: {
       legend: {
         position: 'right' as const,
-        labels: {
-          color: 'white',
+        title: {
+          display: true,
+          text: t('filters'),
+          color: 'white' as const,
+          font: {
+            weight: 'bold' as const,
+            size: 15,
+          },
         },
+        labels: {
+          color: 'white' as const,
+        },
+      },
+      datalabels: {
+        formatter: (value: number) => {
+          let total = 0;
+          pieChartData.datasets[0].data.forEach(d => {
+            total += d;
+          });
+          const percentage = ((value / total) * 100).toFixed(2);
+          if (percentage === '0.00' || percentage === 'NaN') {
+            return '';
+          }
+          return percentage + '%';
+        },
+        color: '#eee' as const,
       },
     },
   };

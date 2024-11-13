@@ -47,8 +47,9 @@ const RemediationComplexity: React.FC<RemediationComplexityProps> = ({
         const dataAudit = await getAuditById(auditId);
         const findings = dataAudit.datas.findings;
         const counts = [0, 0, 0];
-        findings.forEach((finding: { remediationComplexity: number }) => {
+        findings.forEach((finding: { remediationComplexity?: number }) => {
           if (
+            finding.remediationComplexity !== undefined &&
             finding.remediationComplexity >= 1 &&
             finding.remediationComplexity <= 3
           ) {
@@ -104,6 +105,9 @@ const RemediationComplexity: React.FC<RemediationComplexityProps> = ({
     plugins: {
       legend: {
         display: false,
+      },
+      datalabels: {
+        formatter: () => '',
       },
     },
   };

@@ -3,6 +3,7 @@ import { Toaster } from 'sonner';
 
 import Navbar from '../components/navbar/Navbar';
 import ProtectedRoute from '../components/ProtectedRoute';
+import { ModelUpdateContainer } from './settings/ModelUpdateContainer';
 
 export const Root = () => {
   return (
@@ -10,6 +11,7 @@ export const Root = () => {
       <ProtectedRoute>
         <Navbar />
         <Outlet />
+        <ModelUpdateContainer />
       </ProtectedRoute>
       <Toaster
         toastOptions={{
