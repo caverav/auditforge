@@ -34,7 +34,7 @@ export const CustomData: React.FC = () => {
     {
       id: 5,
       title: t('vulnerabilityCategories'),
-      cardTitle: t('auditTypesUsedInAudits'),
+      cardTitle: t('createVulnerabilityCategories'),
       cardChildren: <VulnerabilityCategories />,
     },
     {
