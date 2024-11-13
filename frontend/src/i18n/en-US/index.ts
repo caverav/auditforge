@@ -1,5 +1,3 @@
-import { VulnerabilityTypes } from '@/routes/data/CustomData/VulnerabilityTypes';
-
 /* eslint-disable sonarjs/no-duplicate-string */
 export default {
   aria: {
