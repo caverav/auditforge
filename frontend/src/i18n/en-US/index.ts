@@ -169,6 +169,10 @@ export default {
     exportDashboardCSVOk: 'Exported dashboard to CSV successfully',
     auditEncryptedOk: 'Encrypted Audit as PDF Successfully',
     copiedToClipboard: 'Copied to clipboard',
+    vulnerabilityCategoryCreatedOk:
+      'Vulnerability Category Created Successfully!',
+    vulnerabilityCatergoriesUpdatedOk:
+      'Vulnerability Catergories Updated Successfully!',
   },
   err: {
     notDefinedLanguage: 'Not defined for this language',
@@ -217,6 +221,10 @@ export default {
     exportDashboardCSV: 'Error exporting dashboard to csv',
     createUser: 'Error creating user',
     confirmPasswordDifferents: 'Passwords do not match',
+    failedCreatingVulnerabilityCategory:
+      'Failed to create vulnerability category',
+    failedUpdatingVulnerabilityCategories:
+      'Failed to update vulnerability categories',
   },
   cvss: {
     title: 'CVSS v3.1 Base Score',
