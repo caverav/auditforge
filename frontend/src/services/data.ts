@@ -102,6 +102,17 @@ export type VulnerabilityType = {
   __v: number;
 };
 
+export type VulnerabilityCategory = {
+  _id?: string;
+  name: string;
+  sortValue: string;
+  sortOrder: string;
+  sortAuto: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
+};
+
 export type OptionData = {
   locale: string;
   value: string;
@@ -747,6 +758,73 @@ export const updateVulnerabilityTypes = async (
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(vulnerabilityType),
     });
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const getVulnerabilityCategories = async (): Promise<{
+  status: string;
+  datas: VulnerabilityCategory[];
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/vulnerability-categories`, {
+      credentials: 'include',
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const createVulnerabilityCategories = async (
+  vulnerabilityCategory: VulnerabilityCategory,
+): Promise<{
+  status: string;
+  datas: VulnerabilityType;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/vulnerability-categories`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(vulnerabilityCategory),
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const updateVulnerabilityCategories = async (
+  vulnerabilityCategory: VulnerabilityCategory[],
+): Promise<{
+  status: string;
+  datas: string;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/vulnerability-categories`, {
+      method: 'PUT',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(vulnerabilityCategory),
+    }); // Incluir token
     if (!response.ok) {
       throw new Error(networkErrorMsg);
     }
