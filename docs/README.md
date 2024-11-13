@@ -41,7 +41,7 @@
 
 ![Audit creation](gifs/create_audit.gif)
 
-- 🤖 CWE recommendations powered by AI
+- 🤖 CWE and CVSS recommendations powered by AI
 
 ![Recommendation of CWE and CVSS](gifs/ia.gif)
 
