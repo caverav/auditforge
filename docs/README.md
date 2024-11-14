@@ -38,17 +38,32 @@
 ## Features
 
 - 🌐 Multiple Language support
-- 🤖 CWE recommendations powered by AI
+
+![Audit creation](gifs/create_audit.gif)
+
+- 🤖 CWE and CVSS recommendations powered by AI
+
+![Recommendation of CWE and CVSS](gifs/ia.gif)
+
 - 📊 Dashboard generation
+
+![Dashboards](gifs/dashboard.gif)
+
 - 📁 Multiple Data support
 - 🎨 Great Customization
   - Manage reusable Audit and Vulnerability Data
   - Create Custom Sections
   - Add custom fields to Vulnerabilities
+
 - 🛠️ Vulnerabilities Management
 - 👥 Multi-User reporting
 - 📄 Docx and PDF Report Generation
+
+![Report generation](gifs/exportar.gif)
+
 - 📝 Docx Template customization
+
+![Report document](gifs/reporte.gif)
 
 ## Documentation
 
