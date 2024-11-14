@@ -171,8 +171,8 @@ export default {
     copiedToClipboard: 'Copied to clipboard',
     vulnerabilityCategoryCreatedOk:
       'Vulnerability Category Created Successfully!',
-    vulnerabilityCatergoriesUpdatedOk:
-      'Vulnerability Catergories Updated Successfully!',
+    vulnerabilityCategoriesUpdatedOk:
+      'Vulnerability Categories Updated Successfully!',
   },
   err: {
     notDefinedLanguage: 'Not defined for this language',
