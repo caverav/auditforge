@@ -6,9 +6,10 @@ To create an Audit, it must have a Language and a Template, so they must be firs
 Audits can be edited by multiple users. Users that opened the Audit are listed at the bottom of the Sections sidebar and you can see the section they are on.  
 If 2 users are editing the same section, the last one to save will be effective so be carefull not to edit the same section at the same time.
 
-| <span style="color:green">You can safely edit</span>  | <span style="color:red">You are stepping on each other toe</span> |
-|:-----------------------------------------------------:|:-----------------------------------------------------------------:| 
-| ![Multi-User](_images/audit_multiuser_different.png) | ![Multi-User](_images/audit_multiuser_same.png)                  |
+🚧 WIP 🚧
+<!--| <span style="color:green">You can safely edit</span>  | <span style="color:red">You are stepping on each other toe</span> |-->
+<!--|:-----------------------------------------------------:|:-----------------------------------------------------------------:| -->
+<!--| ![Multi-User](_images/audit_multiuser_different.png) | ![Multi-User](_images/audit_multiuser_same.png)                  |-->
 
 ## General Information
 
@@ -22,7 +23,8 @@ It's possible to add Collaborators to an Audit, this will give write access to a
 
 This section allows to import Nmap/Nessus Scans (only port scan).
 
-![Network Scan](_images/audits_network.png)
+🚧 WIP 🚧
+<!--![Network Scan](_images/audits_network.png)-->
 
 Before importing a scan at least one Audit scope must be defined.
 Once the scope is created it will appear on Network Scan page.
@@ -78,23 +80,25 @@ Once this is done, a reviewer can be added to an audit by the creator or a colla
 
 ![Adding a reviewer](_images/adding_reviewer.png)
 
-![Marking as ready for review](_images/mark_for_review.png)
+<!--![Marking as ready for review](_images/mark_for_review.png)-->
 
 When an audit is in the `REVIEW` state, a reviewer can give his approval of an audit. The minimal number of approvals before an audit is approved is set in the application's settings page. To know who already approved an audit and how far along it is to be approved, it is possible to hover the mouse over the audit state icon. A tooltip will appear, giving you details on the audit's state. 
 
-![Approving an audit](_images/approving_report.png)
+<!--![Approving an audit](_images/approving_report.png)-->
 
 The tooltip giving information on the audit's current state. Here, two approvals are needed for an audit to be approved. The audit is still in the review phase, even if one person approved it already. 
 
-![Information in the tooltip](_images/audit_state_tooltip.png)
+<!--![Information in the tooltip](_images/audit_state_tooltip.png)-->
 
 Once enough approvals are given for an audit to be approved, the audit passes to the `APPROVED` state. In this state, the report is ready to be downloaded and sent to the client. 
 
-![Audit is now approved](_images/approved_audit.png)
+<!--![Audit is now approved](_images/approved_audit.png)-->
 
 The states of the audits can also be seen from the audit list page. 
 
-![Audit list page](_images/audit_list_states.png)
+<!--![Audit list page](_images/audit_list_states.png)-->
+
+🚧 WIP 🚧
 
 The audit edit page, when then review mode is activated, follows the following state machine diagram. Different states show different UI elements. Keep in mind that the Report role here is viewing a report for which he is neither a the creator nor collaborator. Otherwise, on his own reports, his graph would be similar to the Collaborator shown here. Also, the reviewer role, here, has only `audits:review` permission, and not `audits:review-all`. 
 
