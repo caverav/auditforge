@@ -77,7 +77,7 @@ export default {
   msg: {
     auditReviewUpdateOk: 'Audit review status updated successfully',
     auditApprovalUpdateOk: 'Audit approval updated successfully',
-    auditUpdateOk: 'Audit updated successfully',
+    auditUpdatedOk: 'Audit updated successfully',
     findingCreateOk: 'Finding created successfully',
     findingUpdateOk: 'Finding updated successfully',
     findingDeleteOk: 'Finding deleted successfully',
@@ -117,6 +117,7 @@ export default {
     templateNotFound: 'Template Not Found',
     templateCreatedOk: 'Template created successfully',
     templateUpdatedOk: 'Template updated successfully',
+    templateDeletedOk: 'Template deleted successfully',
     allVulnerabilitesDeleteNotice:
       'All Vulnerabilities will be permanently deleted',
     allVulnerabilitesDeleteOk: 'All vulnerabilities deleted successfully',
