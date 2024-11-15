@@ -28,11 +28,6 @@
 ## Table of Contents
 - [Features](#features)
 - [Documentation](#documentation)
-  - [Installation](installation.md)
-  - [Data](data.md)
-  - [Vulnerabilities](vulnerabilities.md)
-  - [Audits](audits.md)
-  - [Templating](docxtemplate.md)
 - [Our Team](#our-team)
 
 ## Features
@@ -67,11 +62,7 @@
 
 ## Documentation
 
-- [Installation](installation.md)
-- [Data](data.md)
-- [Vulnerabilities](vulnerabilities.md)
-- [Audits](audits.md)
-- [Templating](docxtemplate.md)
+You can find the documentation [here](https://caverav.github.io/auditforge/).
 
 ## Activity
 
