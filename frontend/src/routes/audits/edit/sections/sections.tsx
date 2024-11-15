@@ -142,7 +142,7 @@ export const Sections = () => {
   useEffect(() => {
     if (auditLanguage && languagesList.length > 0) {
       const matchedLanguage = languagesList.find(
-        language => language.label === auditLanguage,
+        language => language.value === auditLanguage,
       );
       if (matchedLanguage) {
         setCurrentLanguage(matchedLanguage);
