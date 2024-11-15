@@ -1,15 +1,14 @@
+import {
+  ArchiveBoxIcon,
+  BuildingOffice2Icon,
+  DocumentTextIcon,
+  FaceSmileIcon,
+  UserGroupIcon,
+} from '@heroicons/react/20/solid';
 import { useTranslation } from 'react-i18next';
 import { Outlet } from 'react-router-dom';
 
 import { Sidebar } from '../../components/navbar/Sidebar';
-import {
-  BuildingOffice2Icon,
-  UserGroupIcon,
-  FaceSmileIcon,
-  ArchiveBoxIcon,
-  ArrowTopRightOnSquareIcon,
-  DocumentTextIcon,
-} from '@heroicons/react/20/solid';
 
 export const Data = () => {
   const { t } = useTranslation();
@@ -43,12 +42,6 @@ export const Data = () => {
       value: 'customData',
       id: 5,
       icon: <ArchiveBoxIcon className="h-8 w-auto" />,
-    },
-    {
-      name: `${t('import')} / ${t('export')}`,
-      value: 'importExport',
-      id: 6,
-      icon: <ArrowTopRightOnSquareIcon className="h-8 w-auto" />,
     },
   ];
   return (
