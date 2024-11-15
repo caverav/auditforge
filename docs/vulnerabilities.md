@@ -26,7 +26,7 @@ A Vulnerability is defined by:
 !> Title must be unique since it's used for another functionality allowing users to request creation/modification of vulnerabilities when redacting an Audit.
 
 There is also the possibility to search Audits containing the Vulnerability in its findings (search by Title) :<br>
-![Search in Audits](/_images/action_buttons.png)
+![Search in Audits](_images/action_buttons.png)
 
 ## Import/Export
 
@@ -84,7 +84,7 @@ For import, the Serpico format is also accepted allowing easier transition or ju
 
 It's possible to merge vulnerabilities for cases where 2 different vulnerabilities exist for 2 different languages. The goal is to avoid duplicates and better multilanguage management.
 
-![Merge Vulns](/_images/merge_vulns.png)
+![Merge Vulns](_images/merge_vulns.png)
 
 When both languages have been selected, only Vulnerabilities that don't have the other column language will be displayed.  
 In this example :
@@ -98,17 +98,17 @@ The language details from the Vulnerability of the right column will be moved to
 
 All users can request creation or modifications on a vulnerability when redacting findings in an Audit. Users with admin role can see and validate those modifications in Vulnerabilities menu.
 
-![Validate](/_images/new_updates_vulns.png)
+![Validate](_images/new_updates_vulns.png)
 
 **New**
 
-![New vuln](/_images/new_vuln.png)
+![New vuln](_images/new_vuln.png)
 
 Before approving, it's possible to make changes to the Vulnerability including adding Languages.
 
 **Updates**
 
-![Updates vuln](/_images/updates_vuln.png)
+![Updates vuln](_images/updates_vuln.png)
 
 The left side is the current Vulnerability
 
