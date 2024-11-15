@@ -1,6 +1,5 @@
 import { t } from 'i18next';
 import { useCallback, useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { toast, Toaster } from 'sonner';
 
 import Card from '../../components/card/Card';
@@ -87,8 +86,6 @@ type TableData = {
 };
 
 export const Vulnerabilities = () => {
-  const navigate = useNavigate();
-
   const [vulnerabilities, setVulnerabilities] = useState<VulnerabilityData[]>(
     [],
   );
@@ -277,21 +274,12 @@ export const Vulnerabilities = () => {
     setIsOpenEditVuln(true);
   };
 
-  const findRegister = (item: TableData) => {
-    const sanitizedQueryParam = encodeURIComponent(item.title.trim());
-    navigate(`/audits?findingTitle=${sanitizedQueryParam}`);
-  };
-
   const keyExtractor = (item: TableData) => item._id;
 
   const rowActions = [
     {
       label: 'Edit',
       onClick: (item: TableData) => editRegister(item),
-    },
-    {
-      label: 'FindAudit',
-      onClick: (item: TableData) => findRegister(item),
     },
     {
       label: 'Delete',
