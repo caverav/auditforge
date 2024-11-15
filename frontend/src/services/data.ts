@@ -88,6 +88,31 @@ export type AuditType = {
   templates: { template: string; locale: string }[];
 };
 
+export type NewVulnerabilityType = {
+  locale: string;
+  name: string;
+};
+
+export type VulnerabilityType = {
+  _id: string;
+  name: string;
+  locale: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+};
+
+export type VulnerabilityCategory = {
+  _id?: string;
+  name: string;
+  sortValue: string;
+  sortOrder: string;
+  sortAuto: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  __v?: number;
+};
+
 export type OptionData = {
   locale: string;
   value: string;
@@ -659,6 +684,146 @@ export const updateAuditTypes = async (
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(auditTypes),
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const getVulnerabilityTypes = async (): Promise<{
+  status: string;
+  datas: VulnerabilityType[];
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/vulnerability-types`, {
+      credentials: 'include',
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const createVulnerabilityType = async (
+  vulnerabilityType: NewVulnerabilityType,
+): Promise<{
+  status: string;
+  datas: VulnerabilityType;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/vulnerability-types`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(vulnerabilityType),
+    });
+    if (!response.ok) {
+      const errorText = await response.text();
+      const errorData = JSON.parse(errorText).datas;
+      if (errorData === 'Vulnerability Type already exists') {
+        throw new Error(errorData);
+      } else {
+        throw new Error(networkErrorMsg);
+      }
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const updateVulnerabilityTypes = async (
+  vulnerabilityType: NewVulnerabilityType[],
+): Promise<{
+  status: string;
+  datas: string;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/vulnerability-types`, {
+      method: 'PUT',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(vulnerabilityType),
+    });
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const getVulnerabilityCategories = async (): Promise<{
+  status: string;
+  datas: VulnerabilityCategory[];
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/vulnerability-categories`, {
+      credentials: 'include',
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const createVulnerabilityCategories = async (
+  vulnerabilityCategory: VulnerabilityCategory,
+): Promise<{
+  status: string;
+  datas: VulnerabilityType;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/vulnerability-categories`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(vulnerabilityCategory),
+    }); // Incluir token
+    if (!response.ok) {
+      throw new Error(networkErrorMsg);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error(error);
+
+    throw error;
+  }
+};
+
+export const updateVulnerabilityCategories = async (
+  vulnerabilityCategory: VulnerabilityCategory[],
+): Promise<{
+  status: string;
+  datas: string;
+}> => {
+  try {
+    const response = await fetch(`${API_URL}data/vulnerability-categories`, {
+      method: 'PUT',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(vulnerabilityCategory),
     }); // Incluir token
     if (!response.ok) {
       throw new Error(networkErrorMsg);

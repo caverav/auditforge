@@ -163,10 +163,16 @@ export default {
     passwordsDoNotMatch: 'Passwords do not match',
     auditCustomSectionsSaveSuccess:
       'The custom sections have been saved successfully',
+    vulnerabilityTypeCreatedOk: 'Vulnerability Type Created Successfully!',
+    vulnerabilityTypesUpdatedOk: 'Vulnerability Types Updated Successfully!',
     updateCWEModelOk: 'CWE Model Updated Successfully',
     exportDashboardCSVOk: 'Exported dashboard to CSV successfully',
     auditEncryptedOk: 'Encrypted Audit as PDF Successfully',
     copiedToClipboard: 'Copied to clipboard',
+    vulnerabilityCategoryCreatedOk:
+      'Vulnerability Category Created Successfully!',
+    vulnerabilityCategoriesUpdatedOk:
+      'Vulnerability Categories Updated Successfully!',
   },
   err: {
     notDefinedLanguage: 'Not defined for this language',
@@ -207,11 +213,18 @@ export default {
     passwordsDontMatch: 'Passwords do not match',
     errorGeneratingPdf: 'Failed exporting audit to pdf',
     errorSavingAuditCustomSections: 'Failed saving the audit custom sections',
+    failedCreatingVulnerabilityType: 'Failed to create vulnerability type',
+    failedUpdatingVulnerabilityTypes: 'Failed to update vulnerability types',
+    vulnerabilityTypeAlreadyExists: 'Vulnerability Type already exists',
     failedDeleteFinding: 'Failed to delete the finding',
     updateCWEModelFailed: 'Failed Updating CWE Model',
     exportDashboardCSV: 'Error exporting dashboard to csv',
     createUser: 'Error creating user',
     confirmPasswordDifferents: 'Passwords do not match',
+    failedCreatingVulnerabilityCategory:
+      'Failed to create vulnerability category',
+    failedUpdatingVulnerabilityCategories:
+      'Failed to update vulnerability categories',
   },
   cvss: {
     title: 'CVSS v3.1 Base Score',
@@ -743,6 +756,7 @@ export default {
   recommendCVSS: 'Recommend CVSS',
   cleanRecommendations: 'Clean Recommendations',
   errorRecommendingCVSS: 'Error generating recommendation',
+  vulnerabilityType: 'Vulnerability Type',
   updatingCWEModel: 'Updating CWE Model',
   CWEModelUpdateText:
     'A new version of the CWE Model is available, do you want to upgrade?',
