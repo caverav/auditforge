@@ -98,7 +98,9 @@ The language details from the Vulnerability of the right column will be moved to
 
 All users can request creation or modifications on a vulnerability when redacting findings in an Audit. Users with admin role can see and validate those modifications in Vulnerabilities menu.
 
-![Validate](_images/new_updates_vulns.png)
+🚧 WIP 🚧
+
+<!--![Validate](_images/new_updates_vulns.png)-->
 
 **New**
 
