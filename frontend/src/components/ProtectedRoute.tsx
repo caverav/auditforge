@@ -22,6 +22,12 @@ const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
     };
 
     verifyAuth().catch(console.error);
+
+    const intervalId = setInterval(() => {
+      verifyAuth().catch(console.error);
+    }, 30000);
+
+    return () => clearInterval(intervalId);
   }, [isAuth, navigate]);
 
   if (loading) {
