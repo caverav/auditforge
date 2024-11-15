@@ -292,7 +292,7 @@ For `bullet list` and `ordered list` they must be correctly set in the _numberin
 
 Open the file with an archive manager
 
-![Docx Archive](/_images/docx_archive.png)
+![Docx Archive](_images/docx_archive.png)
 
 The _numbering.xml_ file contains definitions of numbering lists.
 `<w:abstractNum w:abstractNumId=0>...</w:abstractNum>` tags represent the definition of a numbering with its different levels.
