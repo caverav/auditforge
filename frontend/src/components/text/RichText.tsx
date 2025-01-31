@@ -1,173 +1,188 @@
-import './css/RichText.css';
+import 'katex/dist/katex.min.css';
+import 'reactjs-tiptap-editor/style.css';
 
-import Image from '@tiptap/extension-image';
-import Link from '@tiptap/extension-link';
-import Placeholder from '@tiptap/extension-placeholder';
-import Underline from '@tiptap/extension-underline';
-import { Editor, EditorContent, useEditor } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import type { FC } from 'react';
-import React, { useRef } from 'react';
+// import { Label } from '@headlessui/react';
+// import Placeholder from '@tiptap/extension-placeholder';
+import { useRef, useState } from 'react';
+import RcTiptapEditor, {
+  Attachment,
+  BaseKit,
+  Blockquote,
+  Bold,
+  BulletList,
+  Clear,
+  Code,
+  CodeBlock,
+  Color,
+  ColumnActionButton,
+  Emoji,
+  Excalidraw,
+  FontFamily,
+  FontSize,
+  FormatPainter,
+  Heading,
+  Highlight,
+  History,
+  Iframe,
+  Image,
+  Indent,
+  Italic,
+  Katex,
+  Link,
+  Mention,
+  MoreMark,
+  OrderedList,
+  SearchAndReplace,
+  SlashCommand,
+  Strike,
+  Table,
+  TableOfContents,
+  TaskList,
+  Underline,
+} from 'reactjs-tiptap-editor';
 
-export type RichTextProps = {
-  label?: string;
-  placeholder?: string;
-  value: string;
-  onChange: (value: string) => void;
-};
+const imagesUrl = '/api/images/';
 
-const RichText: FC<RichTextProps> = ({
-  label = 'Rich Text',
-  placeholder = 'Escribe aquí...',
-  value,
-  onChange,
-}) => {
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Underline,
-      Link.configure({ openOnClick: false }),
-      Image,
-      Placeholder.configure({ placeholder }),
-    ],
-    content: value,
-    onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
+const extensions = [
+  BaseKit.configure({
+    multiColumn: true,
+    placeholder: {
+      showOnlyCurrent: true,
     },
-  });
+    characterCount: {
+      limit: 50_000,
+    },
+  }),
+  History,
+  SearchAndReplace,
+  TableOfContents,
+  FormatPainter.configure({ spacer: true }),
+  Clear,
+  FontFamily,
+  Heading.configure({ spacer: true }),
+  FontSize,
+  Bold,
+  Italic,
+  Underline,
+  Strike,
+  MoreMark,
+  Katex,
+  Emoji,
+  Color.configure({ spacer: true }),
+  Highlight,
+  BulletList,
+  OrderedList,
+  Indent,
+  TaskList.configure({
+    spacer: true,
+    taskItem: {
+      nested: true,
+    },
+  }),
+  Link,
+  Image.configure({
+    upload: async (file: File) => {
+      const base64Value = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          if (reader.result) {
+            resolve(reader.result.toString());
+          } else {
+            reject(new Error('File reading failed'));
+          }
+        };
+        reader.onerror = error => reject(error);
+      });
 
-  const handleUploadClick = () => {
-    fileInputRef.current?.click();
+      const audit = {
+        name: file.name,
+        value: base64Value,
+      };
+
+      const response = await fetch(imagesUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(audit),
+      });
+
+      const data = await response.json();
+      return data.datas._id;
+    },
+  }),
+  Blockquote.configure({ spacer: true }),
+  SlashCommand,
+  Code.configure({
+    toolbar: false,
+  }),
+  CodeBlock.configure({ defaultTheme: 'dracula' }),
+  ColumnActionButton,
+  Table,
+  Iframe,
+  Excalidraw,
+  Mention,
+  Attachment.configure({
+    upload: async (file: File) => {
+      const formData = new FormData();
+      formData.append('value', await file.text());
+      const response = await fetch('/api/images/', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await response.json();
+      return data.value;
+    },
+  }),
+];
+
+function debounce(func: (value: string) => void, wait: number) {
+  let timeout: NodeJS.Timeout;
+  return function (this: unknown, ...args: [string]) {
+    clearTimeout(timeout);
+
+    timeout = setTimeout(() => func.apply(this, args), wait);
   };
+}
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file || !editor) {
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = e => {
-      if (e.target?.result) {
-        editor
-          .chain()
-          .focus()
-          .setImage({ src: e.target.result as string })
-          .run();
-      }
-    };
-    reader.readAsDataURL(file);
-
-    event.target.value = '';
-  };
-
-  if (!editor) {
-    return null;
-  }
-
-  return (
-    <div className="rich-text-container dark-mode">
-      {label ? <label className="rich-text-label">{label}</label> : null}
-
-      <Toolbar editor={editor} onUploadClick={handleUploadClick} />
-
-      <input
-        accept="image/*"
-        onChange={handleFileChange}
-        ref={fileInputRef}
-        style={{ display: 'none' }}
-        type="file"
-      />
-
-      {/* Área editable */}
-      <div className="rich-text-editor">
-        <EditorContent editor={editor} />
-      </div>
-    </div>
-  );
+type RichTextProps = {
+  label: string;
+  onChange: (value: string) => void;
+  placeholder: string;
+  value: string;
 };
 
-const Toolbar: FC<{ editor: Editor; onUploadClick: () => void }> = ({
-  editor,
-  onUploadClick,
-}) => {
-  const setLink = () => {
-    const previousUrl = editor.getAttributes('link').href;
-    const url = window.prompt('URL', previousUrl || 'https://');
-    if (url === null) {
-      return;
-    }
-    if (url === '') {
-      editor.chain().focus().extendMarkRange('link').unsetLink().run();
-      return;
-    }
-    editor.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
-  };
+const RichText = ({ label, onChange, placeholder, value }: RichTextProps) => {
+  const [content, setContent] = useState(value || placeholder);
+  const refEditor = useRef(null);
+
+  const disable = false;
+
+  const onValueChange = debounce((value: string) => {
+    onChange(value);
+    setContent(value);
+  }, 300);
 
   return (
-    <div className="toolbar">
-      <button
-        className={editor.isActive('bold') ? 'is-active' : ''}
-        onClick={() => editor.chain().focus().toggleBold().run()}
-      >
-        B
-      </button>
-
-      <button
-        className={editor.isActive('italic') ? 'is-active' : ''}
-        onClick={() => editor.chain().focus().toggleItalic().run()}
-      >
-        I
-      </button>
-
-      <button
-        className={editor.isActive('underline') ? 'is-active' : ''}
-        onClick={() => editor.chain().focus().toggleUnderline().run()}
-      >
-        U
-      </button>
-
-      {/* Encabezados */}
-      <button onClick={() => editor.chain().focus().setParagraph().run()}>
-        P
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
-      >
-        H2
-      </button>
-      <button
-        onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
-      >
-        H3
-      </button>
-
-      {/* Listas */}
-      <button onClick={() => editor.chain().focus().toggleBulletList().run()}>
-        • List
-      </button>
-      <button onClick={() => editor.chain().focus().toggleOrderedList().run()}>
-        1. List
-      </button>
-
-      {/* Link */}
-      <button
-        className={editor.isActive('link') ? 'is-active' : ''}
-        onClick={setLink}
-      >
-        Link
-      </button>
-      <button
-        disabled={!editor.isActive('link')}
-        onClick={() => editor.chain().focus().unsetLink().run()}
-      >
-        Unlink
-      </button>
-
-      <button onClick={onUploadClick}>Img</button>
-    </div>
+    <main
+      style={{
+        padding: '0 20px',
+      }}
+    >
+      <p>{label}</p>
+      <div className="m-4">
+        <RcTiptapEditor
+          content={content}
+          dark={true}
+          disabled={disable}
+          extensions={extensions}
+          onChangeContent={onValueChange}
+          output="html"
+          ref={refEditor}
+        />
+      </div>
+    </main>
   );
 };
 
