@@ -1,0 +1,76 @@
+.rich-text-container {
+  width: 100%;
+  margin-bottom: 1rem;
+}
+
+.dark-mode {
+  background-color: #2d2d2d;
+  color: #dddddd;
+  border: 1px solid #444;
+  padding: 16px;
+  border-radius: 6px;
+}
+
+.rich-text-label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  background-color: #3c3c3c;
+  padding: 6px;
+  border-radius: 4px;
+}
+
+.toolbar button {
+  background-color: #555;
+  color: #fff;
+  border: none;
+  outline: none;
+  padding: 6px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.15s ease-in-out;
+}
+
+.toolbar button:hover {
+  background-color: #666;
+}
+
+.toolbar button.is-active {
+  background-color: #888;
+  font-weight: bold;
+}
+
+.rich-text-editor {
+  background-color: #1e1e1e;
+  border: 1px solid #444;
+  margin-top: 8px;
+  min-height: 200px;
+  border-radius: 4px;
+  padding: 8px;
+}
+
+.ProseMirror {
+  color: #eee;
+  min-height: 180px;
+  outline: none;
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+  background: transparent;
+}
+
+.ProseMirror:focus {
+  outline: none;
+}
+
+.ProseMirror h2,
+.ProseMirror h3 {
+  color: #fff;
+  margin-top: 1rem;
+}
+
