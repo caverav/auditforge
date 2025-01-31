@@ -1,76 +1,146 @@
-.rich-text-container {
-  width: 100%;
-  margin-bottom: 1rem;
+.editor {
+    outline: none;
 }
 
-.dark-mode {
-  background-color: #2d2d2d;
-  color: #dddddd;
-  border: 1px solid #444;
-  padding: 16px;
-  border-radius: 6px;
+.editor-toolbar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 8px;
 }
 
-.rich-text-label {
-  display: block;
-  margin-bottom: 8px;
-  font-weight: bold;
-}
-
-.toolbar {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  background-color: #3c3c3c;
-  padding: 6px;
-  border-radius: 4px;
-}
-
-.toolbar button {
-  background-color: #555;
-  color: #fff;
-  border: none;
-  outline: none;
-  padding: 6px 10px;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: all 0.15s ease-in-out;
-}
-
-.toolbar button:hover {
-  background-color: #666;
-}
-
-.toolbar button.is-active {
-  background-color: #888;
-  font-weight: bold;
-}
-
-.rich-text-editor {
-  background-color: #1e1e1e;
-  border: 1px solid #444;
-  margin-top: 8px;
-  min-height: 200px;
-  border-radius: 4px;
-  padding: 8px;
+.editor__content {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
 }
 
 .ProseMirror {
-  color: #eee;
-  min-height: 180px;
-  outline: none;
-  font-family: 'Inter', sans-serif;
-  line-height: 1.6;
-  background: transparent;
+    min-height: 200px;
+    cursor: auto;
 }
 
-.ProseMirror:focus {
-  outline: none;
+h1 {
+    font-size: 4.25rem;
 }
 
-.ProseMirror h2,
-.ProseMirror h3 {
-  color: #fff;
-  margin-top: 1rem;
+pre {
+    padding: 0.7rem 1rem;
+    border-radius: 5px;
+    background: black;
+    color: white;
+    font-size: 0.8rem;
+    overflow-x: auto;
+    white-space: pre-wrap;
+}
+
+p code {
+    padding: 0.2rem 0.4rem;
+    border-radius: 5px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    background: rgba(black, 0.1);
+    color: rgba(black, 0.8);
+}
+
+ul,
+ol {
+    padding-left: 1rem;
+}
+
+li > p,
+li > ol,
+li > ul {
+    margin: 0;
+}
+
+a {
+    color: inherit;
+}
+
+blockquote {
+    border-left: 3px solid rgba(black, 0.1);
+    color: rgba(black, 0.8);
+    padding-left: 0.8rem;
+    font-style: italic;
+}
+
+img {
+    max-width: 100%;
+    border-radius: 3px;
+}
+
+.selected {
+    outline-style: solid;
+    outline-color: blue;
+}
+
+table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    width: 100%;
+    margin: 0;
+    overflow: hidden;
+}
+
+td, th {
+    min-width: 1em;
+    border: 2px solid grey;
+    padding: 3px 5px;
+    vertical-align: top;
+    box-sizing: border-box;
+    position: relative;
+}
+
+th {
+    font-weight: bold;
+    text-align: left;
+}
+
+.selectedCell:after {
+    z-index: 2;
+    position: absolute;
+    content: "";
+    left: 0; right: 0; top: 0; bottom: 0;
+    background: rgba(200, 200, 255, 0.4);
+    pointer-events: none;
+}
+
+.column-resize-handle {
+    position: absolute;
+    right: -2px; top: 0; bottom: 0;
+    width: 4px;
+    z-index: 20;
+    background-color: #adf;
+    pointer-events: none;
+}
+
+.tableWrapper {
+    margin: 1em 0;
+    overflow-x: auto;
+}
+
+.resize-cursor {
+    cursor: ew-resize;
+    cursor: col-resize;
+}
+
+.is-active {
+    color: green;
+}
+
+.is-active-highlight {
+    background-color: grey;
+}
+
+.diffrem {
+    background-color: #fdb8c0;
+}
+
+.diffadd {
+    background-color: #acf2bd;
+}
+
+.text-negative .editor:not(.q-dark) {
+    color: var(--q-color-primary) !important;
 }
 
