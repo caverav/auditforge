@@ -41,7 +41,9 @@ import RcTiptapEditor, {
   Underline,
 } from 'reactjs-tiptap-editor';
 
-const imagesUrl = '/api/images/';
+import CustomImage from './ImageHandler';
+
+const imagesUrl = import.meta.env.VITE_API_URL + '/api/images';
 
 const extensions = [
   BaseKit.configure({
@@ -80,38 +82,8 @@ const extensions = [
     },
   }),
   Link,
-  Image.configure({
-    upload: async (file: File) => {
-      const base64Value = await new Promise<string>((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-          if (reader.result) {
-            resolve(reader.result.toString());
-          } else {
-            reject(new Error('File reading failed'));
-          }
-        };
-        reader.onerror = error => reject(error);
-      });
-
-      const audit = {
-        name: file.name,
-        value: base64Value,
-      };
-
-      const response = await fetch(imagesUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(audit),
-      });
-
-      const data = await response.json();
-      return data.datas._id;
-    },
-  }),
+  Image,
+  CustomImage,
   Blockquote.configure({ spacer: true }),
   SlashCommand,
   Code.configure({
@@ -127,7 +99,7 @@ const extensions = [
     upload: async (file: File) => {
       const formData = new FormData();
       formData.append('value', await file.text());
-      const response = await fetch('/api/images/', {
+      const response = await fetch(imagesUrl, {
         method: 'POST',
         body: formData,
       });
