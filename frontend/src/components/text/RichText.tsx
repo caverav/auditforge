@@ -41,8 +41,6 @@ import RcTiptapEditor, {
   Underline,
 } from 'reactjs-tiptap-editor';
 
-import CustomImage from './ImageHandler';
-
 const imagesUrl = import.meta.env.VITE_API_URL + '/api/images';
 
 const extensions = [
@@ -82,8 +80,41 @@ const extensions = [
     },
   }),
   Link,
-  Image,
-  CustomImage,
+  Image.configure({
+    upload: async (file: File) => {
+      const base64Value = await new Promise<string>((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => {
+          if (reader.result) {
+            resolve(reader.result.toString());
+          } else {
+            reject(new Error('File reading failed'));
+          }
+        };
+        reader.onerror = error => reject(error);
+      });
+
+      return base64Value + '';
+
+      // const audit = {
+      //   name: file.name,
+      //   value: base64Value,
+      //   alt: '',
+      // };
+      //
+      // const response = await fetch(imagesUrl, {
+      //   method: 'POST',
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      //   body: JSON.stringify(audit),
+      // });
+      //
+      // const data = await response.json();
+      // return data.datas._id;
+    },
+  }),
   Blockquote.configure({ spacer: true }),
   SlashCommand,
   Code.configure({
