@@ -41,7 +41,7 @@ export const Register = () => {
         <img alt="Logo" src="/logo.svg" />
       </div>
       <div className="md:w-1/3 max-w-sm text-black">
-        <h1 className="text-center text-2xl font-bold">
+        <h1 className="text-center text-2xl font-bold text-white">
           {t('registerFirstUser')}
         </h1>
         <form className="mt-4" onSubmit={handleSubmit}>

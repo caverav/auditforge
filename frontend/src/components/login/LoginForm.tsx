@@ -14,10 +14,10 @@ const LoginForm = ({ children }: { children: React.ReactNode }) => {
   const [shake, setShake] = useState(false);
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const email = getValue('email');
+    const username = getValue('username');
     const password = getValue('password');
 
-    login(email, password, '')
+    login(username, password, '')
       .then(result => {
         if (!result) {
           setShake(true);

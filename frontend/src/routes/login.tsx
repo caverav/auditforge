@@ -13,7 +13,7 @@ export const Login = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
 
   checktoken()
     .then(result => {
@@ -27,14 +27,14 @@ export const Login = () => {
     <>
       <LoginForm>
         <SimpleInput
-          id="email"
-          label={t('email')}
-          name="email"
-          onChange={setEmail}
-          placeholder={t('email')}
+          id="username"
+          label={t('username')}
+          name="username"
+          onChange={setUsername}
+          placeholder={t('username')}
           requiredField
           type="text"
-          value={email}
+          value={username}
         />
         <SimpleInput
           id="password"
