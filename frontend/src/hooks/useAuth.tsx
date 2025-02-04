@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 const tokenUrl = `${import.meta.env.VITE_API_URL}/api/users/token`;
 const checktokenUrl = `${import.meta.env.VITE_API_URL}/api/users/checktoken`;
 const refreshTokenUrl = `${import.meta.env.VITE_API_URL}/api/users/refreshtoken`;
+const initUrl = `${import.meta.env.VITE_API_URL}/api/users/init`;
 
 export const checktoken = async (): Promise<boolean> => {
   try {
@@ -105,7 +106,7 @@ const useAuth = () => {
     });
 
     try {
-      const response = await fetch('/api/users/init', {
+      const response = await fetch(initUrl, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
