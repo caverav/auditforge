@@ -82,6 +82,7 @@ const extensions = [
   Link,
   Image.configure({
     upload: async (file: File) => {
+      // eslint-disable-next-line sonarjs/prefer-immediate-return -- we need to wait for the file to be read
       const base64Value = await new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
         reader.readAsDataURL(file);
@@ -94,25 +95,7 @@ const extensions = [
         };
         reader.onerror = error => reject(error);
       });
-
-      return base64Value + '';
-
-      // const audit = {
-      //   name: file.name,
-      //   value: base64Value,
-      //   alt: '',
-      // };
-      //
-      // const response = await fetch(imagesUrl, {
-      //   method: 'POST',
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      //   body: JSON.stringify(audit),
-      // });
-      //
-      // const data = await response.json();
-      // return data.datas._id;
+      return base64Value;
     },
   }),
   Blockquote.configure({ spacer: true }),
