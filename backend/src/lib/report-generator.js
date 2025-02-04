@@ -664,9 +664,10 @@ async function splitHTMLParagraphs(data) {
   var result = [];
   if (!data) return result;
 
-  var splitted = data.split(/(<img.+?src=".*?".+?alt=".*?".*?>)/);
+ var splitted = data.split(/(<img.+?src=".*?".*?(alt=".*?")?.*?>)/);
 
   for (var value of splitted) {
+    if (!value) continue;
     if (value.startsWith('<img')) {
       var src = value.match(/<img.+src="(.*?)"/) || '';
       var alt = value.match(/<img.+alt="(.*?)"/) || '';
@@ -681,7 +682,7 @@ async function splitHTMLParagraphs(data) {
         }
       }
       if (result.length === 0) result.push({ text: '', images: [] });
-      result[result.length - 1].images.push({ image: src, caption: alt });
+      result[result.length - 1].images.push({ image: src, caption: alt ?? '' });
     } else if (value === '') {
       continue;
     } else {
