@@ -1,8 +1,6 @@
 import 'katex/dist/katex.min.css';
 import 'reactjs-tiptap-editor/style.css';
 
-// import { Label } from '@headlessui/react';
-// import Placeholder from '@tiptap/extension-placeholder';
 import { useRef, useState } from 'react';
 import RcTiptapEditor, {
   Attachment,
