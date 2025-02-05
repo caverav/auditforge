@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { Toaster } from 'sonner';
@@ -15,13 +15,15 @@ export const Login = () => {
   const [password, setPassword] = useState('');
   const [username, setUsername] = useState('');
 
-  checktoken()
-    .then(result => {
-      if (result) {
-        navigate('/audits', { replace: true });
-      }
-    })
-    .catch(console.error);
+  useEffect(() => {
+    checktoken()
+      .then(result => {
+        if (result) {
+          navigate('/audits', { replace: true });
+        }
+      })
+      .catch(console.error);
+  }, [navigate]);
 
   return (
     <>
