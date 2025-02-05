@@ -40,7 +40,7 @@ export const Register = () => {
       <div className="md:w-1/3 max-w-sm">
         <img alt="Logo" src="/logo.svg" />
       </div>
-      <div className="md:w-1/3 max-w-sm text-black">
+      <div className="md:w-1/3 max-w-sm text-white">
         <h1 className="text-center text-2xl font-bold">
           {t('registerFirstUser')}
         </h1>
