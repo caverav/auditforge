@@ -661,35 +661,45 @@ async function prepAuditData(data, settings) {
 }
 
 async function splitHTMLParagraphs(data) {
-  var result = [];
-  if (!data) return result;
+  if (!data) return [];
 
- var splitted = data.split(/(<img.+?src=".*?".*?(alt=".*?")?.*?>)/);
+  const result = [];
+  const splitted = data.split(/(<img.+?src=".*?".*?(alt=".*?")?.*?>)/);
 
-  for (var value of splitted) {
+  for (const value of splitted) {
     if (!value) continue;
-    if (value.startsWith('<img')) {
-      var src = value.match(/<img.+src="(.*?)"/) || '';
-      var alt = value.match(/<img.+alt="(.*?)"/) || '';
-      if (src && src.length > 1) src = src[1];
-      if (alt && alt.length > 1) alt = _.unescape(alt[1]);
 
-      if (!src.startsWith('data')) {
-        try {
-          src = (await Image.getOne(src)).value;
-        } catch (error) {
-          src = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=';
-        }
-      }
+    if (value.startsWith('<img')) {
+      const { src, alt } = extractImageAttributes(value);
+      const processedSrc = await processImageSrc(src);
+
       if (result.length === 0) result.push({ text: '', images: [] });
-      result[result.length - 1].images.push({ image: src, caption: alt ?? '' });
-    } else if (value === '') {
-      continue;
+      result[result.length - 1].images.push({ image: processedSrc, caption: alt });
     } else {
       result.push({ text: value, images: [] });
     }
   }
+
   return result;
+}
+
+function extractImageAttributes(value) {
+  const srcMatch = value.match(/<img.+src="(.*?)"/) || '';
+  const altMatch = value.match(/<img.+alt="(.*?)"/) || '';
+  const src = srcMatch.length > 1 ? srcMatch[1] : '';
+  const alt = altMatch.length > 1 ? _.unescape(altMatch[1]) : '';
+  return { src, alt };
+}
+
+async function processImageSrc(src) {
+  if (!src.startsWith('data')) {
+    try {
+      src = (await Image.getOne(src)).value;
+    } catch (error) {
+      src = 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=';
+    }
+  }
+  return src;
 }
 
 function replaceSubTemplating(o, originalData = o) {
