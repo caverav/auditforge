@@ -21,6 +21,6 @@ spec:
         io.kompose.service: auditforge-cwe-api
     spec:
       containers:
-        - image: us-central1-docker.pkg.dev/terraform-testing-467719/auditforge/auditforge-cwe-api:0.1.0
+        - image: auditforge-cwe-api.image.com
           name: auditforge-cwe-api
       restartPolicy: Always
