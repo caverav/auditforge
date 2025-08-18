@@ -21,7 +21,7 @@ spec:
         io.kompose.service: auditforge-frontend
     spec:
       containers:
-        - image: auditforge-frontend
+        - image: us-central1-docker.pkg.dev/terraform-testing-467719/auditforge/auditforge-frontend:0.1.1
           name: auditforge-frontend
           ports:
             - containerPort: 8443
